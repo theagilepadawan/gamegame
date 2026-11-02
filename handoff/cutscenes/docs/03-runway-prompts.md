@@ -2,6 +2,8 @@
 
 The Runway plugin is intended to be used in the next session. This handoff does not assume its model names, tool schema, credit system, reference limit, supported resolutions, frame controls or audio capabilities. Inspect those capabilities before invoking a generation. Map the creative instructions below to the actual tool inputs.
 
+Read `07-latest-direction.md` before using these prompts. The intro reference video is forthcoming and absent from this handoff. Its treatment must be decided after inspection. Receiving the exact Park trainers after Midtown is a requested beat; the 505 host staging and 6–8-second edit below are proposals. No prompts have been run and no cutscene player is implemented.
+
 ## Workflow
 
 1. Select one shot and its character variant. Use the current runtime assets and screenshot/reference board, not a text description alone, to establish likeness and style.
@@ -28,27 +30,31 @@ End with a gentle ease-out into a stable pose suitable for a game transition.
 
 Avoid adding a long list of unrelated styles or camera instructions. If the tool has no dedicated negative-prompt field, put only the most relevant constraints in ordinary language. A separate review checklist is more reliable than an enormous prompt.
 
-## LR-OP-01 — start-frame motion prompt
+## LR-OP-01 — draft prompt after reference-video review
+
+The suggested overall intro is 8–12 seconds: Nicolai prepares to run in Lower Manhattan, sets off toward screen right, and the exact title resolves in post-production into the first course. The duration and staging are suggestions. First inspect the user's actual reference video, then replace the bracketed treatment and timing below with observed choices adapted to the game. Do not submit this draft with missing fields or assume a style for the absent video. A short proof may be an excerpt rather than the whole intro.
 
 ```text
-The investor in the supplied reference stands on this Lower Manhattan street
-at warm dusk. He calmly straightens one jacket cuff, looks along the street
-to his right and forms a small determined smile. He then takes two purposeful
-natural strides toward screen right. The camera tracks gently to keep him in
-a medium three-quarter profile, then eases to a stop. His feet contact the
-pavement, his jacket hem responds subtly to each step, and his face and head
-stay stable. One World Trade Center remains a single unchanged distant
-landmark. Preserve the painted game-art texture and all clothing details.
-One continuous six-second shot, no cuts, no generated text, no new people.
+Nicolai in the composed reference prepares to run on this Lower Manhattan
+street, then sets off toward screen right with purposeful natural strides.
+Use [animation treatment and camera movement chosen after inspecting the
+user's reference video] for this [shot duration and beat within the edit].
+His feet contact the pavement, his jacket hem responds subtly to each step,
+and his face, head, proportions and costume remain consistent with the game.
+One World Trade Center remains a single unchanged distant landmark. Preserve
+the supplied street architecture. End with [transition framing chosen after
+reference review], leaving the exact title and branding for post-production.
+No generated lettering or additional people.
 ```
 
-Use Nicolai's selected current sprite for the first proof. For a Trond variant, replace only the identity reference and performance detail; do not ask one face to transform into another.
+Use Nicolai's current sprite identity. If the video is not yet available, work on a Park scenery proof or the shoe references while the intro treatment remains pending. A later Trond variant needs his own identity reference; do not ask one face to transform into another.
 
 ## LR-MT-01 — start-frame motion prompt
 
 ```text
-In this illustrated Midtown streetscape beside Bryant Park, the referenced
-runner crosses a short stretch of pavement from left to right at an easy,
+In this supplied v1.5 Midtown streetscape of warm glass offices, limestone
+architecture and a dense city backdrop, the referenced runner crosses a
+short stretch of pavement from left to right at an easy,
 confident pace. A light breeze moves a few individual leaves and the jacket
 hem. The camera makes one slow lateral tracking move and settles as the
 runner continues toward the right edge. The glass and stone office facades
@@ -56,6 +62,38 @@ remain completely stable, with straight verticals and consistent reflections.
 Preserve this exact character likeness, costume and painted game style.
 Five seconds, one continuous shot, calm movement and a clean ending.
 ```
+
+## LR-SH-01 — proposed shoe handoff and footwear shots
+
+The required outcome is Nicolai receiving his exact Park trainers after completing Midtown, before Central Park. Establish shoe continuity from `game/assets/original-17.webp` and `original-18.webp`, checked against `game/scripts/park-shoes.js` and `references/gameplay/central-park-gameplay.png`. Use `original-27.webp`/`original-28.webp` for formal footwear only; the generic extracted run frame is not the trainer reference. His trousers and other clothing remain unchanged. The following two-shot office treatment is optional; a 6–8-second total edit is suggested, with individual shot lengths selected from the plugin's actual capabilities and trimmed deliberately.
+
+Compose and inspect each input frame before generation. For the suggested handoff shot, show the host holding an open shoebox with the correct trainers already visible, so their design is established without invented opening mechanics.
+
+```text
+At the exact blue/cyan 505 Fifth entrance in the composed frame, the woman
+in the plum suit calmly offers Nicolai the open shoebox. The visible pair
+of trainers keeps the exact shape, navy knit, white midsoles and collars
+from his supplied Central Park shoe reference. Nicolai accepts the box
+with a small warm smile and natural hand contact. Preserve both faces,
+body proportions, costumes, the complete paired revolving doors and fixed
+architecture. One restrained action and a settled ending; no dialogue,
+invented branding or generated lettering.
+```
+
+For the footwear shot, compose Nicolai already wearing those exact trainers with a credible lace-tightening pose. Use a clean edit from the handoff; do not ask the generator to transform footwear or trousers in place. Generate a separate test-step shot only if it improves clarity within the chosen edit.
+
+```text
+Nicolai is already wearing the exact Central Park trainers shown in the
+composed reference. He gently tightens the laces with a small natural hand
+movement, then releases them and settles. The shoes retain their exact
+navy knit shape, white midsoles and white collars throughout. His brown
+trousers, cuffs, legs, hands and body proportions remain consistent with
+the game reference. Keep the shoe soles planted on the pavement, the camera
+steady and the movement relaxed. No clothing transformation, new shoe
+logos or generated lettering.
+```
+
+The final edit may finish on one light test step into a jog toward Central Park. The office host, shoebox staging, length and optional caption “Investing in the long run” remain proposals. Preserve the requested after-Midtown/before-Park placement regardless of treatment. Do not substitute a greeting-only clip for the shoe beat.
 
 ## LR-PK-01 — start-frame motion prompt
 
@@ -70,7 +108,7 @@ face, clothing, scale and foot contact remain consistent. Five seconds,
 one continuous painted game-art shot with restrained movement.
 ```
 
-For the scenery-only proof, omit the runner sentences. That is a useful test of preserving the Park painting before adding a character.
+For the scenery-only proof, omit the runner sentences. That is a useful test of preserving the Park painting before adding a character. If used after LR-SH-01, Nicolai already wears the exact Park trainers; compose them from the Park atlas. This scene is optional supporting material, not a replacement for receiving the shoes.
 
 ## LR-OF-01 — start-frame motion prompt
 

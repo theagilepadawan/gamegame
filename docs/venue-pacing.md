@@ -1,10 +1,10 @@
-# Venue pacing — 1.4
+# Venue pacing — 1.5
 
 The city routes now distinguish source artwork from its position in the world. `LR_SCENERY.layout().blocks` lists the authored sequence, while each visible panel retains its `sourceIndex` for image lookup and `segment` for its world position. Venue metadata finds its world block rather than assuming that image index equals route position.
 
 Opening Bell retains the WTC establishing frame and camera easing. Two complete anonymous city blocks now precede Kabin. Wall Street, Seaport, the single complete Brooklyn Bridge and the East River still separate Kabin and LEI. An additional ordinary Seaport block after LEI lets its frontage pass the runner before the chapter finishes. The fourteen-block route repeats only its final anonymous city/waterfront blocks in Endless.
 
-Midtown now opens on ordinary garden, residential and cast-iron blocks. The Midtown skyline appears once. JOJU, Omar's, Gussy's and 505 occupy route positions 8, 12, 16 and 20 in a twenty-three-block route; three complete ordinary blocks separate every pair. A short camera hold establishes the opening streets. All source artwork retains native dimensions and scale. Anonymous existing city artwork is reused in a varied order; no venue, facade or backdrop is stretched to create distance.
+Midtown opens on glass offices, limestone commercial streets and a construction corner, with two garden breaks along the route. The Midtown skyline appears once. JOJU, Omar's, Gussy's and 505 occupy the same route positions 8, 12, 16 and 20 in a twenty-three-block route; three complete ordinary blocks separate every pair. A short camera hold establishes the opening streets. Version 1.5 replaces the ordinary scenery while retaining the v1.4 logical block widths, camera, venue crops and frontage geometry. The construction building uses a uniform display scale inside its existing slot to keep the crane complete and its pavement grounded; this does not change the route distance or venue timing.
 
 The 505 source art and doorway crop were updated separately against the supplied office photograph. Its metadata uses the exact crop and full entrance bounds specified in `office-art-v14.md`. The office host anchor follows the same source-space and camera transform as the entrance.
 

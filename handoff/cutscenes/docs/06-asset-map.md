@@ -13,7 +13,7 @@ Begin with `references/production-character-board.jpg` for orientation, then use
 | Trond run/idle/jump | `game/assets/original-29.webp` | 2048×1536, 512×512 cells. |
 | Trond original flip sheet | `game/assets/original-30.webp` | 2048×1024, 512×512 cells; retain alongside current signature motion. |
 | Trond belly slide / ball | `game/assets/original-31.webp` | 2560×1024, 4 columns × 2 rows of 640×512 cells. |
-| Nicolai Park footwear variant | `game/assets/original-17.webp`, `original-18.webp` | Activated by `scripts/park-shoes.js`; consult actual Park gameplay before preparing continuity frames. |
+| Nicolai Park footwear variant | `game/assets/original-17.webp`, `original-18.webp` | Loaded by `game/scripts/park-shoes.js`; check `references/gameplay/central-park-gameplay.png` for the trainers' rendered silhouette/colors. These are LR-SH-01's shoe authority; the generic extracted run frame has formal shoes. |
 | Office host | `references/office-host/` and `game/assets/office-host-v14/` | Final art; provenance and placement metadata are in `game/docs/office-host-v14.md`. Use the packaged result, not earlier generation candidates. |
 
 Named extracted cells include `nicolai-run.png`, `nicolai-idle.png`, `nicolai-jump.png`, `nicolai-slide.png`, `nicolai-somersault.png`, `trond-run.png`, `trond-idle.png`, `trond-jump.png`, `trond-bellyslide.png` and `trond-ball.png`.
@@ -34,6 +34,10 @@ The original inline office/host photographs were visible in the conversation but
 | `references/locations/downtown-wall-street.webp` | `game/assets/art-v2/downtown-wallstreet.webp` |
 | `references/locations/midtown-505-blue-glass-entrance.webp` | `game/assets/art-v2/midtown-fifth.webp` |
 | `references/locations/midtown-bryant-garden.webp` | `game/assets/art-v2/midtown-garden.webp` |
+| `references/locations/midtown-warm-skyline.webp` | `game/assets/midtown-v15/atmosphere.webp` |
+| `references/locations/midtown-glass-offices.webp` | `game/assets/midtown-v15/glass-canyon.webp` |
+| `references/locations/midtown-limestone-cafe.webp` | `game/assets/midtown-v15/limestone-cafe.webp` |
+| `references/locations/midtown-construction.webp` | `game/assets/midtown-v15/construction-corner.webp` |
 
 City architectural assets have transparent silhouettes intended for composition over their district atmosphere. Do not treat an isolated alpha panel as a completed scene or add a flat checkerboard behind it. `game/scripts/scenery.js` defines the current route, source crops and shared atmosphere. `game/scripts/park-scenery.js` preserves the approved three-painting Park camera. `opening-storefronts.js` and `midtown-storefronts.js` describe the venue placement and office frontage.
 

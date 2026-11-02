@@ -1,0 +1,29 @@
+{
+  "asset": "assets/midtown-v15/construction-corner.webp",
+  "nativeSize": [
+    1024,
+    1536
+  ],
+  "mode": "RGBA",
+  "source": "/workspace/generated_images/exec-6a6eb00a-09af-426b-b811-7502978a62a3.png",
+  "sha256": "a8ccfeef1e9b0db0ea2307965e33f8da5dcc9fe5531c0e31bd62aa32616660e0",
+  "bytes": 433410,
+  "sourceSha256": "f2ce28e2306d790639a2c9ef718ce06d2ab3f80cb724516fe99d0a8ada9c198d",
+  "alpha32Bounds": [
+    68,
+    130,
+    958,
+    1348
+  ],
+  "upperOpaqueEdgeRuns": [
+    0,
+    0
+  ],
+  "thresholdNativeY": 1325,
+  "curbBottomNativeY": 1347,
+  "recommendedCropTop": 0,
+  "recommendedContentScale": 0.8528301886792453,
+  "recommendedSlotHorizontalAlignment": "center",
+  "generation": "Three imagegen passes: new sprite based on original-34/JOJU style and alignment; two geometry refinements. Final complete crane retained in native source; no raster resizing.",
+  "palette": "Warm golden glass reflections, blue glazing, buff limestone, bronze/green scaffolding, restrained street props."
+}

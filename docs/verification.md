@@ -1,34 +1,35 @@
-# Release verification — scenery, venues and props 1.4
+# Release verification — Midtown atmosphere 1.5
 
-All **12 browser suites passed** against the exact self-contained release HTML using Playwright 1.56.1 and Chromium 154: modes, menu, scenery, art-layers, downtown, venues, venue-pacing, office-host, props, water, gaps, standalone. Command: `PACING_CAPTURE=0 npm test`. The pacing assertions still ran in full; that flag avoids repeating the already-reviewed source gallery.
+All **six affected browser suites passed** against the exact self-contained release HTML using Playwright 1.56.1 and Chromium 154: `midtown-atmosphere`, `scenery`, `venues`, `venue-pacing`, `office-host` and `standalone`. They ran sequentially with `TEST_URL=http://127.0.0.1:4181/release/The-Long-Run-NBIM.html`; `PACING_CAPTURE=0` kept the complete pacing assertions while avoiding a redundant gallery. The new Midtown suite captured 20 current desktop/mobile frames.
 
-The tested HTML is **38,195,724 bytes**, with **60 embedded assets**. SHA-256:
+The tested HTML is **38,842,804 bytes**, with **63 embedded assets**. SHA-256:
 
 ```
-f977a0b6b2645f56f0ee89d198cab4c6077daea46b0af77e57e5df44441201c8
+19a5e509fd5bc2679553c891955427e62d17b81706f806b3d67a3015e94d98f1
 ```
 
-## Coverage and findings
+## Changes and preserved behavior
 
-- Story/Endless, saved seeds, chapter locks/map, touch and controller navigation, history reveal, runner unlock, retries and default Next chapter/Main menu actions.
-- Nineteen native city camera crops, alpha silhouettes, every reachable scenery join, moving-camera frames, complete chapter coverage, and desktop/mobile DPR2 captures. Canvas, direct WebGL and Pixi paths all passed.
-- Actual chapter simulation at 120 Hz checked first visible venue pixels, full frontages and runner crossings. Kabin begins at 21.70 seconds on desktop and 18.97 seconds on mobile; JOJU at 19.10 and 17.53 seconds. Three ordinary blocks separate each Midtown venue, with no simultaneous named frontages. All entrances reach the runner before victory.
-- One World Trade Center remains framed after idle/retry and eight seconds into a run. The complete Brooklyn Bridge remains readable across three viewport widths with its river footing preserved. Named landmarks do not repeat in the Endless continuation.
-- 505 retains its blue/cyan lobby, full glass entrance and paired revolving doors. Its greeting uses the current run distance so a retry cannot inherit late-course visibility. The office host's feet and head remain fixed during one short wrist greeting; pause/reduced motion and Canvas/Pixi parity passed.
-- Painted pickups, market-risk hazards and clearer signs preserve collision, jump/slide clearance, collection rewards, buffs and spring behavior. Original Park obstacle pixels remain unchanged.
-- Original Park water changes inside the lake mask (27,742 measured pixels), with the bank unchanged; pause and reduced motion freeze it. Complete terrain gaps, joined/separate openings and real jump/landing behavior pass on four seeded slopes.
-- All 40 original source asset hashes remain unchanged. Scripts, fonts, artwork and audio load without external requests; Contrarian remains playable offline.
+- Four new native paintings restore Midtown's warm office district: a layered skyline, glass offices, a limestone café and an attached construction crane. Garden panels occur twice instead of seven times. Smaller trees between ordinary blocks reveal more architecture; trees beside named venues retain their approved scale.
+- All **84 sampled camera/venue/host projections** match v1.4 exactly. Desktop and mobile full-frontage and runner-crossing timelines also match exactly. JOJU, Omar's, Gussy's and 505 keep route slots 8, 12, 16 and 20, with three ordinary blocks between each pair.
+- The real chapter simulation confirms the same native-pixel and frontage reveal times, no simultaneous named frontages, and complete entrances before victory on desktop, mobile DPR2 and compact landscape. JOJU's first native pixel appears at 19.10 seconds on desktop and 17.53 seconds on mobile.
+- Twelve deterministic Downtown and Central Park scenery renders remain pixel-identical to v1.4. All **40 original source asset hashes** remain unchanged. Venue artwork, host artwork, venue/host code, Park implementation and game engine match their v1.4 file hashes.
+- Native artwork and prepared camera crops match their source pixels. The construction asset keeps its complete crane using uniform display scale within an unchanged route slot. No raster enlargement is presented as newly authored detail.
+- Finite Story routes, landmark-free Endless continuation, atmosphere coverage and Canvas/direct WebGL/Pixi scenery rendering pass. Full venue geometry, 505 glass entrance, grounding, greeting timing, pause and reduced motion also pass.
+- Fonts, code, art and audio load without external requests. The Contrarian event remains playable after taking the loaded standalone page offline.
 
-## Park restoration and visual review
+Reports and the captured console log are in `docs/verification/standalone-run-v15.json`, `midtown-atmosphere-final-v15.json`, `venue-pacing-final-v15.json` and `office-host-final-v15.json`. The layout fixture records the approved reference commit `a45b2399415a6c818212aaca7c9a3a4e09268bed`.
 
-Before the separate shared pickup/sign polish, all **14 full-stage Park frame pairs were pixel-identical** to approved commit `156db816f0a43420b87864f5c61fde7878344035`, including desktop, mobile DPR2, Canvas, joins, finish and moving water/leaves. An additional background-only comparison remains pixel-identical with the new gameplay objects present. The original five Park art/ambience source files are unchanged.
+## Visual review
 
-The retained reports are under `docs/verification/`: `park-restore-paired-frames.json`, `park-original-assets.json` and `park-background-check.json`. This is an exact scenery restoration; shared pickup/sign artwork is an intentional separate improvement.
+An independent agent reviewed desktop route frames, all four venue frontages and mobile views, finding no blocking seams, clipping, grounding or readability issue. The coordinating agent inspected the final standalone opening, construction and mobile 505/host frames. The warm city depth is restored while 505 retains its cobalt/cyan lighting. See `midtown-visual-review-v15.md` for the visual criteria and capture list.
 
-An independent agent reviewed source-rendered joins, the delayed venues, all three bridge widths, props and the office host without remaining blockers. Its scope and evidence are in `visual-review-v14.md`. The coordinating agent also inspected the final standalone Park and Midtown captures. Native art dimensions and source provenance are documented beside each feature; no raster enlargement is claimed as new detail.
+The full twelve-suite v1.4 result and earlier exact Park restoration evidence remain historical records in `verification-v14.md` and `docs/verification/`. Those unrelated suites were not all rerun for this scenery-only release; v1.5 validation is the six-suite scope stated above.
 
 ## Packaging and limits
 
-The game ZIP is CRC-validated and contains the tested HTML byte for byte. The cutscene handoff contains that same playable HTML, current editable source, native references, audio, proposed shot plans, prompts and integration notes. Its own file manifest records hashes. No new cutscene videos are implemented or generated.
+The release process CRC-checks the game ZIP and compares its HTML to the tested file. The cutscene handoff includes the same playable HTML, editable source, current native references, audio and future production instructions. Rebuilding its packaged source must produce byte-identical HTML. Its file manifest records individual hashes, and `release/SHA256SUMS.txt` records release checksums. Remote downloads are checked separately before delivery.
 
-These are Chromium checks with emulated mobile sizes and controller input, not physical-device or cross-browser certification. Offline gameplay was tested through localhost. The managed browser blocks `file://` navigation by administrator policy, so direct local-file opening is not certified here. Downloaded ZIP integrity is verified separately before delivery; checksums are in `release/SHA256SUMS.txt`.
+No new cutscene videos or player integration are included. The handoff distinguishes the user's requested shoe transition after Midtown from suggested staging and the still-pending intro reference video.
+
+These checks use Chromium with emulated mobile sizes, not physical-device or cross-browser certification. Offline gameplay was tested through localhost. The managed browser blocks `file://` navigation by administrator policy, so direct local-file opening is not certified here.

@@ -1,8 +1,13 @@
 {
   "schemaVersion": 1,
   "project": "The Long Run — NBIM Arcade",
-  "status": "proposal-template-no-video-generated",
+  "status": "user-requests-and-proposed-treatments-no-video-generated",
   "gameSnapshot": "See HANDOFF-METADATA.json and FILES-SHA256.json",
+  "directionAuthority": "docs/07-latest-direction.md",
+  "implementationStatus": "No video cutscene player or new cinematic gates are implemented",
+  "pendingInputs": [
+    {"id": "intro-reference-video", "forScene": "LR-OP-01", "status": "not-supplied-in-this-handoff", "path": null, "requiredBefore": "Finalizing intro animation treatment, pacing, camera language and transitions"}
+  ],
   "deliveryConvention": {
     "aspectRatio": "16:9",
     "targetEditorialFps": 30,
@@ -12,9 +17,42 @@
     "pictureAndAudioDeliveredSeparately": true
   },
   "scenes": [
-    {"id": "LR-OP-01", "title": "The long run begins", "proposedDurationSeconds": 6, "proposedGate": "First Story start before simulation", "variant": "nicolai", "priority": "core", "status": "not-generated"},
-    {"id": "LR-MT-01", "title": "A higher perspective", "proposedDurationSeconds": 5, "proposedGate": "Next chapter selected: Midtown", "variant": "selected-runner", "priority": "core", "status": "not-generated"},
-    {"id": "LR-PK-01", "title": "Room to think", "proposedDurationSeconds": 5, "proposedGate": "Next chapter selected: Central Park", "variant": "selected-runner", "priority": "core", "status": "not-generated"},
+    {
+      "id": "LR-OP-01",
+      "title": "The long run begins",
+      "directionStatus": "user-requested-intro-following-forthcoming-reference-video",
+      "proposedDurationSeconds": null,
+      "proposedDurationRangeSeconds": [8, 12],
+      "durationStatus": "suggestion-pending-reference-review",
+      "treatmentStatus": "awaiting-user-reference-video",
+      "proposedStaging": "Lower Manhattan; Nicolai prepares to run, sets off screen right, and the exact title resolves in post into the first course",
+      "proposedGate": "First Story start before simulation",
+      "variant": "nicolai",
+      "priority": "requested",
+      "status": "not-generated"
+    },
+    {"id": "LR-MT-01", "title": "A higher perspective", "proposedDurationSeconds": 5, "proposedGate": "Next chapter selected: Midtown", "variant": "selected-runner", "priority": "proposed-chapter-transition", "status": "not-generated"},
+    {
+      "id": "LR-SH-01",
+      "title": "Ready for the Park",
+      "directionStatus": "user-requested-beat-and-placement",
+      "requiredBeat": "Nicolai receives the exact Central Park trainers after completing Midtown and before Central Park starts",
+      "proposedDurationSeconds": null,
+      "proposedDurationRangeSeconds": [6, 8],
+      "durationStatus": "suggestion",
+      "treatmentStatus": "proposal-not-approved-final-script",
+      "proposedStaging": "The office host presents a shoebox outside 505; Nicolai changes formal shoes for the exact Park trainers, tightens laces and takes a light test step toward Park",
+      "proposedCaption": "Investing in the long run",
+      "optionalTreatmentDetails": ["505 setting", "Office host participation", "Shoebox and lace-tightening staging", "6–8 second duration", "Caption"],
+      "requiredReferences": ["game/assets/original-17.webp", "game/assets/original-18.webp", "game/scripts/park-shoes.js", "references/gameplay/central-park-gameplay.png"],
+      "beforeFootwearReferences": ["game/assets/original-27.webp", "game/assets/original-28.webp"],
+      "proposedGate": "Existing Next: Central Park action after successful Midtown completion bookkeeping and before starting Park",
+      "integrationConstraints": ["Do not interrupt the active Midtown course or trigger at the live office encounter", "Preserve unlocks and existing Park shoe selection", "Finish, Skip and media failure start Park exactly once", "Do not force replay on every retry", "Define selected-runner handling explicitly before later Trond replays"],
+      "variant": "nicolai",
+      "priority": "requested",
+      "status": "not-generated"
+    },
+    {"id": "LR-PK-01", "title": "Room to think", "proposedDurationSeconds": 5, "proposedGate": "Optional establishing material after LR-SH-01 before Park, or standalone scenery proof", "variant": "selected-runner-or-scenery-only", "priority": "optional-supporting-scene", "status": "not-generated"},
     {"id": "LR-OF-01", "title": "Good company at 505", "proposedDurationSeconds": 5, "proposedGate": "Optional replay or end-of-Midtown after office encountered", "variant": "office-host-and-selected-runner", "priority": "optional", "status": "not-generated"},
     {"id": "LR-CT-01", "title": "The other way up", "proposedDurationSeconds": 1.8, "proposedGate": "Explicit safe Contrarian transition gate, if chosen", "variant": "selected-runner", "priority": "optional-live-rendering-preferred", "status": "not-generated"},
     {"id": "LR-IP-01", "title": "The roadshow", "proposedDurationSeconds": 4, "proposedGate": "Explicit first IPO introduction gate before attack timers", "variant": "selected-runner", "priority": "optional", "status": "not-generated"}

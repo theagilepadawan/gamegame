@@ -20,6 +20,7 @@ Keep cinematic sound sparse: a restrained city/lake bed, one or two clear physic
 |---|---|
 | LR-OP-01 | Quiet city ambience, cuff/footstep detail, a short phrase of the opening theme. |
 | LR-MT-01 | Soft street/leaf movement with a clean handoff into Midtown music. |
+| LR-SH-01 | Sparse box/lace/footstep detail if that staging is chosen; hand off from Midtown to Park music once. No invented spoken greeting. |
 | LR-PK-01 | Light water and leaves; Park music enters gently. |
 | LR-OF-01 | Subtle lobby/door ambience; a warm wordless greeting requires no invented voice. |
 | LR-CT-01 | Optional supplied laugh plus the entrance of Pixel Adventure. Ordinary chapter music stops. |

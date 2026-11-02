@@ -25,7 +25,7 @@ Opening Bell already ends with a bespoke fund-history reveal: the course becomes
 | Asset quality | Detailed native source art; crisp, readable signs; believable feet/tyres on pavement; convincing scale and material. Raster enlargement does not create new detail. |
 | Music | Contrarian uses the supplied Pixel Adventure track exclusively during the event; ordinary level music must not overlap it. |
 
-The packaged v1.4 work addresses venue pacing, the Park restoration, more polished props/signs, 505's lighting/glass and the new office host. Use the release notes and actual final assets for the completed implementation details; image-generation concepts outside the runtime are not automatically approved alternatives.
+The packaged v1.5 work restores Midtown’s dense, warm office-city atmosphere while preserving the approved venue spacing. The underlying v1.4 work addresses venue pacing, the Park restoration, more polished props/signs, 505's lighting/glass and the new office host. Use the release notes and actual final assets for the completed implementation details; image-generation concepts outside the runtime are not automatically approved alternatives.
 
 ## Rendering style
 

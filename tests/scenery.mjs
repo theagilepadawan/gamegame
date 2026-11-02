@@ -102,9 +102,9 @@ try {
       assert.ok(bridge.width > s.width * 2, 'The landmark spans multiple foreground blocks');
     }
     assert.ok(s.panels.length > 0, 'Every camera location has a background');
-    assert.ok(s.panels[0].x <= 0.001, 'Left edge remains covered');
+    assert.ok((s.panels[0].slotX ?? s.panels[0].x) <= 0.001, 'Logical route slots cover the left edge; atmosphere fills alpha margins');
     const last = s.panels.at(-1);
-    assert.ok(last.x + last.width >= s.viewportWidth - 0.001, 'Right edge remains covered');
+    assert.ok((last.slotX ?? last.x) + (last.slotWidth ?? last.width) >= s.viewportWidth - 0.001, 'Logical route slots cover the right edge; atmosphere fills alpha margins');
     assert.equal(s.panels.filter(p => p.original).length <= 1, true);
     assert.equal(s.panels.some(p => p.mirrored), false);
     for (const panel of s.panels) {

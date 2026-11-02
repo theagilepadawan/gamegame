@@ -1,0 +1,47 @@
+{
+  "version": "1.5.0",
+  "nativeArtwork": true,
+  "renderer": "Native camera crops, no raster enlargement; construction uses a uniform world scale within an unchanged route slot.",
+  "files": [
+    {
+      "path": "assets/midtown-v15/atmosphere.webp",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "bytes": 624018,
+      "sha256": "2a10f8ec77bc70cc0a47fb7026e6e148c61b5927c25f0db55aff3db5bbfb89bb"
+    },
+    {
+      "path": "assets/midtown-v15/construction-corner.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "bytes": 433410,
+      "sha256": "a8ccfeef1e9b0db0ea2307965e33f8da5dcc9fe5531c0e31bd62aa32616660e0"
+    },
+    {
+      "path": "assets/midtown-v15/glass-canyon.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "bytes": 425098,
+      "sha256": "60b3c2ab896342e65b735937034b93c376642db15da6ad9a6b134fd05826e778"
+    },
+    {
+      "path": "assets/midtown-v15/limestone-cafe.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "bytes": 395226,
+      "sha256": "740b443106ac7f9630c59e2b820ad53b4fcbfbc6e279fb2ca0cc1410516f8497"
+    }
+  ]
+}

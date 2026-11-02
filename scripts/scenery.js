@@ -16,11 +16,12 @@
       originalIndex: 4, loopStart: 21, backdropScale: 1,
       // Every entry is a complete native-size block. Anonymous streets can
       // recur; venues and the Midtown skyline occur exactly once.
-      route: [1, 6, 7, 1, 4, 6, 1, 7, 0, 7, 6, 1, 2, 6, 1, 7, 3, 1, 7, 6, 5, 6, 1],
-      backdrop: "assets/art-v2/midtown-atmosphere.webp",
-      names: ["joju", "bryant-garden", "omars", "gussy", "midtown-skyline", "fifth-avenue", "residential-block", "cast-iron-block"],
-      files: ["assets/art-v2/midtown-joju.webp", "assets/art-v2/midtown-garden.webp", "assets/art-v2/midtown-omars.webp", "assets/art-v2/midtown-gussy.webp", "assets/art-v2/midtown-skyline.webp", "assets/art-v2/midtown-fifth.webp", "assets/art-v2/downtown-block.webp", "assets/art-v2/downtown-tribeca.webp"],
-      cropTops: [78, 45, 78, 40, 47, 128, 24, 128]
+      route: [6, 7, 8, 6, 4, 7, 1, 6, 0, 7, 8, 6, 2, 7, 6, 1, 3, 6, 8, 7, 5, 6, 7],
+      backdrop: "assets/midtown-v15/atmosphere.webp",
+      names: ["joju", "bryant-garden", "omars", "gussy", "midtown-skyline", "fifth-avenue", "glass-canyon", "limestone-cafe", "construction-corner"],
+      files: ["assets/art-v2/midtown-joju.webp", "assets/art-v2/midtown-garden.webp", "assets/art-v2/midtown-omars.webp", "assets/art-v2/midtown-gussy.webp", "assets/art-v2/midtown-skyline.webp", "assets/art-v2/midtown-fifth.webp", "assets/midtown-v15/glass-canyon.webp", "assets/midtown-v15/limestone-cafe.webp", "assets/midtown-v15/construction-corner.webp"],
+      cropTops: [78, 45, 78, 40, 47, 128, 130, 0, 0],
+      contentScales: { 8: 1130 / 1325 }
     }
   };
   var images = window.NBIMParkScenery ? NBIMParkScenery.images.slice() : [], byPath = new Map(), prepared = new WeakMap(), contexts = new WeakMap();
@@ -74,9 +75,12 @@
       var sourceIndex = def.route[routeIndex];
       var x = index * stride - scroll;
       if (x >= W || x + width <= 0) continue;
+      var contentScale = def.contentScales && def.contentScales[sourceIndex] || 1;
+      var contentWidth = width * contentScale, contentHeight = height * contentScale;
       panels.push({ id: id + ":" + def.names[sourceIndex], kind: "architecture", segment: index, routeIndex: routeIndex, sourceIndex: sourceIndex,
         original: sourceIndex === def.originalIndex, mirrored: false, variant: null,
-        x: x, y: y, width: width, height: height, sourceWidth: SOURCE_W, sourceHeight: SOURCE_H,
+        x: x + (width - contentWidth) / 2, y: y, width: contentWidth, height: contentHeight,
+        slotX: x, slotWidth: width, contentScale: contentScale, sourceWidth: SOURCE_W, sourceHeight: SOURCE_H,
         nativeWidth: SOURCE_W, nativeHeight: 1536, cropTop: def.cropTops[sourceIndex] });
     }
     var atmosphereDrift = Math.min(scroll * .025, W * .18);
@@ -95,7 +99,15 @@
     if (id !== "park") {
       var rootY = H * .824;
       for (var boundary = Math.max(0, first); boundary <= last + 1; boundary++) {
-        var treeHeight = H * [.43, .39, .46, .41][boundary % 4], treeWidth = treeHeight * 2 / 3;
+        // Keep the approved foliage at venue entrances. Between ordinary
+        // Midtown offices, smaller street trees let the city canyon read.
+        var treeProfile = [.43, .39, .46, .41];
+        if (id === "midtown") {
+          var venueSources = [0, 2, 3, 5];
+          var leftSource = def.route[boundary - 1], rightSource = def.route[boundary];
+          if (!venueSources.includes(leftSource) && !venueSources.includes(rightSource)) treeProfile = [.25, .28, .24, .27];
+        }
+        var treeHeight = H * treeProfile[boundary % 4], treeWidth = treeHeight * 2 / 3;
         var treeX = boundary * stride - scroll;
         if (treeX < -treeWidth / 2 || treeX > W + treeWidth / 2) continue;
         layers.push({ id: id + ":tree:" + boundary, kind: "tree", sourceIndex: -2, original: false,

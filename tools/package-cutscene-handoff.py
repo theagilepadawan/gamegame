@@ -57,7 +57,7 @@ native_manifest = json.loads((ROOT / 'assets/art-v2/native-manifest.json').read_
 native_manifest['files'] = [item for item in native_manifest['files'] if item['path'] in used]
 native_manifest['handoffScope'] = 'Only current runtime city art is included; the rejected v1.3 Park rows are omitted.'
 (game / 'assets/art-v2/native-manifest.json').write_text(json.dumps(native_manifest, indent=2) + '\n')
-for folder in ['props-v14', 'office-host-v14']:
+for folder in ['props-v14', 'office-host-v14', 'midtown-v15']:
     if (ROOT / 'assets' / folder).exists():
         for p in (ROOT / 'assets' / folder).glob('*.json'):
             copy(p, game / 'assets' / folder / p.name)
@@ -117,6 +117,10 @@ aliases = {
     'downtown-wall-street.webp': 'assets/art-v2/downtown-wallstreet.webp',
     'midtown-505-blue-glass-entrance.webp': 'assets/art-v2/midtown-fifth.webp',
     'midtown-bryant-garden.webp': 'assets/art-v2/midtown-garden.webp',
+    'midtown-warm-skyline.webp': 'assets/midtown-v15/atmosphere.webp',
+    'midtown-glass-offices.webp': 'assets/midtown-v15/glass-canyon.webp',
+    'midtown-limestone-cafe.webp': 'assets/midtown-v15/limestone-cafe.webp',
+    'midtown-construction.webp': 'assets/midtown-v15/construction-corner.webp',
 }
 for name, relative in aliases.items():
     copy(ROOT / relative, refs / 'locations' / name)
@@ -133,8 +137,9 @@ if host_master.exists():
 captures = {
     'downtown-gameplay.png': 'review/art-direction/opening-start.png',
     'central-park-gameplay.png': 'review/art-direction/park-start.png',
-    'midtown-gameplay.png': 'review/art-direction/midtown-start.png',
-    'office-gameplay.png': 'review/office-host-v14/desktop-office.png',
+    'midtown-gameplay.png': 'review/midtown-v15/after/desktop-start.png',
+    'office-gameplay.png': 'review/midtown-v15/after/desktop-time-55.75.png',
+    'midtown-construction-gameplay.png': 'review/midtown-v15/after/desktop-time-28.png',
     'downtown-bridge-gameplay.png': 'review/downtown/bridge-readable-1440.png',
 }
 for name, relative in captures.items():

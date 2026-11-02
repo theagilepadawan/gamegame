@@ -1,0 +1,56 @@
+{
+  "version": "1.5.0",
+  "nativeDetail": "Generated at 1024\u00d71536 RGBA; no resizing or pixel painting after generation.",
+  "palette": "Warm gold reflections, blue glass, buff limestone and bronze metal; atmosphere from original-34.webp and scenery/midtown-1.webp, with the current JOJU/505 material finish.",
+  "generation": "Each asset had one initial imagegen pass and one placement-correction imagegen edit. Exact threshold alignment is supplied through existing native camera crops, not scaling.",
+  "assets": [
+    {
+      "path": "assets/midtown-v15/glass-canyon.webp",
+      "master": "/workspace/generated_images/exec-51c675fe-ac51-4a38-ac73-8d3fe802e5c7.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha128Bounds": [
+        42,
+        0,
+        1003,
+        1279
+      ],
+      "recommendedCropTop": 130,
+      "nativeThresholdY": 1260,
+      "postCropThresholdY": 1130,
+      "upperOpaqueSideEdgeRuns": [
+        0,
+        0
+      ],
+      "sha256": "60b3c2ab896342e65b735937034b93c376642db15da6ad9a6b134fd05826e778",
+      "masterSha256": "c641713d15b60062816da4a8eaed900a0ecc238302081b7669296e8d4607e820",
+      "bytes": 425098
+    },
+    {
+      "path": "assets/midtown-v15/limestone-cafe.webp",
+      "master": "/workspace/generated_images/exec-25207e1e-4463-463d-b409-cedcddb2fe5c.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "alpha128Bounds": [
+        17,
+        0,
+        994,
+        1160
+      ],
+      "recommendedCropTop": 0,
+      "nativeThresholdY": 1130,
+      "postCropThresholdY": 1130,
+      "upperOpaqueSideEdgeRuns": [
+        0,
+        0
+      ],
+      "sha256": "740b443106ac7f9630c59e2b820ad53b4fcbfbc6e279fb2ca0cc1410516f8497",
+      "masterSha256": "9bf44e231fe02fce0fb2b1d55096357ef9c233eb418698578e200bf85e8a345d",
+      "bytes": 395226
+    }
+  ]
+}

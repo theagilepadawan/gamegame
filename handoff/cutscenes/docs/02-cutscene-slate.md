@@ -1,14 +1,15 @@
-# Proposed cutscene slate
+# Cutscene requests and proposed treatments
 
-This is a recommended starting slate. It has not been approved shot by shot. Produce one proof before a large batch. Choose **LR-OP-01** for identity/action proof or **LR-PK-01** for a lower-risk scenery proof.
+Read `07-latest-direction.md` first. The intro and receiving the exact Park trainers after Midtown are user requests. The staging, lengths and remaining scenes below are proposals, not approved final scripts or implemented features. Produce one proof before a large batch. Use an **LR-OP-01** excerpt only after inspecting the forthcoming intro reference video; while it is unavailable, **LR-PK-01** provides a scenery proof and **LR-SH-01** can establish footwear continuity.
 
-The first three scenes are the useful core: a brief opening and two chapter transitions. The remaining scenes are optional. Keep films rare; the game should spend most of its time responding to the player.
+Prioritize the requested intro and running-shoe beat. A Midtown arrival remains a proposed chapter transition. Park scenery and the office greeting can support the shoe edit or serve as optional extras; do not stack mandatory films at the same transition. Keep films rare; the game should spend most of its time responding to the player.
 
 | ID | Working title | Length | Intended placement | Priority |
 |---|---|---:|---|---|
-| LR-OP-01 | The long run begins | 6 s | First Story start, before simulation begins | Core proof |
-| LR-MT-01 | A higher perspective | 5 s | User chooses Next: Midtown | Core |
-| LR-PK-01 | Room to think | 5 s | User chooses Next: Central Park | Core |
+| LR-OP-01 | The long run begins | Suggested 8–12 s; reference pending | First Story start, before simulation begins | Requested intro; treatment pending reference |
+| LR-MT-01 | A higher perspective | Suggested 5 s | User chooses Next: Midtown | Proposed chapter transition |
+| LR-SH-01 | Ready for the Park | Suggested 6–8 s | After Midtown completion, before Central Park starts | Requested shoe beat; staging proposed |
+| LR-PK-01 | Room to think | Suggested 5 s | Optional Park establishing material after the shoe beat, or scenery proof | Optional supporting scene |
 | LR-OF-01 | Good company at 505 | 5 s | Optional end-of-Midtown/replay extra, after office has been encountered | Optional |
 | LR-CT-01 | The other way up | 1.2–2 s | Optional one-time Contrarian transition, only with a safe simulation gate | Optional; live rendering may be better |
 | LR-IP-01 | The roadshow | 4 s | Optional first IPO introduction before boss telegraphs begin | Optional |
@@ -17,16 +18,11 @@ All timing below uses seconds. A 30 fps editorial timeline is a suggested delive
 
 ## LR-OP-01 — The long run begins
 
-**Story beat:** the city is large, the investor is composed, the horizon is long. A single clear action leads into running.
+**User direction:** follow the intro reference video the user will supply. It is not attached in this handoff. Inspect it before settling animation treatment, pacing, camera language or transitions.
 
-| Time | Picture and action | Camera and cut |
-|---|---|---|
-| 0.0–1.5 | Lower Manhattan at the game's warm dusk. One World Trade Center is the distant anchor; foreground street establishes scale. | A restrained lateral drift; no skyline orbit. |
-| 1.5–3.8 | The selected runner settles a jacket cuff, looks down the route and gives a small determined smile. | Medium three-quarter profile; head/body remain stable. |
-| 3.8–5.5 | Two purposeful strides toward screen right. Jacket hem responds to the steps. | Track only enough to hold composition. Feet contact pavement. |
-| 5.5–6.0 | Pose and framing ease toward the first gameplay direction. | Short clean hold or subtle dissolve to gameplay. |
+**Suggested treatment:** an 8–12-second Lower Manhattan opening in which Nicolai prepares to run, sets off toward screen right, and the title **THE LONG RUN** resolves into the first course. One World Trade Center can anchor the street view. Preparation might be a small cuff adjustment and composed glance. These actions and duration are suggestions; the reference video should determine the final shot structure and timing.
 
-Optional post-production caption: **“Built for the long run.”** Do not put it into the generated image. Make a Nicolai variant first. If selected-runner continuity is later implemented, create a separate Trond variant from his atlas rather than morphing one character into another.
+Keep likeness, costume, planted feet and coherent architecture throughout. Composite the exact title and any branding afterward. Optional caption: **“Built for the long run.”** Make a Nicolai variant first. If selected-runner continuity is later implemented, create a separate Trond variant from his atlas rather than morphing one character into another.
 
 ## LR-MT-01 — A higher perspective
 
@@ -34,15 +30,25 @@ Optional post-production caption: **“Built for the long run.”** Do not put i
 
 | Time | Picture and action | Camera and cut |
 |---|---|---|
-| 0.0–1.2 | A leafy Bryant Park edge with contemporary office facades beyond. | Begin settled on a coherent composition. |
+| 0.0–1.2 | Warm glass offices and a limestone café establish the dense v1.5 Midtown street; a few street trees soften the view. | Begin settled on a coherent composition using the current artwork. |
 | 1.2–3.7 | The runner crosses a short stretch left to right; a small gust lifts a few leaves. | One smooth tracking move; building geometry remains fixed. |
 | 3.7–5.0 | Runner exits toward the chapter's route; the camera settles on the ordinary streetscape. | Match the gameplay travel direction; retain breathing room. |
 
 Optional caption: **“Room for growth.”** Do not feature JOJU, Omar's, Gussy or 505 here: these are discoveries later in the chapter, not a venue montage.
 
+## LR-SH-01 — Ready for the Park
+
+**Required beat and placement:** Nicolai receives the exact running shoes worn by his Central Park sprites after completing Midtown and before Central Park begins. His trousers, jacket, shirt, likeness and proportions stay consistent. Compare formal footwear in `game/assets/original-27.webp`/`original-28.webp` with the trainers in `original-17.webp`/`original-18.webp` before composing the shot. Check `game/scripts/park-shoes.js` and `references/gameplay/central-park-gameplay.png` for the actual Park silhouette and colors; the generic extracted run frame uses formal footwear and is not the trainer reference.
+
+**Suggested treatment, 6–8 seconds:** outside 505's blue/cyan lobby, the office host presents a shoebox. Nicolai opens it with a small smile. A clean edit shows him wearing the exact trainers and tightening their laces; one light test step leads into his jog toward the Park. The office location, host participation, shoebox, duration and optional caption **“Investing in the long run”** are proposals. They are not additional requirements from the user.
+
+Use separate composed frames for the handoff and the footwear close-up if needed; retain matching shoes, clothing and setting across the cut. Do not rely on a model to morph formal shoes into trainers during a running stride. Use the actual Park shoes as the visual authority; do not invent a shoe brand or redesign them.
+
+For later integration, completion bookkeeping and the Next: Central Park action remain authoritative. Show this only after Midtown has finished, then start Park exactly once through the existing flow. Skip must reach the same Park state with its existing shoes. Do not attach the film to the live 505 encounter, change unlocks, or force replay on every retry. The runtime already selects the Park footwear; no shoe-gift cinematic is implemented yet. The requested character is Nicolai; selected-runner handling on later Trond replays needs an explicit policy rather than silently changing the request.
+
 ## LR-PK-01 — Room to think
 
-**Story beat:** the city gives way to a quieter long view without losing momentum.
+**Optional supporting beat:** the city gives way to a quieter long view without losing momentum. This can be a proof shot or support the end of LR-SH-01; it does not replace the requested shoe beat or require a second mandatory film before Park.
 
 | Time | Picture and action | Camera and cut |
 |---|---|---|
@@ -62,7 +68,7 @@ Optional caption: **“Let it compound.”** Preserve bridge shape, lake shore a
 | 1.0–3.4 | Host meets the approaching runner's gaze and gives one small, relaxed greeting with an open hand. | Preserve her broad smile, face, plum suit and body proportions. |
 | 3.4–5.0 | Hand returns smoothly to a comfortable position; both characters share a brief smile. | End settled. No repeated wave loop. |
 
-No spoken dialogue is required. Do not invent her name. Keep the lobby's vivid blue/cyan lighting behind her and a subtle motivated rim on clothing; retain natural skin color. Reflections may move slightly; doors and signage must not deform. Use only after the office's in-game reveal, or as an optional replay scene.
+No spoken dialogue is required. Do not invent her name. Keep the lobby's vivid blue/cyan lighting behind her and a subtle motivated rim on clothing; retain natural skin color. Reflections may move slightly; doors and signage must not deform. Use only after the office's in-game reveal, or as an optional replay scene. If the host participates in LR-SH-01, her greeting can be part of that edit instead of a separate film.
 
 ## LR-CT-01 — The other way up
 

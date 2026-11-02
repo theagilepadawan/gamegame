@@ -1,0 +1,20 @@
+{
+  "version": "1.5.0",
+  "asset": "assets/midtown-v15/atmosphere.webp",
+  "nativeDimensions": [
+    1536,
+    1024
+  ],
+  "mode": "RGB",
+  "sourceMaster": "/workspace/generated_images/exec-9c8275c6-e454-4c13-8f72-73bf6fc46d67.png",
+  "sourceSha256": "fd5fb0c99c03a0e89e8b9bedbea22c9c77800abd5a11432cdffe34e5ad34b2b0",
+  "runtimeSha256": "2a10f8ec77bc70cc0a47fb7026e6e148c61b5927c25f0db55aff3db5bbfb89bb",
+  "runtimeBytes": 624018,
+  "encoding": "WebP quality 95, method 6; no resampling or cropping",
+  "referenceInputs": [
+    "assets/art-v2/midtown-atmosphere.webp",
+    "assets/original-34.webp"
+  ],
+  "generation": "Imagegen edit of the current atmosphere, using the original Midtown painting for warm dense office architecture and reflected light. Retains a single continuous street/curb plane around native y=775. No named venues or recognizable landmark towers are included.",
+  "review": "Native image visually inspected: layered anonymous glass/limestone office towers, amber reflections and cooler shadow planes; tree belt and sidewalk/curb registration preserved. Source street pixels are regenerated closely, not claimed byte-identical."
+}

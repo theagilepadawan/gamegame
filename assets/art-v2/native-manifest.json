@@ -1,5 +1,5 @@
 {
-  "version": "1.4.0",
+  "version": "1.5.0",
   "encoding": "WebP quality 95; native dimensions retained; no raster resize",
   "architectureCameraWindow": [
     1024,
@@ -128,7 +128,7 @@
       "hasAlpha": false,
       "bytes": 477756,
       "sha256": "46655d8878c07924e623cee2d8038f4d4dac93dad4607097cc7f36bf7922a0ba",
-      "activeInGame": true
+      "activeInGame": false
     },
     {
       "path": "assets/art-v2/midtown-fifth.webp",
