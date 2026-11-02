@@ -23,6 +23,13 @@ async function open(viewport, deviceScaleFactor = 1) {
   page.on('response', response => {if (response.status() >= 400) failures.push(`${response.status()} ${response.url()}`);});
   await page.goto(url.href, {waitUntil: 'networkidle'});
   await page.waitForFunction(() => window.longRun && LR_SCENERY.ready && longRun.environment.ready && !document.querySelector('#start').disabled && !document.querySelector('#splash'));
+  // Every frame below explicitly updates and renders the engine. Stop the
+  // ambient loop so it cannot overwrite background-only captures mid-shot.
+  await page.evaluate(() => {
+    const nextFrame = window.requestAnimationFrame.bind(window);
+    window.requestAnimationFrame = () => 0;
+    return new Promise(resolve => nextFrame(resolve));
+  });
   return {context, page};
 }
 async function render(page, district, distance) {
@@ -84,7 +91,7 @@ try {
       }
       signatures.set(top, result); return result;
     }
-    for (const district of ['opening', 'midtown', 'park']) for (let distance = 0; distance <= 30000; distance += 500) {
+    for (const district of ['opening', 'midtown']) for (let distance = 0; distance <= 30000; distance += 500) {
       for (const panel of LR_SCENERY.layout(district, distance, 1000, 540, 'chapter').panels) {
         if (seen.has(panel.id)) continue; seen.add(panel.id);
         const source = LR_SCENERY.source(district, panel), data = source.getContext('2d').getImageData(0, 0, source.width, source.height).data;
@@ -131,7 +138,11 @@ try {
       }
       return {finishDistance, finish, width: eA, joins};
     }, district);
-    assert.ok(Math.abs(route.finish.scroll - (route.finish.stripWidth - route.width)) < .01,
+    if (district === 'park') {
+      assert.equal(route.finish.panelCount, 3, 'Park retains the approved Bow Bridge, Ramble and Bethesda paintings');
+      assert.equal(route.finish.parallaxRate, .085, 'Park retains the approved camera speed');
+      assert.equal(route.finish.authoredLayers, undefined, 'Park uses the approved full paintings');
+    } else assert.ok(Math.abs(route.finish.scroll - (route.finish.stripWidth - route.width)) < .01,
       `${district}: the complete authored route is reached before victory`);
     await capture(page, `${district}-start`, await render(page, district, 0));
     for (const join of route.joins) {
@@ -145,11 +156,12 @@ try {
     const sequence = [];
     for (const offset of [-1000, -500, 0, 500, 1000]) {
       const info = await render(page, district, Math.max(0, center.distance + offset));
-      sequence.push({district, offset, scroll: info.scene.scroll, atmosphere: info.scene.layers[0]});
+      sequence.push({district, offset, scroll: info.scene.scroll, atmosphere: info.scene.layers?.[0] || null});
       await capture(page, `${district}-motion-${offset + 1000}`, info);
     }
     for (let i = 1; i < sequence.length; i++) {
       assert.ok(sequence[i].scroll > sequence[i - 1].scroll, 'Join frames advance through the real scenery camera');
+      if (district === 'park') continue;
       assert.equal(sequence[i].atmosphere.kind, 'atmosphere');
       assert.equal(sequence[i].atmosphere.width, sequence[0].atmosphere.width);
       assert.equal(sequence[i].atmosphere.y, sequence[0].atmosphere.y);

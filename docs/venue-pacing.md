@@ -1,0 +1,36 @@
+# Venue pacing — 1.4
+
+The city routes now distinguish source artwork from its position in the world. `LR_SCENERY.layout().blocks` lists the authored sequence, while each visible panel retains its `sourceIndex` for image lookup and `segment` for its world position. Venue metadata finds its world block rather than assuming that image index equals route position.
+
+Opening Bell retains the WTC establishing frame and camera easing. Two complete anonymous city blocks now precede Kabin. Wall Street, Seaport, the single complete Brooklyn Bridge and the East River still separate Kabin and LEI. An additional ordinary Seaport block after LEI lets its frontage pass the runner before the chapter finishes. The fourteen-block route repeats only its final anonymous city/waterfront blocks in Endless.
+
+Midtown now opens on ordinary garden, residential and cast-iron blocks. The Midtown skyline appears once. JOJU, Omar's, Gussy's and 505 occupy route positions 8, 12, 16 and 20 in a twenty-three-block route; three complete ordinary blocks separate every pair. A short camera hold establishes the opening streets. All source artwork retains native dimensions and scale. Anonymous existing city artwork is reused in a varied order; no venue, facade or backdrop is stretched to create distance.
+
+The 505 source art and doorway crop were updated separately against the supplied office photograph. Its metadata uses the exact crop and full entrance bounds specified in `office-art-v14.md`. The office host anchor follows the same source-space and camera transform as the entrance.
+
+## Verification
+
+Run `node tests/venue-pacing.mjs` against the development server or set `TEST_URL` to the standalone build. The suite starts real chapters and advances the production simulation at 120 Hz. It records the first rendered native venue pixel, first visible frontage pixel, full-frontage arrival and when the venue center crosses the actual runner X position. Native visibility is sampled at 30 Hz after applying subsequent scenery occlusion and the run's terrain line. A route slot becoming visible alone does not satisfy the reveal assertion.
+
+Desktop (1440×900), mobile at DPR2 (844×390) and compact landscape (568×320) are checked. The suite requires at least fifteen seconds without any venue artwork, no two named frontages on screen together, at least three complete intervening blocks, an ordinary-only screen interval, and every complete frontage and runner-center crossing before the actual victory frame. No duration is inferred only from a guessed movement speed or a source image index.
+
+`review/venue-pacing/report.json` contains measured times and distances. `review/venue-pacing/index.html` and `contact-sheet.png` show the actual starts, fifteen-second ordinary streets, first native pixels, full frontages, runner-center crossings and every desktop architectural join. Existing venue, downtown and scenery suites cover native entrance geometry, greeting timing, WTC/HUD placement, bridge readability, renderer parity and landmark-free Endless continuation.
+
+## Measured reveals
+
+Seconds from the actual chapter start; each cell is desktop / mobile at DPR2. First pixel refers to native venue architecture visible after tree and terrain occlusion. The first recognizable frontage is measured separately.
+
+| Venue | First native pixel | First frontage pixel | Center at runner |
+| --- | ---: | ---: | ---: |
+| Kabin | 21.70 / 18.97 | 25.87 / 20.87 | 35.40 / 37.93 |
+| LEI | 53.13 / 53.07 | 53.67 / 53.67 | 64.43 / 68.17 |
+| JOJU | 19.10 / 17.53 | 19.67 / 18.13 | 24.87 / 25.47 |
+| Omar's | 30.03 / 28.87 | 30.63 / 29.50 | 35.80 / 36.80 |
+| Gussy's | 41.03 / 40.30 | 41.47 / 40.77 | 46.83 / 48.23 |
+| 505 Fifth Avenue | 51.87 / 51.53 | 52.50 / 52.23 | 57.63 / 59.47 |
+
+Midtown frontage reveals are 10.83–11.03 seconds apart on desktop and 11.27–11.47 seconds apart on mobile. The shortest interval with no named frontage visible is 3.30 seconds on desktop and 1.30 seconds on mobile. The complete entrance reaches the viewport before the runner-center crossing and before victory. Compact landscape also passes all reveal, separation and completion assertions.
+
+The complete Brooklyn Bridge retains its native scale and original vertical position. Its center is half a block earlier within the waterfront, giving both towers and the span a clear terrain interval without raising the masonry footings out of the river. The downtown suite checks this at all three viewport sizes.
+
+For a validation-only rerun, `PACING_CAPTURE=0 node tests/venue-pacing.mjs` preserves all timing and pixel assertions, writes the measurement report, and leaves the existing visual gallery intact. Its review contact sheet uses a temporary local HTTP server because this environment blocks browser navigation to local `file:` pages.

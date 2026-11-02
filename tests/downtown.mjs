@@ -72,12 +72,12 @@ try{
   const route=await page.evaluate(()=>{
     const story=LR_SCENERY.inspect('opening',25920,1000,540,'chapter');
     const tail=[];for(let d=50000;d<120000;d+=500)tail.push(...LR_SCENERY.layout('opening',d,1000,540,'endless').panels);
-    return {lastVisible:story.panels.some(p=>p.sourceIndex===story.panelCount-1),end:story.scroll,max:story.stripWidth-1000,
-      tail:[...new Set(tail.map(p=>p.id))],tailIndices:[...new Set(tail.map(p=>p.sourceIndex))],loopStart:story.loopStart};
+    return {lastVisible:story.panels.some(p=>p.segment===story.panelCount-1),end:story.scroll,max:story.stripWidth-1000,
+      tail:[...new Set(tail.map(p=>p.id))],tailIndices:[...new Set(tail.map(p=>p.sourceIndex))],loopSourceIndices:story.loopSourceIndices};
   });
   assert.equal(route.lastVisible,true,'The final waterfront is reached within the normal Story course');
   assert.ok(Math.abs(route.end-route.max)<.01);
-  assert.ok(route.tailIndices.every(index=>index>=route.loopStart));
+  assert.ok(route.tailIndices.every(index=>route.loopSourceIndices.includes(index)));
   assert.equal(route.tail.some(id=>/lower-manhattan|brooklyn-bridge|kabin|lei/.test(id)),false,'Endless repeats only anonymous city/waterfront blocks');
   const bridgeViews=[];
   for(const viewport of [{width:1440,height:900},{width:844,height:390},{width:568,height:320}]){

@@ -67,7 +67,7 @@ try {
   const {page} = desktop;
   const geometry = await page.evaluate(() => {
     const records = [];
-    for (const district of ['opening', 'midtown', 'park']) {
+    for (const district of ['opening', 'midtown']) {
       for (const width of [1000, 1320]) {
         for (const mode of ['chapter', 'endless']) {
           for (let distance = 0; distance <= 120000; distance += 1000) {
@@ -109,9 +109,18 @@ try {
     assert.equal(s.panels.some(p => p.mirrored), false);
     for (const panel of s.panels) {
       assert.equal(panel.original, panel.sourceIndex === s.originalIndex);
-      if (s.mode === 'chapter') assert.equal(panel.segment, panel.sourceIndex, 'Story never wraps a plate');
-      if (panel.segment >= s.panelCount) assert.ok(panel.sourceIndex >= s.loopStart, 'Endless never repeats the original skyline or approach');
+      if (s.mode === 'chapter') assert.equal(panel.sourceIndex, s.blocks[panel.segment].sourceIndex, 'Story follows its authored block composition');
+      if (panel.segment >= s.panelCount) assert.ok(s.loopSourceIndices.includes(panel.sourceIndex), 'Endless only repeats anonymous tail blocks');
     }
+  }
+  const park = await page.evaluate(() => [0, 6000, 19000, 120000].map(distance => LR_SCENERY.inspect('park', distance, 1000, 540, 'endless')));
+  for (const scene of park) {
+    assert.equal(scene.panelCount, 3, 'Park delegates to the three approved legacy paintings');
+    assert.equal(scene.maxSourceWidth, 1672);
+    assert.equal(scene.parallaxRate, .085, 'The approved Park camera remains unchanged');
+    assert.ok(Math.abs(scene.overlap - scene.width * 64 / 1672) < 1e-9);
+    assert.equal(scene.layers, undefined, 'Park keeps its original painting composition');
+    if (scene.scroll > scene.stripWidth) assert.ok(scene.panels.every(panel => !panel.original), 'Park Endless tail excludes the original landmark');
   }
   console.log('[scenery] finite Story and landmark-free Endless geometry passed');
   // Exact beginning, first join, and late-course frames exercise the real Pixi

@@ -1,0 +1,22 @@
+{
+  "version": "1.4.0",
+  "command": "PACING_CAPTURE=0 npm test",
+  "suites": [
+    "modes",
+    "menu",
+    "scenery",
+    "art-layers",
+    "downtown",
+    "venues",
+    "venue-pacing",
+    "office-host",
+    "props",
+    "water",
+    "gaps",
+    "standalone"
+  ],
+  "passed": 12,
+  "htmlBytes": 38195724,
+  "embeddedAssets": 60,
+  "htmlSha256": "f977a0b6b2645f56f0ee89d198cab4c6077daea46b0af77e57e5df44441201c8"
+}

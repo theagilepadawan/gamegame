@@ -1,5 +1,5 @@
 {
-  "version": "1.3.0",
+  "version": "1.4.0",
   "encoding": "WebP quality 95; native dimensions retained; no raster resize",
   "architectureCameraWindow": [
     1024,
@@ -17,7 +17,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 723224,
-      "sha256": "99ca4905d772e91932dd06117e6de021617a1a37290505ce3c5260e199517639"
+      "sha256": "99ca4905d772e91932dd06117e6de021617a1a37290505ce3c5260e199517639",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/downtown-atmosphere.webp",
@@ -26,7 +27,8 @@
       "mode": "RGB",
       "hasAlpha": false,
       "bytes": 625676,
-      "sha256": "7887542b719c9ac52077e076e303632ce6e437cf5782d42fc3cf3d7569c047ca"
+      "sha256": "7887542b719c9ac52077e076e303632ce6e437cf5782d42fc3cf3d7569c047ca",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/downtown-block.webp",
@@ -35,7 +37,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 463512,
-      "sha256": "aba4891e4495b3dedc28cfab002cb03cf855a82d657c582838b5f6620d3fcac6"
+      "sha256": "aba4891e4495b3dedc28cfab002cb03cf855a82d657c582838b5f6620d3fcac6",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/downtown-bridge-wide.webp",
@@ -44,7 +47,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 408668,
-      "sha256": "de38ee8e14024162f670c7b932c37838c303ad22f3acbf8954875d1974fd4ee5"
+      "sha256": "de38ee8e14024162f670c7b932c37838c303ad22f3acbf8954875d1974fd4ee5",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/downtown-kabin.webp",
@@ -53,7 +57,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 406258,
-      "sha256": "fab633a7cf0d4d2efce4cb1de6b055154d7825fab3f40a76e6269ec3ea969b63"
+      "sha256": "fab633a7cf0d4d2efce4cb1de6b055154d7825fab3f40a76e6269ec3ea969b63",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/downtown-lei.webp",
@@ -62,7 +67,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 471600,
-      "sha256": "eadac7262c58169572daa09c5e807da666a73113229c8cf24724a31103a7b2bc"
+      "sha256": "eadac7262c58169572daa09c5e807da666a73113229c8cf24724a31103a7b2bc",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/downtown-seaport.webp",
@@ -71,7 +77,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 472602,
-      "sha256": "4714d0480f753cdc7f06e06c3116289d53a3b72f2de31aff3ecb7bdf5a51a5e0"
+      "sha256": "4714d0480f753cdc7f06e06c3116289d53a3b72f2de31aff3ecb7bdf5a51a5e0",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/downtown-tribeca.webp",
@@ -80,7 +87,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 451810,
-      "sha256": "ba95d665f083576428a0148d87a4114e90b08e219ae749b7decfdba6e8fd4c12"
+      "sha256": "ba95d665f083576428a0148d87a4114e90b08e219ae749b7decfdba6e8fd4c12",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/downtown-wallstreet.webp",
@@ -89,7 +97,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 467526,
-      "sha256": "1fd084ddf805b3d00c921fd864e386ea949de668f01364074e0e29c462cf59ef"
+      "sha256": "1fd084ddf805b3d00c921fd864e386ea949de668f01364074e0e29c462cf59ef",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/downtown-waterfront.webp",
@@ -98,7 +107,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 191218,
-      "sha256": "0793ad1c4f8ae9d67be2a971be99457c5877a01a43d76b8b653c7fa66b9e24c7"
+      "sha256": "0793ad1c4f8ae9d67be2a971be99457c5877a01a43d76b8b653c7fa66b9e24c7",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/downtown-wtc.webp",
@@ -107,7 +117,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 486614,
-      "sha256": "4d33b9cc744c2941fd4b2893081949e240fc74190424c50f1a80da9e7120e083"
+      "sha256": "4d33b9cc744c2941fd4b2893081949e240fc74190424c50f1a80da9e7120e083",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/midtown-atmosphere.webp",
@@ -116,7 +127,8 @@
       "mode": "RGB",
       "hasAlpha": false,
       "bytes": 477756,
-      "sha256": "46655d8878c07924e623cee2d8038f4d4dac93dad4607097cc7f36bf7922a0ba"
+      "sha256": "46655d8878c07924e623cee2d8038f4d4dac93dad4607097cc7f36bf7922a0ba",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/midtown-fifth.webp",
@@ -124,8 +136,9 @@
       "height": 1536,
       "mode": "RGBA",
       "hasAlpha": true,
-      "bytes": 413882,
-      "sha256": "67b970ddeedf4be09e6612c265a53246d837a2f54b88ccc535eeb14edfc38d74"
+      "bytes": 390648,
+      "sha256": "84a765b52d02da912ce3553463b5317d28ec0d5e90abb81de3108904d20267d0",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/midtown-garden.webp",
@@ -134,7 +147,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 581732,
-      "sha256": "456caebc7268bf0cfc89a2b7d69d239fa77de0ac83e595b0d7f865624353cfdc"
+      "sha256": "456caebc7268bf0cfc89a2b7d69d239fa77de0ac83e595b0d7f865624353cfdc",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/midtown-gussy.webp",
@@ -143,7 +157,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 424818,
-      "sha256": "f025299fe0873adae049605ea1fdd4d90b645d2f58a69f50b7215c4c9b9704e2"
+      "sha256": "f025299fe0873adae049605ea1fdd4d90b645d2f58a69f50b7215c4c9b9704e2",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/midtown-joju.webp",
@@ -152,7 +167,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 495582,
-      "sha256": "170c5d6498953e63481bad509e1999be788e15b5ff66bebcc9b4b55643089aef"
+      "sha256": "170c5d6498953e63481bad509e1999be788e15b5ff66bebcc9b4b55643089aef",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/midtown-omars.webp",
@@ -161,7 +177,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 504496,
-      "sha256": "3ff7a3f59775756a894066212d89a5f0f25135e25b08ff83a78cc6040b8e5141"
+      "sha256": "3ff7a3f59775756a894066212d89a5f0f25135e25b08ff83a78cc6040b8e5141",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/midtown-skyline.webp",
@@ -170,7 +187,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 591598,
-      "sha256": "f8aaa1b736e4d5782fa52428231d0e16c406282c89d9fd7c16f3445d12a5966d"
+      "sha256": "f8aaa1b736e4d5782fa52428231d0e16c406282c89d9fd7c16f3445d12a5966d",
+      "activeInGame": true
     },
     {
       "path": "assets/art-v2/park-0-bow-bridge.webp",
@@ -179,7 +197,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 398788,
-      "sha256": "c55c9112f3a672c64831ec07cdccbbf4b373121c27b6f37572e528ada431c0e1"
+      "sha256": "c55c9112f3a672c64831ec07cdccbbf4b373121c27b6f37572e528ada431c0e1",
+      "activeInGame": false
     },
     {
       "path": "assets/art-v2/park-1-ramble-shore.webp",
@@ -188,7 +207,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 425904,
-      "sha256": "ceadb181df9bcf621cf5f8f13c95c4a669e250dea83ad2448a44fa6aa84b5dee"
+      "sha256": "ceadb181df9bcf621cf5f8f13c95c4a669e250dea83ad2448a44fa6aa84b5dee",
+      "activeInGame": false
     },
     {
       "path": "assets/art-v2/park-2-ramble-rocks.webp",
@@ -197,7 +217,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 443568,
-      "sha256": "fc171e2390044b28965fa364b2edba9b921bf2053ddf0b3163e2198219f3fbbb"
+      "sha256": "fc171e2390044b28965fa364b2edba9b921bf2053ddf0b3163e2198219f3fbbb",
+      "activeInGame": false
     },
     {
       "path": "assets/art-v2/park-3-bethesda-approach.webp",
@@ -206,7 +227,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 468124,
-      "sha256": "d1566305552a9e7180a8ebe872db5935668dd792b29666ba4ba5b4c9fa139b9f"
+      "sha256": "d1566305552a9e7180a8ebe872db5935668dd792b29666ba4ba5b4c9fa139b9f",
+      "activeInGame": false
     },
     {
       "path": "assets/art-v2/park-4-bethesda-terrace.webp",
@@ -215,7 +237,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 464814,
-      "sha256": "f2e95ef1417b51840694f255ee5279239d1d472313cf9385509f612c4e8311ec"
+      "sha256": "f2e95ef1417b51840694f255ee5279239d1d472313cf9385509f612c4e8311ec",
+      "activeInGame": false
     },
     {
       "path": "assets/art-v2/park-5-willow-shore.webp",
@@ -224,7 +247,8 @@
       "mode": "RGBA",
       "hasAlpha": true,
       "bytes": 433862,
-      "sha256": "40cccd83cb474f85824e2ff2449d395f6d556385484ac590f81e555d13ddd702"
+      "sha256": "40cccd83cb474f85824e2ff2449d395f6d556385484ac590f81e555d13ddd702",
+      "activeInGame": false
     },
     {
       "path": "assets/art-v2/park-atmosphere.webp",
@@ -233,7 +257,8 @@
       "mode": "RGB",
       "hasAlpha": false,
       "bytes": 561038,
-      "sha256": "3c213a2fd69e10b0e9e57ba489c8df2d1e21c97c754cc110dff7c47f95d48173"
+      "sha256": "3c213a2fd69e10b0e9e57ba489c8df2d1e21c97c754cc110dff7c47f95d48173",
+      "activeInGame": false
     }
   ]
 }

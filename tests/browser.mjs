@@ -36,7 +36,7 @@ try{
     });
   }
   console.log(`Testing ${env.TEST_URL}`);
-  for(const test of ['modes','menu','scenery','art-layers','downtown','venues','water','gaps','standalone']) await run(`tests/${test}.mjs`);
+  for(const test of ['modes','menu','scenery','art-layers','downtown','venues','venue-pacing','office-host','props','water','gaps','standalone']) await run(`tests/${test}.mjs`);
   console.log('All release browser checks passed.');
 }finally{
   server?.kill('SIGTERM');

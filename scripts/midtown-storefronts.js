@@ -3,14 +3,14 @@
 (function () {
   "use strict";
   var SOURCE_W = 1024, SOURCE_H = 1430, NATIVE_H = 1536;
-  var cropTops = [78, 45, 78, 40, 47, 78];
+  var cropTops = [78, 45, 78, 40, 47, 128];
   // Bounds include the full recognizable frontage in native artwork coordinates:
   // doors, glazing, awnings, and the food truck's complete silhouette.
   var fixtures = [
     { key: "joju", panel: 0, rect: [232, 876, 566, 335], kind: "integrated storefront", depth: "brownstone ground floor" },
     { key: "omars", panel: 2, rect: [239, 933, 553, 278], kind: "integrated restaurant", depth: "limestone ground floor" },
     { key: "gussy", panel: 3, rect: [208, 847, 691, 335], kind: "integrated vehicle", depth: "park-side curb", contactY: 1181, wheels: [345, 796] },
-    { key: "fifth", panel: 5, rect: [256, 871, 511, 338], kind: "integrated entrance", depth: "complete glass office entrance", fullGlassEntrance: true }
+    { key: "fifth", panel: 5, rect: [256, 870, 512, 386], kind: "integrated entrance", depth: "complete glass office entrance", fullGlassEntrance: true, officeHost: { x: 782, y: 1265, height: 190 } }
   ];
   var last = { on: false, scroll: 0, W: 1000, H: 540, items: [] };
   function state() { return window.longRun ? longRun.state : "home"; }
@@ -23,14 +23,17 @@
     var layout = scene(distance, W, H), scale = layout.height / SOURCE_H;
     return { scene: layout, scale: scale, items: fixtures.map(function (fixture) {
       var cropTop = (layout.cropTops || cropTops)[fixture.panel];
-      var left = fixture.panel * layout.stride - layout.scroll, r = fixture.rect;
+      var block = layout.blocks && layout.blocks.find(function (p) { return p.sourceIndex === fixture.panel; });
+      var worldLeft = block ? block.worldX : fixture.panel * layout.stride;
+      var left = worldLeft - layout.scroll, r = fixture.rect;
       var source = [[r[0], r[1] - cropTop], [r[0] + r[2], r[1] - cropTop],
         [r[0] + r[2], r[1] + r[3] - cropTop], [r[0], r[1] + r[3] - cropTop]];
       var points = source.map(function (p) { return [left + p[0] * scale, -8 + p[1] * scale]; });
-      return { key: fixture.key, panel: fixture.panel, tile: fixture.panel, kind: fixture.kind, depth: fixture.depth,
-        x: left + (r[0] + r[2] / 2) * scale, worldX: fixture.panel * layout.stride + (r[0] + r[2] / 2) * scale,
+      return { key: fixture.key, panel: fixture.panel, segment: block ? block.segment : fixture.panel, tile: fixture.panel, kind: fixture.kind, depth: fixture.depth,
+        x: left + (r[0] + r[2] / 2) * scale, worldX: worldLeft + (r[0] + r[2] / 2) * scale,
         width: r[2] * scale, height: r[3] * scale, quad: points, sourceQuad: source, sourceCrop: fixture.rect.slice(),
         cropTop: cropTop, renderMode: "painted", fullArchitecture: true, fullGlassEntrance: !!fixture.fullGlassEntrance,
+        host: fixture.officeHost ? { x: left + fixture.officeHost.x * scale, y: -8 + (fixture.officeHost.y - cropTop) * scale, height: fixture.officeHost.height * scale } : null,
         contactY: fixture.contactY == null ? null : -8 + (fixture.contactY - cropTop) * scale,
         wheelX: fixture.wheels ? fixture.wheels.map(function (x) { return left + x * scale; }) : null,
         visible: points[1][0] > 0 && points[0][0] < W };
@@ -50,7 +53,11 @@
     draw2d: function (ctx, id, distance, W, img, tileW, tileH) { remember(id, distance, W, tileH - 16); },
     tick: function (q, W, toast) {
       if (!q || q.districtId !== "midtown" || !last.on || q.__told505 || (q.chapterTime || 0) < 2) return;
-      var office = last.items.find(function (item) { return item.key === "fifth"; });
+      // A retry or exact camera seek can precede the next renderer update.
+      // Use the current run distance so cached late-course metadata cannot
+      // announce the office during a fresh Midtown opening.
+      var items = placements(q.distance || 0, last.W, last.H).items;
+      var office = items.find(function (item) { return item.key === "fifth"; });
       // Announce once the full entrance is visible. On wide displays the finite
       // course can stop before the entrance center reaches the middle of view.
       if (office && office.quad[0][0] >= 20 && office.quad[1][0] <= last.W - 20) {

@@ -4,14 +4,17 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
-## Art direction — 1.3
+## Scenery, venues and gameplay art — 1.4
 
-- **Continuous scenery:** each chapter shares one painted atmosphere and ground plane, with complete native-detail architecture above it. Sky, water and road no longer restart at every section boundary.
-- **Lower Manhattan:** One World Trade Center, the complete Brooklyn Bridge, Wall Street and Charging Bull replace the mixed Midtown skyline and duplicate bridge. Varied Tribeca and Seaport architecture connects the journey.
-- **Complete venues:** Kabin and LEI occupy separate blocks. Midtown venues are naturally spaced, and 505 retains its full glass entrance beneath a contemporary office facade.
-- **Native detail:** newly authored 1024×1536 architectural and forest layers replace smaller paintings and tiny sign crops. No raster upscaling is used. See [scenery notes](docs/scenery.md) for source/display density and renderer details.
-- **Central Park:** complete Bow Bridge and Bethesda architecture share a continuous golden forest, lake and path atmosphere.
-- **Chapter map:** the heading reads NEW YORK, without a redundant world number.
+- **Venue pacing:** ordinary streets establish each chapter before its Easter eggs appear. Kabin and LEI, and the four Midtown frontages, are separated using the actual scenery camera and complete frontage bounds.
+- **505 Fifth:** the office entrance follows the supplied reference: cobalt-blue lobby, cyan perimeter lighting, dark lettering and two full revolving glass doors. A new office host uses the existing painted character style.
+- **Central Park restored:** the original Bow Bridge painting, Ramble and Bethesda extensions, camera, foreground scenery and lake animation are restored from the approved pre-1.3 version.
+- **Game objects:** native painted pickups, market-risk obstacles and clearer directional signs add material detail while preserving collision and collection behavior.
+- **City continuity:** Lower Manhattan keeps One World Trade Center, the complete Brooklyn Bridge, Wall Street and Charging Bull. The chapter map reads NEW YORK without a redundant world number.
+
+The current Nicolai and Trond sprite sheets are unchanged. The rejected cartoon runner study and alternate Park artwork are not part of gameplay.
+
+[Cutscene production handoff](release/The-Long-Run-Cutscene-Handoff.zip?raw=1) contains the current game, native references, audio, a proposed shot slate, Runway prompts and browser integration notes. Start with `START-HERE.md` inside the ZIP. Cutscenes are a separate production task; this release does not add video interruptions.
 
 ## Story and Endless
 
@@ -35,7 +38,7 @@ Requires Node.js 20 or newer. The build and local server have no dependencies.
 npm start
 ```
 
-Open the URL printed by the server. `index.html`, `game.css`, `scripts/` and `assets/` are the editable source. `scripts/engine.js` contains the original bundled game and Pixi runtime, formatted for maintenance. `scripts/scenery.js` controls the continuous background sequence; `scripts/chapter-menu.js` controls the chapter map.
+Open the URL printed by the server. `index.html`, `game.css`, `scripts/` and `assets/` are the editable source. `scripts/engine.js` contains the original bundled game and Pixi runtime, formatted for maintenance. `scripts/scenery.js` controls the city background sequence; `scripts/park-scenery.js` preserves the approved Park composition; `scripts/chapter-menu.js` controls the chapter map.
 
 ```sh
 npm run build

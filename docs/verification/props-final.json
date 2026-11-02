@@ -1,0 +1,200 @@
+{
+  "images": [
+    {
+      "width": 370,
+      "height": 381
+    },
+    {
+      "width": 368,
+      "height": 431
+    },
+    {
+      "width": 418,
+      "height": 395
+    },
+    {
+      "width": 466,
+      "height": 450
+    },
+    {
+      "width": 443,
+      "height": 430
+    },
+    {
+      "width": 506,
+      "height": 323
+    }
+  ],
+  "outcomes": [
+    {
+      "type": "low",
+      "action": "walk",
+      "dead": true,
+      "cleared": 0
+    },
+    {
+      "type": "low",
+      "action": "jump",
+      "dead": false,
+      "cleared": 1
+    },
+    {
+      "type": "high",
+      "action": "stand",
+      "dead": true,
+      "cleared": 0
+    },
+    {
+      "type": "high",
+      "action": "slide",
+      "dead": false,
+      "cleared": 1
+    },
+    {
+      "kind": "dividend",
+      "collected": 1,
+      "research": 0,
+      "conviction": 0,
+      "event": {
+        "type": "pickup",
+        "kind": "dividend",
+        "value": 10,
+        "x": 281.11323834618037,
+        "y": 357
+      }
+    },
+    {
+      "kind": "opportunity",
+      "collected": 1,
+      "research": 0,
+      "conviction": 0,
+      "event": {
+        "type": "pickup",
+        "kind": "opportunity",
+        "value": 75,
+        "x": 281.11323834618037,
+        "y": 357
+      }
+    },
+    {
+      "kind": "research",
+      "collected": 1,
+      "research": 8.59166666666669,
+      "conviction": 0,
+      "event": {
+        "type": "pickup",
+        "kind": "research",
+        "value": 20,
+        "x": 281.11323834618037,
+        "y": 357
+      }
+    },
+    {
+      "kind": "conviction",
+      "collected": 1,
+      "research": 0,
+      "conviction": 7.591666666666646,
+      "event": {
+        "type": "pickup",
+        "kind": "conviction",
+        "value": 40,
+        "x": 281.11323834618037,
+        "y": 357
+      }
+    }
+  ],
+  "spring": {
+    "used": true,
+    "grounded": false,
+    "vy": -745,
+    "event": {
+      "type": "spring",
+      "x": 250,
+      "y": 422
+    }
+  },
+  "obstacles": {
+    "enabledPark": {
+      "hash": 1541700886,
+      "visible": 8600
+    },
+    "originalPark": {
+      "hash": 1541700886,
+      "visible": 8600
+    },
+    "upgradedMidtown": {
+      "hash": 3384092859,
+      "visible": 12964
+    },
+    "originalMidtown": {
+      "hash": 3923335180,
+      "visible": 12797
+    }
+  },
+  "motion": {
+    "stillA": {
+      "hash": 3607145056,
+      "visible": 16009
+    },
+    "stillB": {
+      "hash": 3607145056,
+      "visible": 16009
+    },
+    "movingA": {
+      "hash": 3697388625,
+      "visible": 16082
+    },
+    "movingB": {
+      "hash": 3932622458,
+      "visible": 16012
+    }
+  },
+  "frames": [
+    {
+      "action": "jump",
+      "dead": false,
+      "grounded": false,
+      "sliding": false,
+      "y": 298.5729166666667,
+      "body": {
+        "x": 235,
+        "y": 184.57291666666669,
+        "w": 30,
+        "h": 106
+      },
+      "obstacle": {
+        "type": "low",
+        "x": 270.6440071114053,
+        "w": 60,
+        "h": 62,
+        "base": 422,
+        "theme": 0,
+        "passed": false,
+        "label": "DEBT"
+      }
+    },
+    {
+      "action": "slide",
+      "dead": false,
+      "grounded": true,
+      "sliding": true,
+      "y": 422,
+      "body": {
+        "x": 235,
+        "y": 344,
+        "w": 30,
+        "h": 72
+      },
+      "obstacle": {
+        "type": "high",
+        "x": 257.4625821136991,
+        "w": 110,
+        "h": 85,
+        "base": 422,
+        "theme": 0,
+        "passed": false,
+        "label": "RED TAPE"
+      }
+    }
+  ]
+}

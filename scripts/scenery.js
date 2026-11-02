@@ -5,28 +5,25 @@
   var SOURCE_W = 1024, SOURCE_H = 1430;
   var definitions = {
     opening: {
-      originalIndex: 1, loopStart: 9, heroX: 441, backdropScale: 568 / 540,
+      originalIndex: 1, loopStart: 12, heroX: 441, backdropScale: 568 / 540,
+      route: [0, 1, 2, 0, 2, 3, 4, 5, 6, 7, 8, 5, 9, 10], bridgeBlock: 8,
       backdrop: "assets/art-v2/downtown-atmosphere.webp",
       names: ["tribeca-approach", "lower-manhattan", "tribeca-block", "kabin", "wall-street", "seaport-street", "brooklyn-bridge", "east-river", "lei", "seaport-block", "battery-waterfront"],
       files: ["assets/art-v2/downtown-tribeca.webp", "assets/art-v2/downtown-wtc.webp", "assets/art-v2/downtown-block.webp", "assets/art-v2/downtown-kabin.webp", "assets/art-v2/downtown-wallstreet.webp", "assets/art-v2/downtown-seaport.webp", "assets/art-v2/downtown-waterfront.webp", "assets/art-v2/downtown-waterfront.webp", "assets/art-v2/downtown-lei.webp", "assets/art-v2/downtown-block.webp", "assets/art-v2/downtown-waterfront.webp"],
       cropTops: [128, 38, 24, -5, 137, 77, 5, 4, 66, 24, 4]
     },
     midtown: {
-      originalIndex: 0, loopStart: 1, backdropScale: 1,
+      originalIndex: 4, loopStart: 21, backdropScale: 1,
+      // Every entry is a complete native-size block. Anonymous streets can
+      // recur; venues and the Midtown skyline occur exactly once.
+      route: [1, 6, 7, 1, 4, 6, 1, 7, 0, 7, 6, 1, 2, 6, 1, 7, 3, 1, 7, 6, 5, 6, 1],
       backdrop: "assets/art-v2/midtown-atmosphere.webp",
-      names: ["joju", "bryant-garden", "omars", "gussy", "midtown-skyline", "fifth-avenue"],
-      files: ["assets/art-v2/midtown-joju.webp", "assets/art-v2/midtown-garden.webp", "assets/art-v2/midtown-omars.webp", "assets/art-v2/midtown-gussy.webp", "assets/art-v2/midtown-skyline.webp", "assets/art-v2/midtown-fifth.webp"],
-      cropTops: [78, 45, 78, 40, 47, 78]
-    },
-    park: {
-      originalIndex: 0, loopStart: 5, backdropScale: 1,
-      backdrop: "assets/art-v2/park-atmosphere.webp",
-      names: ["bow-bridge", "ramble-shore", "ramble-rocks", "bethesda-approach", "bethesda-terrace", "willow-shore"],
-      files: ["assets/art-v2/park-0-bow-bridge.webp", "assets/art-v2/park-1-ramble-shore.webp", "assets/art-v2/park-2-ramble-rocks.webp", "assets/art-v2/park-3-bethesda-approach.webp", "assets/art-v2/park-4-bethesda-terrace.webp", "assets/art-v2/park-5-willow-shore.webp"],
-      cropTops: [8, 59, 84, 65, 91, 43]
+      names: ["joju", "bryant-garden", "omars", "gussy", "midtown-skyline", "fifth-avenue", "residential-block", "cast-iron-block"],
+      files: ["assets/art-v2/midtown-joju.webp", "assets/art-v2/midtown-garden.webp", "assets/art-v2/midtown-omars.webp", "assets/art-v2/midtown-gussy.webp", "assets/art-v2/midtown-skyline.webp", "assets/art-v2/midtown-fifth.webp", "assets/art-v2/downtown-block.webp", "assets/art-v2/downtown-tribeca.webp"],
+      cropTops: [78, 45, 78, 40, 47, 128, 24, 128]
     }
   };
-  var images = [], byPath = new Map(), prepared = new WeakMap(), contexts = new WeakMap();
+  var images = window.NBIMParkScenery ? NBIMParkScenery.images.slice() : [], byPath = new Map(), prepared = new WeakMap(), contexts = new WeakMap();
   var loaded = function (img) { return !!(img && (img.complete && img.naturalWidth || img.getContext && img.width && img.height)); };
   function load(path) {
     if (byPath.has(path)) return byPath.get(path);
@@ -38,35 +35,15 @@
   });
   var joinTree = load("assets/art-v2/city-plane-tree.webp");
   var bridge = load("assets/art-v2/downtown-bridge-wide.webp");
-  var waterCanvas = null, waterFrame = -1;
-  function waterSurface() {
-    if (!waterCanvas) { waterCanvas = document.createElement("canvas"); waterCanvas.width = 768; waterCanvas.height = 96; }
-    var paused = window.longRun && longRun.state === "paused";
-    var frame = Math.floor(performance.now() / 50);
-    if (waterFrame === frame || paused && waterFrame >= 0) return waterCanvas;
-    waterFrame = frame;
-    var c = waterCanvas.getContext("2d"), t = frame * .05;
-    c.clearRect(0, 0, 768, 96);
-    // Fine horizontal glints stay inside the shared lake. They never displace
-    // the painted shoreline, bridge or foreground forest silhouettes.
-    for (var i = 0; i < 70; i++) {
-      var x = ((i * .61803398875 + Math.sin(t * .12 + i) * .014) % 1) * 768;
-      var y = 5 + ((i * .38196601125) % 1) * 86;
-      var light = .035 + Math.pow(.5 + .5 * Math.sin(t * .9 + i * 2.1), 3) * .11;
-      c.strokeStyle = i % 3 ? "rgba(255,226,164," + light + ")" : "rgba(180,214,239," + light * .7 + ")";
-      c.lineWidth = .6; c.beginPath(); c.moveTo(x, y);
-      c.lineTo(x + 3 + (i % 9) * 1.3, y + Math.sin(t * .7 + i) * .15); c.stroke();
-    }
-    return waterCanvas;
-  }
   function modeNow() {
     return window.longRun && window.longRun.course && window.longRun.course.mode === "endless" ? "endless" : "chapter";
   }
   function layout(id, distance, W, H, mode) {
+    if (id === "park" && window.NBIMParkScenery) return NBIMParkScenery.layout(id, distance, W, H, mode);
     id = definitions[id] ? id : "opening";
     var def = definitions[id], height = id === "opening" ? H : H + 16;
     var width = height * SOURCE_W / SOURCE_H, stride = width;
-    var total = def.names.length, stripWidth = stride * total;
+    var total = def.route.length, stripWidth = stride * total;
     var endless = (mode || modeNow()) === "endless";
     var runDistance = Math.max(0, Number(distance) || 0), initialOffset = 0;
     var hold = 0, ease = 0, easedDistance = runDistance;
@@ -78,6 +55,13 @@
       var afterHold = Math.max(0, runDistance - hold);
       easedDistance = afterHold < ease ? afterHold * afterHold / (2 * ease) : afterHold - ease / 2;
     }
+    if (id === "midtown") {
+      // Ordinary blocks establish Midtown before the first venue. This modest
+      // pause leaves the world composition, rather than image scaling, in
+      // charge of separation between later frontages.
+      hold = 1000;
+      easedDistance = Math.max(0, runDistance - hold);
+    }
     var finishDistance = id === "opening" ? 25920 : 19200;
     var rate = endless ? .145 : Math.max(0, stripWidth - W - initialOffset) / (finishDistance - hold - ease / 2);
     var travel = initialOffset + easedDistance * rate;
@@ -86,10 +70,11 @@
     if (!endless) last = Math.min(last, total - 1);
     var panels = [], y = id === "opening" ? 0 : -8;
     for (var index = first; index <= last; index++) {
-      var sourceIndex = index < total ? index : def.loopStart + (index - total) % (total - def.loopStart);
+      var routeIndex = index < total ? index : def.loopStart + (index - total) % (total - def.loopStart);
+      var sourceIndex = def.route[routeIndex];
       var x = index * stride - scroll;
       if (x >= W || x + width <= 0) continue;
-      panels.push({ id: id + ":" + def.names[sourceIndex], kind: "architecture", segment: index, sourceIndex: sourceIndex,
+      panels.push({ id: id + ":" + def.names[sourceIndex], kind: "architecture", segment: index, routeIndex: routeIndex, sourceIndex: sourceIndex,
         original: sourceIndex === def.originalIndex, mirrored: false, variant: null,
         x: x, y: y, width: width, height: height, sourceWidth: SOURCE_W, sourceHeight: SOURCE_H,
         nativeWidth: SOURCE_W, nativeHeight: 1536, cropTop: def.cropTops[sourceIndex] });
@@ -97,13 +82,9 @@
     var atmosphereDrift = Math.min(scroll * .025, W * .18);
     var layers = [{ id: id + ":atmosphere", kind: "atmosphere", sourceIndex: -1, original: false,
       x: -atmosphereDrift, y: 0, width: W * 1.18, height: H * def.backdropScale }];
-    if (id === "park" && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      layers.push({ id: "park:lake-shimmer", kind: "water", sourceIndex: -3, original: false,
-        x: 0, y: H * .635, width: W, height: H * .145 });
-    }
     if (id === "opening") {
       var bridgeWidth = stride * 2.35, bridgeHeight = bridgeWidth * 724 / 2171;
-      var bridgeX = stride * 6.5 - scroll - bridgeWidth / 2;
+      var bridgeX = stride * def.bridgeBlock - scroll - bridgeWidth / 2;
       if (bridgeX < W && bridgeX + bridgeWidth > 0) layers.push({ id: "opening:complete-brooklyn-bridge",
         kind: "bridge", sourceIndex: 6, original: false, x: bridgeX, y: H * .61 - bridgeHeight * 593 / 724,
         width: bridgeWidth, height: bridgeHeight, nativeWidth: 2171, nativeHeight: 724 });
@@ -123,16 +104,20 @@
     }
     return { id: id, mode: endless ? "endless" : "chapter", width: width, height: height,
       overlap: 0, stride: stride, scroll: scroll, travel: travel, stripWidth: stripWidth,
+      blocks: def.route.map(function (sourceIndex, segment) {
+        return { id: id + ":" + def.names[sourceIndex], sourceIndex: sourceIndex, segment: segment, worldX: segment * stride, width: width };
+      }),
+      sourceCount: def.names.length, loopSourceIndices: def.route.slice(def.loopStart),
       panelCount: total, originalIndex: def.originalIndex, loopStart: def.loopStart, initialOffset: initialOffset,
       introHold: hold, introEase: ease, parallaxRate: rate, clamped: scroll < travel,
       cropTops: def.cropTops.slice(), authoredLayers: true, panels: panels, layers: layers };
   }
-  function source(id, panel) {
+  function source(id, panel, original) {
+    if (id === "park" && window.NBIMParkScenery) return NBIMParkScenery.source(id, panel, original);
     var def = definitions[id];
     if (panel.kind === "atmosphere") return loaded(def.background) ? def.background : null;
     if (panel.kind === "tree") return loaded(joinTree) ? joinTree : null;
     if (panel.kind === "bridge") return loaded(bridge) ? bridge : null;
-    if (panel.kind === "water") return waterSurface();
     var img = def.images[panel.sourceIndex];
     if (!loaded(img)) return null;
     var crops = prepared.get(img);
@@ -146,6 +131,7 @@
     crops.set(top, canvas); return canvas;
   }
   function draw2d(ctx, id, original, distance, W, H, mode) {
+    if (id === "park" && window.NBIMParkScenery) return NBIMParkScenery.draw2d(ctx, id, original, distance, W, H, mode);
     var scene = layout(id, distance, W, H, mode);
     scene.layers.forEach(function (panel) {
       var img = source(id, panel);
@@ -218,9 +204,10 @@
 
   window.LR_SCENERY = {
     layered: true, images: images, layout: layout, source: source, draw2d: draw2d, gl: drawGL,
-    get ready() { return images.every(loaded); },
+    get ready() { return images.every(loaded) && (!window.NBIMParkScenery || NBIMParkScenery.ready); },
     lamps: function () { return []; },
     inspect: function (id, distance, W, H, mode) {
+      if (id === "park" && window.NBIMParkScenery) return NBIMParkScenery.inspect(id, distance, W, H, mode);
       var scene = layout(id, distance, W || 1000, H || 540, mode), def = definitions[scene.id];
       return Object.assign(scene, { ready: def.images.every(loaded) && loaded(def.background) && loaded(joinTree) && (scene.id !== "opening" || loaded(bridge)),
         loadedPanels: def.images.filter(loaded).length, maxSourceWidth: scene.id === "opening" ? 2171 : 1536, nativeHeight: 1536,

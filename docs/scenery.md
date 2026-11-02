@@ -1,31 +1,29 @@
-# Native scenery layers — 1.3
+# Scenery composition — 1.4
 
-The scenery uses complete architectural and forest silhouettes over one continuous painted sky, water and ground plane per chapter. Buildings and landmarks never dissolve into an unrelated painting. `scripts/scenery.js` supplies the same layers to Canvas, direct WebGL and Pixi.
+Downtown and Midtown use complete architectural silhouettes over one continuous painted atmosphere and ground plane. Central Park uses the exact approved original paintings and camera, restored from `156db816f0a43420b87864f5c61fde7878344035`.
 
-The chapter map heading is simply **NEW YORK**. Story chapters and Endless seed controls remain separate.
+## City routes
 
-## Routes and venues
+Opening Bell establishes One World Trade Center before ordinary Tribeca streets lead to Kabin, Wall Street and Charging Bull, Seaport, the complete Brooklyn Bridge, East River and LEI. The Lower Manhattan skyline excludes Empire State and Chrysler. Midtown establishes ordinary streets and gardens before JOJU, Omar's, Gussy's and 505 Fifth. Anonymous blocks separate the venues; named venues and major landmarks appear once.
 
-Opening Bell travels through distinct cast-iron Tribeca architecture, One World Trade Center, historic blocks, Kabin, Wall Street and the Charging Bull, Seaport warehouses, a complete Brooklyn Bridge, the East River frontage, LEI and the waterfront. The skyline contains Lower Manhattan architecture; the previous Empire State/Chrysler composition and second bridge are no longer used. WTC is framed between the HUD groups and retains its establishing pause. Kabin and LEI occupy separate course blocks, five panel intervals apart.
+Source artwork and route position are separate. `LR_SCENERY.layout().blocks` exposes each route slot's source index and world position. The venue modules use this mapping rather than multiplying an image index by a tile width. [Venue pacing](venue-pacing.md) documents actual arrival-time checks and route spacing.
 
-Midtown visits JOJU, a garden block, Omar's, Gussy's, the skyline and 505 Fifth Avenue. Each venue retains its complete architecture. The 505 artwork includes the paired glass doors, glazing, navy/gold address and lobby beneath a contemporary tower facade. Its once-only office greeting follows the full entrance entering view.
+505 follows the supplied photograph's cobalt-blue lobby, cyan edge lighting, dark address lettering and full revolving glass doors. Its office host shares the entrance's source-space anchor and camera transform. See [office artwork](office-art-v14.md) and [host integration](office-host-v14.md).
 
-Central Park proceeds from Bow Bridge through the Ramble and Bethesda Terrace to a willow-lined shore. The shared atmosphere retains golden forest light, a continuous lake and a shaded path. The old coordinate-specific animated lake mesh is replaced by a restrained shimmer layer inside the new lake bounds, beneath the architecture. Reduced-motion settings disable it. Wind, leaves and gameplay effects remain.
+The city camera follows a finite Story route. Endless continues through ordinary blocks without repeating its named venues or major landmarks. The chapter map heading remains NEW YORK.
 
-Endless repeats only the two ordinary downtown waterfront sections after its first journey. WTC, Wall Street and Brooklyn Bridge never return in the repeating tail. Story clamps after the complete route; the camera reaches each route's end by the actual chapter finish distance.
+## Central Park
 
-## Native detail and composition
+`scripts/park-scenery.js` restores the original Bow Bridge painting (`original-33.webp`), Ramble (`scenery/park-1.webp`) and Bethesda (`scenery/park-2.webp`). All three are 1672×941. The original 64-source-pixel extension overlap, .085 camera rate, composition, foreground trees/benches, wind, leaves and masked Pixi lake are retained. No replacement Park painting or synthetic shimmer layer is used. The original lake stays on its original panel; pause and reduced motion freeze the animation.
 
-Architectural/forest sections are newly authored at **1024 × 1536 native pixels**; the complete wide Brooklyn Bridge is **2171 × 724**. They are encoded as WebP without resizing. This is not a 4K claim: the image tool's native output area is limited. Compared with the former 941/1024-pixel-high paintings, the new sections provide 50–63% more vertical source detail. Complete venue artwork replaces the former 132–275-pixel sign sources and the 45-pixel-high 505 crop.
+A separate paired-render check compares the approved commit with the restoration at matched viewport, camera and time. Before the shared pickup/sign polish, all 14 desktop/mobile/Canvas/animated full-stage pairs were pixel-identical. The comparison also supports background-only capture so subsequent gameplay-object improvements do not obscure scenery verification.
 
-Each section is copied at 1:1 into a 1024 × 1430 camera window. A small per-section vertical trim aligns its authored curb or shore, preserving native pixels. At a 900-CSS-pixel-high desktop viewport the effective vertical density is approximately 1.54–1.59 source pixels per CSS pixel; at a 390-pixel-high mobile viewport it is approximately 3.56–3.67. DPR2 checks inspect the real device-sized output; they do not imply 2× coverage at every possible viewport size.
+## Source detail and renderers
 
-One 1536 × 1024 atmosphere painting spans the viewport with a small horizontal overscan and gentle parallax. It never wraps a building, bridge, waterline or road tile back into view. Native transparent architecture moves above it. The complete bridge spans more than two foreground blocks as a single layer, including both masonry endpoints. Modest complete street trees overlap city-block edges through opaque foliage rather than fading masonry. Park silhouettes have authored natural tree/rock outlines.
+City architectural sources are native 1024×1536; the complete Brooklyn Bridge is 2171×724. No enlargement is presented as newly authored detail. City panels copy native pixels into 1024×1430 camera windows. Individual vertical trims align the painted street level; the taller corrected 505 entrance uses crop top 128.
 
-Original source assets remain unchanged for provenance. Runtime references select the new scenery and omit superseded low-resolution venue decals from the standalone build. `assets/art-v2/native-manifest.json` records image dimensions, byte sizes and transparency; Park's generation provenance is recorded separately.
+A shared 1536×1024 atmosphere painting spans each city viewport with overscan and gentle parallax. The full bridge is a single wide layer. Complete foreground street trees overlap architectural boundaries without dissolving masonry. Ordinary architecture can recur; recognisable landmarks and venue frontages do not loop in Story.
 
-## Runtime contract
+`LR_SCENERY.layout()` returns city `panels` and renderer `layers`; Park delegates to its original painting layout without `authoredLayers`. `source()` supplies native city crops or the original Park paintings. Canvas, direct WebGL and Pixi consume this shared geometry. Prepared crops are cached by source and crop offset. The 18-entry Pixi pool retains the original Park texture/scale behavior and its water mask.
 
-`LR_SCENERY.layout(id, distance, width, height, mode)` returns architectural `panels` plus the complete renderer `layers` (atmosphere, architecture and city trees). `source()` returns a native camera crop or a shared layer image. `inspect()` exposes native/effective dimensions, crop offsets, finite route coverage and zero architectural feathering.
-
-The 18-entry Pixi pool supports narrow sections, restrained water glints and complete tree overlaps; textures use each layer's own dimensions. Prepared camera crops are created lazily, deduplicated by source image and crop offset, and reused. The game waits for referenced artwork to decode before enabling Start. Original runner atlases, physics, chapter progress, audio, history reveal, pickups, boss and leaderboards remain part of the game.
+All 40 original source asset files remain unchanged. Superseded Park v1.3 artwork and small venue decals remain historical repository material; they are not selected by the runtime. The cutscene handoff omits the rejected Park paintings. Existing runners, physics, chapter progression, audio and history reveal retain their behavior; separate pickup and sign drawing changes are described in [gameplay props](gameplay-props-v14.md).

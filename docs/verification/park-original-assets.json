@@ -1,0 +1,52 @@
+[
+  {
+    "path": "assets/original-33.webp",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "c3817e5e14060794307c5e3da69a451c920b9d9d0308eaabde4f2a7de9a282ed",
+    "identicalToApproved": true
+  },
+  {
+    "path": "assets/scenery/park-1.webp",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "5c9acbe83b7e8e16d1497533d93720bd99ccd362414d2b76337f9788b9a83f47",
+    "identicalToApproved": true
+  },
+  {
+    "path": "assets/scenery/park-2.webp",
+    "size": [
+      1672,
+      941
+    ],
+    "mode": "RGB",
+    "sha256": "9c5694c947fe5b275e298ef5cc42a0d0ea3ffecc363d4edf8cd2da222238f2bb",
+    "identicalToApproved": true
+  },
+  {
+    "path": "assets/original-35.webp",
+    "size": [
+      1024,
+      1024
+    ],
+    "mode": "RGBA",
+    "sha256": "8604397ea98ce5e3730a063ca535b63a57c81fc37a82dc14cad5e6fece10d3e6",
+    "identicalToApproved": true
+  },
+  {
+    "path": "assets/original-36.webp",
+    "size": [
+      1024,
+      768
+    ],
+    "mode": "RGBA",
+    "sha256": "4549bc56f6795e465ae162ac56589f651fdb0cc3c67eac11a2cdadd4853e0c24",
+    "identicalToApproved": true
+  }
+]

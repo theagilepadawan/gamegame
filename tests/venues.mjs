@@ -73,7 +73,10 @@ async function capture(name, viewport, fallback = false, deviceScaleFactor = 1) 
       $A.update(0, q, {id: 'midtown', reduced: true, quality: 1}); Vu(); vu();
       const greeting = [];
       if (venue === 'fifth') {
-        const visitor = {districtId: 'midtown', chapterTime: 55};
+        const early = {districtId: 'midtown', chapterTime: 5, distance: 0};
+        LR_SHOPS.tick(early, eA, (...args) => greeting.push(args));
+        if (greeting.length) return {missing: 'office greeting used stale camera metadata after retry'};
+        const visitor = {districtId: 'midtown', chapterTime: 55, distance};
         LR_SHOPS.tick(visitor, eA, (...args) => greeting.push(args)); LR_SHOPS.tick(visitor, eA, (...args) => greeting.push(args));
       }
       return {venue, distance, renderer: longRun.renderer, environment: longRun.environment, greeting,

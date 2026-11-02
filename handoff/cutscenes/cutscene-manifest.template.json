@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "project": "The Long Run — NBIM Arcade",
+  "status": "proposal-template-no-video-generated",
+  "gameSnapshot": "See HANDOFF-METADATA.json and FILES-SHA256.json",
+  "deliveryConvention": {
+    "aspectRatio": "16:9",
+    "targetEditorialFps": 30,
+    "preferredBrowserContainer": "mp4",
+    "preferredBrowserCodec": "H.264/yuv420p",
+    "audioSampleRate": 48000,
+    "pictureAndAudioDeliveredSeparately": true
+  },
+  "scenes": [
+    {"id": "LR-OP-01", "title": "The long run begins", "proposedDurationSeconds": 6, "proposedGate": "First Story start before simulation", "variant": "nicolai", "priority": "core", "status": "not-generated"},
+    {"id": "LR-MT-01", "title": "A higher perspective", "proposedDurationSeconds": 5, "proposedGate": "Next chapter selected: Midtown", "variant": "selected-runner", "priority": "core", "status": "not-generated"},
+    {"id": "LR-PK-01", "title": "Room to think", "proposedDurationSeconds": 5, "proposedGate": "Next chapter selected: Central Park", "variant": "selected-runner", "priority": "core", "status": "not-generated"},
+    {"id": "LR-OF-01", "title": "Good company at 505", "proposedDurationSeconds": 5, "proposedGate": "Optional replay or end-of-Midtown after office encountered", "variant": "office-host-and-selected-runner", "priority": "optional", "status": "not-generated"},
+    {"id": "LR-CT-01", "title": "The other way up", "proposedDurationSeconds": 1.8, "proposedGate": "Explicit safe Contrarian transition gate, if chosen", "variant": "selected-runner", "priority": "optional-live-rendering-preferred", "status": "not-generated"},
+    {"id": "LR-IP-01", "title": "The roadshow", "proposedDurationSeconds": 4, "proposedGate": "Explicit first IPO introduction gate before attack timers", "variant": "selected-runner", "priority": "optional", "status": "not-generated"}
+  ],
+  "shotRecordTemplate": {
+    "sceneId": null,
+    "revision": "v001",
+    "approvalStatus": "unreviewed",
+    "inputReferences": [],
+    "inputSha256": [],
+    "prompt": null,
+    "toolAndModelVersion": null,
+    "actualSettings": {},
+    "seedIfExposed": null,
+    "generationOutputId": null,
+    "nativeOutput": {"path": null, "width": null, "height": null, "fps": null, "durationSeconds": null, "sha256": null},
+    "postProcessing": [],
+    "delivery": {"cleanPicture": null, "reviewMix": null, "poster": null, "firstFrame": null, "lastFrame": null, "contactSheet": null, "musicStem": null, "sfxStem": null, "voiceStem": null, "captions": null},
+    "audioCues": [],
+    "identityAndContinuityReview": null,
+    "browserValidation": null
+  }
+}

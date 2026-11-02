@@ -1201,6 +1201,7 @@ var Po = class {
     r.restore();
   }
   pickup(A, t, i, r = false) {
+    if (window.LR_PROPS?.pickup(this.c, A, t, i, r)) return;
     let o = this.c, s = r ? 0 : i, n = A.x + t, a = A.y + (r ? 0 : Math.sin(i * 2.5 + A.x * 3e-3) * 1.5);
     if (A.kind === "contrarian") {
       this.contrarianPickup(n, A.y, i, r);
@@ -1481,6 +1482,7 @@ var Po = class {
     let o = this.c, s = A.x + t, n = A.base ?? i, a = A.w;
     if (s > r + 70 || s + a < -70) return;
     if (A.type === "gap") return; // The terrain renderer owns the complete opening.
+    if (window.LR_PROPS?.hazard(o, A, s, n, "opening")) return;
     let g = A.type === "high", l = g ? n - 181 : n - A.h, E = g ? 85 : A.h;
     this.rect(s, l, a, E, "#071825", 3), this.rect(s + 2, l + 2, a - 4, E - 4, this.metal(s, l, a, E, ["#b37e6c", "#694d4a", "#3b3540"]), 3), this.rect(s + 8, l + 8, a - 16, E - 16, "#432f39", 2), this.line(s + 2, l + 2, s + a - 2, l + 2, "#e3b597", 1.5), this.line(s + 2, l + 2, s + 2, l + E - 2, "#d69f8580", 1), this.line(s + 2, l + E - 2, s + a - 2, l + E - 2, "#b27e6d", 1.5);
     for (let Q of [s + 5, s + a - 5]) for (let R of [l + 6, l + E - 6]) this.rivet(Q, R, 1.4);
@@ -1497,6 +1499,7 @@ var Po = class {
     }
   }
   spring(A, t) {
+    if (window.LR_PROPS?.spring(this.c, A, t)) return;
     let i = A.x + t, r = A.w, o = A.y, s = this.c;
     s.save(), this.rect(i, o - 13, r, 13, "#0d423c", 3), this.line(i, o - 13, i + r, o - 13, "#87ffc4", 3), this.line(i, o - 13, i + r, o - 13, "#66ffb744", 10);
     for (let n = 0; n < 3; n++) {
@@ -1727,6 +1730,7 @@ var wo = class {
       if (window.LR_SCENERY) LR_SCENERY.draw2d(a, A, t, o, i, r);
       else a.drawImage(t, -Math.min(h, Math.max(0, R - i)), -8, R, Q);
       window.LR_SHOPS && LR_SHOPS.draw2d(a, A, o, i, t, R, Q);
+      window.LR_OFFICE_HOST && LR_OFFICE_HOST.draw2d(a, A, o, i, r, s, n, typeof q === "undefined" ? null : q, typeof Kt === "undefined" ? 0 : Kt);
     }
     if (g) {
       if (!n) for (let Q = 0; Q < 7; Q++) {
@@ -1827,6 +1831,7 @@ var wo = class {
   obstacle(A, t, i, r, o = false) {
     let s = this.c, n = A.x, a = A.base ?? t.floorAt(n), g = A.w;
     if (!this.visible(n, g, i, 80)) return;
+    if (window.LR_PROPS?.hazard(s, A, n, a, t.districtId)) return;
     let l = t.districtId === "park", E = A.type === "high", I = E ? a - 181 : a - A.h, Q = E ? 85 : A.h;
     if (s.save(), A.type === "gap") {
       this.rect(n, a, g, 180, l ? "#1d4549" : "#102330");
@@ -1942,6 +1947,7 @@ var wo = class {
   }
   sign(A, t, i, r) {
     let o = this.c, s = A.x, n = t.districtId === "park", a = this.signTimes.get(A.id), g = a === void 0 ? 10 : this.age - a, l = r ? 0 : Math.sin(g * 13) * Math.exp(-g * 3.2) * 0.055 + (this.environment?.windAt(s + (t.distance || 0)) || 0) * 4e-3;
+    if (window.LR_PROPS?.sign(o, A, t, i, l)) return;
     o.save(), o.translate(s, i), o.rotate(l), this.rect(-4, -178, 8, 178, n ? "#5d6448" : "#4c6569", 2), this.line(-1, -170, -1, -4, "#c3b58c55", 1);
     let E = A.role === "fork" || A.route === "fork", I = E ? [{ label: n ? "CANOPY WALK" : "HIGH CONVICTION", y: -168, tone: "#bca16a", sub: "UPPER ROUTE" }, { label: n ? "LAKESIDE PATH" : "STREET LEVEL", y: -124, tone: "#80a795", sub: "LOWER ROUTE" }] : [{ label: A.label || (n ? "THE LONG VIEW" : "UNDER CONSTRUCTION"), y: -148, tone: "#bca16a" }];
     for (let Q of I) {
@@ -21873,6 +21879,7 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
     s.update();
   }
   drawBackground(A, t, i, r, o = false, s = null) {
+    window.LR_OFFICE_HOST && LR_OFFICE_HOST.pixi(this, A, t, i, r, qt, W);
     if (window.LR_SHOPS && LR_SHOPS.pixi(this, A, t, i, r, qt, W, aA, hA), this.openingSprite.visible = A === "opening", this.gradeSprite.visible = A !== "opening", A === "opening") {
       for (let R of this.tiles) R.group.visible = false;
       if (this.bindOpeningCanvas(s), !this.openingSource) throw Error("Opening Bell backdrop is unavailable");
@@ -21886,7 +21893,8 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
       let h = this.tiles[R], panel = (scene.layers || scene.panels)[R];
       if (h.group.visible = !!panel, !panel) continue;
       let texture = n;
-      if (window.LR_SCENERY) {
+      if (A === "park" && panel.original && window.LR_SCENERY) LR_SCENERY.source(A, panel, gi[A]);
+      if (window.LR_SCENERY && !(A === "park" && panel.original)) {
         let image = LR_SCENERY.source(A, panel);
         if (!image) { h.group.visible = false; continue; }
         texture = this.sceneryTextures.get(image);
@@ -21895,7 +21903,7 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
       }
       // Panel geometry stays in game coordinates; native artwork resolution can
       // increase independently without changing its on-screen size or spacing.
-      h.group.position.set(panel.x, panel.y ?? -8), h.group.scale.set((panel.width ?? l) / texture.width, (panel.height ?? a) / texture.height), h.sprite.texture = texture;
+      h.group.position.set(panel.x, panel.y ?? -8), h.group.scale.set(A === "park" ? g : (panel.width ?? l) / texture.width, A === "park" ? g : (panel.height ?? a) / texture.height), h.sprite.texture = texture;
       let M = A === "park" && !scene.authoredLayers && panel.original && !this.reduced && this.quality > 0.4;
       if (h.water.mesh.visible = M, h.mask.visible = M, h.glints.visible = M, M) {
         Q++;
@@ -22150,7 +22158,7 @@ function pD() {
   return zA === "chapter" ? Ot[at].name.toUpperCase() + " \xB7 " + Ot[at].note : "ONE CITY. AN UNREASONABLY LONG HORIZON.";
 }
 function Mu() {
-  return [si, ng, gt[PA].motion, At.shieldImage, At.reserveImage, Fe, po, zA === "chapter" ? gi[at] : null, zA === "chapter" && at !== "opening" ? er : null, ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || []), ...(window.LR_SHOPS?.images || [])].filter(Boolean);
+  return [si, ng, gt[PA].motion, At.shieldImage, At.reserveImage, Fe, po, zA === "chapter" ? gi[at] : null, zA === "chapter" && at !== "opening" ? er : null, ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || []), ...(window.LR_SHOPS?.images || []), ...(window.LR_PROPS?.images || []), ...(window.LR_OFFICE_HOST?.images || [])].filter(Boolean);
 }
 function SD() {
   nu || ![Fe, er, po, ...Object.values(gi)].every((e24) => e24.complete && e24.naturalWidth) || (nu = true, $A.init({ canvas: m("#environment"), gameplayCanvas: ht, openingCanvas: bA, backgrounds: gi, propsImage: er, ambienceImage: po, ambienceFrames: su }).then(() => $A.resize(eA, kA, ht.width, ht.height)).catch((e24) => console.warn("Using the Canvas renderer:", e24.message)));
@@ -22220,7 +22228,7 @@ function fu(e24) {
 for (let e24 of document.querySelectorAll("[data-district]")) e24.onclick = () => {
   b === "home" && (!window.LR_CH || LR_CH.unlocked(e24.dataset.district) ? fu(e24.dataset.district) : LR_CH.locked(e24));
 };
-for (let e24 of [...Object.values(gt).flatMap((A) => [A.atlas, A.flip, A.motion]), At.shieldImage, At.reserveImage, Fe, er, po, ...Object.values(gi), ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || []), ...(window.LR_SHOPS?.images || [])].filter(Boolean)) e24.onload = Ei, e24.onerror = () => {
+for (let e24 of [...Object.values(gt).flatMap((A) => [A.atlas, A.flip, A.motion]), At.shieldImage, At.reserveImage, Fe, er, po, ...Object.values(gi), ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || []), ...(window.LR_SHOPS?.images || []), ...(window.LR_PROPS?.images || []), ...(window.LR_OFFICE_HOST?.images || [])].filter(Boolean)) e24.onload = Ei, e24.onerror = () => {
   Mu().includes(e24) && (Ei(), m("#load-status").textContent = "Artwork could not load. Choose another chapter or refresh to retry.");
 };
 Gu();

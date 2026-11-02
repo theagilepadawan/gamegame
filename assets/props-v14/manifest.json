@@ -1,0 +1,120 @@
+{
+  "version": 14,
+  "source": "../../art/props-v14/generated-atlas-native.png",
+  "sourceSize": [
+    1536,
+    1024
+  ],
+  "generation": "New native imagegen artwork; transparent 3-column \u00d72-row object atlas. Upper-left brass highlights, NBIM navy enamel, teal research glass, oxblood hazards.",
+  "processing": "Extracted native pixels only. Bounding boxes from alpha > 2 with 2px padding. No image rescaling or painted alterations. WebP lossless preserves native alpha.",
+  "assets": {
+    "dividend": {
+      "file": "dividend.webp",
+      "crop": [
+        78,
+        68,
+        448,
+        449
+      ],
+      "nativeSize": [
+        370,
+        381
+      ],
+      "bytes": 216966
+    },
+    "opportunity": {
+      "file": "opportunity.webp",
+      "crop": [
+        584,
+        36,
+        952,
+        467
+      ],
+      "nativeSize": [
+        368,
+        431
+      ],
+      "bytes": 181054
+    },
+    "research": {
+      "file": "research.webp",
+      "crop": [
+        1064,
+        71,
+        1482,
+        466
+      ],
+      "nativeSize": [
+        418,
+        395
+      ],
+      "bytes": 168532
+    },
+    "conviction": {
+      "file": "conviction.webp",
+      "crop": [
+        29,
+        497,
+        495,
+        947
+      ],
+      "nativeSize": [
+        466,
+        450
+      ],
+      "bytes": 234358
+    },
+    "risk-cabinet": {
+      "file": "risk-cabinet.webp",
+      "crop": [
+        544,
+        516,
+        987,
+        946
+      ],
+      "nativeSize": [
+        443,
+        430
+      ],
+      "bytes": 257846,
+      "labelPixels": [
+        38,
+        60,
+        303,
+        164
+      ],
+      "labelNormalized": [
+        0.085779,
+        0.139535,
+        0.683973,
+        0.381395
+      ]
+    },
+    "overhead-panel": {
+      "file": "overhead-panel.webp",
+      "crop": [
+        1014,
+        546,
+        1520,
+        869
+      ],
+      "nativeSize": [
+        506,
+        323
+      ],
+      "bytes": 193494,
+      "labelPixels": [
+        38,
+        101,
+        433,
+        160
+      ],
+      "labelNormalized": [
+        0.075099,
+        0.312693,
+        0.855731,
+        0.495356
+      ]
+    }
+  }
+}
