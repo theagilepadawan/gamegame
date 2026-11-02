@@ -23,3 +23,5 @@ Tested HTML SHA-256:
 ```
 
 The reusable checks are in `tests/`; checksums for the HTML and playable ZIP are in `release/SHA256SUMS.txt`. Browser tests emulate mobile viewports and controller input; these results are Chromium checks, not a claim of physical-device or cross-browser certification.
+
+The published GitHub ZIP was downloaded again and matched the tested local ZIP and embedded HTML byte for byte, with a valid CRC. A separate attempt to open the HTML through `file://` was blocked by this cloud browser's administrator policy (`ERR_BLOCKED_BY_ADMINISTRATOR`); offline gameplay was verified through localhost instead. Direct local-file opening has therefore not been certified by this environment.
