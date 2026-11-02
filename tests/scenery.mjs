@@ -14,7 +14,7 @@ const output = process.env.SCENERY_OUTPUT || new URL('../review/scenery/', impor
 await mkdir(output, {recursive: true});
 const report = [];
 async function open(viewport, fallback = false) {
-  const context = await browser.newContext({viewport, reducedMotion: 'reduce'});
+  const context = await browser.newContext({viewport, deviceScaleFactor: viewport.width === 844 ? 2 : 1, reducedMotion: 'reduce'});
   const page = await context.newPage(), errors = [], failures = [];
   page.setDefaultTimeout(25000);
   page.on('pageerror', error => errors.push(error.message));
@@ -80,8 +80,27 @@ try {
   });
   for (const s of geometry) {
     assert.equal(s.ready, true);
-    assert.equal(s.panelCount, s.id === 'opening' ? 5 : 3);
-    assert.equal(s.maxSourceWidth <= 1672, true, 'Textures stay within mobile limits');
+    assert.ok(s.panelCount >= 6, 'Every chapter has a developed route');
+    assert.equal(s.authoredLayers, true);
+    assert.equal(s.commonAtmosphere, true);
+    assert.equal(s.architectureFeather, 0, 'Architecture must not fade across another painting');
+    assert.equal(s.overlap, 0);
+    assert.ok(s.nativeHeight >= 1536, 'Artwork retains its newly authored native detail');
+    assert.ok(s.layers.length <= 18, 'All visible layers fit the renderer pool');
+    const atmosphere = s.layers.filter(layer => layer.kind === 'atmosphere');
+    assert.equal(atmosphere.length, 1);
+    assert.ok(atmosphere[0].x <= 0, 'Continuous atmosphere covers the left edge');
+    assert.ok(atmosphere[0].x + atmosphere[0].width >= s.viewportWidth, 'Continuous atmosphere covers the right edge');
+    assert.ok(atmosphere[0].height >= 540);
+    const bridges = s.layers.filter(layer => layer.kind === 'bridge');
+    assert.ok(bridges.length <= 1, 'Only one complete Brooklyn Bridge is drawn');
+    if (s.id !== 'opening' || (s.mode === 'endless' && s.scroll > s.stripWidth)) {
+      assert.equal(bridges.length, 0, 'Brooklyn Bridge never reappears in another district or the Endless tail');
+    }
+    for (const bridge of bridges) {
+      assert.ok(bridge.nativeWidth >= 2000 && bridge.nativeHeight >= 700);
+      assert.ok(bridge.width > s.width * 2, 'The landmark spans multiple foreground blocks');
+    }
     assert.ok(s.panels.length > 0, 'Every camera location has a background');
     assert.ok(s.panels[0].x <= 0.001, 'Left edge remains covered');
     const last = s.panels.at(-1);
@@ -119,7 +138,8 @@ try {
     const snapshot = await scene(mobile.page, district, 6000);
     assert.equal(snapshot.renderer, 'pixi-webgl');
     report.push(snapshot);
-    await captureStage(mobile.page, `${output}/${district}-mobile.png`);
+    assert.equal(await mobile.page.evaluate(() => devicePixelRatio), 2);
+    await captureStage(mobile.page, `${output}/${district}-mobile-dpr2.png`);
   }
   assert.deepEqual(mobile.errors, []);
   assert.deepEqual(mobile.failures, []);

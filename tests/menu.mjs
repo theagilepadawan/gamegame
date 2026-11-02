@@ -73,6 +73,8 @@ try {
   assert.equal(await page.locator('#chapter-prev').isDisabled(), true);
   assert.equal(await page.locator('#chapter-browser img').count(), 0, 'The chapter map never shows gameplay preview images');
   assert.equal(await page.locator('#map-route').count(), 1, 'Destinations are joined by an illustrated route');
+  assert.equal((await page.locator('.journey-kicker').innerText()).trim(), 'NEW YORK');
+  assert.doesNotMatch(await page.locator('#chapter-browser').innerText(), /world\s*#?\s*1/i, 'Single-city chapter map has no redundant world designation');
   await inBounds(page, 'desktop');
   await page.emulateMedia({reducedMotion: 'no-preference'});
   const targetCenter = await page.locator('[data-district="midtown"]').evaluate(el => {

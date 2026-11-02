@@ -1,0 +1,117 @@
+{
+  "generator": "imagegen",
+  "design": "Native detailed transparent forest and landmark layers over one continuous sky, lake and path atmosphere. Original assets retained unchanged.",
+  "panels": [
+    {
+      "path": "assets/art-v2/park-0-bow-bridge.webp",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "generationId": "exec-bea8141b-ce32-4875-96bc-6821265e2cc1.png",
+      "nativePngSHA256": "fd09075e41055495cfa9f1b7b86c147eeaceb747ad8e52b4ef770267c8fa694a",
+      "encoding": "WebP quality95; alpha retained; no resizing or spatial editing",
+      "opaqueBounds": [
+        10,
+        244,
+        1014,
+        876
+      ],
+      "shoreBaseline": 875,
+      "bytes": 398788,
+      "transparentPixelFraction": 0.7026
+    },
+    {
+      "path": "assets/art-v2/park-1-ramble-shore.webp",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "generationId": "exec-57ed3ca8-ac75-4768-ac8d-78153d8a78b1.png",
+      "nativePngSHA256": "b3ad7b000a7a2991a6164b0ab188d2ca69838d846cdba3a63500caf1a9541b9c",
+      "encoding": "WebP quality95; alpha retained; no resizing or spatial editing",
+      "opaqueBounds": [
+        3,
+        298,
+        1022,
+        927
+      ],
+      "shoreBaseline": 926,
+      "bytes": 425904,
+      "transparentPixelFraction": 0.6839
+    },
+    {
+      "path": "assets/art-v2/park-2-ramble-rocks.webp",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "generationId": "exec-4854c2d4-9263-4815-8286-be7826dd7c0a.png",
+      "nativePngSHA256": "82ccb55cb0f1c4cda23644ed89b8a7ea63fc3d8955aaae59425fca50a738edb4",
+      "encoding": "WebP quality95; alpha retained; no resizing or spatial editing",
+      "opaqueBounds": [
+        2,
+        339,
+        1021,
+        952
+      ],
+      "shoreBaseline": 951,
+      "bytes": 443568,
+      "transparentPixelFraction": 0.6551
+    },
+    {
+      "path": "assets/art-v2/park-3-bethesda-approach.webp",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "generationId": "exec-47470450-bcb4-42c9-828a-1387f4fad33d.png",
+      "nativePngSHA256": "26dbab98194b4ac0baa380529949dea76c1ddfeebfc6b021439ff738d6c1ed8e",
+      "encoding": "WebP quality95; alpha retained; no resizing or spatial editing",
+      "opaqueBounds": [
+        3,
+        307,
+        1021,
+        933
+      ],
+      "shoreBaseline": 932,
+      "bytes": 468124,
+      "transparentPixelFraction": 0.6513
+    },
+    {
+      "path": "assets/art-v2/park-4-bethesda-terrace.webp",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "generationId": "exec-b03386bc-368b-4a81-b20f-e5fd83b71283.png",
+      "nativePngSHA256": "aad9e793e968aaa3f35c083379c8bf9463088aab6bdee613eeae2ebcd6864e85",
+      "encoding": "WebP quality95; alpha retained; no resizing or spatial editing",
+      "opaqueBounds": [
+        3,
+        301,
+        1022,
+        959
+      ],
+      "shoreBaseline": 958,
+      "bytes": 464814,
+      "transparentPixelFraction": 0.6263
+    },
+    {
+      "path": "assets/art-v2/park-5-willow-shore.webp",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "generationId": "exec-10b3b4a8-5186-4fe3-b97c-32092dfc5e05.png",
+      "nativePngSHA256": "9e45111fb9f2682c7b6bf9e02d26f9d5b7daf69c78e8f988986185acec303975",
+      "encoding": "WebP quality95; alpha retained; no resizing or spatial editing",
+      "opaqueBounds": [
+        9,
+        311,
+        1016,
+        911
+      ],
+      "shoreBaseline": 910,
+      "bytes": 433862,
+      "transparentPixelFraction": 0.6625
+    }
+  ],
+  "backdrop": {
+    "path": "assets/art-v2/park-atmosphere.webp",
+    "nativeWidth": 1536,
+    "nativeHeight": 1024,
+    "generationId": "exec-75b76efe-6ed6-472b-b213-67b599bb7d09.png",
+    "encoding": "WebP quality95, no resizing",
+    "farShoreFraction": 0.61,
+    "pathFraction": 0.845
+  }
+}

@@ -1884,7 +1884,7 @@ var wo = class {
     for (let o of A.worldItems || []) {
       if (!this.visible(o.x, o.w || 0, t, 140)) continue;
       let s = this.itemY(o, A);
-      o.kind === "puddle" ? this.puddle(o.x, s, o.w || 100, A) : o.kind === "tree" ? this.tree(o.x, A.floorAt(o.x), A.districtId === "park", o.id || 0, false, (n) => A.floorAt(n)) : o.kind === "lamp" ? this.lamp(o.x, s, A.districtId === "park") : o.kind === "sign" ? this.sign(o, A, s, r) : o.kind === "finish" && this.finish(o.x, s, A, i, r);
+      o.kind === "puddle" ? this.puddle(o.x, s, o.w || 100, A) : o.kind === "tree" ? this.tree(o.x, A.floorAt(o.x), A.districtId === "park", o.id || 0, false, (n) => A.floorAt(n)) : o.kind === "lamp" ? !(window.LR_SCENERY?.layered && A.districtId === "midtown") && this.lamp(o.x, s, A.districtId === "park") : o.kind === "sign" ? this.sign(o, A, s, r) : o.kind === "finish" && this.finish(o.x, s, A, i, r);
     }
   }
   puddle(A, t, i, r) {
@@ -21767,7 +21767,7 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
     return o.visible = false, t.addChild(o), { mesh: o, buffer: s, base: new Float32Array(s.data) };
   }
   createPools() {
-    for (let t = 0; t < 4; t++) {
+    for (let t = 0; t < 18; t++) {
       let i = new hA(), r = new qt(this.backgroundTextures.park);
       i.addChild(r);
       let o = this.mesh(this.backgroundTextures.park, i, 28, 18), s = new Tt().poly(uD).fill(16777215);
@@ -21883,18 +21883,20 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
     let scene = window.LR_SCENERY ? LR_SCENERY.layout(A, r, t, i) : { panels: [{ x: -Math.min(r * 0.085, Math.max(0, l - t)), original: true, sourceIndex: 0 }] };
     this.sceneryTextures ||= new WeakMap();
     for (let R = 0; R < this.tiles.length; R++) {
-      let h = this.tiles[R], panel = scene.panels[R];
+      let h = this.tiles[R], panel = (scene.layers || scene.panels)[R];
       if (h.group.visible = !!panel, !panel) continue;
       let texture = n;
-      if (panel.original && window.LR_SCENERY) LR_SCENERY.source(A, panel, gi[A]);
-      if (!panel.original) {
+      if (window.LR_SCENERY) {
         let image = LR_SCENERY.source(A, panel);
         if (!image) { h.group.visible = false; continue; }
         texture = this.sceneryTextures.get(image);
         if (!texture) this.sceneryTextures.set(image, texture = W.from(image));
+        if (panel.kind === "water") { texture.source.update(); Q++; }
       }
-      h.group.position.set(panel.x, -8), h.group.scale.set(g, g), h.sprite.texture = texture;
-      let M = A === "park" && panel.original && !this.reduced && this.quality > 0.4;
+      // Panel geometry stays in game coordinates; native artwork resolution can
+      // increase independently without changing its on-screen size or spacing.
+      h.group.position.set(panel.x, panel.y ?? -8), h.group.scale.set((panel.width ?? l) / texture.width, (panel.height ?? a) / texture.height), h.sprite.texture = texture;
+      let M = A === "park" && !scene.authoredLayers && panel.original && !this.reduced && this.quality > 0.4;
       if (h.water.mesh.visible = M, h.mask.visible = M, h.glints.visible = M, M) {
         Q++;
         let f = h.water.buffer.data, G = h.water.base;
@@ -22032,11 +22034,9 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
     let n = 0;
     if (this.id === "opening" && window.LR_SCENERY) {
       let scene = LR_SCENERY.layout("opening", t, this.W, i);
-      // Glows follow authored lamps in their own plate, rather than a second
-      // independent mirrored tiling of the old backdrop.
-      let lamps = { 1: VD, 2: [[15, 656, 8], [371, 654, 8], [778, 651, 8], [1516, 651, 8]],
-        3: [[10, 655, 8], [330, 624, 7], [769, 612, 8], [1380, 611, 8]],
-        4: [[91, 632, 8], [675, 631, 8], [1212, 628, 8]] };
+      // The new paintings carry their own lamp light. Legacy point coordinates
+      // must not add floating glows over the native architectural layers.
+      let lamps = {};
       for (let panel of scene.panels) for (let [E, I, Q] of lamps[panel.sourceIndex] || []) {
         let R = panel.x + E / panel.sourceWidth * panel.width;
         if (R < -20 || R > this.W + 20 || n >= this.openingLights.length) continue;
@@ -22150,7 +22150,7 @@ function pD() {
   return zA === "chapter" ? Ot[at].name.toUpperCase() + " \xB7 " + Ot[at].note : "ONE CITY. AN UNREASONABLY LONG HORIZON.";
 }
 function Mu() {
-  return [si, ng, gt[PA].motion, At.shieldImage, At.reserveImage, Fe, po, zA === "chapter" ? gi[at] : null, zA === "chapter" && at !== "opening" ? er : null, ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || [])].filter(Boolean);
+  return [si, ng, gt[PA].motion, At.shieldImage, At.reserveImage, Fe, po, zA === "chapter" ? gi[at] : null, zA === "chapter" && at !== "opening" ? er : null, ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || []), ...(window.LR_SHOPS?.images || [])].filter(Boolean);
 }
 function SD() {
   nu || ![Fe, er, po, ...Object.values(gi)].every((e24) => e24.complete && e24.naturalWidth) || (nu = true, $A.init({ canvas: m("#environment"), gameplayCanvas: ht, openingCanvas: bA, backgrounds: gi, propsImage: er, ambienceImage: po, ambienceFrames: su }).then(() => $A.resize(eA, kA, ht.width, ht.height)).catch((e24) => console.warn("Using the Canvas renderer:", e24.message)));
@@ -22220,7 +22220,7 @@ function fu(e24) {
 for (let e24 of document.querySelectorAll("[data-district]")) e24.onclick = () => {
   b === "home" && (!window.LR_CH || LR_CH.unlocked(e24.dataset.district) ? fu(e24.dataset.district) : LR_CH.locked(e24));
 };
-for (let e24 of [...Object.values(gt).flatMap((A) => [A.atlas, A.flip, A.motion]), At.shieldImage, At.reserveImage, Fe, er, po, ...Object.values(gi), ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || [])].filter(Boolean)) e24.onload = Ei, e24.onerror = () => {
+for (let e24 of [...Object.values(gt).flatMap((A) => [A.atlas, A.flip, A.motion]), At.shieldImage, At.reserveImage, Fe, er, po, ...Object.values(gi), ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || []), ...(window.LR_SHOPS?.images || [])].filter(Boolean)) e24.onload = Ei, e24.onerror = () => {
   Mu().includes(e24) && (Ei(), m("#load-status").textContent = "Artwork could not load. Choose another chapter or refresh to retry.");
 };
 Gu();

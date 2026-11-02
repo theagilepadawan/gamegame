@@ -1,27 +1,39 @@
-# Release verification — world polish 1.2
+# Release verification — scenery and venue detail 1.3
 
-All seven release suites passed against the self-contained HTML using Playwright 1.56.1 and Chromium 154.0.8037.57. The suites in `npm test` cover the following:
+`npm test` completed successfully against the exact self-contained release HTML using Playwright 1.56.1 and Chromium 154.0.8037.57. All nine suites passed: modes, menu, scenery, art-layers, downtown, venues, water, gaps and standalone.
 
-- Story/Endless menus and four leaderboard categories; no Daily or separate Contrarian entry.
-- Stable Story terrain and isolation from the saved Endless seed.
-- Retry, chapter unlocks, Trond unlock, fund-history reveal, and Next chapter defaults through keyboard and gamepad input.
-- Fresh-profile chapter locks, keyboard navigation, actual touch swiping, D-pad/analogue navigation and layouts down to 568×320. The player marker follows selection, locked nodes keep their anchor during feedback, and chapter browsing does not expose later scenery.
-- 1,452 scenery camera/mode/viewport cases, covering finite Story routes and the Endless continuation without returning to the original landmark painting.
-- One World Trade Center framing at the start and eight seconds into a run, at 1440, 844 and 568 pixels wide, including menu idle and retry. Full Story panorama coverage, camera continuity through Contrarian/boss waits, and a bridge-free repeating Endless tail.
-- Kabin/LEI composition confined to their architectural bays. Midtown facade mounts, the 505 entrance perspective, Gussy's curb contact and the once-only 505 greeting, on desktop, mobile layouts and Canvas.
-- Actual jump/landing physics on four seeded slopes, merged touching holes, solid intervening islands, and pixel checks for complete shafts without residual road, curb or internal hills. Wide crest/valley openings and airborne shadows are included in visual review.
-- Actual Pixi, direct WebGL and forced Canvas scene captures on desktop and mobile viewport sizes, with no JavaScript or failed asset requests.
-- All 40 original asset hashes unchanged; standalone fonts and assets load without external requests; Contrarian starts and ends offline.
-- ZIP CRC validation and byte-for-byte comparison of its HTML with the tested release.
-
-Manual visual review checked the restored skyline, full bridge landing, Seaport storefronts, Midtown venue scale and contact, the smallest map layout, and complete gaps. An independent review followed a double jump through takeoff, flight and landing. The final Endless Battery variant was checked at both incoming and outgoing joins, including a later repeat, for severed buildings, transparent overlaps, unsupported bridge fragments and waterline jumps.
-
-Tested HTML SHA-256:
+The tested HTML is **37,477,360 bytes**, with **58 embedded assets**. Its SHA-256 is:
 
 ```
-9fd060927fc13512f82b18c86e9edc8cf19de59357f5874169d9e8644b263488
+a50e3aca9876d1512a6c918b21b0a4962f43668144eca182a7fe59c81f5e8df5
 ```
 
-The reusable checks are in `tests/`; checksums for the HTML and playable ZIP are in `release/SHA256SUMS.txt`. Browser tests emulate mobile viewports and controller input; these results are Chromium checks, not a claim of physical-device or cross-browser certification.
+## Functional and rendering checks
 
-The published GitHub ZIP was downloaded again and matched the tested local ZIP and embedded HTML byte for byte, with a valid CRC. A separate attempt to open the HTML through `file://` was blocked by this cloud browser's administrator policy (`ERR_BLOCKED_BY_ADMINISTRATOR`); offline gameplay was verified through localhost instead. Direct local-file opening has therefore not been certified by this environment.
+- Story/Endless selection, stable Story terrain, saved Endless seeds, history reveal, chapter/runner unlocks, retries and keyboard/controller result defaults.
+- Chapter-map locks, marker movement, touch swiping, keyboard and controller controls, layouts down to 568×320, and removal of the redundant world number.
+- Finite Story coverage, landmark-free Endless continuation, One World Trade Center framing after menu idle/retry and eight seconds into a run, and camera continuity through Contrarian/boss waits.
+- Native pixels, camera crops and exposed side edges for all 23 architectural route panels; every reachable join, moving sequences, desktop/mobile layouts and DPR2 captures.
+- Separate venue blocks, complete storefronts and 505 glazing, vehicle tyre contact, entrance visibility before victory and the once-only 505 greeting.
+- Actual rendered lake pixels change in normal motion in both Pixi and Canvas, while the bank stays stable. Pause freezes the effect; reduced motion remains quiet.
+- Complete gap rendering and collision, touching/separate openings, long removed hills/valleys, and real jump/landing physics on four seeded slopes.
+- Pixi, direct WebGL and Canvas fallback captures without JavaScript exceptions or failed asset requests.
+- All 40 original source asset hashes unchanged. The standalone fonts, artwork, code and audio load without external requests; Contrarian remains playable offline.
+
+## Visual review
+
+An independent reviewer and the coordinating agent inspected the actual rendered scenes, including background-only views where terrain would otherwise hide a join. The final review covered:
+
+- Lower Manhattan landmarks, a clearly readable single Brooklyn Bridge, its complete masonry approaches and its natural emergence behind the Seaport foreground.
+- Kabin and LEI in distinct stretches of the route, with complete frontages and natural building/foliage outlines.
+- Midtown venue spacing, full 505 glass doors and sign, the contemporary office base, and removal of the obsolete lamp overlay across its entrance.
+- Repaired city edges, continuous sky/water/street planes, and warm Central Park scenery.
+- Bridge visibility at desktop and narrow widths, plus later Endless views without repeated landmark fragments.
+
+The 25 new runtime art files total 11,854,670 bytes. Architecture/forest layers are natively 1024×1536, atmosphere layers 1536×1024, and the single bridge 2171×724. Camera trims and atlas placement do not add source detail. Original runner artwork remains the current style; the separate cartoon sprite experiment was not integrated.
+
+## Packaging and limits
+
+The playable ZIP is CRC-validated and contains the tested HTML byte for byte. Checksums are in `release/SHA256SUMS.txt`. The reusable browser checks live in `tests/`.
+
+Mobile viewports and controller input were emulated. These results are Chromium checks, not physical-device or cross-browser certification. Offline gameplay was tested through localhost. This managed browser blocks `file://` navigation by administrator policy, so direct local-file opening is not certified by this environment.

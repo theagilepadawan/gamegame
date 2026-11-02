@@ -33,7 +33,7 @@ try{
         const scene=LR_SCENERY.inspect('opening',q.distance,eA,kA,'chapter');
         const panel=scene.panels.find(p=>p.original),scale=innerWidth/eA;
         const brand=document.querySelector('.brand').getBoundingClientRect(),hud=document.querySelector('#live-hud').getBoundingClientRect();
-        return {distance:q.distance,heroX:panel?(panel.x+200/1536*panel.width)*scale:null,
+        return {distance:q.distance,heroX:panel?(panel.x+441/1024*panel.width)*scale:null,
           brandRight:brand.right,hudLeft:hud.left,hudRight:hud.right,scroll:scene.scroll};
       };
       const start=sample();
@@ -57,31 +57,56 @@ try{
     await page.locator('#stage').screenshot({path:`${output}/hero-${viewport.width}.png`});
   }
   const frontage=await page.evaluate(()=>{
-    const painting=LR_SCENERY.images[2],composed=LR_KABIN.frontage(painting,3);
-    const raw=document.createElement('canvas');raw.width=painting.naturalWidth;raw.height=painting.naturalHeight;
-    const c=raw.getContext('2d');c.drawImage(painting,0,0);
-    const original=c.getImageData(0,0,raw.width,raw.height).data;
-    const final=composed.getContext('2d').getImageData(0,0,raw.width,raw.height).data;
-    const spots=LR_KABIN.spots(),changed=spots.map(()=>0);let outside=0;
-    for(let y=0;y<raw.height;y++)for(let x=0;x<raw.width;x++){
-      const i=(y*raw.width+x)*4;if(original[i]===final[i]&&original[i+1]===final[i+1]&&original[i+2]===final[i+2]&&original[i+3]===final[i+3])continue;
-      const b=spots.findIndex(s=>x>=s.sourceRect[0]&&x<s.sourceRect[0]+s.sourceRect[2]&&y>=s.sourceRect[1]&&y<s.sourceRect[1]+s.sourceRect[3]);
-      if(b<0)outside++;else changed[b]++;
+    const visits={};
+    for(let distance=0;distance<=25920;distance+=100){
+      const scene=LR_SCENERY.layout('opening',distance,1000,540,'chapter');
+      for(const panel of scene.panels){
+        if(/:(kabin|lei)$/.test(panel.id))visits[panel.id.split(':')[1]]={panel:panel.sourceIndex,worldX:panel.segment*scene.stride,width:panel.width};
+      }
     }
-    return {outside,changed};
+    return visits;
   });
-  assert.equal(frontage.outside,0,'Venue composition must not alter surrounding architecture');
-  assert.ok(frontage.changed.every(n=>n>5000),'Both named venues are actually present in their facade bays');
+  assert.deepEqual(Object.keys(frontage).sort(),['kabin','lei']);
+  assert.notEqual(frontage.kabin.panel,frontage.lei.panel,'Kabin and LEI occupy separate city blocks');
+  assert.ok(frontage.lei.worldX-frontage.kabin.worldX>1000,'Downtown venues are more than a gameplay viewport apart');
   const route=await page.evaluate(()=>{
     const story=LR_SCENERY.inspect('opening',25920,1000,540,'chapter');
     const tail=[];for(let d=50000;d<120000;d+=500)tail.push(...LR_SCENERY.layout('opening',d,1000,540,'endless').panels);
-    return {lastVisible:story.panels.some(p=>p.sourceIndex===4),end:story.scroll,max:story.stripWidth-1000,storyUsesOriginalBattery:story.panels.filter(p=>p.sourceIndex===4).every(p=>!p.variant),
-      tailVariant:tail.filter(p=>p.sourceIndex===4).every(p=>p.variant==='battery-loop'),tail:[...new Set(tail.map(p=>p.sourceIndex))]};
+    return {lastVisible:story.panels.some(p=>p.sourceIndex===story.panelCount-1),end:story.scroll,max:story.stripWidth-1000,
+      tail:[...new Set(tail.map(p=>p.id))],tailIndices:[...new Set(tail.map(p=>p.sourceIndex))],loopStart:story.loopStart};
   });
-  assert.equal(route.lastVisible,true,'Battery is reached within the normal Story course');
+  assert.equal(route.lastVisible,true,'The final waterfront is reached within the normal Story course');
   assert.ok(Math.abs(route.end-route.max)<.01);
-  assert.deepEqual(route.tail.sort(),[3,4],'Endless never reintroduces the partial bridge or skyline');
-  assert.equal(route.storyUsesOriginalBattery,true);assert.equal(route.tailVariant,true);
+  assert.ok(route.tailIndices.every(index=>index>=route.loopStart));
+  assert.equal(route.tail.some(id=>/lower-manhattan|brooklyn-bridge|kabin|lei/.test(id)),false,'Endless repeats only anonymous city/waterfront blocks');
+  const bridgeViews=[];
+  for(const viewport of [{width:1440,height:900},{width:844,height:390},{width:568,height:320}]){
+    await page.setViewportSize(viewport);
+    const view=await page.evaluate(()=>{
+      Cu(false);fu('opening');Ko('chapter');b='paused';SA.pause();
+      let best=null;
+      for(let distance=7000;distance<24000;distance+=25){
+        q.distance=distance;q.chapterDistance=distance;
+        const scene=LR_SCENERY.layout('opening',distance,eA,kA,'chapter');
+        const bridge=scene.layers.find(layer=>layer.kind==='bridge');
+        if(!bridge)continue;
+        const left=bridge.x+bridge.width*.08,right=bridge.x+bridge.width*.92;
+        if(left<16||right>eA-16)continue;
+        const base=bridge.y+bridge.height*593/724,camera=T-q.floorY;
+        const clearance=Math.min(...Array.from({length:33},(_,i)=>q.floorAt(left+(right-left)*i/32)+camera-base));
+        if(!best||clearance>best.clearance)best={distance,clearance,bridge};
+      }
+      if(!best)return null;
+      q.distance=best.distance;q.chapterDistance=best.distance;q.y=q.floorY;q.grounded=true;ir=q.y;Kt=T-q.floorY;$i=0;
+      $A.update(0,q,{id:'opening',reduced:true,quality:1});vu();
+      const image=LR_SCENERY.source('opening',best.bridge);
+      return {...best,viewport:{width:innerWidth,height:innerHeight},nativeWidth:image.naturalWidth,nativeHeight:image.naturalHeight};
+    });
+    assert.ok(view&&view.clearance>20,`Both bridge towers and main span are readable above normal terrain at width ${viewport.width}`);
+    assert.ok(view.nativeWidth>=2000&&view.nativeHeight>=700,'Complete bridge retains native panoramic detail');
+    bridgeViews.push(view);
+    await page.screenshot({path:`${output}/bridge-readable-${viewport.width}.png`});
+  }
   const events=await page.evaluate(()=>{
     Cu(false);fu('opening');Ko('chapter');b='paused';SA.pause();q.invincible=10000;
     q.distance=ee(31);q.chapterDistance=q.distance;q.chapterTime=31;q.time=31;
@@ -100,6 +125,6 @@ try{
   assert.equal(events.leftContrarian,true);
   assert.equal(events.beforeFlight,events.afterFlight,'Entering the boss does not jump the camera');
   assert.deepEqual(errors,[]);
-  await writeFile(`${output}/checks.json`,JSON.stringify({records,frontage,route,events},null,2));
+  await writeFile(`${output}/checks.json`,JSON.stringify({records,frontage,route,bridgeViews,events},null,2));
   console.log('PASS: One WTC framing after idle/retry and8seconds, spoiler-free home scene, no floating legacy traffic, architecture-only venue composition, full Story coverage and bridge-free Endless tail.');
 }finally{await browser.close();}
