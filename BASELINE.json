@@ -1,0 +1,20 @@
+{
+  "source": "The-Long-Run-New-York-NBIM-Arcade (1).html",
+  "sha256": "b5650916ba811b93e805462ea366941da10c9595cccb09727206ab4d0fcfbc8f",
+  "scripts": [
+    "logo",
+    "splash",
+    "opening-storefronts",
+    "midtown-storefronts",
+    "touch-guard",
+    "park-shoes",
+    "runner-unlocks",
+    "chapter-progression",
+    "endless",
+    "arcade",
+    "history-reveal",
+    "leaderboard",
+    "engine"
+  ],
+  "note": "All runtime/art extracted from user-supplied NBIM Arcade HTML. No earlier game source imported."
+}

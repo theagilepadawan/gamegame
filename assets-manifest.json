@@ -1,0 +1,282 @@
+[
+  {
+    "path": "assets/original-00.svg",
+    "mime": "image/svg+xml",
+    "bytes": 329,
+    "sha256": "e163039806d642c472242fde0edd6e5b8999181563c672d2b45bb74e11102481",
+    "context": "Norges Bank Investment Management</title><link rel=\"icon\" type=\"image/svg+xml\" href=\""
+  },
+  {
+    "path": "assets/original-01.png",
+    "mime": "image/png",
+    "bytes": 1661,
+    "sha256": "b84f2fcce82d2c0ccb6cf8fcf419291a7e7c40a21172cdd6c0d7cdcbb63b18ec",
+    "context": "NDAgMTIwIDEyMCAyNi42NiAwIDAgMCIvPjwvZz48L3N2Zz4=\"><link rel=\"apple-touch-icon\" href=\""
+  },
+  {
+    "path": "assets/original-02.woff2",
+    "mime": "font/woff2",
+    "bytes": 21212,
+    "sha256": "5eb3b71ee30bd68613f860ac7a1b2e63d4f7af1fe264f07b12ab515d19b1b9f9",
+    "context": "==================================== */ @font-face{font-family:\"Norges Bank\";src:url("
+  },
+  {
+    "path": "assets/original-03.woff2",
+    "mime": "font/woff2",
+    "bytes": 22616,
+    "sha256": "36a366a6ed38779a3fcb8706cb1326dbc07f57e99c32e1ca34835e0271daf0cb",
+    "context": "0;font-style:normal;font-display:block} @font-face{font-family:\"Norges Bank\";src:url("
+  },
+  {
+    "path": "assets/original-04.woff2",
+    "mime": "font/woff2",
+    "bytes": 22940,
+    "sha256": "1a101de10b2010e4becf906d07d4f93648d8b8066820c8a06b3520eae830ebf6",
+    "context": "0;font-style:normal;font-display:block} @font-face{font-family:\"Norges Bank\";src:url("
+  },
+  {
+    "path": "assets/original-05.woff2",
+    "mime": "font/woff2",
+    "bytes": 22700,
+    "sha256": "a0ce05257088651c814034ba3c6fdee3fa4e312e3f552112bba04b4faae4fcff",
+    "context": "0;font-style:normal;font-display:block} @font-face{font-family:\"Norges Bank\";src:url("
+  },
+  {
+    "path": "assets/original-06.woff2",
+    "mime": "font/woff2",
+    "bytes": 21712,
+    "sha256": "f3de0c1bed2b412c3bd786af98c4e80af2c47dcff0ba64a0703a0eb4bd37989a",
+    "context": "0;font-style:normal;font-display:block} @font-face{font-family:\"Norges Bank\";src:url("
+  },
+  {
+    "path": "assets/original-07.webp",
+    "mime": "image/webp",
+    "bytes": 90930,
+    "sha256": "0be1d70b5df0c17ca546df1fccf39abdbdac1c84a5c40454290901ec21f7b1f2",
+    "context": "========================================================= */ :root{--mini-sprite:url("
+  },
+  {
+    "path": "assets/original-08.svg",
+    "mime": "image/svg+xml",
+    "bytes": 7868,
+    "sha256": "e3acfba90abbe49b0da7dbc5388c427dd8b7165e67f89cbfbd1518976b0af5cc",
+    "context": "=\"splash\" class=\"splash\" aria-hidden=\"true\"><div class=\"splash-logo\"></div><img src=\""
+  },
+  {
+    "path": "assets/original-09.svg",
+    "mime": "image/svg+xml",
+    "bytes": 224,
+    "sha256": "2de1f226798878fcc82624663b14d14fd734f7e89dedc375e24a1a6e87b7d604",
+    "context": "es Bank Investment Management\" width=\"123\" height=\"38\"><img class=\"logo-symbol\" src=\""
+  },
+  {
+    "path": "assets/original-10.webp",
+    "mime": "image/webp",
+    "bytes": 56802,
+    "sha256": "1ce0e3d1e660493a3b42dc69d4beba2fcd832cbed9090f9c029237ec3c8fe0be",
+    "context": "painting, 2 + f spot f on the third)   var SHOPS = [     { key: \"kabin\", city: load(\""
+  },
+  {
+    "path": "assets/original-11.webp",
+    "mime": "image/webp",
+    "bytes": 31196,
+    "sha256": "0e03b679362eac4ed516283fe2eb72628eb32fd84fcee59c25e8fe60d5abb83b",
+    "context": " 168, bh: 150, ax: 84, ay: 140, P: 2 - 238.5 / TILE },     { key: \"lei\", city: load(\""
+  },
+  {
+    "path": "assets/original-12.webp",
+    "mime": "image/webp",
+    "bytes": 30570,
+    "sha256": "ab7026010110ffbd54b7519c4a317fc52fde79fe95b79d406fae7c34fc207dbb",
+    "context": "on (src) { var i = new Image(); i.src = src; return i; };   var IMG = { fifth: load(\""
+  },
+  {
+    "path": "assets/original-13.webp",
+    "mime": "image/webp",
+    "bytes": 27724,
+    "sha256": "38a88edb04a516c44996a1e32c57d2964758de38e41ddd3190e307a9e8f0145c",
+    "context": "6gAWjP2zDEIAE8DGi7kmSjBwlovNbjbdbSH/EbAd6f/nB++GZ6g7AnUwgFNzl70hpkEA\"), omars: load(\""
+  },
+  {
+    "path": "assets/original-14.webp",
+    "mime": "image/webp",
+    "bytes": 15676,
+    "sha256": "c35253f6271087281f3b5d64735917f79d6ab6550e049516407264d92f294617",
+    "context": "mZhe5+wDuqrOrKShzFQAgJ80VAAZwAAC0+cHTp9dW7wFw/PWgAAOcn37l8u5PwEECAA==\"), joju: load(\""
+  },
+  {
+    "path": "assets/original-15.webp",
+    "mime": "image/webp",
+    "bytes": 23278,
+    "sha256": "6b2f595137c0358e18b30a4ae5ccb0ccca99df510a023fe3d6bddab3c8708631",
+    "context": "AoM1IMC+wU2CUQgQRHWaiA4OgIoAYHxWP6hfkIbHq//yrfnwNv9xV/d++exRcgNYCQ==\"), gussy: load(\""
+  },
+  {
+    "path": "assets/original-16.webp",
+    "mime": "image/webp",
+    "bytes": 104196,
+    "sha256": "983e971107799d94b2712c534cef06136ef6cfe7895d3b5e916a3b376bbbd7d9",
+    "context": "LVlYVq2RFLJCUichW0iqlCwRVaekRB9/1RwSm/KpjqthBuLiUssn994DAA==\") };   var WALL = load(\""
+  },
+  {
+    "path": "assets/original-17.webp",
+    "mime": "image/webp",
+    "bytes": 401910,
+    "sha256": "44fbb0ae052902e4153b4add60b2668df55df5f32cf66c98a45639287deedc1b",
+    "context": "dow.LR_SHOES_APPLY(); };   atlas.onload = ready; flip.onload = ready;   atlas.src = \""
+  },
+  {
+    "path": "assets/original-18.webp",
+    "mime": "image/webp",
+    "bytes": 243176,
+    "sha256": "388005196d1b66f940e12daf810513612d2805ca810c9afdfb0e94241ba8c5b1",
+    "context": "XmdzX3xmBW+ZM2+IpkAxUgB+PoAdz6Hw/qQ6AKp9G0+gE0+gAAAXj6AAAAAAAAAAAAAAAA\"; flip.src = \""
+  },
+  {
+    "path": "assets/original-19.mp3",
+    "mime": "audio/mpeg",
+    "bytes": 2707629,
+    "sha256": "0e8e5c01ac041c324b9a03064f59af9caef402c3c31c552f5c45d2eaff48e7e7",
+    "context": "e original, Midtown charges, Central Park ends gracefully   var TRACKS = { midtown: \""
+  },
+  {
+    "path": "assets/original-20.mp3",
+    "mime": "audio/mpeg",
+    "bytes": 2603949,
+    "sha256": "9bd0f9bfedae0664109677e6f1f090cb141ef07abc84430bd3633c2a5ac75ca4",
+    "context": "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq\", park: \""
+  },
+  {
+    "path": "assets/original-21.webp",
+    "mime": "image/webp",
+    "bytes": 47654,
+    "sha256": "4ca6f8d5da45bb567f9e813888e62343d7a344e807032087d88b3f056172f83c",
+    "context": "age=typeof Image==\"function\"?new Image:null,this.shieldImage&&(this.shieldImage.src=\""
+  },
+  {
+    "path": "assets/original-22.webp",
+    "mime": "image/webp",
+    "bytes": 124286,
+    "sha256": "4af5a9d2bcca68a28de6b186e1246af61044720f706661bc252b4d4c956027fb",
+    "context": "zYdxpwkaCoXeM0X7Mb//+NOON9Dhg57zj4Z8wI=\"),this.reserveImage&&(this.reserveImage.src=\""
+  },
+  {
+    "path": "assets/original-23.webm",
+    "mime": "video/webm",
+    "bytes": 515,
+    "sha256": "e02a2f773c52a1989fa9e6f3113151637a822131c0847de5d456131d082c4806",
+    "context": ".onerror=()=>n(null),a.autoplay=!1,a.crossOrigin=\"anonymous\",a.preload=\"auto\",a.src=\""
+  },
+  {
+    "path": "assets/original-24.avif",
+    "mime": "image/avif",
+    "bytes": 311,
+    "sha256": "04dfc8e1a6e59e36a3a3a5c15443a97a92a6d2a7da9d276b050d58be3c7952a7",
+    "context": "n!0}return!1}var p7={extension:{type:U.DetectionParser,priority:1},test:async()=>df(\""
+  },
+  {
+    "path": "assets/original-25.webp",
+    "mime": "image/webp",
+    "bytes": 38,
+    "sha256": "52dc24c0429ea6ccc5b579a6da8bb79bf41e471fe5108a62009f3c2e195551c0",
+    "context": "(A=>A!==\"webm\")},F7={extension:{type:U.DetectionParser,priority:0},test:async()=>df(\""
+  },
+  {
+    "path": "assets/original-26.png",
+    "mime": "image/png",
+    "bytes": 68,
+    "sha256": "5e3d382db4dd83d59aa5742793ad6b7903409e865c83bcbc54835049f043bc15",
+    "context": "t;return i.svg(t),i}var ES=`(function () {     'use strict';      const WHITE_PNG = \""
+  },
+  {
+    "path": "assets/original-27.webp",
+    "mime": "image/webp",
+    "bytes": 409246,
+    "sha256": "f9a6c669e822fbb30a3b5b86cf2dcc58b1a09099681e868b93887465c4e0cf94",
+    "context": "TRIPLE SPIN\",atlas:new Image,flip:new Image,motion:new Image}};gt.nicolai.atlas.src=\""
+  },
+  {
+    "path": "assets/original-28.webp",
+    "mime": "image/webp",
+    "bytes": 246942,
+    "sha256": "16831448d03d57aa308277ee5b7e71d0637a00fc75a7107cd8740edef67efb1b",
+    "context": "AAAaDsCAOwEA7DvdnI7AD+fgdmI7R2AAAAu3YcrsADPdgAgnYAAAAAAAAAAA==\";gt.nicolai.flip.src=\""
+  },
+  {
+    "path": "assets/original-29.webp",
+    "mime": "image/webp",
+    "bytes": 343158,
+    "sha256": "7fb352a4ae9af65cba1962c645ef97290459044fe470312a8f676701d5ae2079",
+    "context": "fKeuvCACnABVi0X1Hp1wGVh/tm6DUnxZbYAAAAAANIjtwAAAAAAAAAAAAAAAAAA\";gt.trond.atlas.src=\""
+  },
+  {
+    "path": "assets/original-30.webp",
+    "mime": "image/webp",
+    "bytes": 225662,
+    "sha256": "605050662079da11c110babaf463794373221b778f248f4e9a1626077fa03ef2",
+    "context": "zfB1gyRs03gAAAAAFYLAo79osF6LA4hYAcAsEdchdiw1QAAAAAm7kAAAAAAAAAAA\";gt.trond.flip.src=\""
+  },
+  {
+    "path": "assets/original-31.webp",
+    "mime": "image/webp",
+    "bytes": 225792,
+    "sha256": "a3ea5dc85fc4cbae7381576e34eaaf83d8a0728fe5b48b85fe9eaa613792380e",
+    "context": "1D5uWFLfDAAfVKAAJqpdSgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=\";gt.trond.motion.src=\""
+  },
+  {
+    "path": "assets/original-32.webp",
+    "mime": "image/webp",
+    "bytes": 578450,
+    "sha256": "dc3847d0736597cc89a56380e7e1e1c139188dfbe32fa39f7f830457e2a5d8e8",
+    "context": "N.unlocked())&&(PA=e)}catch{}var si=gt[PA].atlas,ng=gt[PA].flip,Fe=new Image;Fe.src=\""
+  },
+  {
+    "path": "assets/original-33.webp",
+    "mime": "image/webp",
+    "bytes": 686544,
+    "sha256": "c3817e5e14060794307c5e3da69a451c920b9d9d0308eaabde4f2a7de9a282ed",
+    "context": "X8XF4sdMOcU4hmEuzUUvCrZ5AAA=\";var gi={park:new Image,midtown:new Image};gi.park.src=\""
+  },
+  {
+    "path": "assets/original-34.webp",
+    "mime": "image/webp",
+    "bytes": 607202,
+    "sha256": "13b37e93986e3fe96762dccc5136acd9c74d3cec81394635d394ba58e011d6fa",
+    "context": "YjiR6GBsOYHeF4m8nclSxQoBKUCiA+faYGYeCAE79MJQ6cfiodWAX8hFMBuZADUAAAA\";gi.midtown.src=\""
+  },
+  {
+    "path": "assets/original-35.webp",
+    "mime": "image/webp",
+    "bytes": 395352,
+    "sha256": "8604397ea98ce5e3730a063ca535b63a57c81fc37a82dc14cad5e6fece10d3e6",
+    "context": "V8qB4YMfQSj4unPUxEFw/beE0AreeALLvL7jYrlUDr92UXtgAD84hYAAA=\";var er=new Image;er.src=\""
+  },
+  {
+    "path": "assets/original-36.webp",
+    "mime": "image/webp",
+    "bytes": 266494,
+    "sha256": "4549bc56f6795e465ae162ac56589f651fdb0cc3c67eac11a2cdadd4853e0c24",
+    "context": "WSV1ZdJIuDigFBJViGl1CHMZdA1XoZEAAAAQ0cIWOAAAAAAAAAAAAAAAAA\";var po=new Image;po.src=\""
+  },
+  {
+    "path": "assets/original-37.mp3",
+    "mime": "audio/mpeg",
+    "bytes": 2502511,
+    "sha256": "b9e72bf64bdfca7833e91b6cc93c6a245d06603526ed841d71d0d9d3d07645d0",
+    "context": "apter\",q=null,eA=1e3,kA=540,EQ=1,au=0,$i=0,UA=0,QQ=0,ir=T,fe=0,Ar=1,RQ=!1,SA=new ko(\""
+  },
+  {
+    "path": "assets/original-38.mp3",
+    "mime": "audio/mpeg",
+    "bytes": 19244,
+    "sha256": "259f4c7d7d28a0fc03ac60b665507d2df10a0bfd5dae0df7d9895848b829cb54",
+    "context": "qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqg==\");SA.registerClip(\"laugh\",\""
+  },
+  {
+    "path": "assets/original-39.mp3",
+    "mime": "audio/mpeg",
+    "bytes": 1455020,
+    "sha256": "d8fc27a6fa989ef52fbd5c303b2d38a5609b3359ba3b2cd121456b01f3acd981",
+    "context": "VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVU=\");SA.registerMusic(\"contrarian\",\""
+  }
+]
