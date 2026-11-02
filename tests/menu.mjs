@@ -16,7 +16,7 @@ const browser = await chromium.launch({
 const errors = [];
 const checks = [];
 function pass(name) { checks.push(name); console.log(`PASS ${name}`); }
-async function open(viewport, { demo = false, touch = false } = {}) {
+async function open(viewport, { demo = false, touch = false, pad = false } = {}) {
   const context = await browser.newContext({
     viewport,
     reducedMotion: 'reduce',
@@ -24,6 +24,16 @@ async function open(viewport, { demo = false, touch = false } = {}) {
     isMobile: touch,
   });
   const page = await context.newPage();
+  if (pad) await page.addInitScript(() => {
+    window.__mapPadActive = false;
+    window.__mapPadDirection = 0;
+    window.__mapPadDpad = 0;
+    window.__mapPadButton = false;
+    Object.defineProperty(navigator, 'getGamepads', { value: () => window.__mapPadActive ? [{
+      axes: [window.__mapPadDirection, 0],
+      buttons: Array.from({length: 16}, (_, i) => ({pressed: (i === 0 && window.__mapPadButton) || (i === 14 && window.__mapPadDpad < 0) || (i === 15 && window.__mapPadDpad > 0)}))
+    }] : [] });
+  });
   page.on('pageerror', error => errors.push(error.message));
   await page.goto(String(demo ? demoURL : baseURL), { waitUntil: 'load' });
   await page.waitForFunction(() => window.LR_MENU && window.longRun && !document.querySelector('#start').disabled, null, { timeout: 60000 });
@@ -40,11 +50,11 @@ async function inBounds(page, label) {
       const r = document.querySelector(selector).getBoundingClientRect();
       return { x: r.x, y: r.y, right: r.right, bottom: r.bottom, width: r.width, height: r.height };
     };
-    return { width: innerWidth, height: innerHeight, documentWidth: document.documentElement.scrollWidth, start: rect('#start'), rail: rect('#district-picker') };
+    return { width: innerWidth, height: innerHeight, documentWidth: document.documentElement.scrollWidth, start: rect('#start'), rail: rect('#district-picker'), status: document.querySelector('#load-status').offsetParent ? rect('#load-status') : null };
   });
   assert(layout.documentWidth <= layout.width, `${label}: no horizontal page overflow`);
   assert(layout.start.width > 100 && layout.start.height >= 30, `${label}: usable start button`);
-  for (const [name, rect] of Object.entries({ start: layout.start, rail: layout.rail })) {
+  for (const [name, rect] of Object.entries({ start: layout.start, rail: layout.rail, ...(layout.status ? {status: layout.status} : {}) })) {
     assert(rect.x >= -1 && rect.y >= -1 && rect.right <= layout.width + 1 && rect.bottom <= layout.height + 1, `${label}: ${name} stays inside viewport`);
   }
 }
@@ -61,11 +71,27 @@ try {
   assert.equal(await page.locator('[data-district="midtown"]').getAttribute('aria-disabled'), 'true');
   assert.equal(await page.locator('[data-district="park"]').getAttribute('aria-disabled'), 'true');
   assert.equal(await page.locator('#chapter-prev').isDisabled(), true);
+  assert.equal(await page.locator('#chapter-browser img').count(), 0, 'The chapter map never shows gameplay preview images');
+  assert.equal(await page.locator('#map-route').count(), 1, 'Destinations are joined by an illustrated route');
   await inBounds(page, 'desktop');
+  await page.emulateMedia({reducedMotion: 'no-preference'});
+  const targetCenter = await page.locator('[data-district="midtown"]').evaluate(el => {
+    const box = el.getBoundingClientRect(); return box.x + box.width / 2 + document.querySelector('#district-picker').scrollLeft;
+  });
   await page.locator('#chapter-next').click();
   await page.waitForFunction(() => LR_MENU.state.browsing === 'midtown');
-  assert.equal(await page.evaluate(() => LR_MENU.state.selected), 'opening');
   assert.match(await page.locator('#load-status').innerText(), /Finish Opening Bell/);
+  const centers = await page.evaluate(async () => {
+    const values = [], node = document.querySelector('[data-district="midtown"]'), rail = document.querySelector('#district-picker');
+    for (let i = 0; i < 12; i++) {
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      const box = node.getBoundingClientRect(); values.push(box.x + box.width / 2 + rail.scrollLeft);
+    }
+    return values;
+  });
+  assert(centers.every(x => Math.abs(x - targetCenter) < 1), 'Locked destination stays anchored during its refusal animation');
+  await page.emulateMedia({reducedMotion: 'reduce'});
+  assert.equal(await page.evaluate(() => LR_MENU.state.selected), 'opening');
   assert.match(await page.locator('#start-label').innerText(), /Opening Bell/);
   await stillHome(page);
   pass('Fresh-profile locks preserve the selected playable chapter and explain the next unlock');
@@ -98,10 +124,10 @@ try {
   assert.equal(await page.locator('.world-picker').isVisible(), false);
   assert.equal(await page.evaluate(() => LR_MENU.state.selected), 'opening');
   await inBounds(page, 'desktop after mode switch');
-  pass('Story shows the chapter rail; only Endless shows enabled world controls');
+  pass('Story shows the chapter map; only Endless shows enabled world controls');
   await desktop.context.close();
 
-  const small = await open({ width: 568, height: 320 }, { demo: true, touch: true });
+  const small = await open({ width: 568, height: 320 }, { demo: true, touch: true, pad: true });
   const mobile = small.page;
   await inBounds(mobile, '568×320 landscape');
   assert.equal(await mobile.locator('[data-district="park"]').getAttribute('aria-disabled'), 'false');
@@ -129,6 +155,10 @@ try {
   await mobile.keyboard.press('Enter');
   await mobile.keyboard.press('Space');
   await stillHome(mobile);
+  await mobile.waitForFunction(() => document.querySelector('#stage').dataset.location === 'opening');
+  const pin = await mobile.locator('.map-player').boundingBox();
+  const destination = await mobile.locator('[data-district="midtown"]').boundingBox();
+  assert(Math.abs(pin.x + pin.width / 2 - destination.x - destination.width / 2) < 2, 'Player pin follows the selected destination');
   await mobile.locator('[data-mode="endless"]').click();
   await mobile.waitForFunction(() => LR_MENU.state.mode === 'endless');
   const start = await mobile.locator('#start').boundingBox();
@@ -137,7 +167,18 @@ try {
   await mobile.waitForFunction(() => LR_MENU.state.mode === 'story');
   assert.equal(await mobile.evaluate(() => LR_MENU.state.selected), 'midtown');
   await inBounds(mobile, '568×320 returning to Story');
-  pass('Small landscape layout keeps the CTA reachable and restores the selected chapter');
+  pass('Small layout keeps the CTA reachable, moves the player pin, and never previews chapter scenery');
+  await mobile.evaluate(() => { window.__mapPadActive = true; window.__mapPadDpad = 1; dispatchEvent(new Event('gamepadconnected')); });
+  await mobile.waitForFunction(() => LR_MENU.state.selected === 'park');
+  await stillHome(mobile);
+  await mobile.evaluate(() => { window.__mapPadDpad = 0; });
+  await mobile.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  await mobile.evaluate(() => { window.__mapPadDirection = -1; });
+  await mobile.waitForFunction(() => LR_MENU.state.selected === 'midtown');
+  await stillHome(mobile);
+  await mobile.evaluate(() => { window.__mapPadDirection = 0; window.__mapPadButton = true; });
+  await mobile.waitForFunction(() => longRun.state === 'playing' && longRun.snapshot.districtId === 'midtown');
+  pass('Controller horizontal input navigates the map and A starts the selected chapter');
   await small.context.close();
   assert.deepEqual(errors, [], 'no browser exceptions during menu interactions');
   pass('No browser exceptions');

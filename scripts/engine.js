@@ -91,6 +91,93 @@ var LR_HISTORY = [[1998, 9.26], [1999, 12.44], [2e3, 2.49], [2001, -2.47], [2002
     }
   };
 })();
+// Gaps are missing terrain, not rectangular decals painted over the surface.
+// The same horizontal bounds feed physics, terrain cuts and grounded details.
+var LR_GAPS = {
+  footReach: 8,
+  bounds(gap, offset = 0) {
+    return { left: gap.x + offset, right: gap.x + gap.w + offset };
+  },
+  find(obstacles, x, offset = 0) {
+    const opening = this.layout(obstacles, x + 40, offset).openings.find(edge =>
+      x > edge.left + this.footReach && x < edge.right - this.footReach);
+    if (!opening) return null;
+    // Touching/overlapping hazards are one opening. Foot forgiveness belongs
+    // only to its two outer banks, never to an invisible seam in the middle.
+    return obstacles.find(gap => gap.type === "gap" && x >= gap.x + offset && x <= gap.x + gap.w + offset) || null;
+  },
+  overlaps(obstacles, left, right = left, offset = 0) {
+    return (obstacles || []).some(gap => {
+      if (gap.type !== "gap") return false;
+      const edge = this.bounds(gap, offset);
+      return right > edge.left && left < edge.right;
+    });
+  },
+  layout(obstacles, width, offset = 0) {
+    const openings = (obstacles || []).filter(gap => gap.type === "gap" && gap.w > 0)
+      .map(gap => this.bounds(gap, offset)).filter(edge => edge.right > -40 && edge.left < width + 40)
+      .sort((a, b) => a.left - b.left);
+    const merged = [];
+    for (const edge of openings) {
+      const previous = merged.at(-1);
+      if (previous && edge.left <= previous.right) previous.right = Math.max(previous.right, edge.right);
+      else merged.push({ ...edge });
+    }
+    const solids = [];
+    let start = -40;
+    for (const edge of merged) {
+      if (edge.left > start) solids.push([start, Math.min(width + 40, edge.left)]);
+      start = Math.max(start, edge.right);
+    }
+    if (start < width + 40) solids.push([start, width + 40]);
+    return { openings: merged, solids };
+  },
+  clipSolids(ctx, solids) {
+    ctx.beginPath();
+    for (const [left, right] of solids) ctx.rect(left, -10000, right - left, 20000);
+    ctx.clip();
+  },
+  depth(ctx, openings, floor, bottom) {
+    // Hide the painted street behind each missing foreground span. The shaft
+    // has no bottom. Its mouth connects the real banks: one global height makes
+    // a black wall on slopes, while an internal terrain crest makes a fake hill.
+    for (const edge of openings) {
+      const contour = [[edge.left, floor(edge.left)], [edge.right, floor(edge.right)]];
+      // A narrow bank-height atmosphere softens the distance plane, then the
+      // shaft is fully opaque from its mouth all the way down. Terrain that
+      // would have occupied the opening contributes no silhouette or ledge.
+      for (const [lift, color] of [[16, "#01050b18"], [10, "#01050b3c"], [5, "#01050b88"], [1, "#01050b"]]) {
+        ctx.beginPath(); ctx.moveTo(edge.left, bottom);
+        for (const [x, y] of contour) ctx.lineTo(x, y - lift);
+        ctx.lineTo(edge.right, bottom); ctx.closePath(); ctx.fillStyle = color; ctx.fill();
+      }
+    }
+  },
+  edges(ctx, openings, floor, bottom) {
+    ctx.save();
+    ctx.lineCap = "butt";
+    for (const edge of openings) for (const [x, side] of [[edge.left, -1], [edge.right, 1]]) {
+      const y = floor(x), outer = x + side * 8, yOuter = floor(outer);
+      const face = ctx.createLinearGradient(0, y, 0, y + 155);
+      face.addColorStop(0, "#63746e");
+      face.addColorStop(0.12, "#344a50");
+      face.addColorStop(0.55, "#10222f");
+      face.addColorStop(1, "#06121e");
+      ctx.beginPath(); ctx.moveTo(outer, yOuter + 6); ctx.lineTo(x, y + 6);
+      ctx.lineTo(x, bottom); ctx.lineTo(outer, bottom); ctx.closePath();
+      ctx.fillStyle = face; ctx.fill();
+      const rim = ctx.createLinearGradient(0, y, 0, y + 95);
+      rim.addColorStop(0, "#e3b88a"); rim.addColorStop(0.2, "#96a99b"); rim.addColorStop(1, "#435e6400");
+      ctx.beginPath(); ctx.moveTo(x + side * 0.8, y + 1); ctx.lineTo(x + side * 0.8, y + 95);
+      ctx.strokeStyle = rim; ctx.lineWidth = 1.5; ctx.stroke();
+      // A short bank-side cap makes the takeoff/landing edge legible without
+      // extending a fake ledge into the missing collision surface.
+      ctx.beginPath(); ctx.moveTo(x + side, floor(x + side)); ctx.lineTo(x + side * 11, floor(x + side * 11));
+      ctx.strokeStyle = "#e4c39a"; ctx.lineWidth = 2; ctx.stroke();
+    }
+    ctx.restore();
+  }
+};
 function LR_UP(q2) {
   var p = q2.terrainProfile;
   return !!p && p.districtId === "opening" && !q2.contrarian && q2.y - q2.floorY < 150 && !q2.obstacles.some(function(o) {
@@ -283,7 +370,7 @@ var hi = class {
   nearLanding() {
     if (this.grounded || this.vy < 0 || this.flight || this.transfer) return false;
     let A = this.vy * 0.1 + 1950 * 0.1 * 0.1 / 2, t = (Math.sqrt(this.vy * this.vy + 3900 * Math.max(0, this.floorY - this.y)) - this.vy) / 1950;
-    return (!this.obstacles.some((r) => r.type === "gap" && this.x > r.x - this.speed * t + 8 && this.x < r.x - this.speed * t + r.w - 8) || this.invincible > 0) && this.floorY - this.y <= A ? true : this.platforms.some((r) => {
+    return (!LR_GAPS.find(this.obstacles, this.x, -this.speed * t) || this.invincible > 0) && this.floorY - this.y <= A ? true : this.platforms.some((r) => {
       if (!r.active || r.y < this.y || r.y - this.y > A) return false;
       let o = (Math.sqrt(this.vy * this.vy + 3900 * (r.y - this.y)) - this.vy) / 1950, s = r.x - this.speed * o;
       return this.x + 10 > s && this.x - 10 < s + r.w && (!r.collapseAt || r.collapseAt > this.time + o);
@@ -665,7 +752,7 @@ var hi = class {
     }
     this.autoSpawn && this.nextX < (this.procedural ? this.x + 1100 : this.width + 260) && (!this.contrarianDone && this.spawnCount >= 2 && this.spawnCount % 5 === 2 && this.lastOfferSection !== this.spawnCount ? this.offerContrarian() : this.spawn());
     for (let I of this.markers) !I.announced && I.x < this.x + 110 && (I.announced = true, this.route = I.route, this.routeCount++, this.emit("route", { route: I.route }));
-    let s = this.stepFlight(A), n = this.obstacles.find((I) => I.type === "gap" && this.x > I.x + 8 && this.x < I.x + I.w - 8), a = !n || this.invincible > 0;
+    let s = this.stepFlight(A), n = LR_GAPS.find(this.obstacles, this.x), a = !n || this.invincible > 0;
     if (!s) {
       let I = this.platforms.find((Q) => Q.id === this.support && Q.active && this.x + 8 > Q.x && this.x - 8 < Q.x + Q.w);
       if (this.grounded && (this.support !== null ? I ? this.y = I.y : (this.grounded = false, this.support = null, this.coyote = 0.1) : a ? this.y = this.floorY : (this.grounded = false, this.coyote = 0.1)), this.grounded ? (this.coyote = 0.1, this.airJumpAvailable = true, this.jumpCount = 0, this.flipAge = -1) : this.coyote = Math.max(0, this.coyote - A), this.buffer = Math.max(0, this.buffer - A), this.sliding = t && this.grounded, this.sliding && this.resetJumpChain(), this.buffer > 0 && (this.grounded || this.coyote > 0) ? this.launchGroundJump() : this.buffer > 0 && this.airJumpAvailable && !this.grounded && (!this.landingBuffered || !this.nearLanding()) && this.launchAirJump(), !this.grounded) {
@@ -863,7 +950,12 @@ var Wo = class {
     let s = o.getAttribLocation(this.sky, "a_pos");
     o.enableVertexAttribArray(s), o.vertexAttribPointer(s, 2, o.FLOAT, false, 0, 0), o.uniform1f(o.getUniformLocation(this.sky, "u_time"), t), o.uniform1f(o.getUniformLocation(this.sky, "u_aspect"), i / r), o.drawArrays(o.TRIANGLES, 0, 3);
     let n = this.renderPicture(A, i);
-    o.clear(o.DEPTH_BUFFER_BIT), o.enable(o.DEPTH_TEST), o.depthFunc(o.LEQUAL), n && window.LR_KABIN && LR_KABIN.gl(o, A, i, r), o.useProgram(this.program);
+    o.clear(o.DEPTH_BUFFER_BIT), o.enable(o.DEPTH_TEST), o.depthFunc(o.LEQUAL), n && window.LR_KABIN && LR_KABIN.gl(o, A, i, r);
+    // The painted waterfront has its own roads and bridge. Procedural traffic
+    // belongs to the geometry fallback only; otherwise its unsupported train
+    // and cars float across water and architectural facades.
+    if (n) { o.disable(o.DEPTH_TEST); return; }
+    o.useProgram(this.program);
     for (let [a, g] of [["u_width", i], ["u_height", r], ["u_scroll", A / 25 * 0.65 % this.span + this.span / 2], ["u_time", t]]) o.uniform1f(o.getUniformLocation(this.program, a), g);
     if (this.attributes(this.staticBuffer), !n) for (let a of [-this.span, 0, this.span]) o.uniform1f(o.getUniformLocation(this.program, "u_tile"), a), o.drawArrays(o.TRIANGLES, 0, this.staticCount);
     this.dynamic(t), o.bindBuffer(o.ARRAY_BUFFER, this.dynamicBuffer), o.bufferData(o.ARRAY_BUFFER, new Float32Array(this.data), o.DYNAMIC_DRAW), this.attributes(this.dynamicBuffer);
@@ -1293,21 +1385,40 @@ var Po = class {
     }
     r.restore();
   }
-  terrain(A, t, i, r, o) {
+  terrain(A, t, i, r, o, obstacles = [], offset = 0) {
     let s = this.c, n = typeof o == "string" ? o : o?.id || "", a = /sell|bear|down/.test(n), g = /bull|up/.test(n), l = a ? "#d99b97" : g ? "#98dbb5" : "#a8c7bc", E = [];
-    for (let B = -40; B <= A + 40; B += 32) E.push([B, t(B)]);
+    for (let B = -40; B <= A + 40; B += 24) E.push([B, t(B)]);
     let I = Math.max(...E.map((B) => B[1])) + 800;
-    s.save(), s.beginPath(), s.moveTo(E[0][0], I);
-    for (let [B, c] of E) s.lineTo(B, c);
-    s.lineTo(E.at(-1)[0], I), s.closePath();
+    const cuts = LR_GAPS.layout(obstacles, A, offset);
+    const banks = cuts.solids.map(([left, right]) => {
+      const points = [[left, t(left)]];
+      for (let x = left + 16; x < right; x += 16) points.push([x, t(x)]);
+      points.push([right, t(right)]);
+      return points;
+    });
+    s.save();
+    LR_GAPS.depth(s, cuts.openings, t, I);
+    s.save(); LR_GAPS.clipSolids(s, cuts.solids);
+    s.beginPath();
+    for (const bank of banks) {
+      s.moveTo(bank[0][0], I);
+      for (const [x, y] of bank) s.lineTo(x, y);
+      s.lineTo(bank.at(-1)[0], I); s.closePath();
+    }
     let Q = s.createLinearGradient(0, Math.min(...E.map((B) => B[1])), 0, I);
-    Q.addColorStop(0, a ? "#25313c" : "#243b43"), Q.addColorStop(0.2, "#0a1b2b"), Q.addColorStop(1, "#06121e"), s.fillStyle = Q, s.fill(), s.beginPath(), E.forEach(([B, c], M) => M ? s.lineTo(B, c) : s.moveTo(B, c)), s.strokeStyle = "#071622", s.lineWidth = 9, s.stroke(), s.beginPath(), E.forEach(([B, c], M) => M ? s.lineTo(B, c + 7) : s.moveTo(B, c + 7)), s.strokeStyle = "#526a6f", s.lineWidth = 3, s.stroke(), s.beginPath(), E.forEach(([B, c], M) => M ? s.lineTo(B, c) : s.moveTo(B, c)), s.strokeStyle = l, s.lineWidth = 2, s.stroke();
+    Q.addColorStop(0, a ? "#25313c" : "#243b43"), Q.addColorStop(0.2, "#0a1b2b"), Q.addColorStop(1, "#06121e"), s.fillStyle = Q, s.fill();
+    const contour = (dy, color, width) => {
+      s.beginPath();
+      for (const bank of banks) bank.forEach(([x, y], index) => index ? s.lineTo(x, y + dy) : s.moveTo(x, y + dy));
+      s.strokeStyle = color; s.lineWidth = width; s.stroke();
+    };
+    contour(0, "#071622", 9); contour(7, "#526a6f", 3); contour(0, l, 2);
     let R = 120, h = (i % R + R) % R;
     for (let B = -h; B < A + R; B += R) {
       let c = t(B);
       this.line(B, c + 14, B, c + 108, "#7d929723", 1), this.line(B + 10, c + 26, B + 100, t(B + 100) + 26, "#91a9a923", 1), this.rect(B + 9, c + 14, 4, 4, "#b2b8a34d", 1);
     }
-    s.restore();
+    s.restore(); LR_GAPS.edges(s, cuts.openings, t, I); s.restore();
   }
   listingBell(A, t, i, r = false) {
     let o = this.c;
@@ -1319,7 +1430,7 @@ var Po = class {
     let n = o.createLinearGradient(-36, 0, 36, 0);
     n.addColorStop(0, "#77502a"), n.addColorStop(0.3, "#f2cc83"), n.addColorStop(0.48, "#fff2ba"), n.addColorStop(0.7, "#b78a4e"), n.addColorStop(1, "#684926"), o.beginPath(), o.moveTo(-12, 0), o.bezierCurveTo(-34, 10, -21, 42, -43, 52), o.quadraticCurveTo(0, 65, 43, 52), o.bezierCurveTo(21, 42, 34, 10, 12, 0), o.closePath(), o.fillStyle = n, o.fill(), o.beginPath(), o.ellipse(0, 53, 42, 7, 0, 0, Math.PI * 2), o.fillStyle = "#604829", o.fill(), o.strokeStyle = "#ffe6aa", o.lineWidth = 2, o.stroke(), this.rect(-3, 51, 6, 15, "#c8a063", 2), o.beginPath(), o.arc(0, 67, 7, 0, Math.PI * 2), o.fillStyle = "#f7dc9f", o.fill(), o.restore(), o.fillStyle = "#d5e3d8", o.font = "8px Arial", o.fillText("LONG HORIZON. STRONG FINISH.", 0, -75), o.restore();
   }
-  grid(A, t, i, r) {
+  grid(A, t, i, r, obstacles = [], offset = 0) {
     let o = this.c;
     o.save();
     let s = o.createLinearGradient(0, 130, 0, t + 100);
@@ -1327,9 +1438,12 @@ var Po = class {
     for (let a = 182; a < t; a += 48) this.line(0, a, A, a, "#8de5de09");
     let n = i * 0.45 % 80;
     for (let a = -n; a < A; a += 80) this.line(a, 165, a, t + 78, "#8de5de09");
-    this.rect(0, t, A, 118, "#071724dd"), this.line(0, t, A, t, "#80c5bd66", 1.5);
+    const cuts = LR_GAPS.layout(obstacles, A, offset);
+    LR_GAPS.depth(o, cuts.openings, () => t, t + 800);
+    o.save(); LR_GAPS.clipSolids(o, cuts.solids);
+    this.rect(0, t, A, 800, "#071724dd"), this.line(0, t, A, t, "#80c5bd66", 1.5);
     for (let a = -i % 80; a < A; a += 80) this.line(a, t + 9, a, t + 14, "#82c5bc40"), this.label((Math.floor((a + i) / 80) * 5).toString().padStart(4, "0"), a + 5, t + 32, "#587d8588", 6);
-    o.restore();
+    o.restore(); LR_GAPS.edges(o, cuts.openings, () => t, t + 800); o.restore();
   }
   platform(A, t, i, r) {
     let o = this.c, s = A.x + t, n = A.y, a = A.w;
@@ -1366,11 +1480,7 @@ var Po = class {
   obstacle(A, t, i, r) {
     let o = this.c, s = A.x + t, n = A.base ?? i, a = A.w;
     if (s > r + 70 || s + a < -70) return;
-    if (A.type === "gap") {
-      let Q = o.createLinearGradient(0, n, 0, n + 118);
-      Q.addColorStop(0, "#010811"), Q.addColorStop(1, "#2f222b"), this.rect(s, n, a, 118, Q), this.line(s, n, s, n + 20, "#cc8c7a", 2), this.line(s + a, n, s + a, n + 20, "#cc8c7a", 2), o.save(), o.setLineDash([3, 7]), this.line(s, n + 35, s + a, n + 35, "#d8a69130"), o.restore();
-      return;
-    }
+    if (A.type === "gap") return; // The terrain renderer owns the complete opening.
     let g = A.type === "high", l = g ? n - 181 : n - A.h, E = g ? 85 : A.h;
     this.rect(s, l, a, E, "#071825", 3), this.rect(s + 2, l + 2, a - 4, E - 4, this.metal(s, l, a, E, ["#b37e6c", "#694d4a", "#3b3540"]), 3), this.rect(s + 8, l + 8, a - 16, E - 16, "#432f39", 2), this.line(s + 2, l + 2, s + a - 2, l + 2, "#e3b597", 1.5), this.line(s + 2, l + 2, s + 2, l + E - 2, "#d69f8580", 1), this.line(s + 2, l + E - 2, s + a - 2, l + E - 2, "#b27e6d", 1.5);
     for (let Q of [s + 5, s + a - 5]) for (let R of [l + 6, l + E - 6]) this.rivet(Q, R, 1.4);
@@ -21863,7 +21973,7 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
       let a = this.litter[n], g = this.id === "opening" && !A?.flight;
       if (a.visible = i || g, !a.visible) continue;
       let l = g ? 110 : 48, E = Math.floor(t / l) + n - 1, I = E * l - t + (A?.x || 0) + EA(E + 610) * 25, Q = A ? A.floorAt(I) : 422;
-      a.texture = this.textures[g ? "paper" : oi[n % 4]], a.tint = g ? 11977679 : 16777215, a.visible = I > -20 && I < this.W + 20, a.position.set(I, Q - 1.7), a.rotation = -0.25 + EA(E + 611) * 0.7, a.width = (g ? 5 : 6) + EA(E + 612) * 6, a.height = a.width * 0.4, a.alpha = g ? 0.5 : 0.8;
+      a.texture = this.textures[g ? "paper" : oi[n % 4]], a.tint = g ? 11977679 : 16777215, a.visible = I > -20 && I < this.W + 20 && !LR_GAPS.overlaps(A?.obstacles, I - 8, I + 8), a.position.set(I, Q - 1.7), a.rotation = -0.25 + EA(E + 611) * 0.7, a.width = (g ? 5 : 6) + EA(E + 612) * 6, a.height = a.width * 0.4, a.alpha = g ? 0.5 : 0.8;
     }
   }
   drawMidtown(A, t) {
@@ -21878,7 +21988,7 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
     let r = 0, o = i ? 850 : 720, s = Math.floor(t / o) - 1;
     for (let g = s; g < s + 5; g++) {
       let l = g * o + 380 - t + (A?.x || 0);
-      if (l < -70 || l > this.W + 70) continue;
+      if (l < -70 || l > this.W + 70 || LR_GAPS.overlaps(A?.obstacles, l - 20, l + 20)) continue;
       let E = A ? A.floorAt(l) : 422;
       this.vents.roundRect(l - 19, E - 3, 38, 4, 1).fill({ color: 2506050, alpha: 0.95 });
       for (let I = 0; I < 6; I++) this.vents.moveTo(l - 14 + I * 5, E - 2).lineTo(l - 14 + I * 5, E + 1).stroke({ width: 1, color: 10136475, alpha: 0.7 });
@@ -21919,12 +22029,20 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
   drawOpeningDetails(A, t, i) {
     for (let l of this.openingLights) l.visible = false;
     this.airStreaks.clear(), this.counts.lights = 0, this.counts.air = 0;
-    let r = 1120, o = t * 0.1176, s = Math.floor(o / r), n = 0;
-    if (this.id === "opening") for (let l = s; l < s + Math.ceil(this.W / r) + 1; l++) for (let [E, I, Q] of VD) {
-      let R = l * r - o + (l % 2 ? 1 - E / 1536 : E / 1536) * r;
-      if (R < -20 || R > this.W + 20 || n >= this.openingLights.length) continue;
-      let h = this.openingLights[n++];
-      h.visible = true, h.position.set(R, I / 1024 * i), h.width = Q * 2, h.height = Q * 2.2, h.alpha = this.reduced ? 0.12 : 0.12 + Math.sin(this.age * 0.65 + E) * 0.025;
+    let n = 0;
+    if (this.id === "opening" && window.LR_SCENERY) {
+      let scene = LR_SCENERY.layout("opening", t, this.W, i);
+      // Glows follow authored lamps in their own plate, rather than a second
+      // independent mirrored tiling of the old backdrop.
+      let lamps = { 1: VD, 2: [[15, 656, 8], [371, 654, 8], [778, 651, 8], [1516, 651, 8]],
+        3: [[10, 655, 8], [330, 624, 7], [769, 612, 8], [1380, 611, 8]],
+        4: [[91, 632, 8], [675, 631, 8], [1212, 628, 8]] };
+      for (let panel of scene.panels) for (let [E, I, Q] of lamps[panel.sourceIndex] || []) {
+        let R = panel.x + E / panel.sourceWidth * panel.width;
+        if (R < -20 || R > this.W + 20 || n >= this.openingLights.length) continue;
+        let h = this.openingLights[n++];
+        h.visible = true, h.position.set(R, I / panel.sourceHeight * panel.height), h.width = Q * 2, h.height = Q * 2.2, h.alpha = this.reduced ? 0.09 : 0.09 + Math.sin(this.age * 0.65 + E) * 0.018;
+      }
     }
     if (this.counts.lights = n, !A?.flight || this.reduced || A.transfer) return;
     let a = Math.max(90, A.x - 60), g = Math.round(7 * this.quality);
@@ -22032,7 +22150,7 @@ function pD() {
   return zA === "chapter" ? Ot[at].name.toUpperCase() + " \xB7 " + Ot[at].note : "ONE CITY. AN UNREASONABLY LONG HORIZON.";
 }
 function Mu() {
-  return [si, ng, gt[PA].motion, At.shieldImage, At.reserveImage, Fe, po, zA === "chapter" ? gi[at] : null, zA === "chapter" && at !== "opening" ? er : null, ...(window.LR_SCENERY?.images || [])].filter(Boolean);
+  return [si, ng, gt[PA].motion, At.shieldImage, At.reserveImage, Fe, po, zA === "chapter" ? gi[at] : null, zA === "chapter" && at !== "opening" ? er : null, ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || [])].filter(Boolean);
 }
 function SD() {
   nu || ![Fe, er, po, ...Object.values(gi)].every((e24) => e24.complete && e24.naturalWidth) || (nu = true, $A.init({ canvas: m("#environment"), gameplayCanvas: ht, openingCanvas: bA, backgrounds: gi, propsImage: er, ambienceImage: po, ambienceFrames: su }).then(() => $A.resize(eA, kA, ht.width, ht.height)).catch((e24) => console.warn("Using the Canvas renderer:", e24.message)));
@@ -22087,7 +22205,7 @@ function Eg() {
     let t = A.dataset.mode === zA;
     A.classList.toggle("selected", t), A.setAttribute("aria-pressed", String(t));
   }
-  m("#district-picker").classList.toggle("hidden", zA !== "chapter"), m("#chapter-description").innerHTML = zA === "chapter" ? e24.copy : "The pace doubles in a minute.<br>Every 32 seconds, the market turns.", m("#start-label").textContent = zA === "chapter" ? "Play " + e24.name : "Start endless", b === "home" && (m("#district").textContent = zA === "chapter" ? e24.place : "NEW YORK"), GQ();
+  m("#district-picker").classList.toggle("hidden", zA !== "chapter"), m("#chapter-description").innerHTML = zA === "chapter" ? e24.copy : "The pace doubles in a minute.<br>Every 32 seconds, the market turns.", m("#start-label").textContent = zA === "chapter" ? "Play " + e24.name : "Start endless", b === "home" && (m("#district").textContent = "NEW YORK"), GQ();
 }
 function fu(e24) {
   if (Object.hasOwn(Ot, e24)) {
@@ -22102,7 +22220,7 @@ function fu(e24) {
 for (let e24 of document.querySelectorAll("[data-district]")) e24.onclick = () => {
   b === "home" && (!window.LR_CH || LR_CH.unlocked(e24.dataset.district) ? fu(e24.dataset.district) : LR_CH.locked(e24));
 };
-for (let e24 of [...Object.values(gt).flatMap((A) => [A.atlas, A.flip, A.motion]), At.shieldImage, At.reserveImage, Fe, er, po, ...Object.values(gi), ...(window.LR_SCENERY?.images || [])].filter(Boolean)) e24.onload = Ei, e24.onerror = () => {
+for (let e24 of [...Object.values(gt).flatMap((A) => [A.atlas, A.flip, A.motion]), At.shieldImage, At.reserveImage, Fe, er, po, ...Object.values(gi), ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || [])].filter(Boolean)) e24.onload = Ei, e24.onerror = () => {
   Mu().includes(e24) && (Ei(), m("#load-status").textContent = "Artwork could not load. Choose another chapter or refresh to retry.");
 };
 Gu();
@@ -22355,7 +22473,7 @@ function xD(e24) {
     let i = e24 * 0.1176, r = 1120, o = Math.floor(i / r);
     if (window.LR_SCENERY) LR_SCENERY.draw2d(A, "opening", Fe, e24, eA, kA);
     else A.drawImage(Fe, -Math.min(i, Math.max(0, r - eA)), 0, r, kA);
-    window.LR_KABIN && LR_KABIN.draw2d(A, e24, eA);
+    window.LR_KABIN && LR_KABIN.draw2d(A, e24, eA, kA);
     A.fillStyle = "#040f201f", A.fillRect(0, 0, eA, kA);
     return;
   }
@@ -22643,12 +22761,12 @@ function dQ() {
 }
 function vu(e24 = false) {
   $D(), Ax();
-  let A = b !== "home", t = b === "playing" ? $i / (1 / 120) : 1, i = A && q ? q.speed * (1 - t) / 120 : 0, r = A ? Math.max(0, (q?.distance || 0) - i) : UA * 17, o = q?.transfer, s = o ? Math.min(1, o.age / o.duration) : 1, n = o ? s < 0.5 ? !o.toContrarian : o.toContrarian : !!q?.contrarian, a = A ? q?.districtId || "opening" : zA === "chapter" ? at : "opening", g = a !== "opening", l = !e24 && $A.ready && !$A.lost;
-  if (ut.environment = l && g ? $A : null, At.environment = l ? $A : null, tx(), bA.style.transform = n ? "scaleY(-1)" : "none", bA.style.visibility = g || l ? "hidden" : "visible", mt.dataset.location = a, g || (nt && !nt.lost ? nt.render(r, UA, eA, kA) : ag && xD(r)), d.setTransform(ht.width / eA, 0, 0, ht.height / kA, 0, 0), d.clearRect(0, 0, eA, kA), g && !l && ut.background(a, gi[a], eA, kA, r, UA, gA), n && (d.translate(0, kA), d.scale(1, -1)), d.translate(0, o && (o.toContrarian || s < 0.5) ? 0 : Kt), g || WD(r), g ? ut.terrain(q || { districtId: a, floorAt: () => T, distance: r, chapterDistance: r, worldItems: [], setPiece: null }, eA, UA, gA) : A && (q?.mode === "chapter" || q?.procedural) && !q.contrarian && (!o || s >= 0.5) ? At.terrain(eA, (E) => q.floorAt(E), q.mode === "chapter" ? q.chapterDistance : r, UA, q.chapterPhase?.id) : At.grid(eA, T, r, UA), A) {
+  let A = b !== "home", t = b === "playing" ? $i / (1 / 120) : 1, i = A && q ? q.speed * (1 - t) / 120 : 0, r = A ? Math.max(0, (q?.distance || 0) - i) : 0, o = q?.transfer, s = o ? Math.min(1, o.age / o.duration) : 1, n = o ? s < 0.5 ? !o.toContrarian : o.toContrarian : !!q?.contrarian, a = A ? q?.districtId || "opening" : "opening", g = a !== "opening", l = !e24 && $A.ready && !$A.lost;
+  if (ut.environment = l && g ? $A : null, At.environment = l ? $A : null, tx(), bA.style.transform = n ? "scaleY(-1)" : "none", bA.style.visibility = g || l ? "hidden" : "visible", mt.dataset.location = a, g || (nt && !nt.lost ? nt.render(r, UA, eA, kA) : ag && xD(r)), d.setTransform(ht.width / eA, 0, 0, ht.height / kA, 0, 0), d.clearRect(0, 0, eA, kA), g && !l && ut.background(a, gi[a], eA, kA, r, UA, gA), n && (d.translate(0, kA), d.scale(1, -1)), d.translate(0, o && (o.toContrarian || s < 0.5) ? 0 : Kt), g || WD(r), g ? ut.terrain(q || { districtId: a, floorAt: () => T, distance: r, chapterDistance: r, worldItems: [], setPiece: null }, eA, UA, gA) : A && (q?.mode === "chapter" || q?.procedural) && !q.contrarian && (!o || s >= 0.5) ? At.terrain(eA, (E) => q.floorAt(E - i), q.mode === "chapter" ? q.chapterDistance : r, UA, q.chapterPhase?.id, q.obstacles, i) : At.grid(eA, T, r, UA, A ? q?.obstacles : [], i), A) {
     if (q) {
       wD(), yD(i);
       for (let I of q.pickups) kD(I, i);
-      d.fillStyle = "#03091288", d.beginPath(), d.ellipse(q.x, (q.grounded ? q.y : q.floorY ?? T) + 2, 25, 4, 0, 0, Math.PI * 2), d.fill();
+      if (q.grounded && q.support !== null || !LR_GAPS.overlaps(q.obstacles, q.x - 20, q.x + 20, i)) { d.fillStyle = "#03091288"; d.beginPath(); d.ellipse(q.x, (q.grounded ? q.y : q.floorY ?? T) + 2, 25, 4, 0, 0, Math.PI * 2); d.fill(); }
       let E = q.won ? "idle" : q.flight ? q.grounded ? "run" : "jump" : q.sliding ? "slide" : q.slideRecoverAge >= 0 ? "recover" : q.superJumpAge >= 0 ? "superjump" : q.flipAge >= 0 ? "flip" : q.grounded ? "run" : q.vy < 0 ? "jump" : "fall";
       o || MQ(q.x, ir + (q.y - ir) * t - (q.won && !gA ? Math.max(0, Math.sin(Math.min(1, ni / 0.65) * Math.PI)) * 12 : 0), E, Math.floor(q.distance / 28) % 6);
     }
@@ -22681,7 +22799,7 @@ function Ku(e24) {
     for (let i of Ht) i.y -= t * 35, i.life -= t;
     Ht = Ht.filter((i) => i.life > 0);
   }
-  if ((b === "playing" || b === "home") && $A.update(t, q, { id: b === "home" ? zA === "chapter" ? at : "opening" : q?.districtId || "opening", reduced: gA, quality: dQ() }), b === "playing" && !q.transfer) {
+  if ((b === "playing" || b === "home") && $A.update(t, q, { id: b === "home" ? "opening" : q?.districtId || "opening", reduced: gA, quality: dQ() }), b === "playing" && !q.transfer) {
     let i = q.floorY ?? T, r = q.flight ? q.flightKind === "cruise" ? T - i : 0 : T - (q.terrainProfile && q.terrainProfile.districtId === "opening" && !q.contrarian ? 0.62 * i + 0.38 * q.floorAt(q.x + 220) : i) + Math.max(0, i - 207 - q.y);
     Kt += (r - Kt) * (1 - Math.exp(-t * 8));
   }

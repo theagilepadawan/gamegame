@@ -6,9 +6,9 @@
   var FEATHER = 64;
   var definitions = {
     opening: {
-      width: 1536, height: 1024, rate: 0.1176,
-      names: ["lower-manhattan", "east-river", "south-street-seaport", "battery-waterfront"],
-      files: ["assets/scenery/opening-1.webp", "assets/scenery/opening-2.webp", "assets/scenery/opening-3.webp"]
+      width: 1536, height: 1024, rate: 0.145, originalIndex: 1, loopStart: 3,
+      names: ["tribeca-approach", "lower-manhattan", "east-river", "south-street-seaport", "battery-waterfront"],
+      files: ["assets/scenery/opening-west.webp", "assets/scenery/opening-bridge.webp", "assets/scenery/opening-2.webp", "assets/scenery/opening-3.webp"]
     },
     park: {
       width: 1672, height: 941, rate: 0.085,
@@ -22,7 +22,7 @@
     }
   };
   var images = [], prepared = new WeakMap(), originals = {}, contexts = new WeakMap();
-  var loaded = function (img) { return !!(img && img.complete && img.naturalWidth); };
+  var loaded = function (img) { return !!(img && (img.complete && img.naturalWidth || img.getContext && img.width && img.height)); };
   Object.keys(definitions).forEach(function (id) {
     var def = definitions[id];
     def.images = def.files.map(function (src) {
@@ -34,6 +34,13 @@
       return img;
     });
   });
+  // The final Endless panel has its own right edge: it opens naturally onto
+  // Seaport again without cutting an office tower at the loop boundary.
+  var endlessBattery = new Image();
+  endlessBattery.decoding = "async";
+  endlessBattery.addEventListener("load", function () { prepare(endlessBattery); });
+  endlessBattery.src = "assets/scenery/opening-battery-loop.webp";
+  images.push(endlessBattery);
 
   // A small left-edge dissolve is prepared once per texture, never per frame.
   // It joins the painted sky/ground without stretching buildings or flipping art.
@@ -42,7 +49,7 @@
     var canvas = prepared.get(img);
     if (canvas) return canvas;
     canvas = document.createElement("canvas");
-    canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
+    canvas.width = img.naturalWidth || img.width; canvas.height = img.naturalHeight || img.height;
     var c = canvas.getContext("2d");
     c.drawImage(img, 0, 0);
     c.globalCompositeOperation = "destination-in";
@@ -65,31 +72,54 @@
     var overlap = width * FEATHER / def.width, stride = width - overlap;
     var total = def.names.length, stripWidth = width + stride * (total - 1);
     var endless = (mode || modeNow()) === "endless";
-    var travel = Math.max(0, Number(distance) || 0) * def.rate;
+    var originalIndex = def.originalIndex || 0, loopStart = def.loopStart || 1;
+    var runDistance = Math.max(0, Number(distance) || 0), initialOffset = 0, rate = def.rate;
+    var hold = 0, ease = 0, easedDistance = runDistance;
+    if (id === "opening") {
+      // Frame the exact original One WTC between the brand and central HUD.
+      // A brief establishing beat eases into a continuous journey; no landmark
+      // is replayed when the player retries, returns home, or runs indefinitely.
+      var compactHud = window.innerWidth <= 650;
+      var heroFraction = compactHud ? 0.24 : 0.35;
+      initialOffset = Math.max(0, stride - (W * heroFraction - width * 200 / def.width));
+      // The narrow HUD has one smaller clear opening beside the NBIM logo.
+      // Give that composition a little longer before it begins to travel.
+      hold = compactHud ? 2400 : 1500; ease = compactHud ? 2000 : 2400;
+      var afterHold = Math.max(0, runDistance - hold);
+      easedDistance = afterHold < ease ? afterHold * afterHold / (2 * ease) : afterHold - ease / 2;
+      if (!endless) rate = Math.max(0, stripWidth - W - initialOffset) / (25920 - hold - ease / 2);
+    }
+    var travel = initialOffset + easedDistance * rate;
     var scroll = endless ? travel : Math.min(travel, Math.max(0, stripWidth - W));
     var first = Math.max(0, Math.floor((scroll - width) / stride) + 1);
     var last = Math.ceil((scroll + W) / stride), panels = [];
     if (!endless) last = Math.min(last, total - 1);
     for (var index = first; index <= last; index++) {
-      // Endless continues through landmark-free neighbourhoods. Index zero
-      // belongs only to the start of a run, never to the repeating tail.
-      var sourceIndex = index < total ? index : 1 + (index - total) % (total - 1);
+      // Endless continues through landmark-free neighbourhoods. The approach, skyline
+      // and complete bridge belong only to the first journey, never to the repeating tail.
+      var sourceIndex = index < total ? index : loopStart + (index - total) % (total - loopStart);
       var x = index * stride - scroll;
       if (x >= W || x + width <= 0) continue;
       panels.push({
         id: id + ":" + def.names[sourceIndex], segment: index, sourceIndex: sourceIndex,
-        original: sourceIndex === 0, mirrored: false, x: x, y: id === "opening" ? 0 : -8,
+        original: sourceIndex === originalIndex, mirrored: false,
+        variant: id === "opening" && endless && sourceIndex === 4 ? "battery-loop" : null, x: x, y: id === "opening" ? 0 : -8,
         width: width, height: height, sourceWidth: def.width, sourceHeight: def.height
       });
     }
     return { id: id, mode: endless ? "endless" : "chapter", width: width, height: height,
       overlap: overlap, stride: stride, scroll: scroll, travel: travel, stripWidth: stripWidth,
-      panelCount: total, clamped: scroll < travel, panels: panels };
+      panelCount: total, originalIndex: originalIndex, loopStart: loopStart, initialOffset: initialOffset,
+      introHold: hold, introEase: ease, parallaxRate: rate, clamped: scroll < travel, panels: panels };
   }
   function source(id, panel, original) {
     if (original) originals[id] = original;
-    if (panel.original) return loaded(originals[id]) ? originals[id] : null;
-    return prepare(definitions[id].images[panel.sourceIndex - 1]);
+    var def = definitions[id], originalIndex = def.originalIndex || 0;
+    if (panel.original) return loaded(originals[id]) ? (originalIndex ? prepare(originals[id]) : originals[id]) : null;
+    var imageIndex = panel.sourceIndex < originalIndex ? panel.sourceIndex : panel.sourceIndex - 1;
+    var image = panel.variant === "battery-loop" ? endlessBattery : def.images[imageIndex];
+    if (id === "opening" && window.LR_KABIN) image = LR_KABIN.frontage(image, panel.sourceIndex);
+    return prepare(image);
   }
   function draw2d(ctx, id, original, distance, W, H, mode) {
     var scene = layout(id, distance, W, H, mode);
@@ -167,7 +197,7 @@
     get ready() { return images.every(loaded); },
     inspect: function (id, distance, W, H, mode) {
       var scene = layout(id, distance, W || 1000, H || 540, mode);
-      return Object.assign(scene, { ready: definitions[scene.id].images.every(loaded),
+      return Object.assign(scene, { ready: definitions[scene.id].images.every(loaded) && (scene.id !== "opening" || scene.mode !== "endless" || loaded(endlessBattery)),
         loadedPanels: definitions[scene.id].images.filter(loaded).length + (loaded(originals[scene.id]) ? 1 : 0),
         maxSourceWidth: definitions[scene.id].width, originalRepeats: false,
         tailExcludesOriginal: true, mirrored: false });

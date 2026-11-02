@@ -1,5 +1,5 @@
-/* The Story chapter rail keeps the original chapter buttons and progression
-   rules. Pointer dragging is explicit because gameplay disables native gestures. */
+/* The chapter overworld keeps the existing progression and game controls.
+   Its player pin travels along the same path that joins the destinations. */
 (function () {
   "use strict";
   function init() {
@@ -13,6 +13,11 @@
     var next = document.getElementById("chapter-next");
     var progress = document.getElementById("journey-progress");
     var announce = document.getElementById("chapter-announce");
+    var route = document.getElementById("map-route");
+    var marker = browser.querySelector(".map-player");
+    var legs = Array.from(browser.querySelectorAll("[data-leg]"));
+    var markerLength = 0, markerFrame = 0;
+    var stops = [0, legs[0].getTotalLength(), route.getTotalLength()];
     var names = { opening: "Opening Bell", midtown: "Midtown", park: "Central Park" };
     var reduce = matchMedia("(prefers-reduced-motion: reduce)");
     var browsing = 0, selected = "", scheduled = false, drag = null;
@@ -24,6 +29,26 @@
       previous.disabled = browsing === 0;
       next.disabled = browsing === cards.length - 1;
       browser.dataset.browsing = cards[browsing].dataset.district;
+      browser.querySelector(".map-gesture").hidden = rail.scrollWidth - rail.clientWidth < 16;
+    }
+    function placeMarker(length) {
+      markerLength = length;
+      var point = route.getPointAtLength(length);
+      marker.style.left = (point.x / 860 * 100) + "%";
+      marker.style.top = ((point.y - 26) / 240 * 100) + "%";
+    }
+    function moveMarker(index, instant) {
+      cancelAnimationFrame(markerFrame);
+      var from = markerLength, to = stops[index];
+      if (instant || reduce.matches || Math.abs(to - from) < 1) { placeMarker(to); return; }
+      var began = performance.now(), duration = Math.min(680, 340 + Math.abs(to - from) * .45);
+      function step(now) {
+        var t = Math.min(1, (now - began) / duration);
+        var eased = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+        placeMarker(from + (to - from) * eased);
+        if (t < 1) markerFrame = requestAnimationFrame(step);
+      }
+      markerFrame = requestAnimationFrame(step);
     }
     function scrollToCard(index, instant) {
       if (browser.hidden || !rail.clientWidth) return;
@@ -74,16 +99,18 @@
         var status = card.querySelector(".chapter-status");
         if (status.textContent !== label) status.textContent = label;
         var stamp = card.querySelector(".chapter-stamp");
-        if (stamp.textContent !== (done ? "✓" : "↗")) stamp.textContent = done ? "✓" : "↗";
+        if (stamp.textContent !== (done ? "✓" : String(i + 1))) stamp.textContent = done ? "✓" : String(i + 1);
         card.setAttribute("aria-label", "Chapter " + (i + 1) + ", " + names[id] + ". " + label + (open ? "." : " to unlock."));
-        var point = browser.querySelector('[data-path="' + id + '"]');
-        if (point) { point.classList.toggle("is-current", active); point.classList.toggle("is-complete", done); }
+        var leg = browser.querySelector('[data-leg="' + id + '"]');
+        if (leg) leg.classList.toggle("is-open", open);
       });
       var text = completed + " of " + cards.length + " chapters complete";
       if (progress.textContent !== text) progress.textContent = text;
       if (selected !== chosen.dataset.district || (story && wasHidden)) {
+        var first = !selected;
         selected = chosen.dataset.district;
         browsing = cards.indexOf(chosen);
+        moveMarker(browsing, first || wasHidden);
         requestAnimationFrame(function () { scrollToCard(browsing, wasHidden); });
       }
       updateArrows();
@@ -169,6 +196,27 @@
     if (resize) resize.observe(rail);
     window.addEventListener("resize", function () { if (!drag) scrollToCard(browsing, true); });
     window.addEventListener("storage", queueRefresh);
+    // Horizontal pad input belongs to the map; A / jump and result defaults
+    // stay in the existing gameplay controller handler.
+    var padPolling = false, lastPadDirection = 0;
+    function pollMapPad() {
+      var direction = 0;
+      try {
+        var gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+        for (var i = 0; i < gamepads.length; i++) {
+          var pad = gamepads[i]; if (!pad) continue;
+          if ((pad.buttons[14] && pad.buttons[14].pressed) || (pad.axes[0] || 0) < -.6) direction = -1;
+          else if ((pad.buttons[15] && pad.buttons[15].pressed) || (pad.axes[0] || 0) > .6) direction = 1;
+          if (direction) break;
+        }
+      } catch (_) {}
+      if (direction && direction !== lastPadDirection && !document.hidden && window.longRun && longRun.state === "home" && isStory() && !document.querySelector("dialog[open]")) activate(browsing + direction, false);
+      lastPadDirection = direction;
+      requestAnimationFrame(pollMapPad);
+    }
+    function startMapPad() { if (!padPolling) { padPolling = true; requestAnimationFrame(pollMapPad); } }
+    window.addEventListener("gamepadconnected", startMapPad);
+    try { if (navigator.getGamepads && Array.from(navigator.getGamepads()).some(Boolean)) startMapPad(); } catch (_) {}
     window.LR_MENU = {
       refresh: queueRefresh,
       focusChapter: function (id) { var i = cards.findIndex(function (card) { return card.dataset.district === id; }); if (i >= 0) activate(i, true); },

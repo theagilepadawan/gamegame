@@ -1,132 +1,159 @@
-/* Midtown's local venues follow the authored neighbourhood paintings: the opening
-   street, Bryant Park and Fifth Avenue. Each appears once, with a small seeded
-   variation inside its own frontage. The 505 office greeting is retained. */
+/* Midtown venues are architectural details, not independent little buildings.
+   Each sign occupies an authored facade bay in the painting's pixel coordinates.
+   The original windows, doors, trees and parapets stay in front/behind it at the
+   correct depth. The food truck is parked on the far curb with tyre contact. */
 (function () {
   "use strict";
-  var RATE = 0.085;                     // the Midtown painting's parallax
-  var WALL_Y = 686, KERB = 715, ROAD = 723; // painting rows: parapet overlay top, shop base, truck wheels
-  var META = {"omars":{"w":60.0,"h":36.0,"ax":30.0,"ay":34.91},"joju":{"w":33.0,"h":38.5,"ax":16.5,"ay":37.4},"fifth":{"w":68.75,"h":44.0,"ax":34.38,"ay":42.24},"gussy":{"w":62.5,"h":36.0,"ax":31.25,"ay":34.8}};                  // backdrop sprite sizes and anchors, world units
-  var load = function (src) { var i = new Image(); i.src = src; return i; };
-  var IMG = { fifth: load("assets/original-12.webp"), omars: load("assets/original-13.webp"), joju: load("assets/original-14.webp"), gussy: load("assets/original-15.webp") };
-  var WALL = load("assets/original-16.webp");
-  var ok = function (i) { return i.complete && i.naturalWidth > 0; };
-  // Source-pixel anchors are specific to these three paintings; no mirrored tiles.
-  var SLOTS = [
-    { key: "omars", tile: 0, x0: 394, x1: 470, base: KERB, wall: true },
-    { key: "joju", tile: 1, x0: 258, x1: 314, base: KERB, wall: false },
-    { key: "fifth", tile: 2, x0: 454, x1: 520, base: KERB, wall: false },
-    { key: "gussy", tile: 1, x0: 1220, x1: 1335, base: ROAD, wall: false }
+  var SOURCE_W = 1672, SOURCE_H = 941;
+  var load = function (src) { var image = new Image(); image.src = src; return image; };
+  var images = {
+    fifth: load("assets/original-12.webp"),
+    omars: load("assets/original-13.webp"),
+    joju: load("assets/original-14.webp"),
+    gussy: load("assets/original-15.webp")
+  };
+  var ready = function (image) { return image && image.complete && image.naturalWidth > 0; };
+  // Clockwise quads follow the painted facade's perspective. Crop coordinates
+  // select the venue's actual sign/awning; the beautifully painted doors remain.
+  var fixtures = [
+    { key: "joju", panel: 0, crop: [0, 0, 132, 52],
+      quad: [[378, 670], [428, 669], [428, 689], [378, 690]], kind: "fascia", depth: "brick storefront" },
+    { key: "omars", panel: 0, crop: [0, 0, 240, 83],
+      quad: [[444, 669], [520, 670], [520, 696], [444, 695]], kind: "awning", depth: "stone storefront" },
+    { key: "gussy", panel: 1, crop: [0, 0, 250, 144],
+      quad: [[1266, 639.61], [1420, 639.61], [1420, 728.31], [1266, 728.31]],
+      kind: "vehicle", contactY: 724, wheels: [1294, 1392], depth: "far curb" },
+    { key: "fifth", panel: 2, crop: [8, 8, 258, 45],
+      quad: [[508, 607], [575, 612], [575, 625], [508, 620]], kind: "lobby plaque", depth: "glass entrance" }
   ];
-  var state = function () { return window.longRun ? window.longRun.state : "home"; };
-  var seedNow = function () { return window.longRun && window.longRun.seed || 0; };
-
-  function rng(a) {
-    a >>>= 0;
-    return function () { a = (a + 0x6D2B79F5) >>> 0; var t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  var cache = new Map(), pixi = null;
+  var last = { on: false, scroll: 0, W: 1000, H: 540, items: [] };
+  function state() { return window.longRun ? longRun.state : "home"; }
+  function scene(distance, W, H) {
+    if (window.LR_SCENERY) return LR_SCENERY.layout("midtown", distance, W, H, "chapter");
+    var height = H + 16, width = height * SOURCE_W / SOURCE_H, stride = width - 64 * height / SOURCE_H;
+    return { scroll: Math.max(0, distance) * 0.085, stride: stride, width: width, height: height };
   }
-  function worldX(tile, px, tileW, g) { return tile * (tileW - 64 * g) + px * g; }
-  var cache = { key: "", items: [] };
-  function street(seed, tileW, g) {
-    var key = seed + "|" + tileW.toFixed(2);
-    if (cache.key !== key) {
-      var r = rng((seed ^ 0x9E3779B1) >>> 0);
-      cache = { key: key, items: SLOTS.map(function (slot) {
-        var px = slot.x0 + r() * (slot.x1 - slot.x0);
-        return { key: slot.key, px: px, tile: slot.tile,
-          x: worldX(slot.tile, px, tileW, g), base: slot.base, wall: slot.wall };
-      }) };
-    }
-    return cache.items;
+  function polygon(ctx, points) {
+    ctx.beginPath(); points.forEach(function (point, index) { index ? ctx.lineTo(point[0], point[1]) : ctx.moveTo(point[0], point[1]); }); ctx.closePath();
   }
-  function sceneScroll(dist, W, H) {
-    return window.LR_SCENERY ? LR_SCENERY.layout("midtown", dist, W, H).scroll : dist * RATE;
+  function quadImage(ctx, image, crop, points) {
+    var x = crop[0], y = crop[1], w = crop[2], h = crop[3];
+    // All four mounts are parallelograms: one affine draw keeps the sign sharp
+    // without a diagonal seam from separately antialiased triangles.
+    ctx.save(); polygon(ctx, points); ctx.clip();
+    ctx.transform((points[1][0] - points[0][0]) / w, (points[1][1] - points[0][1]) / w,
+      (points[3][0] - points[0][0]) / h, (points[3][1] - points[0][1]) / h, points[0][0], points[0][1]);
+    ctx.drawImage(image, x, y, w, h, 0, 0, w, h); ctx.restore();
   }
-  // the parapet in front of a shop: the painting's own wall pixels, a little wider than the shop
-  function wallSpan(it, g) {
-    var m = META[it.key], half = m.w / g / 2 + 6;
-    var x0 = Math.max(0, Math.floor(it.px - half)), x1 = Math.min(WALL.naturalWidth || 1672, Math.ceil(it.px + half));
-    return { x0: x0, w: x1 - x0 };
-  }
-  function tileOrigin(tile, tileW, scroll) { return { t0: tile * (tileW - 64 * tileW / 1672) - scroll, m: false }; }
-
-  var last = { scroll: 0, W: 960, items: [], on: false };
-  var px = null;
-  window.LR_SHOPS = {
-    // Pixi environment: at the top of drawBackground, every frame
-    pixi: function (env, id, W, H, dist, Sprite, Texture, Rect, Container) {
-      var on = id === "midtown" && state() !== "home";
-      last.on = on;
-      if (!px && on) {
-        px = { root: new Container(), shops: new Container(), walls: new Container(), trucks: new Container(), pool: { shops: [], walls: [], trucks: [] }, wallTex: null, frames: {}, tex: {} };
-        px.root.addChild(px.shops, px.walls, px.trucks);
-        env.backgroundLayer.addChild(px.root);
+  function renderFixture(ctx, fixture) {
+    var points = fixture.quad, image = images[fixture.key];
+    ctx.save();
+    if (fixture.kind === "vehicle") {
+      // The wheels touch the same far-curb line in every viewport. The soft
+      // footprint is behind the tyres; it cannot float below the truck.
+      for (var i = 3; i > 0; i--) {
+        ctx.fillStyle = "rgba(19,25,25," + (0.07 + (4 - i) * 0.04) + ")";
+        ctx.beginPath(); ctx.ellipse(1343, fixture.contactY + 1.1, 63 + i * 2, 1 + i, 0, 0, Math.PI * 2); ctx.fill();
       }
-      if (!px) return;
-      px.root.visible = on;
-      if (!on) return;
-      var bg = env.backgroundTextures && env.backgroundTextures.midtown; if (!bg) return;
-      var kids = env.backgroundLayer.children;
-      if (kids[kids.length - 1] !== px.root) env.backgroundLayer.addChild(px.root);
-      var tileH = H + 16, g = tileH / bg.height, tileW = bg.width * g, scroll = sceneScroll(dist, W, H);
-      var items = street(seedNow(), tileW, g, scroll, W);
-      last.scroll = scroll; last.W = W; last.items = items;
-      if (!px.wallTex && ok(WALL)) px.wallTex = Texture.from(WALL);
-      var n = { shops: 0, walls: 0, trucks: 0 };
-      var get = function (kind, layer) {
-        var p = px.pool[kind], s = p[n[kind]];
-        if (!s) { s = new Sprite(); p.push(s); layer.addChild(s); }
-        n[kind]++; s.visible = true; return s;
-      };
-      items.forEach(function (it) {
-        var m = META[it.key], sx = it.x - scroll;
-        if (sx + m.w < -20 || sx - m.w > W + 20 || !ok(IMG[it.key])) return;
-        var s = get(it.key === "gussy" ? "trucks" : "shops", it.key === "gussy" ? px.trucks : px.shops);
-        if (s.__key !== it.key) { s.texture = px.tex[it.key] || (px.tex[it.key] = Texture.from(IMG[it.key])); s.__key = it.key; }
-        s.anchor.set(m.ax / m.w, m.ay / m.h);
-        s.position.set(sx, it.base * g - 8); s.width = m.w; s.height = m.h;
-        if (it.wall && px.wallTex) {
-          var sp = wallSpan(it, g), fk = sp.x0 + ":" + sp.w;
-          var tex = px.frames[fk] || (px.frames[fk] = new Texture({ source: px.wallTex.source, frame: new Rect(sp.x0, 0, sp.w, px.wallTex.height) }));
-          var o = tileOrigin(it.tile, tileW, scroll), w = get("walls", px.walls);
-          w.texture = tex; w.anchor.set(0, 0);
-          w.position.set(o.m ? o.t0 + tileW - sp.x0 * g : o.t0 + sp.x0 * g, WALL_Y * g - 8);
-          w.scale.set(o.m ? -g : g, g);
-        }
-      });
-      ["shops", "walls", "trucks"].forEach(function (k) { var p = px.pool[k]; for (var i = n[k]; i < p.length; i++) p[i].visible = false; });
-    },
-    // 2D fallback: inside the district background, right after the painting tiles
-    draw2d: function (ctx, id, dist, W, img, tileW, tileH) {
+    } else {
+      var shadow = points.map(function (p) { return [p[0] + 0.5, p[1] + 1.8]; });
+      polygon(ctx, shadow); ctx.fillStyle = "rgba(15,22,25,.48)"; ctx.fill();
+    }
+    quadImage(ctx, image, fixture.crop, points);
+    // Warm reflected sunset light unifies the supplied venue art with the
+    // painting, while retaining the signs' exact names and original textures.
+    polygon(ctx, points); ctx.clip(); ctx.globalCompositeOperation = "source-atop";
+    ctx.fillStyle = fixture.kind === "vehicle" ? "rgba(255,194,99,.07)" : "rgba(255,196,112,.035)";
+    ctx.fillRect(0, 0, SOURCE_W, SOURCE_H);
+    ctx.restore();
+  }
+  function overlay(index) {
+    var entries = fixtures.filter(function (fixture) { return fixture.panel === index; });
+    if (!entries.every(function (fixture) { return ready(images[fixture.key]); })) return null;
+    if (cache.has(index)) return cache.get(index);
+    var points = entries.flatMap(function (fixture) { return fixture.quad; });
+    var left = Math.floor(Math.min.apply(null, points.map(function (p) { return p[0]; }))) - 4;
+    var top = Math.floor(Math.min.apply(null, points.map(function (p) { return p[1]; }))) - 4;
+    var right = Math.ceil(Math.max.apply(null, points.map(function (p) { return p[0]; }))) + 4;
+    var bottom = Math.ceil(Math.max.apply(null, points.map(function (p) { return p[1]; }))) + 4;
+    // These are small, tightly cropped textures, not three mostly transparent
+    // full-size paintings. Native-pixel mounts remain exact without wasting VRAM.
+    var canvas = document.createElement("canvas"); canvas.width = right - left; canvas.height = bottom - top;
+    var ctx = canvas.getContext("2d"); ctx.imageSmoothingEnabled = true; ctx.translate(-left, -top);
+    entries.forEach(function (fixture) { renderFixture(ctx, fixture); });
+    var result = { canvas: canvas, x: left, y: top, width: canvas.width, height: canvas.height };
+    cache.set(index, result); return result;
+  }
+  function placements(distance, W, H) {
+    var layout = scene(distance, W, H), scale = (H + 16) / SOURCE_H;
+    return { scene: layout, scale: scale, items: fixtures.map(function (fixture) {
+      var left = fixture.panel * layout.stride - layout.scroll;
+      var points = fixture.quad.map(function (p) { return [left + p[0] * scale, -8 + p[1] * scale]; });
+      var x = points.reduce(function (sum, p) { return sum + p[0]; }, 0) / 4;
+      return { key: fixture.key, panel: fixture.panel, tile: fixture.panel, kind: fixture.kind, depth: fixture.depth,
+        x: x, width: Math.max.apply(null, points.map(function (p) { return p[0]; })) - Math.min.apply(null, points.map(function (p) { return p[0]; })),
+        quad: points, sourceQuad: fixture.quad.map(function (p) { return p.slice(); }), sourceCrop: fixture.crop.slice(),
+        contactY: fixture.contactY == null ? null : -8 + fixture.contactY * scale,
+        wheelX: fixture.wheels ? fixture.wheels.map(function (x) { return left + x * scale; }) : null,
+        visible: points[1][0] > 0 && points[0][0] < W };
+    }) };
+  }
+  function remember(distance, W, H) {
+    var result = placements(distance, W, H);
+    last = { on: true, scroll: result.scene.scroll, W: W, H: H, items: result.items };
+    return result;
+  }
+  window.LR_SHOPS = {
+    pixi: function (env, id, W, H, distance, Sprite, Texture, Rect, Container) {
       var on = id === "midtown" && state() !== "home";
       last.on = on;
-      if (!on || !img || !img.naturalHeight) return;
-      var g = tileH / img.naturalHeight, scroll = sceneScroll(dist, W, tileH - 16);
-      var items = street(seedNow(), tileW, g, scroll, W);
-      last.scroll = scroll; last.W = W; last.items = items;
-      var vis = items.filter(function (it) { var m = META[it.key], sx = it.x - scroll; return sx + m.w > -20 && sx - m.w < W + 20 && ok(IMG[it.key]); });
-      var draw = function (it) { var m = META[it.key]; ctx.drawImage(IMG[it.key], it.x - scroll - m.ax, it.base * g - 8 - m.ay, m.w, m.h); };
-      vis.forEach(function (it) { if (it.key !== "gussy") draw(it); });
-      if (ok(WALL)) vis.forEach(function (it) {
-        if (!it.wall) return;
-        var sp = wallSpan(it, g), o = tileOrigin(it.tile, tileW, scroll), y = WALL_Y * g - 8, h = WALL.naturalHeight;
-        ctx.save();
-        if (o.m) { ctx.translate(o.t0 + tileW - sp.x0 * g, 0); ctx.scale(-1, 1); ctx.drawImage(WALL, sp.x0, 0, sp.w, h, 0, y, sp.w * g, h * g); }
-        else ctx.drawImage(WALL, sp.x0, 0, sp.w, h, o.t0 + sp.x0 * g, y, sp.w * g, h * g);
-        ctx.restore();
-      });
-      vis.forEach(function (it) { if (it.key === "gussy") draw(it); });
+      if (!pixi && on) {
+        pixi = { root: new Container(), sprites: [], textures: [] };
+        env.backgroundLayer.addChild(pixi.root);
+      }
+      if (!pixi) return;
+      pixi.root.visible = on;
+      if (!on) return;
+      // Keep this architectural decal pass above the painted panels and below
+      // gameplay/near foliage, with identical transforms to its painted facade.
+      var children = env.backgroundLayer.children;
+      if (children[children.length - 1] !== pixi.root) env.backgroundLayer.addChild(pixi.root);
+      var result = remember(distance, W, H);
+      for (var index = 0; index < 3; index++) {
+        var img = overlay(index), sprite = pixi.sprites[index];
+        if (!img) { if (sprite) sprite.visible = false; continue; }
+        if (!sprite) {
+          pixi.textures[index] = Texture.from(img.canvas); sprite = pixi.sprites[index] = new Sprite(pixi.textures[index]);
+          pixi.root.addChild(sprite);
+        }
+        var x = index * result.scene.stride - result.scene.scroll;
+        sprite.visible = x < W && x + result.scene.width > 0;
+        sprite.position.set(x + img.x * result.scale, -8 + img.y * result.scale); sprite.scale.set(result.scale, result.scale);
+      }
     },
-    // gameplay draw: the 505 says hello once, when it is well in view
+    draw2d: function (ctx, id, distance, W, img, tileW, tileH) {
+      var on = id === "midtown" && state() !== "home"; last.on = on;
+      if (!on) return;
+      var H = tileH - 16, result = remember(distance, W, H);
+      for (var index = 0; index < 3; index++) {
+        var image = overlay(index), x = index * result.scene.stride - result.scene.scroll;
+        if (image && x < W && x + result.scene.width > 0) ctx.drawImage(image.canvas,
+          x + image.x * result.scale, -8 + image.y * result.scale, image.width * result.scale, image.height * result.scale);
+      }
+    },
     tick: function (q, W, toast) {
       if (!q || q.districtId !== "midtown" || !last.on || q.__told505 || (q.chapterTime || 0) < 2) return;
-      for (var i = 0; i < last.items.length; i++) {
-        var it = last.items[i]; if (it.key !== "fifth") continue;
-        var sx = it.x - last.scroll;
-        if (sx > last.W * 0.18 && sx < last.W * 0.82) { q.__told505 = true; toast && toast("505 FIFTH AVENUE", "Our New York office. 20th floor.", 2.6); }
-        return;
+      var office = last.items.find(function (item) { return item.key === "fifth"; });
+      if (office && office.x > last.W * 0.18 && office.x < last.W * 0.82) {
+        q.__told505 = true; if (toast) toast("505 FIFTH AVENUE", "Our New York office. 20th floor.", 2.6);
       }
     },
-    // for tests: where everything is on this world's street
-    layout: function (seed, W) { var g = 556 / 941, tileW = 1672 * g; return street(seed >>> 0, tileW, g, 0, W || 2600).map(function (it) { return { key: it.key, x: Math.round(it.x), tile: it.tile }; }); }
+    layout: function (seed, W, H, distance) { return placements(distance || 0, W || 1000, H || 540).items; },
+    inspect: function (distance, W, H) {
+      var result = placements(distance || 0, W || 1000, H || 540);
+      return { scroll: result.scene.scroll, scale: result.scale, sourceWidth: SOURCE_W, sourceHeight: SOURCE_H,
+        ready: Object.keys(images).every(function (key) { return ready(images[key]); }), seededJitter: false, items: result.items };
+    }
   };
 })();

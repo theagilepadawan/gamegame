@@ -45,6 +45,23 @@ async function scene(page, district, distance, renderer) {
       scene: LR_SCENERY.inspect(district, distance, eA, kA, 'chapter')};
   }, {district, distance, renderer});
 }
+async function captureStage(page, path) {
+  // The stage fills the viewport. Assert that contract before taking the same
+  // pixels with a viewport capture: element screenshots add RAF-based stability
+  // and scroll checks that can time out under software-WebGL rendering load.
+  const frame = await page.locator('#stage').evaluate(element => {
+    const rect = element.getBoundingClientRect(), style = getComputedStyle(element);
+    return {bounds: {x: rect.x, y: rect.y, width: rect.width, height: rect.height},
+      position: style.position, transform: style.transform, animation: style.animationName};
+  });
+  const viewport = page.viewportSize();
+  assert.equal(frame.position, 'fixed', 'Stage remains fixed to the viewport');
+  assert.equal(frame.transform, 'none', 'Paused reduced-motion stage does not move');
+  assert.equal(frame.animation, 'none', 'Paused reduced-motion stage has no active CSS animation');
+  assert.deepEqual(frame.bounds, {x: 0, y: 0, width: viewport.width, height: viewport.height},
+    'Viewport screenshot is exactly the stage, without clipping or extra page content');
+  await page.screenshot({path});
+}
 try {
   const desktop = await open({width: 1440, height: 900});
   const {page} = desktop;
@@ -63,7 +80,7 @@ try {
   });
   for (const s of geometry) {
     assert.equal(s.ready, true);
-    assert.equal(s.panelCount, s.id === 'opening' ? 4 : 3);
+    assert.equal(s.panelCount, s.id === 'opening' ? 5 : 3);
     assert.equal(s.maxSourceWidth <= 1672, true, 'Textures stay within mobile limits');
     assert.ok(s.panels.length > 0, 'Every camera location has a background');
     assert.ok(s.panels[0].x <= 0.001, 'Left edge remains covered');
@@ -72,9 +89,9 @@ try {
     assert.equal(s.panels.filter(p => p.original).length <= 1, true);
     assert.equal(s.panels.some(p => p.mirrored), false);
     for (const panel of s.panels) {
-      assert.equal(panel.original, panel.sourceIndex === 0);
+      assert.equal(panel.original, panel.sourceIndex === s.originalIndex);
       if (s.mode === 'chapter') assert.equal(panel.segment, panel.sourceIndex, 'Story never wraps a plate');
-      if (panel.segment >= s.panelCount) assert.ok(panel.sourceIndex > 0, 'Endless never repeats the original skyline');
+      if (panel.segment >= s.panelCount) assert.ok(panel.sourceIndex >= s.loopStart, 'Endless never repeats the original skyline or approach');
     }
   }
   console.log('[scenery] finite Story and landmark-free Endless geometry passed');
@@ -87,12 +104,12 @@ try {
       assert.equal(snapshot.renderer, 'pixi-webgl');
       assert.equal(snapshot.environment.error, null);
       report.push(snapshot);
-      await page.locator('#stage').screenshot({path: `${output}/${district}-${i}-desktop.png`});
+      await captureStage(page, `${output}/${district}-${i}-desktop.png`);
     }
   }
   const openingGL = await scene(page, 'opening', 6500, 'webgl');
   assert.equal(openingGL.renderer, 'webgl');
-  await page.locator('#stage').screenshot({path: `${output}/opening-webgl.png`});
+  await captureStage(page, `${output}/opening-webgl.png`);
   assert.deepEqual(desktop.errors, []);
   assert.deepEqual(desktop.failures, []);
   await desktop.context.close();
@@ -102,7 +119,7 @@ try {
     const snapshot = await scene(mobile.page, district, 6000);
     assert.equal(snapshot.renderer, 'pixi-webgl');
     report.push(snapshot);
-    await mobile.page.locator('#stage').screenshot({path: `${output}/${district}-mobile.png`});
+    await captureStage(mobile.page, `${output}/${district}-mobile.png`);
   }
   assert.deepEqual(mobile.errors, []);
   assert.deepEqual(mobile.failures, []);
@@ -113,7 +130,7 @@ try {
     const snapshot = await scene(fallback.page, district, 6500);
     assert.equal(snapshot.renderer, district === 'opening' ? 'canvas-fallback' : 'district-canvas');
     report.push(snapshot);
-    await fallback.page.locator('#stage').screenshot({path: `${output}/${district}-canvas.png`});
+    await captureStage(fallback.page, `${output}/${district}-canvas.png`);
   }
   assert.deepEqual(fallback.errors, []);
   assert.deepEqual(fallback.failures, []);

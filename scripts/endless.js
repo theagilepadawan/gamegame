@@ -216,7 +216,7 @@
       var s = stats(q), best = readBest(q);
       if (best > 400) {
         var x = q.x + (best - q.distance);
-        if (x > -60 && x < W + 80) {
+        if (x > -60 && x < W + 80 && !(window.LR_GAPS && LR_GAPS.overlaps(q.obstacles, x - 6, x + 6))) {
           var y = q.floorAt(x);
           d.save();
           d.strokeStyle = "#f5f2eb"; d.lineWidth = 2.5; d.beginPath(); d.moveTo(x, y); d.lineTo(x, y - 150); d.stroke();
