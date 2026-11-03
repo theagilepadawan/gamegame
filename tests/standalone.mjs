@@ -26,10 +26,11 @@ try{
   assert.equal(await page.evaluate(()=>document.fonts.check('18px "Norges Bank"')),true);
   assert.equal(await page.locator('script[src],link[rel="stylesheet"][href]').count(),0,'Release must embed scripts/styles');
   const scenery=await page.evaluate(()=>LR_SCENERY.images.map(image=>({embedded:image.src.startsWith('data:'),ready:image.complete&&image.naturalWidth>0})));
-  assert.ok(scenery.length>=20,'Release includes the current city artwork and restored Park paintings');
+  const restored = await page.evaluate(() => ({midtown: NBIMMidtownScenery.images.length, park: NBIMParkScenery.images.length, venues: LR_SHOPS.images.length}));
+  assert.deepEqual(restored, {midtown: 2, park: 2, venues: 4}, 'Standalone contains both restored painting extensions and all four retained venues');
   assert.ok(scenery.every(image=>image.embedded&&image.ready),'Every referenced scenery layer is embedded and decoded');
-  const addedArt=await page.evaluate(()=>[...(window.LR_PROPS?.images||[]),...(window.LR_OFFICE_HOST?.images||[])].map(image=>({embedded:image.src.startsWith('data:'),ready:image.complete&&image.naturalWidth>0})));
-  assert.ok(addedArt.length>=7&&addedArt.every(image=>image.embedded&&image.ready),'New prop and office-host artwork is decoded and embedded in the standalone');
+  const addedArt=await page.evaluate(()=>[...(window.LR_SHOPS?.images||[]),...(window.LR_PROPS?.images||[]),...(window.LR_OFFICE_HOST?.images||[])].map(image=>({embedded:image.src.startsWith('data:'),ready:image.complete&&image.naturalWidth>0})));
+  assert.ok(addedArt.length>=11&&addedArt.every(image=>image.embedded&&image.ready),'Venue, prop and office-host artwork is decoded and embedded in the standalone');
   // Continue through the real Contrarian event after loading with no network.
   await page.context().setOffline(true);
   await page.locator('#start').click();

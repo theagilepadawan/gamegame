@@ -1723,22 +1723,21 @@ var wo = class {
   }
   background(A, t, i, r, o, s, n = false) {
     let a = this.c, g = A === "park";
-    const view = window.LR_SCENERY?.projection?.(A, typeof q === "undefined" ? null : q, typeof Kt === "undefined" ? 0 : Kt);
     a.save();
     let l = a.createLinearGradient(0, 0, 0, r);
     if (l.addColorStop(0, g ? "#9da79a" : "#b89d84"), l.addColorStop(0.58, g ? "#dec08c" : "#e5c69a"), l.addColorStop(1, g ? "#53655a" : "#5f696a"), a.fillStyle = l, a.fillRect(0, 0, i, r), t?.complete && t.naturalWidth) {
       let Q = r + 16, R = Q * t.naturalWidth / t.naturalHeight, h = o * 0.085, B = Math.floor(h / R);
-      if (window.LR_SCENERY) LR_SCENERY.draw2d(a, A, t, o, i, r, undefined, view);
+      if (window.LR_SCENERY) LR_SCENERY.draw2d(a, A, t, o, i, r);
       else a.drawImage(t, -Math.min(h, Math.max(0, R - i)), -8, R, Q);
-      window.LR_SHOPS && LR_SHOPS.draw2d(a, A, o, i, t, R, Q, view);
-      window.LR_OFFICE_HOST && LR_OFFICE_HOST.draw2d(a, A, o, i, r, s, n, typeof q === "undefined" ? null : q, typeof Kt === "undefined" ? 0 : Kt, view);
+      window.LR_SHOPS && LR_SHOPS.draw2d(a, A, o, i, t, R, Q);
+      window.LR_OFFICE_HOST && LR_OFFICE_HOST.draw2d(a, A, o, i, r, s, n, typeof q === "undefined" ? null : q, typeof Kt === "undefined" ? 0 : Kt);
     }
     if (g) {
       if (!n) for (let Q = 0; Q < 7; Q++) {
         let R = (Q * 211 - o * 0.21 + s * (9 + Q % 3 * 3)) % (i + 80), h = 122 + (Q * 53 + s * (12 + Q % 2 * 5)) % 232;
         a.save(), a.translate(R < 0 ? R + i + 80 : R, h), a.rotate(s * 0.5 + Q), this.poly([[-3, 0], [0, -2], [4, 0], [0, 2]], Q % 2 ? "#e5b95b80" : "#b8774680"), a.restore();
       }
-    } else if (!(A === "midtown" && window.LR_SCENERY?.layered)) {
+    } else {
       let Q = o * 0.13, R = 890, h = Math.floor(Q / R);
       for (let B = h; B < h + Math.ceil(i / R) + 2; B++) {
         let c = B * R - Q;
@@ -1754,33 +1753,15 @@ var wo = class {
     I.addColorStop(0, "#071726af"), I.addColorStop(0.5, "#07172648"), I.addColorStop(1, "#07172600"), a.fillStyle = I, a.fillRect(0, 0, i, 120), a.restore();
   }
   terrain(A, t, i, r = false) {
-    let o = this.c, s = A.districtId === "park", urban = A.districtId === "midtown", n = [];
+    let o = this.c, s = A.districtId === "park", n = [];
     for (let R = -40; R <= t + 48; R += 24) n.push([R, A.floorAt(R)]);
     let a = Math.max(...n.map((R) => R[1])) + 750, g = Math.min(...n.map((R) => R[1]));
     o.save(), o.beginPath(), o.moveTo(n[0][0], a);
     for (let [R, h] of n) o.lineTo(R, h);
     o.lineTo(n.at(-1)[0], a), o.closePath();
-    let E = A.chapterDistance ?? A.distance, l = o.createLinearGradient(0, g, 0, g + 300);
-    l.addColorStop(0, s ? "#86754f" : urban ? "#82786a" : "#788281"), l.addColorStop(0.08, s ? "#55563b" : urban ? "#625c53" : "#50646b"), l.addColorStop(0.5, s ? "#2d483c" : urban ? "#3b3935" : "#2a4657"), l.addColorStop(1, s ? "#1d3533" : urban ? "#252626" : "#183544"), o.fillStyle = l, o.fill();
-    // Midtown's platform is a dry masonry foundation. Its texture follows the
-    // terrain's world coordinates, so jump-camera motion cannot expose a
-    // second, motionless water-like surface beneath the playable curb.
-    const foundation = urban && window.LR_SCENERY?.foundationImage;
-    if (foundation?.complete && foundation.naturalWidth) {
-      if (this.foundationMaterial?.image !== foundation) this.foundationMaterial = { image: foundation, pattern: o.createPattern(foundation, "repeat") };
-      const pattern = this.foundationMaterial.pattern;
-      if (pattern) {
-        const tileSize = 320, scale = tileSize / foundation.naturalWidth;
-        pattern.setTransform(new DOMMatrix([scale, 0, 0, scale, -(E % tileSize), 0]));
-        o.fillStyle = pattern; o.fill();
-        const shade = o.createLinearGradient(0, g, 0, g + 390);
-        shade.addColorStop(0, "#29251e26"); shade.addColorStop(.09, "#29251e4d");
-        shade.addColorStop(.6, "#1b1b19a8"); shade.addColorStop(1, "#171918d9");
-        o.fillStyle = shade; o.fill();
-      }
-    }
-    o.save(); o.clip();
-    let I = s ? 92 : 112, Q = (E % I + I) % I;
+    let l = o.createLinearGradient(0, g, 0, g + 300);
+    l.addColorStop(0, s ? "#86754f" : "#788281"), l.addColorStop(0.08, s ? "#55563b" : "#50646b"), l.addColorStop(0.5, s ? "#2d483c" : "#2a4657"), l.addColorStop(1, s ? "#1d3533" : "#183544"), o.fillStyle = l, o.fill(), o.save(), o.clip();
+    let E = A.chapterDistance ?? A.distance, I = s ? 92 : 112, Q = (E % I + I) % I;
     for (let R = -Q - I; R < t + I; R += I) {
       let h = A.floorAt(R), B = A.floorAt(R + I);
       if (this.poly([[R + 1, h + 4], [R + I - 2, B + 4], [R + I - 2, B + 19], [R + 1, h + 19]], s ? "#b0a078" : "#a4aaa1"), this.line(R + 1, h + 5, R + I - 2, B + 5, s ? "#e1cba0" : "#d2d4ba", 1.3), this.line(R, h + 4, R, h + 33, s ? "#4a4e3b" : "#3a4c53", 1.5), s) {
@@ -1788,12 +1769,6 @@ var wo = class {
         for (let c = 0; c < 3; c++) {
           let M = R + 15 + c * 23, f = A.floorAt(M);
           this.ellipse(M, f + 30 + c % 2 * 10, 2.6, 1.4, "#c8ac6c30");
-        }
-      } else if (urban) {
-        this.line(R + 3, h + 33, R + I - 3, B + 33, "#342e2645");
-        if (Math.round((R + E) / I) % 3 === 0) {
-          this.rect(R + 42, h + 12, 40, 8, "#393a35", 2);
-          for (let c = 0; c < 6; c++) this.line(R + 47 + c * 5, h + 13, R + 47 + c * 5, h + 18, "#85877a", 1);
         }
       } else if (this.line(R + 3, h + 33, R + I - 3, B + 33, "#92a3a435"), this.line(R + 14, h + 38, R + 14, h + 122, "#93a4a020"), this.rect(R + 9, h + 43, 5, 5, "#a9aea645", 1), Math.round((R + E) / I) % 3 === 0) {
         this.rect(R + 42, h + 12, 40, 8, "#344951", 2);
@@ -1914,7 +1889,7 @@ var wo = class {
     for (let o of A.worldItems || []) {
       if (!this.visible(o.x, o.w || 0, t, 140)) continue;
       let s = this.itemY(o, A);
-      o.kind === "puddle" ? this.puddle(o.x, s, o.w || 100, A) : o.kind === "tree" ? this.tree(o.x, A.floorAt(o.x), A.districtId === "park", o.id || 0, false, (n) => A.floorAt(n)) : o.kind === "lamp" ? !(window.LR_SCENERY?.layered && A.districtId === "midtown") && this.lamp(o.x, s, A.districtId === "park") : o.kind === "sign" ? this.sign(o, A, s, r) : o.kind === "finish" && this.finish(o.x, s, A, i, r);
+      o.kind === "puddle" ? this.puddle(o.x, s, o.w || 100, A) : o.kind === "tree" ? this.tree(o.x, A.floorAt(o.x), A.districtId === "park", o.id || 0, false, (n) => A.floorAt(n)) : o.kind === "lamp" ? this.lamp(o.x, s, A.districtId === "park") : o.kind === "sign" ? this.sign(o, A, s, r) : o.kind === "finish" && this.finish(o.x, s, A, i, r);
     }
   }
   puddle(A, t, i, r) {
@@ -21904,23 +21879,23 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
     s.update();
   }
   drawBackground(A, t, i, r, o = false, s = null) {
-    const view = window.LR_SCENERY?.projection?.(A, this.run, this.worldLayer.y);
-    window.LR_OFFICE_HOST && LR_OFFICE_HOST.pixi(this, A, t, i, r, qt, W, view);
-    if (window.LR_SHOPS && LR_SHOPS.pixi(this, A, t, i, r, qt, W, aA, hA, view), this.openingSprite.visible = A === "opening", this.gradeSprite.visible = A !== "opening", A === "opening") {
+    if (this.openingSprite.visible = A === "opening", this.gradeSprite.visible = A !== "opening", A === "opening") {
+      window.LR_SHOPS && LR_SHOPS.pixi(this, A, t, i, r, qt, W, aA, hA);
+      window.LR_OFFICE_HOST && LR_OFFICE_HOST.pixi(this, A, t, i, r, qt, W);
       for (let R of this.tiles) R.group.visible = false;
       if (this.bindOpeningCanvas(s), !this.openingSource) throw Error("Opening Bell backdrop is unavailable");
       (this.openingSource.width !== this.openingCanvas.width || this.openingSource.height !== this.openingCanvas.height) && (this.openingSource.resize(this.openingCanvas.width, this.openingCanvas.height, 1), this.openingTexture.frame.width = this.openingCanvas.width, this.openingTexture.frame.height = this.openingCanvas.height, this.openingTexture.update()), this.openingSource.update(), this.openingSprite.width = t, this.openingSprite.height = i, this.openingSprite.filters = o ? this.openingFilters : null, this.counts.water = 0;
       return;
     }
     let n = this.backgroundTextures[A], a = i + 16, g = a / n.height, l = n.width * g, Q = 0;
-    let scene = window.LR_SCENERY ? LR_SCENERY.layout(A, r, t, i, undefined, view) : { panels: [{ x: -Math.min(r * 0.085, Math.max(0, l - t)), original: true, sourceIndex: 0 }] };
+    let scene = window.LR_SCENERY ? LR_SCENERY.layout(A, r, t, i) : { panels: [{ x: -Math.min(r * 0.085, Math.max(0, l - t)), original: true, sourceIndex: 0 }] };
     this.sceneryTextures ||= new WeakMap();
     for (let R = 0; R < this.tiles.length; R++) {
       let h = this.tiles[R], panel = (scene.layers || scene.panels)[R];
       if (h.group.visible = !!panel, !panel) continue;
       let texture = n;
-      if (A === "park" && panel.original && window.LR_SCENERY) LR_SCENERY.source(A, panel, gi[A]);
-      if (window.LR_SCENERY && !(A === "park" && panel.original)) {
+      if (!scene.authoredLayers && panel.original && window.LR_SCENERY) LR_SCENERY.source(A, panel, gi[A]);
+      if (window.LR_SCENERY && !(!scene.authoredLayers && panel.original)) {
         let image = LR_SCENERY.source(A, panel);
         if (!image) { h.group.visible = false; continue; }
         texture = this.sceneryTextures.get(image);
@@ -21929,7 +21904,7 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
       }
       // Panel geometry stays in game coordinates; native artwork resolution can
       // increase independently without changing its on-screen size or spacing.
-      h.group.position.set(panel.x, panel.y ?? -8), h.group.scale.set(A === "park" ? g : (panel.width ?? l) / texture.width, A === "park" ? g : (panel.height ?? a) / texture.height), h.sprite.texture = texture;
+      h.group.position.set(panel.x, panel.y ?? -8), h.group.scale.set(!scene.authoredLayers ? g : (panel.width ?? l) / texture.width, !scene.authoredLayers ? g : (panel.height ?? a) / texture.height), h.sprite.texture = texture;
       let M = A === "park" && !scene.authoredLayers && panel.original && !this.reduced && this.quality > 0.4;
       if (h.water.mesh.visible = M, h.mask.visible = M, h.glints.visible = M, M) {
         Q++;
@@ -21946,6 +21921,10 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
       }
     }
     this.counts.water = Q;
+    // Venue overlays and their host share a fixed street-side pavement anchor.
+    // Draw in this order so the host remains in front of the entrance.
+    window.LR_SHOPS && LR_SHOPS.pixi(this, A, t, i, r, qt, W, aA, hA);
+    window.LR_OFFICE_HOST && LR_OFFICE_HOST.pixi(this, A, t, i, r, qt, W);
   }
   drawLeaves(A, t, i, r, o, s) {
     let n = this.reduced || s?.transfer ? 0 : Math.round((A === "park" ? 66 : A === "opening" ? s?.flight ? 5 : 24 : 18) * this.quality), a = 0, g = 0;

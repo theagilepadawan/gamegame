@@ -37,9 +37,9 @@ async function capture(name, viewport, fallback = false, deviceScaleFactor = 1) 
     }
     return {fixedA, fixedB, finishDistance, greetingFrames, scales: [540, 720].map(height => LR_SHOPS.inspect(6000, 1000, height))};
   });
-  assert.deepEqual(checks.fixedA, checks.fixedB, 'Venue architecture is fixed to its authored block');
+  assert.deepEqual(checks.fixedA, checks.fixedB, 'Venue positions are stable across seeds');
   assert.deepEqual(checks.fixedA.map(i => i.key).sort(), ['fifth', 'gussy', 'joju', 'omars']);
-  assert.equal(new Set(checks.fixedA.map(i => i.panel)).size, 4, 'Venues occupy distinct city blocks');
+  assert.equal(new Set(checks.fixedA.map(i => i.panel)).size, 4, 'All four retained venues occupy distinct positions');
   for (const frame of checks.greetingFrames) assert.ok(frame.distance && frame.distance < checks.finishDistance, `Full 505 entrance arrives before victory at width ${frame.width}`);
   const [normal, large] = checks.scales;
   assert.ok(normal.nativeWidth >= 1024 && normal.nativeHeight >= 1536);
@@ -51,10 +51,12 @@ async function capture(name, viewport, fallback = false, deviceScaleFactor = 1) 
   for (const item of normal.items) {
     const resized = large.items.find(i => i.key === item.key);
     assert.ok(Math.abs(item.width / normal.scale - resized.width / large.scale) < 1e-9);
-    assert.equal(item.renderMode, 'painted'); assert.equal(item.fullArchitecture, true);
+    assert.equal(item.renderMode, 'native-overlay'); assert.equal(item.fullArchitecture, true);
+    assert.ok(Math.abs(item.art.width / item.art.height - 1024 / 1536) < 1e-9, 'Full native architecture keeps its original proportions');
+    assert.ok(Math.abs(item.art.footY - (-8 + 556 * 723 / 941)) < 1e-9, 'All venue curbs share the restored painted pavement anchor');
     assert.ok(item.sourceCrop[2] > 500 && item.sourceCrop[3] > 250, 'Native venue detail includes complete architecture, not a small sign crop');
     if (item.key === 'fifth') {
-      assert.equal(item.kind, 'integrated entrance'); assert.equal(item.fullGlassEntrance, true);
+      assert.equal(item.kind, 'glass office entrance'); assert.equal(item.fullGlassEntrance, true);
       assert.ok(item.sourceCrop[3] / item.sourceCrop[2] > .5, '505 retains its tall glass-door entrance proportions');
     }
   }

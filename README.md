@@ -4,15 +4,14 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
-## Midtown immersion — 1.6
+## Midtown backdrop restoration — 1.7
 
-- **Midtown landmarks:** one wide Empire State/Chrysler panorama opens across three logical street slots. Lower library and masonry frontages vary the roofline around glass offices, cafés, construction and garden stretches.
-- **Dry, grounded streets:** matte city paving and painted stone foundations replace the water-like surfaces. Street architecture, trees, venue entrances and the office host share the jump-camera projection.
-- **Venue pacing:** ordinary streets establish each chapter before its Easter eggs appear. Kabin and LEI, and the four Midtown frontages, are separated using the actual scenery camera and complete frontage bounds.
-- **505 Fifth:** the office entrance follows the supplied reference: cobalt-blue lobby, cyan perimeter lighting, dark lettering and two full revolving glass doors. Its office host uses the existing painted character style.
-- **Central Park restored:** the original Bow Bridge painting, Ramble and Bethesda extensions, camera, foreground scenery and lake animation are restored from the approved pre-1.3 version.
-- **Game objects:** native painted pickups, market-risk obstacles and clearer directional signs add material detail while preserving collision and collection behavior.
-- **City continuity:** Lower Manhattan keeps One World Trade Center, the complete Brooklyn Bridge, Wall Street and Charging Bull. The chapter map reads NEW YORK without a redundant world number.
+- **Original Midtown atmosphere:** the golden-hour skyline, Bryant Park and Fifth Avenue paintings are restored from `156db81`, with their original slow horizontal scroll and fixed vertical position. The faster layered rebuild and jump-driven backdrop movement are removed.
+- **Retained venue detail:** JOJU, Omar's, Uncle Gussy's and 505 use their existing native artwork as occasional street-side landmarks. They arrive later in the run, separated by ordinary scenery. Gussy retains its native truck/curb pixels without duplicating the library behind it. Their pavement anchors stay fixed during jumps.
+- **505 Fifth:** the complete blue/cyan glass entrance, paired revolving doors and office host are retained. The host keeps one small wrist greeting, with stable head and feet.
+- **Other worlds and game objects:** Downtown and the restored Central Park scenery, painted pickups, financial-risk obstacles, directional signs and chapter flow are retained.
+
+This release follows the user's request to restore the earlier Midtown backdrop after rejecting v1.6's motion. It is a restoration for review, not a claim of user approval of the new composition.
 
 The current Nicolai and Trond sprite sheets are unchanged. The rejected cartoon runner study and alternate Park artwork are not part of gameplay.
 
@@ -40,7 +39,7 @@ Requires Node.js 20 or newer. The build and local server have no dependencies.
 npm start
 ```
 
-Open the URL printed by the server. `index.html`, `game.css`, `scripts/` and `assets/` are the editable source. `scripts/engine.js` contains the original bundled game and Pixi runtime, formatted for maintenance. `scripts/scenery.js` controls the city background sequence; `scripts/park-scenery.js` preserves the approved Park composition; `scripts/chapter-menu.js` controls the chapter map.
+Open the URL printed by the server. `index.html`, `game.css`, `scripts/` and `assets/` are the editable source. `scripts/engine.js` contains the original bundled game and Pixi runtime, formatted for maintenance. `scripts/scenery.js` controls the city background sequence; `scripts/midtown-scenery.js` and `scripts/park-scenery.js` preserve the original three-painting compositions; `scripts/chapter-menu.js` controls the chapter map.
 
 ```sh
 npm run build
@@ -56,6 +55,6 @@ npx playwright install chromium
 npm test
 ```
 
-The test runner builds the exact standalone HTML, starts a temporary server, and runs mode/progression, map, native-alpha art, scenery joins, landmark framing, full-venue placement, gap physics/rendering and offline packaging checks. It uses `/usr/bin/chromium` when present, otherwise Playwright's installed Chromium. `CHROMIUM_PATH` can select another executable. `PLAYWRIGHT_MODULE` can point at an existing Playwright module. `TEST_URL` can select an already hosted standalone build.
+The browser tests cover mode/progression, map, artwork, scenery, venue placement, gaps and offline packaging. `tests/midtown-restoration.mjs` checks the restored backdrop against the pre-rebuild reference and exercises its camera behavior. The current release verification records which suites actually ran; older layered-Midtown assertions describe superseded behavior. It uses `/usr/bin/chromium` when present, otherwise Playwright's installed Chromium. `CHROMIUM_PATH` can select another executable. `PLAYWRIGHT_MODULE` can point at an existing Playwright module. `TEST_URL` can select an already hosted standalone build.
 
 Progress and local scores use the browser's local storage. The original `?unlock=all` URL option remains available for demonstrations; ordinary play retains chapter and runner unlocks.

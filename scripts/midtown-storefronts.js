@@ -1,59 +1,105 @@
-/* Midtown venues belong to complete authored city blocks. This module describes
-   their positions and keeps the 505 greeting in sync with the scenery camera. */
+/* Original Midtown paintings stay on their approved slow camera. The four
+   detailed venues are occasional street-side landmarks, with fixed pavement
+   anchors and long ordinary stretches between them. No jump-driven movement. */
 (function () {
   "use strict";
-  var SOURCE_W = 1024, SOURCE_H = 1430, NATIVE_H = 1536;
-  var cropTops = [78, 45, 78, 40, 47, 128];
-  // Bounds include the full recognizable frontage in native artwork coordinates:
-  // doors, glazing, awnings, and the food truck's complete silhouette.
+  var SOURCE_W = 1024, NATIVE_H = 1536;
   var fixtures = [
-    { key: "joju", panel: 0, rect: [232, 876, 566, 335], kind: "integrated storefront", depth: "brownstone ground floor" },
-    { key: "omars", panel: 2, rect: [239, 933, 553, 278], kind: "integrated restaurant", depth: "limestone ground floor" },
-    { key: "gussy", panel: 3, rect: [208, 847, 691, 335], kind: "integrated vehicle", depth: "park-side curb", contactY: 1181, wheels: [345, 796] },
-    { key: "fifth", panel: 5, rect: [256, 870, 512, 386], kind: "integrated entrance", depth: "complete glass office entrance", fullGlassEntrance: true, officeHost: { x: 782, y: 1265, height: 190 } }
+    { key: "joju", panel: 0, rect: [232, 876, 566, 335], scale: .22, foot: 1253, kind: "brownstone storefront", depth: "street-side", file: "assets/art-v2/midtown-joju.webp" },
+    { key: "omars", panel: 2, rect: [239, 933, 553, 278], scale: .22, foot: 1260, kind: "restaurant frontage", depth: "street-side", file: "assets/art-v2/midtown-omars.webp" },
+    { key: "gussy", panel: 3, rect: [208, 847, 691, 335], scale: .25, foot: 1213, kind: "park-side food truck", depth: "curb", contactY: 1181, wheels: [345, 796], file: "assets/art-v2/midtown-gussy.webp" },
+    { key: "fifth", panel: 5, rect: [256, 870, 512, 386], scale: .35, foot: 1298, kind: "glass office entrance", depth: "street-side", fullGlassEntrance: true, officeHost: { x: 782, y: 1265, height: 190 }, file: "assets/art-v2/midtown-fifth.webp" }
   ];
-  var last = { on: false, scroll: 0, W: 1000, H: 540, items: [] };
-  function state() { return window.longRun ? longRun.state : "home"; }
-  function scene(distance, W, H, view) {
-    if (window.LR_SCENERY) return LR_SCENERY.layout("midtown", distance, W, H, "chapter", view);
-    var height = H + 16, width = height * SOURCE_W / SOURCE_H;
-    return { scroll: Math.max(0, distance) * .085, stride: width, width: width, height: height, cropTops: cropTops };
+  var images = fixtures.map(function (fixture) { var img = new Image(); img.decoding = "async"; img.src = fixture.file; return img; });
+  var loaded = function (img) { return img.complete && img.naturalWidth > 0; };
+  var truckCutout = null;
+  function source(key) {
+    var index = typeof key === "number" ? key : fixtures.findIndex(function (fixture) { return fixture.key === key; });
+    var img = images[index];
+    if (!img || !loaded(img)) return null;
+    if (index !== 2) return img;
+    if (truckCutout) return truckCutout;
+    // Extract the vehicle silhouette from its native atlas. Its old library
+    // vignette must not duplicate NYPL already present in the restored painting.
+    var canvas = document.createElement("canvas"); canvas.width = SOURCE_W; canvas.height = NATIVE_H;
+    var ctx = canvas.getContext("2d");
+    ctx.save(); ctx.beginPath();
+    ctx.moveTo(283, 850); ctx.lineTo(719, 850); ctx.quadraticCurveTo(725, 850, 725, 858);
+    ctx.lineTo(725, 913); ctx.lineTo(810, 913); ctx.lineTo(828, 928); ctx.lineTo(841, 992);
+    ctx.lineTo(854, 1018); ctx.lineTo(882, 1038); ctx.quadraticCurveTo(892, 1046, 894, 1064);
+    ctx.lineTo(895, 1142); ctx.lineTo(873, 1158);
+    ctx.bezierCurveTo(863, 1194, 774, 1195, 758, 1157);
+    ctx.lineTo(390, 1157); ctx.bezierCurveTo(372, 1199, 308, 1191, 300, 1154);
+    ctx.lineTo(215, 1154); ctx.lineTo(215, 926); ctx.quadraticCurveTo(215, 914, 229, 914);
+    ctx.lineTo(283, 914); ctx.closePath(); ctx.clip(); ctx.drawImage(img, 0, 0); ctx.restore();
+    // Original complete stone curb, including its alpha edge, grounds the tyres.
+    ctx.drawImage(img, 0, 1183, SOURCE_W, 33, 0, 1183, SOURCE_W, 33);
+    truckCutout = canvas; return canvas;
   }
-  function placements(distance, W, H, view) {
-    var layout = scene(distance, W, H, view), scale = layout.height / SOURCE_H;
-    // Default inspection retains authored geometry. Rendering supplies the
-    // same view as the architecture so bounds, tyres and host move together.
-    var streetOffset = view && Number.isFinite(view.streetOffset) ? view.streetOffset : 0;
-    return { scene: layout, scale: scale, items: fixtures.map(function (fixture) {
-      var cropTop = (layout.cropTops || cropTops)[fixture.panel];
-      var block = layout.blocks && layout.blocks.find(function (p) { return p.sourceIndex === fixture.panel; });
-      var worldLeft = block ? block.worldX : fixture.panel * layout.stride;
-      var left = worldLeft - layout.scroll, r = fixture.rect;
-      var source = [[r[0], r[1] - cropTop], [r[0] + r[2], r[1] - cropTop],
-        [r[0] + r[2], r[1] + r[3] - cropTop], [r[0], r[1] + r[3] - cropTop]];
-      var points = source.map(function (p) { return [left + p[0] * scale, -8 + p[1] * scale + streetOffset]; });
-      return { key: fixture.key, panel: fixture.panel, segment: block ? block.segment : fixture.panel, tile: fixture.panel, kind: fixture.kind, depth: fixture.depth,
-        x: left + (r[0] + r[2] / 2) * scale, worldX: worldLeft + (r[0] + r[2] / 2) * scale,
-        width: r[2] * scale, height: r[3] * scale, quad: points, sourceQuad: source, sourceCrop: fixture.rect.slice(),
-        cropTop: cropTop, renderMode: "painted", fullArchitecture: true, fullGlassEntrance: !!fixture.fullGlassEntrance,
-        host: fixture.officeHost ? { x: left + fixture.officeHost.x * scale, y: -8 + (fixture.officeHost.y - cropTop) * scale + streetOffset, height: fixture.officeHost.height * scale } : null,
-        contactY: fixture.contactY == null ? null : -8 + (fixture.contactY - cropTop) * scale + streetOffset,
-        wheelX: fixture.wheels ? fixture.wheels.map(function (x) { return left + x * scale; }) : null,
-        visible: points[1][0] > 0 && points[0][0] < W };
+  var last = { on: false, scroll: 0, W: 1000, H: 540, items: [] };
+  var states = new WeakMap();
+  function state() { return window.longRun ? longRun.state : "home"; }
+  function placements(distance, W, H) {
+    var factor = (H + 16) / 556;
+    // The backdrop always travels at .085. Only these occasional, small street
+    // objects use a nearer plane, at constant velocity; no zoom or vertical pan.
+    // Responsive spacing gives each venue its own moment, including on phones.
+    var interval = 11.5, speed = (W + SOURCE_W * .35 * factor + 56) / interval;
+    var rate = speed / 320, scroll = Math.max(0, distance) * rate;
+    var pavement = -8 + (H + 16) * 723 / 941;
+    return { scene: { scroll: scroll, parallaxRate: rate }, scale: factor, items: fixtures.map(function (fixture, index) {
+      var scale = fixture.scale * factor, worldLeft = W + speed * (15 + index * interval);
+      var left = worldLeft - scroll, top = pavement - fixture.foot * scale, r = fixture.rect;
+      var points = [[r[0],r[1]], [r[0]+r[2],r[1]], [r[0]+r[2],r[1]+r[3]], [r[0],r[1]+r[3]]].map(function (p) { return [left+p[0]*scale,top+p[1]*scale]; });
+      return { key: fixture.key, panel: fixture.panel, segment: index, tile: fixture.panel, kind: fixture.kind, depth: fixture.depth,
+        x: left+(r[0]+r[2]/2)*scale, worldX: worldLeft+(r[0]+r[2]/2)*scale,
+        width: r[2]*scale, height: r[3]*scale, quad: points, sourceCrop: r.slice(), scale: scale,
+        art: { x: left, y: top, width: SOURCE_W*scale, height: NATIVE_H*scale, footY: pavement },
+        renderMode: "native-overlay", fullArchitecture: true, fullGlassEntrance: !!fixture.fullGlassEntrance,
+        host: fixture.officeHost ? { x: left+fixture.officeHost.x*scale, y: top+fixture.officeHost.y*scale, height: fixture.officeHost.height*scale } : null,
+        contactY: fixture.contactY == null ? null : top+fixture.contactY*scale,
+        wheelX: fixture.wheels ? fixture.wheels.map(function (x) { return left+x*scale; }) : null,
+        visible: points[1][0]>0 && points[0][0]<W,
+        artVisible: left+SOURCE_W*scale>0 && left<W };
     }) };
   }
-  function remember(id, distance, W, H, view) {
+  function remember(id, distance, W, H) {
     var on = id === "midtown" && state() !== "home";
     last.on = on;
-    if (!on) return;
-    var result = placements(distance, W, H, view);
+    if (!on) return null;
+    var result = placements(distance, W, H);
     last = { on: true, scroll: result.scene.scroll, W: W, H: H, items: result.items };
+    return result;
   }
   window.LR_SHOPS = {
-    // The venue pixels already belong to the scenery. Both renderer hooks only
-    // update shared metadata, avoiding a second layer over the glass entrance.
-    pixi: function (env, id, W, H, distance, Sprite, Texture, Rectangle, Container, view) { remember(id, distance, W, H, view); },
-    draw2d: function (ctx, id, distance, W, img, tileW, tileH, view) { remember(id, distance, W, tileH - 16, view); },
+    images: images,
+    source: source,
+    get ready() { return images.every(loaded); },
+    pixi: function (env, id, W, H, distance, Sprite, Texture, Rectangle, Container) {
+      var result = remember(id, distance, W, H), entry = states.get(env);
+      if (!entry && result) {
+        entry = { root: new Container(), sprites: [] }; states.set(env, entry);
+        env.backgroundLayer.addChild(entry.root);
+      }
+      if (!entry) return;
+      entry.root.visible = !!result;
+      if (!result) return;
+      env.backgroundLayer.addChild(entry.root);
+      result.items.forEach(function (item, index) {
+        var sprite = entry.sprites[index];
+        if (!loaded(images[index])) return;
+        if (!sprite) { sprite = entry.sprites[index] = new Sprite(Texture.from(source(index))); entry.root.addChild(sprite); }
+        sprite.visible = item.artVisible;
+        if (sprite.visible) { sprite.position.set(item.art.x, item.art.y); sprite.scale.set(item.scale); }
+      });
+    },
+    draw2d: function (ctx, id, distance, W, img, tileW, tileH) {
+      var result = remember(id, distance, W, tileH - 16);
+      if (!result) return;
+      result.items.forEach(function (item, index) {
+        if (item.artVisible && loaded(images[index])) ctx.drawImage(source(index),item.art.x,item.art.y,item.art.width,item.art.height);
+      });
+    },
     tick: function (q, W, toast) {
       if (!q || q.districtId !== "midtown" || !last.on || q.__told505 || (q.chapterTime || 0) < 2) return;
       // A retry or exact camera seek can precede the next renderer update.
@@ -71,9 +117,9 @@
     layout: function (seed, W, H, distance, view) { return placements(distance || 0, W || 1000, H || 540, view).items; },
     inspect: function (distance, W, H, view) {
       var result = placements(distance || 0, W || 1000, H || 540, view);
-      return { scroll: result.scene.scroll, scale: result.scale, sourceWidth: SOURCE_W, sourceHeight: SOURCE_H,
-        nativeWidth: SOURCE_W, nativeHeight: NATIVE_H, renderMode: "painted",
-        ready: !!(window.LR_SCENERY && LR_SCENERY.ready), seededJitter: false, items: result.items };
+      return { scroll: result.scene.scroll, scale: result.scale, sourceWidth: SOURCE_W, sourceHeight: NATIVE_H,
+        nativeWidth: SOURCE_W, nativeHeight: NATIVE_H, renderMode: "native-overlay",
+        ready: images.every(loaded), seededJitter: false, items: result.items };
     }
   };
 })();

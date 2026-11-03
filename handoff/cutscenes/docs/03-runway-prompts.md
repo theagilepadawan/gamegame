@@ -52,15 +52,15 @@ Use Nicolai's current sprite identity. If the video is not yet available, work o
 ## LR-MT-01 — start-frame motion prompt
 
 ```text
-In this supplied v1.6 Midtown streetscape of warm glass offices, lower
-library/masonry frontages and dry stone/asphalt surfaces, the runner crosses a
-short stretch of pavement from left to right at an easy,
+In this supplied restored original Midtown painting, preserve the golden-hour
+skyline, warm glass offices and existing street composition. The runner crosses
+a short stretch of pavement from left to right at an easy,
 confident pace. A light breeze moves a few individual leaves and the jacket
 hem. The camera makes one slow lateral tracking move and settles as the
 runner continues toward the right edge. The glass and stone office facades
 remain completely stable, with straight verticals and consistent glass reflections.
-Keep ground surfaces dry and matte. Where the wide Empire State/Chrysler
-panorama is visible, preserve both complete landmark silhouettes and scale.
+Preserve the supplied pavement and landmark silhouettes at their original scale.
+Do not introduce the rejected layered-city panorama or alter the backdrop.
 Preserve this exact character likeness, costume and painted game style.
 Five seconds, one continuous shot, calm movement and a clean ending.
 ```

@@ -91,10 +91,10 @@ try {
       }
       signatures.set(top, result); return result;
     }
-    for (const district of ['opening', 'midtown']) for (let distance = 0; distance <= 30000; distance += 500) {
-      // Inspect artwork that is actually drawn. The Midtown vista retains its
-      // logical route slots for pacing but replaces their portrait panels with
-      // one complete native landscape image at a separate parallax depth.
+    for (const district of ['opening']) for (let distance = 0; distance <= 30000; distance += 500) {
+      // Downtown retains its native architectural layers. Midtown's restored
+      // full paintings and separate venue images are checked below and in the
+      // restoration suite against the immutable original reference.
       const scene = LR_SCENERY.layout(district, distance, 1000, 540, 'chapter');
       for (const panel of scene.layers.filter(layer => layer.kind === 'architecture' || layer.kind === 'landmark')) {
         if (seen.has(panel.id)) continue; seen.add(panel.id);
@@ -134,7 +134,20 @@ try {
     if (!asset.id.startsWith('park:')) assert.ok(asset.unmaskedEdgeRun < 32,
       `${asset.id}: an upper silhouette is cut straight along the image boundary (${asset.unmaskedEdgeRun} native pixels)`);
   }
-  console.log(`[art-layers] ${report.native.length} native crops and alpha silhouettes passed`);
+  report.venueNative = await page.evaluate(() => LR_SHOPS.images.map(image => {
+    const canvas = document.createElement('canvas'); canvas.width = image.naturalWidth; canvas.height = image.naturalHeight;
+    canvas.getContext('2d').drawImage(image, 0, 0);
+    const data = canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
+    let clear = 0, opaque = 0;
+    for (let i = 3; i < data.length; i += 4 * 31) {if (data[i] === 0) clear++; if (data[i] >= 250) opaque++;}
+    return {width: canvas.width, height: canvas.height, clear, opaque};
+  }));
+  assert.equal(report.venueNative.length, 4);
+  for (const venue of report.venueNative) {
+    assert.equal(venue.width, 1024); assert.equal(venue.height, 1536);
+    assert.ok(venue.clear > 100 && venue.opaque > 100, 'Retained full venue art has a native transparent architectural silhouette');
+  }
+  console.log(`[art-layers] ${report.native.length} Downtown native crops and four retained venue silhouettes passed`);
   for (const district of ['opening', 'midtown', 'park']) {
     const route = await page.evaluate(district => {
       const finishDistance = district === 'opening' ? 25920 : Oo[district].duration * ye;
@@ -152,10 +165,10 @@ try {
       }
       return {finishDistance, finish, width: eA, joins};
     }, district);
-    if (district === 'park') {
-      assert.equal(route.finish.panelCount, 3, 'Park retains the approved Bow Bridge, Ramble and Bethesda paintings');
-      assert.equal(route.finish.parallaxRate, .085, 'Park retains the approved camera speed');
-      assert.equal(route.finish.authoredLayers, undefined, 'Park uses the approved full paintings');
+    if (district !== 'opening') {
+      assert.equal(route.finish.panelCount, 3, `${district} retains its original three paintings`);
+      assert.equal(route.finish.parallaxRate, .085, 'Original slow camera speed is retained');
+      assert.equal(route.finish.authoredLayers, undefined, 'Original full paintings are used');
     } else assert.ok(Math.abs(route.finish.scroll - (route.finish.stripWidth - route.width)) < .01,
       `${district}: the complete authored route is reached before victory`);
     await capture(page, `${district}-start`, await render(page, district, 0));
@@ -175,7 +188,7 @@ try {
     }
     for (let i = 1; i < sequence.length; i++) {
       assert.ok(sequence[i].scroll > sequence[i - 1].scroll, 'Join frames advance through the real scenery camera');
-      if (district === 'park') continue;
+      if (district !== 'opening') continue;
       assert.equal(sequence[i].atmosphere.kind, 'atmosphere');
       assert.equal(sequence[i].atmosphere.width, sequence[0].atmosphere.width);
       assert.equal(sequence[i].atmosphere.y, sequence[0].atmosphere.y);

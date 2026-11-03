@@ -67,7 +67,7 @@ try {
   const {page} = desktop;
   const geometry = await page.evaluate(() => {
     const records = [];
-    for (const district of ['opening', 'midtown']) {
+    for (const district of ['opening']) {
       for (const width of [1000, 1320]) {
         for (const mode of ['chapter', 'endless']) {
           for (let distance = 0; distance <= 120000; distance += 1000) {
@@ -101,18 +101,7 @@ try {
       assert.ok(bridge.nativeWidth >= 2000 && bridge.nativeHeight >= 700);
       assert.ok(bridge.width > s.width * 2, 'The landmark spans multiple foreground blocks');
     }
-    const landmarks = s.layers.filter(layer => layer.kind === 'landmark');
-    assert.ok(landmarks.length <= 1, 'Midtown draws one complete landmark panorama, never repeated portraits');
-    if (s.id !== 'midtown' || (s.mode === 'endless' && s.scroll > s.stripWidth)) {
-      assert.equal(landmarks.length, 0, 'Midtown landmarks never appear in another district or repeat in the Endless tail');
-    }
-    for (const landmark of landmarks) {
-      assert.equal(landmark.nativeWidth, 1536); assert.equal(landmark.nativeHeight, 1024);
-      assert.ok(landmark.width > s.width * 2, 'Empire State and Chrysler occupy a broad view across multiple logical blocks');
-      assert.ok(Math.abs(landmark.width / landmark.height - 1.5) < 1e-9, 'The landmark retains its complete native proportions');
-    }
-    if (s.id === 'midtown') assert.equal(s.layers.some(layer => layer.kind === 'architecture' && layer.sourceIndex === s.originalIndex), false,
-      'The replaced narrow skyline portrait is not drawn under the wide panorama');
+    assert.equal(s.layers.some(layer => layer.kind === 'landmark'), false, 'Midtown panorama never leaks into Downtown');
     assert.ok(s.panels.length > 0, 'Every camera location has a background');
     assert.ok((s.panels[0].slotX ?? s.panels[0].x) <= 0.001, 'Logical route slots cover the left edge; atmosphere fills alpha margins');
     const last = s.panels.at(-1);
@@ -125,15 +114,31 @@ try {
       if (panel.segment >= s.panelCount) assert.ok(s.loopSourceIndices.includes(panel.sourceIndex), 'Endless only repeats anonymous tail blocks');
     }
   }
-  assert.ok(geometry.some(s => s.id === 'midtown' && s.layers.some(layer => layer.kind === 'landmark')), 'The unique Midtown panorama actually appears along the route');
-  const park = await page.evaluate(() => [0, 6000, 19000, 120000].map(distance => LR_SCENERY.inspect('park', distance, 1000, 540, 'endless')));
-  for (const scene of park) {
-    assert.equal(scene.panelCount, 3, 'Park delegates to the three approved legacy paintings');
+  const legacy = await page.evaluate(() => {
+    const records = [];
+    for (const district of ['park', 'midtown']) for (const width of [1000, 1320]) {
+      for (const mode of ['chapter', 'endless']) for (const distance of [0, 6000, 19000, 120000]) {
+        records.push({...LR_SCENERY.inspect(district, distance, width, 540, mode), viewportWidth: width});
+      }
+    }
+    return records;
+  });
+  for (const scene of legacy) {
+    assert.equal(scene.panelCount, 3, `${scene.id} delegates to its three original paintings`);
     assert.equal(scene.maxSourceWidth, 1672);
-    assert.equal(scene.parallaxRate, .085, 'The approved Park camera remains unchanged');
+    assert.equal(scene.parallaxRate, .085, 'The original calm camera remains unchanged');
     assert.ok(Math.abs(scene.overlap - scene.width * 64 / 1672) < 1e-9);
-    assert.equal(scene.layers, undefined, 'Park keeps its original painting composition');
-    if (scene.scroll > scene.stripWidth) assert.ok(scene.panels.every(panel => !panel.original), 'Park Endless tail excludes the original landmark');
+    assert.equal(scene.layers, undefined, 'Legacy paintings are not replaced by foreground architecture');
+    assert.ok(scene.panels.length > 0);
+    assert.ok(scene.panels[0].x <= .001);
+    assert.ok(scene.panels.at(-1).x + scene.panels.at(-1).width >= scene.viewportWidth - .001);
+    for (const panel of scene.panels) {
+      assert.equal(panel.y, -8, 'Backdrop has a fixed vertical anchor');
+      assert.equal(panel.sourceWidth, 1672); assert.equal(panel.sourceHeight, 941);
+      assert.equal(panel.mirrored, false);
+      if (scene.mode === 'chapter') assert.equal(panel.segment, panel.sourceIndex);
+    }
+    if (scene.scroll > scene.stripWidth) assert.ok(scene.panels.every(panel => !panel.original), 'Endless tail excludes the original landmark');
   }
   console.log('[scenery] finite Story and landmark-free Endless geometry passed');
   // Exact beginning, first join, and late-course frames exercise the real Pixi

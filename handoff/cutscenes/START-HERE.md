@@ -41,8 +41,10 @@ sprite style. Do not use the rejected cartoon sprite study or redesign the
 characters. 505 Fifth must keep the electric-blue/cyan glass lobby, complete
 paired revolving doors and the office host's supplied likeness/plum suit.
 Central Park must preserve the restored original dreamy painting. Midtown
-uses the current v1.6 dry streets, stone foundations, varied low frontages
-and wide Empire State/Chrysler panorama. Keep the landmark silhouettes clear.
+uses the restored original golden-hour skyline, Bryant Park and Fifth Avenue
+paintings from before the layered-city rebuild. Keep the original slow, calm
+composition. Only the detailed venue artwork and its careful placement carry
+forward; do not use the rejected v1.5/v1.6 city redesigns.
 
 For LR-OP-01, inspect the intro reference video I will supply before deciding
 its animation treatment, pacing, camera or transitions. That video is not in

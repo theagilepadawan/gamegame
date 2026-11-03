@@ -33,21 +33,18 @@ The original inline office/host photographs were visible in the conversation but
 | `references/locations/downtown-complete-brooklyn-bridge.webp` | `game/assets/art-v2/downtown-bridge-wide.webp` |
 | `references/locations/downtown-wall-street.webp` | `game/assets/art-v2/downtown-wallstreet.webp` |
 | `references/locations/midtown-505-blue-glass-entrance.webp` | `game/assets/art-v2/midtown-fifth.webp` |
-| `references/locations/midtown-bryant-garden.webp` | `game/assets/art-v2/midtown-garden.webp` |
-| `references/locations/midtown-dry-city.webp` | `game/assets/midtown-v16/dry-city-atmosphere.webp` |
-| `references/locations/midtown-empire-state-chrysler.webp` | `game/assets/midtown-v16/landmark-panorama.webp` |
-| `references/locations/midtown-library-frontage.webp` | `game/assets/midtown-v16/library-frontage.webp` |
-| `references/locations/midtown-masonry-street.webp` | `game/assets/midtown-v16/masonry-street.webp` |
-| `references/locations/midtown-stone-foundation.webp` | `game/assets/midtown-v16/stone-foundation.webp` |
-| `references/locations/midtown-glass-offices.webp` | `game/assets/midtown-v15/glass-canyon.webp` |
-| `references/locations/midtown-limestone-cafe.webp` | `game/assets/midtown-v15/limestone-cafe.webp` |
-| `references/locations/midtown-construction.webp` | `game/assets/midtown-v15/construction-corner.webp` |
+| `references/locations/midtown-original-skyline.webp` | `game/assets/original-34.webp` |
+| `references/locations/midtown-original-bryant-park.webp` | `game/assets/scenery/midtown-1.webp` |
+| `references/locations/midtown-original-fifth-avenue.webp` | `game/assets/scenery/midtown-2.webp` |
+| `references/locations/midtown-joju.webp` | `game/assets/art-v2/midtown-joju.webp` |
+| `references/locations/midtown-omars.webp` | `game/assets/art-v2/midtown-omars.webp` |
+| `references/locations/midtown-gussy.webp` | `game/assets/art-v2/midtown-gussy.webp` |
 
-City architectural assets have transparent silhouettes intended for composition over their district atmosphere. Do not treat an isolated alpha panel as a completed scene or add a flat checkerboard behind it. `game/scripts/scenery.js` defines the current route, landmark panorama, source crops and shared vertical street projection. `game/scripts/park-scenery.js` preserves the approved three-painting Park camera. `opening-storefronts.js` and `midtown-storefronts.js` describe the venue placement and office frontage. The three retained `midtown-v15` office/café/construction assets are still active; its reflective atmosphere and the older portrait skyline are superseded.
+The original Midtown paintings are the backdrop authority. `game/scripts/midtown-scenery.js` preserves their slow horizontal camera and fixed vertical position. `game/scripts/park-scenery.js` preserves the original Park composition; `scenery.js` retains the Downtown route. Midtown venue assets have transparent silhouettes and are separate street-side details, not replacement background panels. The supplied Gussy source includes a library vignette that the renderer masks out: use only its native truck silhouette and original curb as defined by `midtown-storefronts.js`, so NYPL is not duplicated over the restored painting. `midtown-storefronts.js` and `office-host.js` define their scale and anchors. Do not add a checkerboard or substitute the retired v1.5/v1.6 backgrounds.
 
 `references/gameplay/downtown-gameplay.png`, `midtown-gameplay.png`, `central-park-gameplay.png` and `office-gameplay.png` show actual current rendering and scale. These contain gameplay/UI context; prepare clean picture frames before video generation. If there is a difference between an isolated painting and the live composition, inspect the renderer/camera rather than arbitrarily stretching the painting.
 
-The rejected six-panel v1.3 Park art and cartoon runner study are intentionally omitted from this handoff. All 40 original source assets remain in `game/assets/` for provenance and regression checks, so **presence alone does not mean an asset is currently rendered**. In particular, old tiny storefront crops `original-10` through `original-16` and the old full city plates `original-32`/`original-34` are not authority over the new runtime city composition. The approved original Park plate `original-33` is active.
+The rejected six-panel v1.3 Park art, v1.5/v1.6 Midtown redesigns and cartoon runner study are intentionally omitted from this handoff. All 40 original source assets remain in `game/assets/` for provenance and regression checks, so **presence alone does not mean an asset is currently rendered**. In particular, old tiny storefront crops `original-10` through `original-16` and the old Downtown plate `original-32` are not authority over the current venue/Downtown composition. The original Park plate `original-33` and restored Midtown plate `original-34` are active.
 
 ## Props, brand and audio
 

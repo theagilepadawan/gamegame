@@ -36,7 +36,9 @@ try{
     });
   }
   console.log(`Testing ${env.TEST_URL}`);
-  for(const test of ['modes','menu','scenery','art-layers','downtown','venues','venue-pacing','office-host','midtown-atmosphere','midtown-grounding','props','water','gaps','standalone']) await run(`tests/${test}.mjs`);
+  // The v1.6 atmosphere/grounding suites describe the rejected fast, projected
+  // Midtown redesign. Restoration now locks the original paintings and camera.
+  for(const test of ['modes','menu','scenery','art-layers','downtown','venues','venue-pacing','office-host','midtown-restoration','props','water','gaps','standalone']) await run(`tests/${test}.mjs`);
   console.log('All release browser checks passed.');
 }finally{
   server?.kill('SIGTERM');

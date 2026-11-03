@@ -31,13 +31,13 @@ async function capture(name, viewport, deviceScaleFactor = 1) {
       // Isolate native venue pixels, then erase every later scenery layer and
       // the actual terrain above them. A slot entering view is not proof that
       // any pixel of its architecture or frontage is visible.
-      function hasVisiblePixel(scene, panel, rect) {
+      function hasVisiblePixel(scene, panel, rect, source) {
         ctx.clearRect(0, 0, mask.width, H); ctx.globalCompositeOperation = 'source-over';
         ctx.save();
         if (rect) {ctx.beginPath(); ctx.rect(rect.x, rect.y, rect.width, rect.height); ctx.clip();}
-        ctx.drawImage(LR_SCENERY.source(district, panel), panel.x, panel.y, panel.width, panel.height); ctx.restore();
+        ctx.drawImage(source || LR_SCENERY.source(district, panel), panel.x, panel.y, panel.width, panel.height); ctx.restore();
         ctx.globalCompositeOperation = 'destination-out';
-        for (const layer of scene.layers.slice(scene.layers.indexOf(panel) + 1)) {
+        for (const layer of source ? [] : scene.layers.slice(scene.layers.indexOf(panel) + 1)) {
           const source = LR_SCENERY.source(district, layer);
           if (source) ctx.drawImage(source, layer.x, layer.y, layer.width, layer.height);
         }
@@ -59,15 +59,19 @@ async function capture(name, viewport, deviceScaleFactor = 1) {
           const visible = items.filter(item => item.visible).map(item => item.key);
           if (visible.length > 1) simultaneous.push({time: q.time, visible});
           const sample = {time: q.time, distance: q.distance, scroll: scene.scroll}; samples.push(sample);
-          for (const item of items) {
+          for (const [index, item] of items.entries()) {
             const mark = marks[item.key] ||= {key: item.key, segment: item.segment, worldX: item.worldX, sourceRect: item.nativeRect || item.sourceCrop};
-            const panel = scene.panels.find(p => p.sourceIndex === item.panel);
+            // Midtown now uses the exact old painted backdrop and separate
+            // small native venues. Their motion is independent of its .085
+            // camera, so inspect their real alpha pixels and screen position.
+            const panel = district === 'midtown' ? item.art : scene.panels.find(p => p.sourceIndex === item.panel);
+            const source = district === 'midtown' ? LR_SHOPS.source(item.key) : null;
             const rect = item.rect || {x: item.quad[0][0], y: item.quad[0][1], width: item.width, height: item.height};
-            if (panel && !mark.firstPixel && hasVisiblePixel(scene, panel)) mark.firstPixel = {...sample};
-            if (item.visible && !mark.frontagePixel && hasVisiblePixel(scene, panel, rect)) mark.frontagePixel = {...sample};
+            if (panel && !mark.firstPixel && hasVisiblePixel(scene, panel, null, source)) mark.firstPixel = {...sample};
+            if (item.visible && !mark.frontagePixel && hasVisiblePixel(scene, panel, rect, source)) mark.frontagePixel = {...sample};
             if (item.visible) mark.lastFrontage = {...sample};
             if (!mark.fullyVisible && rect.x >= 20 && rect.x + rect.width <= W - 20) mark.fullyVisible = {...sample};
-            if (!mark.heroCenter && item.worldX - scene.scroll <= heroX) mark.heroCenter = {...sample};
+            if (!mark.heroCenter && (district === 'midtown' ? item.x : item.worldX - scene.scroll) <= heroX) mark.heroCenter = {...sample};
           }
         }
         q.step(1 / 120, false);
@@ -101,7 +105,7 @@ async function capture(name, viewport, deviceScaleFactor = 1) {
       assert.ok(venue.heroCenter && venue.heroCenter.time < record.finishTime, `${venue.key}: its center reaches the actual runner before victory`);
     }
     for (const gap of record.gaps) {
-      assert.ok(gap.ordinaryBlocks >= 3, 'At least three complete ordinary blocks separate named frontages');
+      if (record.district === 'opening') assert.ok(gap.ordinaryBlocks >= 3, 'At least three complete ordinary blocks separate Downtown frontages');
       assert.ok(gap.emptyScreenSeconds > .5, 'There is a visible interval containing ordinary scenery only');
       assert.ok(gap.revealInterval >= 9, 'Venues arrive as separate moments in the run');
     }
@@ -156,5 +160,5 @@ try {
       await sheet.close();
     } finally { await new Promise(resolve => server.close(resolve)); }
   }
-  console.log('PASS: actual chapter starts, alpha-tested native/frontage reveal, runner-center timing, ordinary blocks between venues, no simultaneous named frontages, complete entrances before victory.');
+  console.log('PASS: actual chapter starts, alpha-tested native/frontage reveal, runner-center timing, ordinary scenery between venues, no simultaneous named frontages, complete entrances before victory.');
 } finally {await browser.close();}

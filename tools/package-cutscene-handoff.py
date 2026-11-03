@@ -55,22 +55,26 @@ for relative in sorted(used):
     copy(ROOT / relative, game / relative)
 native_manifest = json.loads((ROOT / 'assets/art-v2/native-manifest.json').read_text())
 native_manifest['files'] = [item for item in native_manifest['files'] if item['path'] in used]
-native_manifest['handoffScope'] = 'Only current runtime city art is included; the rejected v1.3 Park rows are omitted.'
+native_manifest['handoffScope'] = 'Only current runtime city and venue art is included; rejected Park and Midtown redesigns are omitted.'
 (game / 'assets/art-v2/native-manifest.json').write_text(json.dumps(native_manifest, indent=2) + '\n')
 for folder in ['props-v14', 'office-host-v14', 'midtown-v15', 'midtown-v16']:
-    if (ROOT / 'assets' / folder).exists():
-        for p in (ROOT / 'assets' / folder).glob('*.json'):
-            if folder == 'midtown-v15':
-                data = json.loads(p.read_text())
-                if data.get('asset') and data['asset'] not in used:
-                    continue
-                if 'files' in data:
-                    data['files'] = [item for item in data['files'] if item['path'] in used]
-                target = game / 'assets' / folder / p.name
-                target.parent.mkdir(parents=True, exist_ok=True)
-                target.write_text(json.dumps(data, indent=2) + '\n')
-                continue
-            copy(p, game / 'assets' / folder / p.name)
+    folder_root = ROOT / 'assets' / folder
+    prefix = f'assets/{folder}/'
+    if not folder_root.exists() or not any(path.startswith(prefix) for path in runtime_used):
+        continue
+    for p in folder_root.glob('*.json'):
+        data = json.loads(p.read_text())
+        if data.get('asset') and data['asset'] not in runtime_used:
+            continue
+        # Mixed provenance/manifests must describe only the shipped runtime art.
+        for field in ['files', 'assets']:
+            if isinstance(data.get(field), list):
+                data[field] = [item for item in data[field] if item.get('path') in runtime_used]
+        if any(isinstance(data.get(field), list) and not data[field] for field in ['files', 'assets']):
+            continue
+        target = game / 'assets' / folder / p.name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(json.dumps(data, indent=2) + '\n')
 if (ROOT / 'art' / 'props-v14' / 'generated-atlas-native.png').exists():
     copy(ROOT / 'art' / 'props-v14' / 'generated-atlas-native.png',
          game / 'art' / 'props-v14' / 'generated-atlas-native.png')
@@ -126,15 +130,12 @@ aliases = {
     'downtown-complete-brooklyn-bridge.webp': 'assets/art-v2/downtown-bridge-wide.webp',
     'downtown-wall-street.webp': 'assets/art-v2/downtown-wallstreet.webp',
     'midtown-505-blue-glass-entrance.webp': 'assets/art-v2/midtown-fifth.webp',
-    'midtown-bryant-garden.webp': 'assets/art-v2/midtown-garden.webp',
-    'midtown-dry-city.webp': 'assets/midtown-v16/dry-city-atmosphere.webp',
-    'midtown-empire-state-chrysler.webp': 'assets/midtown-v16/landmark-panorama.webp',
-    'midtown-library-frontage.webp': 'assets/midtown-v16/library-frontage.webp',
-    'midtown-masonry-street.webp': 'assets/midtown-v16/masonry-street.webp',
-    'midtown-stone-foundation.webp': 'assets/midtown-v16/stone-foundation.webp',
-    'midtown-glass-offices.webp': 'assets/midtown-v15/glass-canyon.webp',
-    'midtown-limestone-cafe.webp': 'assets/midtown-v15/limestone-cafe.webp',
-    'midtown-construction.webp': 'assets/midtown-v15/construction-corner.webp',
+    'midtown-original-skyline.webp': 'assets/original-34.webp',
+    'midtown-original-bryant-park.webp': 'assets/scenery/midtown-1.webp',
+    'midtown-original-fifth-avenue.webp': 'assets/scenery/midtown-2.webp',
+    'midtown-joju.webp': 'assets/art-v2/midtown-joju.webp',
+    'midtown-omars.webp': 'assets/art-v2/midtown-omars.webp',
+    'midtown-gussy.webp': 'assets/art-v2/midtown-gussy.webp',
 }
 for name, relative in aliases.items():
     copy(ROOT / relative, refs / 'locations' / name)
@@ -151,11 +152,8 @@ if host_master.exists():
 captures = {
     'downtown-gameplay.png': 'review/art-direction/opening-start.png',
     'central-park-gameplay.png': 'review/art-direction/park-start.png',
-    'midtown-gameplay.png': 'review/midtown-v16/after/desktop-start.png',
-    'midtown-landmarks-gameplay.png': 'review/midtown-v16-qa/after/desktop-landmark-vista.png',
-    'midtown-jump-gameplay.png': 'review/midtown-v16-qa/after/desktop-slope-jump-apex.png',
-    'office-gameplay.png': 'review/midtown-v16/after/desktop-time-55.75.png',
-    'midtown-construction-gameplay.png': 'review/midtown-v16/after/desktop-time-28.png',
+    'midtown-gameplay.png': 'release/Midtown-v17-restored.png',
+    'office-gameplay.png': 'release/Midtown-v17-office.png',
     'downtown-bridge-gameplay.png': 'review/downtown/bridge-readable-1440.png',
 }
 for name, relative in captures.items():
@@ -186,7 +184,7 @@ metadata = {
                  'Five game audio sources', 'Cutscene production brief, shot slate, prompts and integration notes'],
     'notIncluded': ['No generated cutscene videos', 'No Runway credentials or plugin installation',
                     'Original inline office/host reference photographs were not exposed as downloadable local files',
-                    'No rejected cartoon runner study or rejected v1.3 Park artwork'],
+                    'No rejected cartoon runner study, v1.3 Park artwork or v1.5/v1.6 Midtown redesigns'],
 }
 (STAGE / 'HANDOFF-METADATA.json').write_text(json.dumps(metadata, indent=2) + '\n')
 manifest = [{
@@ -199,7 +197,7 @@ with zipfile.ZipFile(OUT, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as archive
     for p in sorted(STAGE.rglob('*')):
         if p.is_file():
             name = str(p.relative_to(STAGE.parent))
-            entry = zipfile.ZipInfo(name, date_time=(2026, 11, 2, 0, 0, 0))
+            entry = zipfile.ZipInfo(name, date_time=(2026, 11, 3, 0, 0, 0))
             entry.compress_type = zipfile.ZIP_DEFLATED
             entry.external_attr = 0o644 << 16
             archive.writestr(entry, p.read_bytes(), compresslevel=9)
