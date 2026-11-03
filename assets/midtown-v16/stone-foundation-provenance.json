@@ -1,0 +1,26 @@
+{
+  "version": "1.6.0",
+  "asset": "assets/midtown-v16/stone-foundation.webp",
+  "nativeDimensions": [
+    1254,
+    1254
+  ],
+  "mode": "RGB",
+  "sourceMaster": "/workspace/generated_images/exec-561b1032-aba4-4f7d-9458-923ef54542b4.png",
+  "sourceSha256": "8ca00aac0051ffad6ee3d6d9106850e83d040f9109a18bb047d13aba601f8d10",
+  "runtimeSha256": "6e93e7ef97d7b3afc5bf9e69c741ba42b82157511427c7c712e392f762fc7763",
+  "runtimeBytes": 733200,
+  "encoding": "WebP quality 95, method 6; original generated native dimensions retained, no resizing or creative pixel edits outside imagegen.",
+  "generation": "One imagegen pass: dry matte warm gray/buff limestone foundation material with staggered broad dressed-stone courses, fine aggregate, subtle mortar and chips; orthographic material-only front view.",
+  "recommendedDisplayTile": [
+    320,
+    320
+  ],
+  "edgeMeanAbsRGB": {
+    "leftRight": 12.58,
+    "topBottom": 17.62
+  },
+  "review": "Inspected native artwork and a 3 by 2 CSS repeat at 320 pixels per tile. The material reads as solid dry masonry with continuous courses and no bright/dark tile border. Minor individual joint variation remains at tile edges; the edges are not claimed pixel-identical.",
+  "reviewCapture": "review/midtown-v16-material/stone-repeat-320.png",
+  "sizeNote": "Requested 1024 square; imagegen returned native 1254 square. Retained the higher native dimensions and exact square aspect. Display scale should use the decoded image natural width."
+}

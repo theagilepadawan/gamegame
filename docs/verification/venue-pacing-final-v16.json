@@ -1,0 +1,1448 @@
+[
+  {
+    "name": "desktop",
+    "district": "opening",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "W": 864,
+    "H": 540,
+    "heroX": 216,
+    "initialScroll": 250.81678321678316,
+    "finishTime": 71.87500000000327,
+    "finishDistance": 24795.24999999989,
+    "won": true,
+    "dead": false,
+    "venues": [
+      {
+        "key": "kabin",
+        "segment": 5,
+        "worldX": 2127.9020979020975,
+        "sourceRect": [
+          310,
+          903,
+          410,
+          235
+        ],
+        "firstPixel": {
+          "time": 21.69999999999941,
+          "distance": 7161,
+          "scroll": 1076.6930525288667
+        },
+        "lastFrontage": {
+          "time": 40.066666666665036,
+          "distance": 13249.61944444443,
+          "scroll": 2203.894646798935
+        },
+        "frontagePixel": {
+          "time": 25.86666666666584,
+          "distance": 8536,
+          "scroll": 1331.2502976093674
+        },
+        "fullyVisible": {
+          "time": 26.36666666666581,
+          "distance": 8701,
+          "scroll": 1361.7971670190277
+        },
+        "heroCenter": {
+          "time": 35.399999999998634,
+          "distance": 11682,
+          "scroll": 1913.6772743535535
+        }
+      },
+      {
+        "key": "lei",
+        "segment": 10,
+        "worldX": 4059.440559440559,
+        "sourceRect": [
+          288,
+          836,
+          444,
+          344
+        ],
+        "firstPixel": {
+          "time": 53.13333333333096,
+          "distance": 18023.48981481471,
+          "scroll": 3087.693403055582
+        },
+        "lastFrontage": {
+          "time": 68.9000000000009,
+          "distance": 23724.24999999989,
+          "scroll": 4143.08962676856
+        },
+        "frontagePixel": {
+          "time": 53.66666666666426,
+          "distance": 18230.430555555453,
+          "scroll": 3126.0048684067683
+        },
+        "fullyVisible": {
+          "time": 56.266666666664115,
+          "distance": 19176.24999999989,
+          "scroll": 3301.106826313202
+        },
+        "heroCenter": {
+          "time": 64.43333333333068,
+          "distance": 22116.24999999989,
+          "scroll": 3845.396499430782
+        }
+      }
+    ],
+    "gaps": [
+      {
+        "from": "kabin",
+        "to": "lei",
+        "ordinaryBlocks": 4,
+        "emptyScreenSeconds": 13.599999999999227,
+        "revealInterval": 27.799999999998423
+      }
+    ],
+    "simultaneous": [],
+    "transitions": [
+      {
+        "boundary": 2,
+        "time": 9.200000000000118,
+        "distance": 3036,
+        "scroll": 341.8131302000325
+      },
+      {
+        "boundary": 3,
+        "time": 15.999999999999732,
+        "distance": 5280,
+        "scroll": 728.4587412587413
+      },
+      {
+        "boundary": 4,
+        "time": 22.333333333332707,
+        "distance": 7370,
+        "scroll": 1115.3857537811027
+      },
+      {
+        "boundary": 5,
+        "time": 28.66666666666568,
+        "distance": 9460,
+        "scroll": 1502.3127663034643
+      },
+      {
+        "boundary": 6,
+        "time": 34.99999999999866,
+        "distance": 11550,
+        "scroll": 1889.2397788258254
+      },
+      {
+        "boundary": 7,
+        "time": 41.199999999998305,
+        "distance": 13641.138888888869,
+        "scroll": 2276.3776367430983
+      },
+      {
+        "boundary": 8,
+        "time": 47.033333333331306,
+        "distance": 15724.043981481422,
+        "scroll": 2661.9911510227394
+      },
+      {
+        "boundary": 9,
+        "time": 52.59999999999766,
+        "distance": 17817.497222222126,
+        "scroll": 3049.5574707811393
+      },
+      {
+        "boundary": 10,
+        "time": 58.29999999999733,
+        "distance": 19908.24999999989,
+        "scroll": 3436.623846966967
+      },
+      {
+        "boundary": 11,
+        "time": 64.09999999999708,
+        "distance": 21996.24999999989,
+        "scroll": 3823.180594405575
+      },
+      {
+        "boundary": 12,
+        "time": 69.9000000000017,
+        "distance": 24084.24999999989,
+        "scroll": 4209.737341844183
+      }
+    ],
+    "fifteenSeconds": {
+      "time": 15.03333333333312,
+      "distance": 4961,
+      "scroll": 669.401460400065
+    }
+  },
+  {
+    "name": "desktop",
+    "district": "midtown",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "W": 864,
+    "H": 540,
+    "heroX": 216,
+    "initialScroll": 0,
+    "finishTime": 60.00833333333057,
+    "finishDistance": 19202.666666666457,
+    "won": true,
+    "dead": false,
+    "venues": [
+      {
+        "key": "joju",
+        "segment": 8,
+        "worldX": 3385.379020979021,
+        "sourceRect": [
+          232,
+          876,
+          566,
+          335
+        ],
+        "firstPixel": {
+          "time": 19.099999999999557,
+          "distance": 6112.0000000001355,
+          "scroll": 2329.4095098748026
+        },
+        "frontagePixel": {
+          "time": 19.666666666666192,
+          "distance": 6293.3333333334895,
+          "scroll": 2412.0385378724554
+        },
+        "lastFrontage": {
+          "time": 27.06666666666577,
+          "distance": 8661.333333333598,
+          "scroll": 3491.0764329005538
+        },
+        "fullyVisible": {
+          "time": 21.333333333332764,
+          "distance": 6826.666666666883,
+          "scroll": 2655.065090806728
+        },
+        "heroCenter": {
+          "time": 24.866666666665896,
+          "distance": 7957.333333333679,
+          "scroll": 3170.2813830273867
+        }
+      },
+      {
+        "key": "omars",
+        "segment": 12,
+        "worldX": 4978.144055944055,
+        "sourceRect": [
+          239,
+          933,
+          553,
+          278
+        ],
+        "firstPixel": {
+          "time": 30.03333333333227,
+          "distance": 9610.666666666715,
+          "scroll": 3923.663697123412
+        },
+        "frontagePixel": {
+          "time": 30.633333333332235,
+          "distance": 9802.666666666672,
+          "scroll": 4011.1532561797203
+        },
+        "lastFrontage": {
+          "time": 37.99999999999849,
+          "distance": 12159.999999999469,
+          "scroll": 5085.33062014884
+        },
+        "fullyVisible": {
+          "time": 32.23333333333215,
+          "distance": 10314.666666666555,
+          "scroll": 4244.458746996543
+        },
+        "heroCenter": {
+          "time": 35.79999999999861,
+          "distance": 11455.999999999629,
+          "scroll": 4764.535570275709
+        }
+      },
+      {
+        "key": "gussy",
+        "segment": 16,
+        "worldX": 6585.48951048951,
+        "sourceRect": [
+          208,
+          847,
+          691,
+          335
+        ],
+        "firstPixel": {
+          "time": 41.03333333333165,
+          "distance": 13130.666666665915,
+          "scroll": 5527.638946489066
+        },
+        "frontagePixel": {
+          "time": 41.466666666664956,
+          "distance": 13269.33333333255,
+          "scroll": 5590.825850251955
+        },
+        "lastFrontage": {
+          "time": 49.19999999999785,
+          "distance": 15743.999999998654,
+          "scroll": 6718.469055866597
+        },
+        "fullyVisible": {
+          "time": 43.43333333333151,
+          "distance": 13898.66666666574,
+          "scroll": 5877.597182714299
+        },
+        "heroCenter": {
+          "time": 46.83333333333132,
+          "distance": 14986.666666665493,
+          "scroll": 6373.371350700047
+        }
+      },
+      {
+        "key": "fifth",
+        "segment": 20,
+        "worldX": 8161.924475524476,
+        "sourceRect": [
+          256,
+          870,
+          512,
+          386
+        ],
+        "firstPixel": {
+          "time": 51.866666666664365,
+          "distance": 16597.33333333194,
+          "scroll": 7107.311540561367
+        },
+        "frontagePixel": {
+          "time": 52.49999999999766,
+          "distance": 16799.999999998698,
+          "scroll": 7199.661630676423
+        },
+        "lastFrontage": {
+          "time": 59.766666666663916,
+          "distance": 19125.33333333309,
+          "scroll": 8259.257401470213
+        },
+        "fullyVisible": {
+          "time": 53.99999999999758,
+          "distance": 17279.999999998916,
+          "scroll": 7418.3855283173425
+        },
+        "heroCenter": {
+          "time": 57.633333333330704,
+          "distance": 18442.66666666611,
+          "scroll": 7948.183413714238
+        }
+      }
+    ],
+    "gaps": [
+      {
+        "from": "joju",
+        "to": "omars",
+        "ordinaryBlocks": 3,
+        "emptyScreenSeconds": 3.566666666666464,
+        "revealInterval": 10.966666666666043
+      },
+      {
+        "from": "omars",
+        "to": "gussy",
+        "ordinaryBlocks": 3,
+        "emptyScreenSeconds": 3.4666666666664696,
+        "revealInterval": 10.833333333332721
+      },
+      {
+        "from": "gussy",
+        "to": "fifth",
+        "ordinaryBlocks": 3,
+        "emptyScreenSeconds": 3.2999999999998124,
+        "revealInterval": 11.033333333332706
+      }
+    ],
+    "simultaneous": [],
+    "transitions": [
+      {
+        "boundary": 2,
+        "time": 5.633333333333403,
+        "distance": 1802.6666666666829,
+        "scroll": 365.7549621660465
+      },
+      {
+        "boundary": 3,
+        "time": 8.366666666666832,
+        "distance": 2677.3333333333208,
+        "scroll": 764.3185089781956
+      },
+      {
+        "boundary": 4,
+        "time": 11.10000000000001,
+        "distance": 3551.9999999999377,
+        "scroll": 1162.8820557903352
+      },
+      {
+        "boundary": 5,
+        "time": 13.833333333333188,
+        "distance": 4426.666666666611,
+        "scroll": 1561.4456026025002
+      },
+      {
+        "boundary": 6,
+        "time": 16.566666666666368,
+        "distance": 5301.333333333377,
+        "scroll": 1960.0091494147077
+      },
+      {
+        "boundary": 7,
+        "time": 19.299999999999546,
+        "distance": 6176.000000000143,
+        "scroll": 2358.5726962269155
+      },
+      {
+        "boundary": 8,
+        "time": 22.033333333332724,
+        "distance": 7050.666666666909,
+        "scroll": 2757.1362430391227
+      },
+      {
+        "boundary": 9,
+        "time": 24.766666666665902,
+        "distance": 7925.333333333675,
+        "scroll": 3155.6997898513305
+      },
+      {
+        "boundary": 10,
+        "time": 27.49999999999908,
+        "distance": 8800.000000000233,
+        "scroll": 3554.263336663443
+      },
+      {
+        "boundary": 11,
+        "time": 30.199999999998926,
+        "distance": 9664.000000000036,
+        "scroll": 3947.966352416831
+      },
+      {
+        "boundary": 12,
+        "time": 32.93333333333211,
+        "distance": 10538.666666666504,
+        "scroll": 4346.529899228903
+      },
+      {
+        "boundary": 13,
+        "time": 35.666666666665286,
+        "distance": 11413.333333332972,
+        "scroll": 4745.093446040974
+      },
+      {
+        "boundary": 14,
+        "time": 38.399999999998464,
+        "distance": 12287.99999999944,
+        "scroll": 5143.656992853045
+      },
+      {
+        "boundary": 15,
+        "time": 41.13333333333164,
+        "distance": 13162.666666665908,
+        "scroll": 5542.220539665117
+      },
+      {
+        "boundary": 16,
+        "time": 43.86666666666482,
+        "distance": 14037.333333332375,
+        "scroll": 5940.784086477189
+      },
+      {
+        "boundary": 17,
+        "time": 46.599999999998,
+        "distance": 14911.999999998843,
+        "scroll": 6339.347633289261
+      },
+      {
+        "boundary": 18,
+        "time": 49.333333333331176,
+        "distance": 15786.666666665311,
+        "scroll": 6737.911180101332
+      },
+      {
+        "boundary": 19,
+        "time": 52.066666666664354,
+        "distance": 16661.333333331968,
+        "scroll": 7136.47472691349
+      },
+      {
+        "boundary": 20,
+        "time": 54.79999999999753,
+        "distance": 17535.999999999032,
+        "scroll": 7535.038273725833
+      },
+      {
+        "boundary": 21,
+        "time": 57.53333333333071,
+        "distance": 18410.666666666097,
+        "scroll": 7933.601820538177
+      }
+    ],
+    "fifteenSeconds": {
+      "time": 15.03333333333312,
+      "distance": 4810.666666666654,
+      "scroll": 1736.4247207151768
+    }
+  },
+  {
+    "name": "mobile-dpr2",
+    "district": "opening",
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "W": 1168.6153846153845,
+    "H": 540,
+    "heroX": 250,
+    "initialScroll": 144.20139860139858,
+    "finishTime": 71.87500000000327,
+    "finishDistance": 24795.24999999989,
+    "won": true,
+    "dead": false,
+    "venues": [
+      {
+        "key": "kabin",
+        "segment": 5,
+        "worldX": 2127.9020979020975,
+        "sourceRect": [
+          310,
+          903,
+          410,
+          235
+        ],
+        "firstPixel": {
+          "time": 18.96666666666623,
+          "distance": 6259,
+          "scroll": 772.7400531251694
+        },
+        "frontagePixel": {
+          "time": 20.866666666666124,
+          "distance": 6886,
+          "scroll": 883.4716452539708
+        },
+        "lastFrontage": {
+          "time": 43.266666666664854,
+          "distance": 14366.108333333299,
+          "scroll": 2204.4992450082154
+        },
+        "fullyVisible": {
+          "time": 23.866666666665953,
+          "distance": 7876,
+          "scroll": 1058.311001246815
+        },
+        "heroCenter": {
+          "time": 37.933333333331824,
+          "distance": 12524.256481481476,
+          "scroll": 1879.2182433799321
+        }
+      },
+      {
+        "key": "lei",
+        "segment": 10,
+        "worldX": 4059.440559440559,
+        "sourceRect": [
+          288,
+          836,
+          444,
+          344
+        ],
+        "lastFrontage": {
+          "time": 71.86666666666993,
+          "distance": 24792.24999999989,
+          "scroll": 4045.8122697457384
+        },
+        "firstPixel": {
+          "time": 53.0666666666643,
+          "distance": 17997.688888888784,
+          "scroll": 2845.856018310697
+        },
+        "frontagePixel": {
+          "time": 53.66666666666426,
+          "distance": 18230.430555555453,
+          "scroll": 2886.9594557982746
+        },
+        "fullyVisible": {
+          "time": 55.366666666664166,
+          "distance": 18852.24999999989,
+          "scroll": 2996.7761337886723
+        },
+        "heroCenter": {
+          "time": 68.16666666666698,
+          "distance": 23460.24999999989,
+          "scroll": 3810.5738635008206
+        }
+      }
+    ],
+    "gaps": [
+      {
+        "from": "kabin",
+        "to": "lei",
+        "ordinaryBlocks": 4,
+        "emptyScreenSeconds": 10.399999999999409,
+        "revealInterval": 32.799999999998136
+      }
+    ],
+    "simultaneous": [],
+    "transitions": [
+      {
+        "boundary": 2,
+        "time": 7.900000000000182,
+        "distance": 2607,
+        "scroll": 189.28909093348508
+      },
+      {
+        "boundary": 3,
+        "time": 15.599999999999755,
+        "distance": 5148,
+        "scroll": 576.5314425109773
+      },
+      {
+        "boundary": 4,
+        "time": 22.233333333332713,
+        "distance": 7337,
+        "scroll": 963.1206852062664
+      },
+      {
+        "boundary": 5,
+        "time": 28.86666666666567,
+        "distance": 9526,
+        "scroll": 1349.7099279015556
+      },
+      {
+        "boundary": 6,
+        "time": 35.49999999999863,
+        "distance": 11715,
+        "scroll": 1736.2991705968448
+      },
+      {
+        "boundary": 7,
+        "time": 41.96666666666493,
+        "distance": 13908.418055555527,
+        "scroll": 2123.668665805335
+      },
+      {
+        "boundary": 8,
+        "time": 48.03333333333125,
+        "distance": 16092.50231481475,
+        "scroll": 2509.3897620911844
+      },
+      {
+        "boundary": 9,
+        "time": 53.79999999999759,
+        "distance": 18282.313888888784,
+        "scroll": 2896.12233315864
+      },
+      {
+        "boundary": 10,
+        "time": 59.86666666666391,
+        "distance": 20472.24999999989,
+        "scroll": 3282.876898140599
+      },
+      {
+        "boundary": 11,
+        "time": 65.96666666666523,
+        "distance": 22668.24999999989,
+        "scroll": 3670.702378706545
+      }
+    ],
+    "fifteenSeconds": {
+      "time": 15.03333333333312,
+      "distance": 4961,
+      "scroll": 543.5062308234401
+    }
+  },
+  {
+    "name": "mobile-dpr2",
+    "district": "midtown",
+    "viewport": {
+      "width": 844,
+      "height": 390
+    },
+    "W": 1168.6153846153845,
+    "H": 540,
+    "heroX": 250,
+    "initialScroll": 0,
+    "finishTime": 60.00833333333057,
+    "finishDistance": 19202.666666666457,
+    "won": true,
+    "dead": false,
+    "venues": [
+      {
+        "key": "joju",
+        "segment": 8,
+        "worldX": 3385.379020979021,
+        "sourceRect": [
+          232,
+          876,
+          566,
+          335
+        ],
+        "firstPixel": {
+          "time": 17.53333333333298,
+          "distance": 5610.666666666745,
+          "scroll": 2023.7953193473538
+        },
+        "frontagePixel": {
+          "time": 18.133333333332946,
+          "distance": 5802.666666666767,
+          "scroll": 2108.07135346709
+        },
+        "lastFrontage": {
+          "time": 27.99999999999905,
+          "distance": 8960.000000000196,
+          "scroll": 3493.943914547078
+        },
+        "fullyVisible": {
+          "time": 19.83333333333285,
+          "distance": 6346.666666666829,
+          "scroll": 2346.8534501396753
+        },
+        "heroCenter": {
+          "time": 25.466666666665862,
+          "distance": 8149.3333333337005,
+          "scroll": 3138.111770486086
+        }
+      },
+      {
+        "key": "omars",
+        "segment": 12,
+        "worldX": 4978.144055944055,
+        "sourceRect": [
+          239,
+          933,
+          553,
+          278
+        ],
+        "firstPixel": {
+          "time": 28.86666666666567,
+          "distance": 9237.333333333467,
+          "scroll": 3615.6759638310996
+        },
+        "frontagePixel": {
+          "time": 29.499999999998966,
+          "distance": 9440.000000000087,
+          "scroll": 3704.633999846346
+        },
+        "lastFrontage": {
+          "time": 39.29999999999841,
+          "distance": 12575.999999999374,
+          "scroll": 5081.142557134898
+        },
+        "fullyVisible": {
+          "time": 31.166666666665538,
+          "distance": 9973.3333333333,
+          "scroll": 3938.7340946233107
+        },
+        "heroCenter": {
+          "time": 36.799999999998555,
+          "distance": 11775.999999999556,
+          "scroll": 4729.992414969452
+        }
+      },
+      {
+        "key": "gussy",
+        "segment": 16,
+        "worldX": 6585.48951048951,
+        "sourceRect": [
+          208,
+          847,
+          691,
+          335
+        ],
+        "firstPixel": {
+          "time": 40.299999999998356,
+          "distance": 12895.999999999302,
+          "scroll": 5221.602614001077
+        },
+        "frontagePixel": {
+          "time": 40.766666666664996,
+          "distance": 13045.3333333326,
+          "scroll": 5287.150640538627
+        },
+        "lastFrontage": {
+          "time": 50.933333333331085,
+          "distance": 16298.666666665194,
+          "scroll": 6715.161218678111
+        },
+        "fullyVisible": {
+          "time": 42.799999999998214,
+          "distance": 13695.99999999912,
+          "scroll": 5572.752756166524
+        },
+        "heroCenter": {
+          "time": 48.23333333333124,
+          "distance": 15434.666666665391,
+          "scroll": 6335.919065139428
+        }
+      },
+      {
+        "key": "fifth",
+        "segment": 20,
+        "worldX": 8161.924475524476,
+        "sourceRect": [
+          256,
+          870,
+          512,
+          386
+        ],
+        "firstPixel": {
+          "time": 51.53333333333105,
+          "distance": 16490.666666665224,
+          "scroll": 6799.43725279785
+        },
+        "frontagePixel": {
+          "time": 52.23333333333101,
+          "distance": 16714.666666665325,
+          "scroll": 6897.759292604243
+        },
+        "lastFrontage": {
+          "time": 59.999999999997236,
+          "distance": 19199.99999999979,
+          "scroll": 7988.665734265642
+        },
+        "fullyVisible": {
+          "time": 53.76666666666426,
+          "distance": 17205.333333332215,
+          "scroll": 7113.131379799197
+        },
+        "heroCenter": {
+          "time": 59.46666666666393,
+          "distance": 19029.333333333045,
+          "scroll": 7913.753703936963
+        }
+      }
+    ],
+    "gaps": [
+      {
+        "from": "joju",
+        "to": "omars",
+        "ordinaryBlocks": 3,
+        "emptyScreenSeconds": 1.4999999999999147,
+        "revealInterval": 11.36666666666602
+      },
+      {
+        "from": "omars",
+        "to": "gussy",
+        "ordinaryBlocks": 3,
+        "emptyScreenSeconds": 1.4666666666665833,
+        "revealInterval": 11.26666666666603
+      },
+      {
+        "from": "gussy",
+        "to": "fifth",
+        "ordinaryBlocks": 3,
+        "emptyScreenSeconds": 1.299999999999926,
+        "revealInterval": 11.466666666666015
+      }
+    ],
+    "simultaneous": [],
+    "transitions": [
+      {
+        "boundary": 2,
+        "time": 4.666666666666688,
+        "distance": 1493.3333333333408,
+        "scroll": 216.5425876687448
+      },
+      {
+        "boundary": 3,
+        "time": 7.5000000000001625,
+        "distance": 2400.000000000003,
+        "scroll": 614.5127487896733
+      },
+      {
+        "boundary": 4,
+        "time": 10.333333333333387,
+        "distance": 3306.6666666666183,
+        "scroll": 1012.482909910581
+      },
+      {
+        "boundary": 5,
+        "time": 13.16666666666656,
+        "distance": 4213.333333333253,
+        "scroll": 1410.4530710314973
+      },
+      {
+        "boundary": 6,
+        "time": 15.999999999999732,
+        "distance": 5120.000000000023,
+        "scroll": 1808.423232152473
+      },
+      {
+        "boundary": 7,
+        "time": 18.833333333332906,
+        "distance": 6026.6666666667925,
+        "scroll": 2206.3933932734485
+      },
+      {
+        "boundary": 8,
+        "time": 21.666666666666078,
+        "distance": 6933.333333333562,
+        "scroll": 2604.363554394424
+      },
+      {
+        "boundary": 9,
+        "time": 24.49999999999925,
+        "distance": 7840.000000000332,
+        "scroll": 3002.3337155154
+      },
+      {
+        "boundary": 10,
+        "time": 27.333333333332423,
+        "distance": 8746.666666666912,
+        "scroll": 3400.303876636292
+      },
+      {
+        "boundary": 11,
+        "time": 30.166666666665595,
+        "distance": 9653.333333333372,
+        "scroll": 3798.2740377571317
+      },
+      {
+        "boundary": 12,
+        "time": 32.99999999999877,
+        "distance": 10559.999999999833,
+        "scroll": 4196.244198877972
+      },
+      {
+        "boundary": 13,
+        "time": 35.83333333333194,
+        "distance": 11466.666666666293,
+        "scroll": 4594.214359998812
+      },
+      {
+        "boundary": 14,
+        "time": 38.666666666665115,
+        "distance": 12373.333333332754,
+        "scroll": 4992.184521119651
+      },
+      {
+        "boundary": 15,
+        "time": 41.49999999999829,
+        "distance": 13279.999999999214,
+        "scroll": 5390.154682240492
+      },
+      {
+        "boundary": 16,
+        "time": 44.33333333333146,
+        "distance": 14186.666666665675,
+        "scroll": 5788.124843361331
+      },
+      {
+        "boundary": 17,
+        "time": 47.16666666666463,
+        "distance": 15093.333333332135,
+        "scroll": 6186.095004482171
+      },
+      {
+        "boundary": 18,
+        "time": 49.999999999997804,
+        "distance": 15999.999999998596,
+        "scroll": 6584.065165603011
+      },
+      {
+        "boundary": 19,
+        "time": 52.83333333333098,
+        "distance": 16906.666666665413,
+        "scroll": 6982.035326724008
+      },
+      {
+        "boundary": 20,
+        "time": 55.66666666666415,
+        "distance": 17813.33333333249,
+        "scroll": 7380.005487845119
+      },
+      {
+        "boundary": 21,
+        "time": 58.49999999999732,
+        "distance": 18719.99999999957,
+        "scroll": 7777.97564896623
+      }
+    ],
+    "fifteenSeconds": {
+      "time": 15.03333333333312,
+      "distance": 4810.666666666654,
+      "scroll": 1672.6451771817872
+    }
+  },
+  {
+    "name": "compact",
+    "district": "opening",
+    "viewport": {
+      "width": 568,
+      "height": 320
+    },
+    "W": 958.5,
+    "H": 540,
+    "heroX": 239.625,
+    "initialScroll": 323.1767832167832,
+    "finishTime": 71.87500000000327,
+    "finishDistance": 24795.24999999989,
+    "won": true,
+    "dead": false,
+    "venues": [
+      {
+        "key": "kabin",
+        "segment": 5,
+        "worldX": 2127.9020979020975,
+        "sourceRect": [
+          310,
+          903,
+          410,
+          235
+        ],
+        "firstPixel": {
+          "time": 21.199999999999438,
+          "distance": 6996,
+          "scroll": 982.9625634152702
+        },
+        "lastFrontage": {
+          "time": 41.233333333331636,
+          "distance": 13652.718981481461,
+          "scroll": 2204.321997997813
+        },
+        "frontagePixel": {
+          "time": 25.833333333332508,
+          "distance": 8525,
+          "scroll": 1263.4999543839817
+        },
+        "fullyVisible": {
+          "time": 25.89999999999917,
+          "distance": 8547,
+          "scroll": 1267.5364636065533
+        },
+        "heroCenter": {
+          "time": 36.16666666666526,
+          "distance": 11935.04861111111,
+          "scroll": 1889.1678029370157
+        }
+      },
+      {
+        "key": "lei",
+        "segment": 10,
+        "worldX": 4059.440559440559,
+        "sourceRect": [
+          288,
+          836,
+          444,
+          344
+        ],
+        "firstPixel": {
+          "time": 53.13333333333096,
+          "distance": 18023.48981481471,
+          "scroll": 3006.26094247489
+        },
+        "lastFrontage": {
+          "time": 70.26666666666866,
+          "distance": 24216.24999999989,
+          "scroll": 4142.494287960021
+        },
+        "frontagePixel": {
+          "time": 53.66666666666426,
+          "distance": 18230.430555555453,
+          "scroll": 3044.2299519533335
+        },
+        "fullyVisible": {
+          "time": 56.09999999999746,
+          "distance": 19116.24999999989,
+          "scroll": 3206.7580590911994
+        },
+        "heroCenter": {
+          "time": 65.39999999999812,
+          "distance": 22464.24999999989,
+          "scroll": 3821.04137168979
+        }
+      }
+    ],
+    "gaps": [
+      {
+        "from": "kabin",
+        "to": "lei",
+        "ordinaryBlocks": 4,
+        "emptyScreenSeconds": 12.433333333332627,
+        "revealInterval": 27.833333333331755
+      }
+    ],
+    "simultaneous": [],
+    "transitions": [
+      {
+        "boundary": 3,
+        "time": 16.233333333333054,
+        "distance": 5357,
+        "scroll": 682.2426263337018
+      },
+      {
+        "boundary": 4,
+        "time": 22.59999999999936,
+        "distance": 7458,
+        "scroll": 1067.7292570892694
+      },
+      {
+        "boundary": 5,
+        "time": 28.999999999998995,
+        "distance": 9570,
+        "scroll": 1455.2341424561228
+      },
+      {
+        "boundary": 6,
+        "time": 35.399999999998634,
+        "distance": 11682,
+        "scroll": 1842.7390278229761
+      },
+      {
+        "boundary": 7,
+        "time": 41.59999999999828,
+        "distance": 13780.344444444418,
+        "scroll": 2227.7384233744
+      },
+      {
+        "boundary": 8,
+        "time": 47.49999999999795,
+        "distance": 15895.576388888823,
+        "scroll": 2615.8362984483756
+      },
+      {
+        "boundary": 9,
+        "time": 53.0666666666643,
+        "distance": 17997.688888888784,
+        "scroll": 3001.527048136214
+      },
+      {
+        "boundary": 10,
+        "time": 58.86666666666397,
+        "distance": 20112.24999999989,
+        "scroll": 3389.501840258522
+      },
+      {
+        "boundary": 11,
+        "time": 64.69999999999756,
+        "distance": 22212.24999999989,
+        "scroll": 3774.8049933221546
+      },
+      {
+        "boundary": 12,
+        "time": 70.5666666666689,
+        "distance": 24324.24999999989,
+        "scroll": 4162.309878689008
+      }
+    ],
+    "fifteenSeconds": {
+      "time": 15.03333333333312,
+      "distance": 4961,
+      "scroll": 609.5854603274167
+    }
+  },
+  {
+    "name": "compact",
+    "district": "midtown",
+    "viewport": {
+      "width": 568,
+      "height": 320
+    },
+    "W": 958.5,
+    "H": 540,
+    "heroX": 239.625,
+    "initialScroll": 0,
+    "finishTime": 60.00833333333057,
+    "finishDistance": 19202.666666666457,
+    "won": true,
+    "dead": false,
+    "venues": [
+      {
+        "key": "joju",
+        "segment": 8,
+        "worldX": 3385.379020979021,
+        "sourceRect": [
+          232,
+          876,
+          566,
+          335
+        ],
+        "firstPixel": {
+          "time": 18.633333333332917,
+          "distance": 5962.666666666785,
+          "scroll": 2235.594382745513
+        },
+        "frontagePixel": {
+          "time": 19.19999999999955,
+          "distance": 6144.000000000139,
+          "scroll": 2317.2818722816273
+        },
+        "lastFrontage": {
+          "time": 27.366666666665754,
+          "distance": 8757.333333333576,
+          "scroll": 3494.542750890245
+        },
+        "fullyVisible": {
+          "time": 20.866666666666124,
+          "distance": 6677.333333333533,
+          "scroll": 2557.539194446669
+        },
+        "heroCenter": {
+          "time": 24.96666666666589,
+          "distance": 7989.333333333682,
+          "scroll": 3148.5722069726717
+        }
+      },
+      {
+        "key": "omars",
+        "segment": 12,
+        "worldX": 4978.144055944055,
+        "sourceRect": [
+          239,
+          933,
+          553,
+          278
+        ],
+        "firstPixel": {
+          "time": 29.666666666665623,
+          "distance": 9493.333333333409,
+          "scroll": 3826.0978554778894
+        },
+        "frontagePixel": {
+          "time": 30.26666666666559,
+          "distance": 9685.333333333365,
+          "scroll": 3912.5904914572748
+        },
+        "lastFrontage": {
+          "time": 38.399999999998464,
+          "distance": 12287.99999999944,
+          "scroll": 5085.046223622279
+        },
+        "fullyVisible": {
+          "time": 31.89999999999883,
+          "distance": 10207.999999999913,
+          "scroll": 4148.0426671789355
+        },
+        "heroCenter": {
+          "time": 35.9999999999986,
+          "distance": 11519.999999999614,
+          "scroll": 4739.075679704737
+        }
+      },
+      {
+        "key": "gussy",
+        "segment": 16,
+        "worldX": 6585.48951048951,
+        "sourceRect": [
+          208,
+          847,
+          691,
+          335
+        ],
+        "firstPixel": {
+          "time": 40.79999999999833,
+          "distance": 13055.999999999265,
+          "scroll": 5431.016767539822
+        },
+        "frontagePixel": {
+          "time": 41.233333333331636,
+          "distance": 13194.6666666659,
+          "scroll": 5493.483671302711
+        },
+        "lastFrontage": {
+          "time": 49.73333333333115,
+          "distance": 15914.666666665282,
+          "scroll": 6718.796014344006
+        },
+        "fullyVisible": {
+          "time": 43.23333333333152,
+          "distance": 13834.666666665755,
+          "scroll": 5781.792457900662
+        },
+        "heroCenter": {
+          "time": 47.16666666666463,
+          "distance": 15093.333333332135,
+          "scroll": 6348.7997382099675
+        }
+      },
+      {
+        "key": "fifth",
+        "segment": 20,
+        "worldX": 8161.924475524476,
+        "sourceRect": [
+          256,
+          870,
+          512,
+          386
+        ],
+        "firstPixel": {
+          "time": 51.76666666666437,
+          "distance": 16565.333333331924,
+          "scroll": 7011.909947385313
+        },
+        "frontagePixel": {
+          "time": 52.433333333331,
+          "distance": 16778.666666665355,
+          "scroll": 7108.012876251362
+        },
+        "lastFrontage": {
+          "time": 59.999999999997236,
+          "distance": 19199.99999999979,
+          "scroll": 8198.781118881025
+        },
+        "fullyVisible": {
+          "time": 53.933333333330914,
+          "distance": 17258.666666665573,
+          "scroll": 7324.244466199973
+        },
+        "heroCenter": {
+          "time": 58.099999999997344,
+          "distance": 18591.999999999513,
+          "scroll": 7924.887771612783
+        }
+      }
+    ],
+    "gaps": [
+      {
+        "from": "joju",
+        "to": "omars",
+        "ordinaryBlocks": 3,
+        "emptyScreenSeconds": 2.899999999999835,
+        "revealInterval": 11.066666666666038
+      },
+      {
+        "from": "omars",
+        "to": "gussy",
+        "ordinaryBlocks": 3,
+        "emptyScreenSeconds": 2.8333333333331723,
+        "revealInterval": 10.966666666666047
+      },
+      {
+        "from": "gussy",
+        "to": "fifth",
+        "ordinaryBlocks": 3,
+        "emptyScreenSeconds": 2.6999999999998465,
+        "revealInterval": 11.199999999999363
+      }
+    ],
+    "simultaneous": [],
+    "transitions": [
+      {
+        "boundary": 2,
+        "time": 5.333333333333388,
+        "distance": 1706.6666666666802,
+        "scroll": 318.3409518686503
+      },
+      {
+        "boundary": 3,
+        "time": 8.10000000000018,
+        "distance": 2591.9999999999923,
+        "scroll": 717.1681066625647
+      },
+      {
+        "boundary": 4,
+        "time": 10.86666666666669,
+        "distance": 3477.3333333332753,
+        "scroll": 1115.995261456466
+      },
+      {
+        "boundary": 5,
+        "time": 13.6333333333332,
+        "distance": 4362.666666666603,
+        "scroll": 1514.8224162503877
+      },
+      {
+        "boundary": 6,
+        "time": 16.39999999999971,
+        "distance": 5248.000000000037,
+        "scroll": 1913.6495710443571
+      },
+      {
+        "boundary": 7,
+        "time": 19.16666666666622,
+        "distance": 6133.333333333471,
+        "scroll": 2312.4767258383263
+      },
+      {
+        "boundary": 8,
+        "time": 21.899999999999398,
+        "distance": 7008.000000000237,
+        "scroll": 2706.498734188995
+      },
+      {
+        "boundary": 9,
+        "time": 24.666666666665908,
+        "distance": 7893.333333333671,
+        "scroll": 3105.3258889829644
+      },
+      {
+        "boundary": 10,
+        "time": 27.433333333332417,
+        "distance": 8778.666666666904,
+        "scroll": 3504.1530437768433
+      },
+      {
+        "boundary": 11,
+        "time": 30.199999999998926,
+        "distance": 9664.000000000036,
+        "scroll": 3902.9801985706767
+      },
+      {
+        "boundary": 12,
+        "time": 32.96666666666544,
+        "distance": 10549.333333333168,
+        "scroll": 4301.80735336451
+      },
+      {
+        "boundary": 13,
+        "time": 35.73333333333195,
+        "distance": 11434.6666666663,
+        "scroll": 4700.634508158343
+      },
+      {
+        "boundary": 14,
+        "time": 38.49999999999846,
+        "distance": 12319.999999999432,
+        "scroll": 5099.461662952177
+      },
+      {
+        "boundary": 15,
+        "time": 41.233333333331636,
+        "distance": 13194.6666666659,
+        "scroll": 5493.483671302711
+      },
+      {
+        "boundary": 16,
+        "time": 43.999999999998145,
+        "distance": 14079.999999999032,
+        "scroll": 5892.310826096544
+      },
+      {
+        "boundary": 17,
+        "time": 46.766666666664655,
+        "distance": 14965.333333332164,
+        "scroll": 6291.137980890378
+      },
+      {
+        "boundary": 18,
+        "time": 49.533333333331164,
+        "distance": 15850.666666665296,
+        "scroll": 6689.9651356842105
+      },
+      {
+        "boundary": 19,
+        "time": 52.299999999997674,
+        "distance": 16735.99999999867,
+        "scroll": 7088.792290478153
+      },
+      {
+        "boundary": 20,
+        "time": 55.06666666666418,
+        "distance": 17621.333333332404,
+        "scroll": 7487.6194452722575
+      },
+      {
+        "boundary": 21,
+        "time": 57.83333333333069,
+        "distance": 18506.66666666614,
+        "scroll": 7886.446600066363
+      }
+    ],
+    "fifteenSeconds": {
+      "time": 15.03333333333312,
+      "distance": 4810.666666666654,
+      "scroll": 1716.6385668690227
+    }
+  }
+]

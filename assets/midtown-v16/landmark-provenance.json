@@ -1,0 +1,57 @@
+{
+  "version": "1.6.0",
+  "asset": "assets/midtown-v16/landmark-panorama.webp",
+  "nativeDimensions": [
+    1536,
+    1024
+  ],
+  "mode": "RGBA",
+  "sourceMaster": "/workspace/generated_images/exec-981a4dd5-c18b-48f8-9cdd-d8669a35ed04.png",
+  "sourceSha256": "d663af8a95f4bfbef00578f6c7f0e0e5c99d326163825c0404ff183a61b7a330",
+  "runtimeSha256": "d992726911c8ffff4d79685678964bce7d59747734d5205cd5d598fa9358c3cf",
+  "runtimeBytes": 352766,
+  "encoding": "WebP quality 95 method 6; native dimensions retained, no resizing or cropping.",
+  "referenceInputs": [
+    "assets/original-34.webp",
+    "assets/art-v2/midtown-skyline.webp"
+  ],
+  "generation": "Imagegen initial wide panorama followed by two composition correction edits. A single complete Empire State and Chrysler form the hero skyline above varied lower buildings and a connected dry urban plaza. The final edit moves the distant towers back in perspective, reducing vertical span so the entire mast fits below the HUD at a broad world scale. Transparent sky and margins; no water, wet reflections or named venue frontages.",
+  "alphaBoundsByThreshold": {
+    "1": [
+      0,
+      31,
+      1525,
+      976
+    ],
+    "64": [
+      15,
+      300,
+      1522,
+      898
+    ],
+    "128": [
+      15,
+      305,
+      1522,
+      897
+    ],
+    "250": [
+      16,
+      346,
+      1519,
+      896
+    ]
+  },
+  "anchors": {
+    "empireStateMast": [
+      604,
+      301
+    ],
+    "chryslerSpire": [
+      1101,
+      420
+    ],
+    "curbContactY": 891
+  },
+  "integrationNotes": "Use once as an independent broad landmark layer; remove legacy skyline portrait from runtime to avoid duplication. Preserve native aspect 1.5. Register curb contactY891 to the street baseline. Visible skyline content spans about590 native pixels vertically; world scale0.58 gives display width891 and mast-to-curb span342, enabling about2.25 logical route slots while keeping the mast below HUD. Lower nearby foreground rooflines so both landmarks remain legible. Logical route slots and named venue geometry need not change."
+}

@@ -101,6 +101,18 @@ try {
       assert.ok(bridge.nativeWidth >= 2000 && bridge.nativeHeight >= 700);
       assert.ok(bridge.width > s.width * 2, 'The landmark spans multiple foreground blocks');
     }
+    const landmarks = s.layers.filter(layer => layer.kind === 'landmark');
+    assert.ok(landmarks.length <= 1, 'Midtown draws one complete landmark panorama, never repeated portraits');
+    if (s.id !== 'midtown' || (s.mode === 'endless' && s.scroll > s.stripWidth)) {
+      assert.equal(landmarks.length, 0, 'Midtown landmarks never appear in another district or repeat in the Endless tail');
+    }
+    for (const landmark of landmarks) {
+      assert.equal(landmark.nativeWidth, 1536); assert.equal(landmark.nativeHeight, 1024);
+      assert.ok(landmark.width > s.width * 2, 'Empire State and Chrysler occupy a broad view across multiple logical blocks');
+      assert.ok(Math.abs(landmark.width / landmark.height - 1.5) < 1e-9, 'The landmark retains its complete native proportions');
+    }
+    if (s.id === 'midtown') assert.equal(s.layers.some(layer => layer.kind === 'architecture' && layer.sourceIndex === s.originalIndex), false,
+      'The replaced narrow skyline portrait is not drawn under the wide panorama');
     assert.ok(s.panels.length > 0, 'Every camera location has a background');
     assert.ok((s.panels[0].slotX ?? s.panels[0].x) <= 0.001, 'Logical route slots cover the left edge; atmosphere fills alpha margins');
     const last = s.panels.at(-1);
@@ -113,6 +125,7 @@ try {
       if (panel.segment >= s.panelCount) assert.ok(s.loopSourceIndices.includes(panel.sourceIndex), 'Endless only repeats anonymous tail blocks');
     }
   }
+  assert.ok(geometry.some(s => s.id === 'midtown' && s.layers.some(layer => layer.kind === 'landmark')), 'The unique Midtown panorama actually appears along the route');
   const park = await page.evaluate(() => [0, 6000, 19000, 120000].map(distance => LR_SCENERY.inspect('park', distance, 1000, 540, 'endless')));
   for (const scene of park) {
     assert.equal(scene.panelCount, 3, 'Park delegates to the three approved legacy paintings');

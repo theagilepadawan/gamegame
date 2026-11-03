@@ -1,5 +1,5 @@
-/* A quiet welcome at 505. The host belongs to the office's painted pavement,
-   so both renderers use the venue's own camera and scale rather than the runner. */
+/* A quiet welcome at 505. The host belongs to the office's painted pavement;
+   both renderers share its scale and projected street offset during jumps. */
 (function () {
   "use strict";
   var image = new Image();
@@ -10,9 +10,9 @@
   var last = { visible: false, angle: 0 };
 
   function ready() { return image.complete && image.naturalWidth > 0; }
-  function placement(distance, width, height) {
+  function placement(distance, width, height, view) {
     if (!window.LR_SHOPS) return null;
-    var office = LR_SHOPS.inspect(distance, width, height).items.find(function (item) { return item.key === "fifth"; });
+    var office = LR_SHOPS.inspect(distance, width, height, view).items.find(function (item) { return item.key === "fifth"; });
     if (!office || !office.host) return null;
     var host = office.host;
     return { x: host.x, y: host.y, height: host.height,
@@ -58,11 +58,11 @@
     ctx.arc(0, -.2, host.height * .17, 0, Math.PI * 2); ctx.fill(); ctx.restore();
     ctx.scale(scale, scale); ctx.translate(-FOOT_X, -FOOT_Y); portrait(ctx, angle); ctx.restore();
   }
-  function frame(id, distance, width, height, time, reduced, run, cameraY) {
+  function frame(id, distance, width, height, time, reduced, run, cameraY, view) {
     if (id !== "midtown" || (window.longRun && longRun.state === "home") || !ready()) {
       last = { visible: false, angle: 0 }; return null;
     }
-    var host = placement(distance, width, height);
+    var host = placement(distance, width, height, view);
     if (!host || !host.visible) { last = { visible: false, angle: 0 }; return null; }
     // Wait until the foreground crest clears the pavement before greeting.
     // The feet keep their architectural anchor even while the hill occludes it.
@@ -77,13 +77,13 @@
   window.LR_OFFICE_HOST = {
     images: [image],
     get ready() { return ready(); },
-    draw2d: function (ctx, id, distance, width, height, time, reduced, run, cameraY) {
+    draw2d: function (ctx, id, distance, width, height, time, reduced, run, cameraY, view) {
       var clock = run && typeof run.chapterTime === "number" ? run.chapterTime : time;
-      var current = frame(id, distance, width, height, clock, reduced, run, cameraY);
+      var current = frame(id, distance, width, height, clock, reduced, run, cameraY, view);
       if (current) paint(ctx, current.host, current.angle);
     },
-    pixi: function (env, id, width, height, distance, Sprite, Texture) {
-      var current = frame(id, distance, width, height, env.run?.chapterTime || env.age, env.reduced, env.run, env.worldLayer.y);
+    pixi: function (env, id, width, height, distance, Sprite, Texture, view) {
+      var current = frame(id, distance, width, height, env.run?.chapterTime || env.age, env.reduced, env.run, env.worldLayer.y, view);
       var entry = env.officeHost;
       if (!current) { if (entry) entry.sprite.visible = false; return; }
       if (!entry) {

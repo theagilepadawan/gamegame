@@ -92,29 +92,43 @@ try {
       signatures.set(top, result); return result;
     }
     for (const district of ['opening', 'midtown']) for (let distance = 0; distance <= 30000; distance += 500) {
-      for (const panel of LR_SCENERY.layout(district, distance, 1000, 540, 'chapter').panels) {
+      // Inspect artwork that is actually drawn. The Midtown vista retains its
+      // logical route slots for pacing but replaces their portrait panels with
+      // one complete native landscape image at a separate parallax depth.
+      const scene = LR_SCENERY.layout(district, distance, 1000, 540, 'chapter');
+      for (const panel of scene.layers.filter(layer => layer.kind === 'architecture' || layer.kind === 'landmark')) {
         if (seen.has(panel.id)) continue; seen.add(panel.id);
-        const source = LR_SCENERY.source(district, panel), data = source.getContext('2d').getImageData(0, 0, source.width, source.height).data;
+        const source = LR_SCENERY.source(district, panel), fullLandmark = panel.kind === 'landmark';
+        let canvas = source;
+        if (fullLandmark) {
+          canvas = document.createElement('canvas'); canvas.width = source.naturalWidth; canvas.height = source.naturalHeight;
+          canvas.getContext('2d').drawImage(source, 0, 0);
+        }
+        const data = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
         let clear = 0, opaque = 0, unmaskedEdgeRun = 0;
         for (let i = 3; i < data.length; i += 4 * 31) {if (data[i] === 0) clear++; if (data[i] >= 250) opaque++;}
         // Tall opaque strips exactly on a source boundary are severed foliage
         // or architecture. The short street trees cannot conceal these upper
         // silhouettes; transparency elsewhere in the image is not sufficient.
-        for (const x of [0, source.width - 1]) {
+        for (const x of [0, canvas.width - 1]) {
           let run = 0;
           for (let y = 0; y < 650; y++) {
-            run = data[(y * source.width + x) * 4 + 3] >= 250 ? run + 1 : 0;
+            run = data[(y * canvas.width + x) * 4 + 3] >= 250 ? run + 1 : 0;
             unmaskedEdgeRun = Math.max(unmaskedEdgeRun, run);
           }
         }
-        records.push({id: panel.id, width: source.width, height: source.height,
-          unchangedNativeCrop: rawSignatures(panel.cropTop).has(signature(source)), clearSamples: clear, opaqueSamples: opaque, unmaskedEdgeRun});
+        records.push({id: panel.id, kind: panel.kind, width: canvas.width, height: canvas.height,
+          displayAspect: panel.width / panel.height,
+          unchangedNativeCrop: fullLandmark ? LR_SCENERY.images.includes(source) : rawSignatures(panel.cropTop).has(signature(canvas)),
+          clearSamples: clear, opaqueSamples: opaque, unmaskedEdgeRun});
       }
     }
     return records;
   });
   for (const asset of report.native) {
-    assert.equal(asset.width, 1024); assert.equal(asset.height, 1430);
+    assert.equal(asset.width, asset.kind === 'landmark' ? 1536 : 1024);
+    assert.equal(asset.height, asset.kind === 'landmark' ? 1024 : 1430);
+    if (asset.kind === 'landmark') assert.ok(Math.abs(asset.displayAspect - 1.5) < 1e-9, 'The complete skyline preserves its native landscape aspect');
     assert.equal(asset.unchangedNativeCrop, true, `${asset.id}: native pixels remain unchanged by scaling or feathering`);
     assert.ok(asset.clearSamples > 100 && asset.opaqueSamples > 100, `${asset.id}: architecture is a separated silhouette, not an opaque scene rectangle`);
     if (!asset.id.startsWith('park:')) assert.ok(asset.unmaskedEdgeRun < 32,

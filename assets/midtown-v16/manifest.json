@@ -1,0 +1,56 @@
+{
+  "version": "1.6.0",
+  "nativeArtwork": true,
+  "files": [
+    {
+      "path": "assets/midtown-v16/dry-city-atmosphere.webp",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "bytes": 600118,
+      "sha256": "88a66d07771bce5f5de212b92f22606d29a6e3cde8335e8c08c19067cb6754f5"
+    },
+    {
+      "path": "assets/midtown-v16/landmark-panorama.webp",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "bytes": 352766,
+      "sha256": "d992726911c8ffff4d79685678964bce7d59747734d5205cd5d598fa9358c3cf"
+    },
+    {
+      "path": "assets/midtown-v16/library-frontage.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "bytes": 350624,
+      "sha256": "6ebd5e6c23664bc9983d100d24c4990cdaf0e998042772a206fe794c157acf4d"
+    },
+    {
+      "path": "assets/midtown-v16/masonry-street.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "bytes": 364152,
+      "sha256": "ded2cba0ff43e1dacfc007042307dced3205751a83f365719f45064583cf633d"
+    },
+    {
+      "path": "assets/midtown-v16/stone-foundation.webp",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "bytes": 733200,
+      "sha256": "6e93e7ef97d7b3afc5bf9e69c741ba42b82157511427c7c712e392f762fc7763"
+    }
+  ]
+}

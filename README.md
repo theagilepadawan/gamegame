@@ -4,11 +4,12 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
-## Midtown atmosphere — 1.5
+## Midtown immersion — 1.6
 
-- **Midtown atmosphere:** warm layered office towers, reflective glass, limestone cafés and grounded construction restore the earlier city character. Two garden stretches provide contrast; the approved venue positions and camera timing are preserved.
+- **Midtown landmarks:** one wide Empire State/Chrysler panorama opens across three logical street slots. Lower library and masonry frontages vary the roofline around glass offices, cafés, construction and garden stretches.
+- **Dry, grounded streets:** matte city paving and painted stone foundations replace the water-like surfaces. Street architecture, trees, venue entrances and the office host share the jump-camera projection.
 - **Venue pacing:** ordinary streets establish each chapter before its Easter eggs appear. Kabin and LEI, and the four Midtown frontages, are separated using the actual scenery camera and complete frontage bounds.
-- **505 Fifth:** the office entrance follows the supplied reference: cobalt-blue lobby, cyan perimeter lighting, dark lettering and two full revolving glass doors. A new office host uses the existing painted character style.
+- **505 Fifth:** the office entrance follows the supplied reference: cobalt-blue lobby, cyan perimeter lighting, dark lettering and two full revolving glass doors. Its office host uses the existing painted character style.
 - **Central Park restored:** the original Bow Bridge painting, Ramble and Bethesda extensions, camera, foreground scenery and lake animation are restored from the approved pre-1.3 version.
 - **Game objects:** native painted pickups, market-risk obstacles and clearer directional signs add material detail while preserving collision and collection behavior.
 - **City continuity:** Lower Manhattan keeps One World Trade Center, the complete Brooklyn Bridge, Wall Street and Charging Bull. The chapter map reads NEW YORK without a redundant world number.

@@ -16,11 +16,11 @@
       originalIndex: 4, loopStart: 21, backdropScale: 1,
       // Every entry is a complete native-size block. Anonymous streets can
       // recur; venues and the Midtown skyline occur exactly once.
-      route: [6, 7, 8, 6, 4, 7, 1, 6, 0, 7, 8, 6, 2, 7, 6, 1, 3, 6, 8, 7, 5, 6, 7],
-      backdrop: "assets/midtown-v15/atmosphere.webp",
-      names: ["joju", "bryant-garden", "omars", "gussy", "midtown-skyline", "fifth-avenue", "glass-canyon", "limestone-cafe", "construction-corner"],
-      files: ["assets/art-v2/midtown-joju.webp", "assets/art-v2/midtown-garden.webp", "assets/art-v2/midtown-omars.webp", "assets/art-v2/midtown-gussy.webp", "assets/art-v2/midtown-skyline.webp", "assets/art-v2/midtown-fifth.webp", "assets/midtown-v15/glass-canyon.webp", "assets/midtown-v15/limestone-cafe.webp", "assets/midtown-v15/construction-corner.webp"],
-      cropTops: [78, 45, 78, 40, 47, 128, 130, 0, 0],
+      route: [6, 9, 10, 10, 4, 10, 1, 10, 0, 7, 8, 10, 2, 6, 10, 1, 3, 10, 8, 7, 5, 10, 6],
+      backdrop: "assets/midtown-v16/dry-city-atmosphere.webp",
+      names: ["joju", "bryant-garden", "omars", "gussy", "midtown-skyline", "fifth-avenue", "glass-canyon", "limestone-cafe", "construction-corner", "library", "masonry-street"],
+      files: ["assets/art-v2/midtown-joju.webp", "assets/art-v2/midtown-garden.webp", "assets/art-v2/midtown-omars.webp", "assets/art-v2/midtown-gussy.webp", "assets/midtown-v16/landmark-panorama.webp", "assets/art-v2/midtown-fifth.webp", "assets/midtown-v15/glass-canyon.webp", "assets/midtown-v15/limestone-cafe.webp", "assets/midtown-v15/construction-corner.webp", "assets/midtown-v16/library-frontage.webp", "assets/midtown-v16/masonry-street.webp"],
+      cropTops: [78, 45, 78, 40, 0, 128, 130, 0, 0, 0, 170],
       contentScales: { 8: 1130 / 1325 }
     }
   };
@@ -36,10 +36,18 @@
   });
   var joinTree = load("assets/art-v2/city-plane-tree.webp");
   var bridge = load("assets/art-v2/downtown-bridge-wide.webp");
+  var foundationImage = load("assets/midtown-v16/stone-foundation.webp");
+  function projection(id, run, cameraY) {
+    if (id !== "midtown" || !run) return { streetOffset: 0, skylineOffset: 0 };
+    var floor = run.floorY;
+    if (!Number.isFinite(floor) && typeof run.floorAt === "function") floor = run.floorAt(run.x);
+    var offset = Number.isFinite(floor) && Number.isFinite(cameraY) ? floor + cameraY - 422 : 0;
+    return { streetOffset: offset, skylineOffset: offset * .18 };
+  }
   function modeNow() {
     return window.longRun && window.longRun.course && window.longRun.course.mode === "endless" ? "endless" : "chapter";
   }
-  function layout(id, distance, W, H, mode) {
+  function layout(id, distance, W, H, mode, view) {
     if (id === "park" && window.NBIMParkScenery) return NBIMParkScenery.layout(id, distance, W, H, mode);
     id = definitions[id] ? id : "opening";
     var def = definitions[id], height = id === "opening" ? H : H + 16;
@@ -69,7 +77,8 @@
     var scroll = endless ? travel : Math.min(travel, Math.max(0, stripWidth - W));
     var first = Math.max(0, Math.floor(scroll / stride)), last = Math.ceil((scroll + W) / stride);
     if (!endless) last = Math.min(last, total - 1);
-    var panels = [], y = id === "opening" ? 0 : -8;
+    var streetOffset = id === "midtown" && Number.isFinite(view && view.streetOffset) ? view.streetOffset : 0;
+    var panels = [], y = id === "opening" ? 0 : -8 + streetOffset;
     for (var index = first; index <= last; index++) {
       var routeIndex = index < total ? index : def.loopStart + (index - total) % (total - def.loopStart);
       var sourceIndex = def.route[routeIndex];
@@ -80,12 +89,26 @@
       panels.push({ id: id + ":" + def.names[sourceIndex], kind: "architecture", segment: index, routeIndex: routeIndex, sourceIndex: sourceIndex,
         original: sourceIndex === def.originalIndex, mirrored: false, variant: null,
         x: x + (width - contentWidth) / 2, y: y, width: contentWidth, height: contentHeight,
-        slotX: x, slotWidth: width, contentScale: contentScale, sourceWidth: SOURCE_W, sourceHeight: SOURCE_H,
+        slotX: x, slotWidth: width, contentScale: contentScale, vista: id === "midtown" && index >= 3 && index <= 5, sourceWidth: SOURCE_W, sourceHeight: SOURCE_H,
         nativeWidth: SOURCE_W, nativeHeight: 1536, cropTop: def.cropTops[sourceIndex] });
     }
     var atmosphereDrift = Math.min(scroll * .025, W * .18);
     var layers = [{ id: id + ":atmosphere", kind: "atmosphere", sourceIndex: -1, original: false,
       x: -atmosphereDrift, y: 0, width: W * 1.18, height: H * def.backdropScale }];
+    // A single wide landmark view replaces three foreground blocks. It moves
+    // at its own depth; no repeated portrait tile or foreground tower hides it.
+    var landmark = null;
+    if (id === "midtown") {
+      var landmarkWidth = stride * 2.25, landmarkScale = landmarkWidth / 1536;
+      var landmarkX = stride * 3 - scroll * .82;
+      landmark = { id: "midtown:empire-state-chrysler", kind: "landmark", sourceIndex: 4, original: true,
+        x: landmarkX, y: H * .824 + streetOffset - 891 * landmarkScale,
+        width: landmarkWidth, height: 1024 * landmarkScale,
+        nativeWidth: 1536, nativeHeight: 1024, contactY: H * .824 + streetOffset,
+        empireTip: [landmarkX + 604 * landmarkScale, H * .824 + streetOffset - 590 * landmarkScale],
+        chryslerTip: [landmarkX + 1101 * landmarkScale, H * .824 + streetOffset - 471 * landmarkScale] };
+      if (landmark.x < W && landmark.x + landmark.width > 0) layers.push(landmark);
+    }
     if (id === "opening") {
       var bridgeWidth = stride * 2.35, bridgeHeight = bridgeWidth * 724 / 2171;
       var bridgeX = stride * def.bridgeBlock - scroll - bridgeWidth / 2;
@@ -93,12 +116,13 @@
         kind: "bridge", sourceIndex: 6, original: false, x: bridgeX, y: H * .61 - bridgeHeight * 593 / 724,
         width: bridgeWidth, height: bridgeHeight, nativeWidth: 2171, nativeHeight: 724 });
     }
-    layers = layers.concat(panels);
+    layers = layers.concat(panels.filter(function (panel) { return !panel.vista; }));
     // Complete foreground trees overlap the ends of architectural groups. Their
     // organic, opaque foliage is a physical occluder; building pixels never fade.
     if (id !== "park") {
-      var rootY = H * .824;
+      var rootY = H * .824 + streetOffset;
       for (var boundary = Math.max(0, first); boundary <= last + 1; boundary++) {
+        if (id === "midtown" && boundary >= 3 && boundary <= 6) continue;
         // Keep the approved foliage at venue entrances. Between ordinary
         // Midtown offices, smaller street trees let the city canyon read.
         var treeProfile = [.43, .39, .46, .41];
@@ -122,7 +146,9 @@
       sourceCount: def.names.length, loopSourceIndices: def.route.slice(def.loopStart),
       panelCount: total, originalIndex: def.originalIndex, loopStart: def.loopStart, initialOffset: initialOffset,
       introHold: hold, introEase: ease, parallaxRate: rate, clamped: scroll < travel,
-      cropTops: def.cropTops.slice(), authoredLayers: true, panels: panels, layers: layers };
+      cropTops: def.cropTops.slice(), authoredLayers: true, streetOffset: streetOffset, landmark: landmark,
+      urbanGround: id === "midtown" ? { dry: true, opaqueFrom: H * 823 / 1024, bottom: H, material: "matte-asphalt-and-stone" } : null,
+      panels: panels, layers: layers };
   }
   function source(id, panel, original) {
     if (id === "park" && window.NBIMParkScenery) return NBIMParkScenery.source(id, panel, original);
@@ -130,6 +156,7 @@
     if (panel.kind === "atmosphere") return loaded(def.background) ? def.background : null;
     if (panel.kind === "tree") return loaded(joinTree) ? joinTree : null;
     if (panel.kind === "bridge") return loaded(bridge) ? bridge : null;
+    if (panel.kind === "landmark") return loaded(def.images[4]) ? def.images[4] : null;
     var img = def.images[panel.sourceIndex];
     if (!loaded(img)) return null;
     var crops = prepared.get(img);
@@ -142,9 +169,9 @@
     canvas.getContext("2d").drawImage(img, 0, top, SOURCE_W, SOURCE_H, 0, 0, SOURCE_W, SOURCE_H);
     crops.set(top, canvas); return canvas;
   }
-  function draw2d(ctx, id, original, distance, W, H, mode) {
+  function draw2d(ctx, id, original, distance, W, H, mode, view) {
     if (id === "park" && window.NBIMParkScenery) return NBIMParkScenery.draw2d(ctx, id, original, distance, W, H, mode);
-    var scene = layout(id, distance, W, H, mode);
+    var scene = layout(id, distance, W, H, mode, view);
     scene.layers.forEach(function (panel) {
       var img = source(id, panel);
       if (img) ctx.drawImage(img, panel.x, panel.y, panel.width, panel.height);
@@ -216,11 +243,12 @@
 
   window.LR_SCENERY = {
     layered: true, images: images, layout: layout, source: source, draw2d: draw2d, gl: drawGL,
+    projection: projection, foundationImage: foundationImage,
     get ready() { return images.every(loaded) && (!window.NBIMParkScenery || NBIMParkScenery.ready); },
     lamps: function () { return []; },
-    inspect: function (id, distance, W, H, mode) {
+    inspect: function (id, distance, W, H, mode, view) {
       if (id === "park" && window.NBIMParkScenery) return NBIMParkScenery.inspect(id, distance, W, H, mode);
-      var scene = layout(id, distance, W || 1000, H || 540, mode), def = definitions[scene.id];
+      var scene = layout(id, distance, W || 1000, H || 540, mode, view), def = definitions[scene.id];
       return Object.assign(scene, { ready: def.images.every(loaded) && loaded(def.background) && loaded(joinTree) && (scene.id !== "opening" || loaded(bridge)),
         loadedPanels: def.images.filter(loaded).length, maxSourceWidth: scene.id === "opening" ? 2171 : 1536, nativeHeight: 1536,
         landmarkSourceSize: scene.id === "opening" ? [2171, 724] : null,

@@ -1,5 +1,5 @@
 {
-  "version": "1.5.0",
+  "version": "1.6.0",
   "encoding": "WebP quality 95; native dimensions retained; no raster resize",
   "architectureCameraWindow": [
     1024,
@@ -188,7 +188,7 @@
       "hasAlpha": true,
       "bytes": 591598,
       "sha256": "f8aaa1b736e4d5782fa52428231d0e16c406282c89d9fd7c16f3445d12a5966d",
-      "activeInGame": true
+      "activeInGame": false
     },
     {
       "path": "assets/art-v2/park-0-bow-bridge.webp",

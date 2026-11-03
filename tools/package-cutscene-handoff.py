@@ -57,9 +57,19 @@ native_manifest = json.loads((ROOT / 'assets/art-v2/native-manifest.json').read_
 native_manifest['files'] = [item for item in native_manifest['files'] if item['path'] in used]
 native_manifest['handoffScope'] = 'Only current runtime city art is included; the rejected v1.3 Park rows are omitted.'
 (game / 'assets/art-v2/native-manifest.json').write_text(json.dumps(native_manifest, indent=2) + '\n')
-for folder in ['props-v14', 'office-host-v14', 'midtown-v15']:
+for folder in ['props-v14', 'office-host-v14', 'midtown-v15', 'midtown-v16']:
     if (ROOT / 'assets' / folder).exists():
         for p in (ROOT / 'assets' / folder).glob('*.json'):
+            if folder == 'midtown-v15':
+                data = json.loads(p.read_text())
+                if data.get('asset') and data['asset'] not in used:
+                    continue
+                if 'files' in data:
+                    data['files'] = [item for item in data['files'] if item['path'] in used]
+                target = game / 'assets' / folder / p.name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(json.dumps(data, indent=2) + '\n')
+                continue
             copy(p, game / 'assets' / folder / p.name)
 if (ROOT / 'art' / 'props-v14' / 'generated-atlas-native.png').exists():
     copy(ROOT / 'art' / 'props-v14' / 'generated-atlas-native.png',
@@ -117,7 +127,11 @@ aliases = {
     'downtown-wall-street.webp': 'assets/art-v2/downtown-wallstreet.webp',
     'midtown-505-blue-glass-entrance.webp': 'assets/art-v2/midtown-fifth.webp',
     'midtown-bryant-garden.webp': 'assets/art-v2/midtown-garden.webp',
-    'midtown-warm-skyline.webp': 'assets/midtown-v15/atmosphere.webp',
+    'midtown-dry-city.webp': 'assets/midtown-v16/dry-city-atmosphere.webp',
+    'midtown-empire-state-chrysler.webp': 'assets/midtown-v16/landmark-panorama.webp',
+    'midtown-library-frontage.webp': 'assets/midtown-v16/library-frontage.webp',
+    'midtown-masonry-street.webp': 'assets/midtown-v16/masonry-street.webp',
+    'midtown-stone-foundation.webp': 'assets/midtown-v16/stone-foundation.webp',
     'midtown-glass-offices.webp': 'assets/midtown-v15/glass-canyon.webp',
     'midtown-limestone-cafe.webp': 'assets/midtown-v15/limestone-cafe.webp',
     'midtown-construction.webp': 'assets/midtown-v15/construction-corner.webp',
@@ -137,9 +151,11 @@ if host_master.exists():
 captures = {
     'downtown-gameplay.png': 'review/art-direction/opening-start.png',
     'central-park-gameplay.png': 'review/art-direction/park-start.png',
-    'midtown-gameplay.png': 'review/midtown-v15/after/desktop-start.png',
-    'office-gameplay.png': 'review/midtown-v15/after/desktop-time-55.75.png',
-    'midtown-construction-gameplay.png': 'review/midtown-v15/after/desktop-time-28.png',
+    'midtown-gameplay.png': 'review/midtown-v16/after/desktop-start.png',
+    'midtown-landmarks-gameplay.png': 'review/midtown-v16-qa/after/desktop-landmark-vista.png',
+    'midtown-jump-gameplay.png': 'review/midtown-v16-qa/after/desktop-slope-jump-apex.png',
+    'office-gameplay.png': 'review/midtown-v16/after/desktop-time-55.75.png',
+    'midtown-construction-gameplay.png': 'review/midtown-v16/after/desktop-time-28.png',
     'downtown-bridge-gameplay.png': 'review/downtown/bridge-readable-1440.png',
 }
 for name, relative in captures.items():

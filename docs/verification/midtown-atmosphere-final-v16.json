@@ -1,0 +1,609 @@
+{
+  "version": "1.6.0",
+  "reference": "a45b2399415a6c818212aaca7c9a3a4e09268bed",
+  "motionCoverage": "tests/midtown-grounding.mjs",
+  "captures": [
+    {
+      "file": "desktop-start.png",
+      "name": "desktop",
+      "label": "start",
+      "time": 0,
+      "distance": 0,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 0,
+        "time": 0
+      }
+    },
+    {
+      "file": "desktop-time-15.png",
+      "name": "desktop",
+      "label": "time-15",
+      "time": 14.999999999999789,
+      "distance": 4799.999999999986,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 4799.999999999986,
+        "time": 14.999999999999789
+      }
+    },
+    {
+      "file": "desktop-time-28.png",
+      "name": "desktop",
+      "label": "time-28",
+      "time": 27.99999999999905,
+      "distance": 8960.000000000196,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 8960.000000000196,
+        "time": 27.99999999999905
+      }
+    },
+    {
+      "file": "desktop-time-39.png",
+      "name": "desktop",
+      "label": "time-39",
+      "time": 38.99999999999843,
+      "distance": 12479.999999999396,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 12479.999999999396,
+        "time": 38.99999999999843
+      }
+    },
+    {
+      "file": "desktop-time-50.png",
+      "name": "desktop",
+      "label": "time-50",
+      "time": 49.999999999997804,
+      "distance": 15999.999999998596,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 15999.999999998596,
+        "time": 49.999999999997804
+      }
+    },
+    {
+      "file": "desktop-time-55.75.png",
+      "name": "desktop",
+      "label": "time-55.75",
+      "time": 55.74999999999748,
+      "distance": 17839.99999999917,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 17839.99999999917,
+        "time": 55.74999999999748
+      }
+    },
+    {
+      "file": "desktop-joju-frontage.png",
+      "name": "desktop",
+      "label": "joju-frontage",
+      "time": 21.308333333332765,
+      "distance": 6818.6666666668825,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 6818.6666666668825,
+        "time": 21.308333333332765
+      }
+    },
+    {
+      "file": "desktop-omars-frontage.png",
+      "name": "desktop",
+      "label": "omars-frontage",
+      "time": 32.21666666666548,
+      "distance": 10309.333333333223,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 10309.333333333223,
+        "time": 32.21666666666548
+      }
+    },
+    {
+      "file": "desktop-gussy-frontage.png",
+      "name": "desktop",
+      "label": "gussy-frontage",
+      "time": 43.42499999999818,
+      "distance": 13895.999999999074,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 13895.999999999074,
+        "time": 43.42499999999818
+      }
+    },
+    {
+      "file": "desktop-fifth-frontage.png",
+      "name": "desktop",
+      "label": "fifth-frontage",
+      "time": 53.99999999999758,
+      "distance": 17279.999999998916,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 17279.999999998916,
+        "time": 53.99999999999758
+      }
+    },
+    {
+      "file": "mobile-dpr2-start.png",
+      "name": "mobile-dpr2",
+      "label": "start",
+      "time": 0,
+      "distance": 0,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 0,
+        "time": 0
+      }
+    },
+    {
+      "file": "mobile-dpr2-time-15.png",
+      "name": "mobile-dpr2",
+      "label": "time-15",
+      "time": 14.999999999999789,
+      "distance": 4799.999999999986,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 4799.999999999986,
+        "time": 14.999999999999789
+      }
+    },
+    {
+      "file": "mobile-dpr2-time-28.png",
+      "name": "mobile-dpr2",
+      "label": "time-28",
+      "time": 27.99999999999905,
+      "distance": 8960.000000000196,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 8960.000000000196,
+        "time": 27.99999999999905
+      }
+    },
+    {
+      "file": "mobile-dpr2-time-39.png",
+      "name": "mobile-dpr2",
+      "label": "time-39",
+      "time": 38.99999999999843,
+      "distance": 12479.999999999396,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 12479.999999999396,
+        "time": 38.99999999999843
+      }
+    },
+    {
+      "file": "mobile-dpr2-time-50.png",
+      "name": "mobile-dpr2",
+      "label": "time-50",
+      "time": 49.999999999997804,
+      "distance": 15999.999999998596,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 15999.999999998596,
+        "time": 49.999999999997804
+      }
+    },
+    {
+      "file": "mobile-dpr2-time-55.75.png",
+      "name": "mobile-dpr2",
+      "label": "time-55.75",
+      "time": 55.74999999999748,
+      "distance": 17839.99999999917,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 17839.99999999917,
+        "time": 55.74999999999748
+      }
+    },
+    {
+      "file": "mobile-dpr2-joju-frontage.png",
+      "name": "mobile-dpr2",
+      "label": "joju-frontage",
+      "time": 19.83333333333285,
+      "distance": 6346.666666666829,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 6346.666666666829,
+        "time": 19.83333333333285
+      }
+    },
+    {
+      "file": "mobile-dpr2-omars-frontage.png",
+      "name": "mobile-dpr2",
+      "label": "omars-frontage",
+      "time": 31.158333333332205,
+      "distance": 9970.666666666633,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 9970.666666666633,
+        "time": 31.158333333332205
+      }
+    },
+    {
+      "file": "mobile-dpr2-gussy-frontage.png",
+      "name": "mobile-dpr2",
+      "label": "gussy-frontage",
+      "time": 42.79166666666488,
+      "distance": 13693.333333332454,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 13693.333333332454,
+        "time": 42.79166666666488
+      }
+    },
+    {
+      "file": "mobile-dpr2-fifth-frontage.png",
+      "name": "mobile-dpr2",
+      "label": "fifth-frontage",
+      "time": 53.76666666666426,
+      "distance": 17205.333333332215,
+      "rendered": {
+        "renderer": "pixi-webgl",
+        "environment": null,
+        "distance": 17205.333333332215,
+        "time": 53.76666666666426
+      }
+    }
+  ],
+  "timelines": [
+    {
+      "name": "desktop",
+      "W": 864,
+      "H": 540,
+      "heroX": 216,
+      "finishTime": 60.00833333333057,
+      "won": true,
+      "venues": [
+        {
+          "key": "joju",
+          "full": {
+            "time": 21.308333333332765,
+            "distance": 6818.6666666668825
+          },
+          "hero": {
+            "time": 24.866666666665896,
+            "distance": 7957.333333333679
+          }
+        },
+        {
+          "key": "omars",
+          "full": {
+            "time": 32.21666666666548,
+            "distance": 10309.333333333223
+          },
+          "hero": {
+            "time": 35.79166666666528,
+            "distance": 11453.333333332963
+          }
+        },
+        {
+          "key": "gussy",
+          "full": {
+            "time": 43.42499999999818,
+            "distance": 13895.999999999074
+          },
+          "hero": {
+            "time": 46.80833333333132,
+            "distance": 14978.666666665495
+          }
+        },
+        {
+          "key": "fifth",
+          "full": {
+            "time": 53.99999999999758,
+            "distance": 17279.999999998916
+          },
+          "hero": {
+            "time": 57.62499999999737,
+            "distance": 18439.999999999443
+          }
+        }
+      ],
+      "frames": [
+        {
+          "label": "start",
+          "time": 0,
+          "distance": 0
+        },
+        {
+          "label": "time-15",
+          "time": 14.999999999999789,
+          "distance": 4799.999999999986
+        },
+        {
+          "label": "time-28",
+          "time": 27.99999999999905,
+          "distance": 8960.000000000196
+        },
+        {
+          "label": "time-39",
+          "time": 38.99999999999843,
+          "distance": 12479.999999999396
+        },
+        {
+          "label": "time-50",
+          "time": 49.999999999997804,
+          "distance": 15999.999999998596
+        },
+        {
+          "label": "time-55.75",
+          "time": 55.74999999999748,
+          "distance": 17839.99999999917
+        },
+        {
+          "label": "joju-frontage",
+          "time": 21.308333333332765,
+          "distance": 6818.6666666668825
+        },
+        {
+          "label": "omars-frontage",
+          "time": 32.21666666666548,
+          "distance": 10309.333333333223
+        },
+        {
+          "label": "gussy-frontage",
+          "time": 43.42499999999818,
+          "distance": 13895.999999999074
+        },
+        {
+          "label": "fifth-frontage",
+          "time": 53.99999999999758,
+          "distance": 17279.999999998916
+        }
+      ]
+    },
+    {
+      "name": "mobile-dpr2",
+      "W": 1168.6153846153845,
+      "H": 540,
+      "heroX": 250,
+      "finishTime": 60.00833333333057,
+      "won": true,
+      "venues": [
+        {
+          "key": "joju",
+          "full": {
+            "time": 19.83333333333285,
+            "distance": 6346.666666666829
+          },
+          "hero": {
+            "time": 25.449999999999196,
+            "distance": 8144.0000000003665
+          }
+        },
+        {
+          "key": "omars",
+          "full": {
+            "time": 31.158333333332205,
+            "distance": 9970.666666666633
+          },
+          "hero": {
+            "time": 36.79166666666522,
+            "distance": 11773.33333333289
+          }
+        },
+        {
+          "key": "gussy",
+          "full": {
+            "time": 42.79166666666488,
+            "distance": 13693.333333332454
+          },
+          "hero": {
+            "time": 48.23333333333124,
+            "distance": 15434.666666665391
+          }
+        },
+        {
+          "key": "fifth",
+          "full": {
+            "time": 53.76666666666426,
+            "distance": 17205.333333332215
+          },
+          "hero": {
+            "time": 59.4583333333306,
+            "distance": 19026.666666666377
+          }
+        }
+      ],
+      "frames": [
+        {
+          "label": "start",
+          "time": 0,
+          "distance": 0
+        },
+        {
+          "label": "time-15",
+          "time": 14.999999999999789,
+          "distance": 4799.999999999986
+        },
+        {
+          "label": "time-28",
+          "time": 27.99999999999905,
+          "distance": 8960.000000000196
+        },
+        {
+          "label": "time-39",
+          "time": 38.99999999999843,
+          "distance": 12479.999999999396
+        },
+        {
+          "label": "time-50",
+          "time": 49.999999999997804,
+          "distance": 15999.999999998596
+        },
+        {
+          "label": "time-55.75",
+          "time": 55.74999999999748,
+          "distance": 17839.99999999917
+        },
+        {
+          "label": "joju-frontage",
+          "time": 19.83333333333285,
+          "distance": 6346.666666666829
+        },
+        {
+          "label": "omars-frontage",
+          "time": 31.158333333332205,
+          "distance": 9970.666666666633
+        },
+        {
+          "label": "gussy-frontage",
+          "time": 42.79166666666488,
+          "distance": 13693.333333332454
+        },
+        {
+          "label": "fifth-frontage",
+          "time": 53.76666666666426,
+          "distance": 17205.333333332215
+        }
+      ]
+    }
+  ],
+  "visualReviewRequired": [
+    "Empire State and Chrysler read as complete unique landmarks in the broad city view.",
+    "Varied lower rooflines and dry curb contact look natural at every ordinary-street join.",
+    "The actual jump-camera frames in the grounding suite expose no static water-like band.",
+    "All four venues keep clear full frontages; 505 retains blue/cyan lighting and its grounded host."
+  ],
+  "native": [
+    {
+      "name": "glass-canyon",
+      "kind": "architecture",
+      "width": 1024,
+      "height": 1536,
+      "expectedWidth": 1024,
+      "expectedHeight": 1536,
+      "sourceWidth": 1024,
+      "sourceHeight": 1430,
+      "cropTop": 130,
+      "unchangedNativeCrop": true,
+      "clear": 480415,
+      "solid": 960154,
+      "edgeRun": 0
+    },
+    {
+      "name": "limestone-cafe",
+      "kind": "architecture",
+      "width": 1024,
+      "height": 1536,
+      "expectedWidth": 1024,
+      "expectedHeight": 1536,
+      "sourceWidth": 1024,
+      "sourceHeight": 1430,
+      "cropTop": 0,
+      "unchangedNativeCrop": true,
+      "clear": 524348,
+      "solid": 890461,
+      "edgeRun": 0
+    },
+    {
+      "name": "construction-corner",
+      "kind": "architecture",
+      "width": 1024,
+      "height": 1536,
+      "expectedWidth": 1024,
+      "expectedHeight": 1536,
+      "sourceWidth": 1024,
+      "sourceHeight": 1430,
+      "cropTop": 0,
+      "unchangedNativeCrop": true,
+      "clear": 717503,
+      "solid": 645176,
+      "edgeRun": 0
+    },
+    {
+      "name": "library-frontage",
+      "kind": "architecture",
+      "width": 1024,
+      "height": 1536,
+      "expectedWidth": 1024,
+      "expectedHeight": 1536,
+      "sourceWidth": 1024,
+      "sourceHeight": 1430,
+      "cropTop": 0,
+      "unchangedNativeCrop": true,
+      "clear": 866328,
+      "solid": 571660,
+      "edgeRun": 0
+    },
+    {
+      "name": "masonry-street",
+      "kind": "architecture",
+      "width": 1024,
+      "height": 1536,
+      "expectedWidth": 1024,
+      "expectedHeight": 1536,
+      "sourceWidth": 1024,
+      "sourceHeight": 1430,
+      "cropTop": 170,
+      "unchangedNativeCrop": true,
+      "clear": 873044,
+      "solid": 554762,
+      "edgeRun": 0
+    },
+    {
+      "name": "dry-city-atmosphere",
+      "kind": "atmosphere",
+      "width": 1536,
+      "height": 1024,
+      "expectedWidth": 1536,
+      "expectedHeight": 1024,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "cropTop": 0,
+      "unchangedNativeCrop": true,
+      "clear": 0,
+      "solid": 1572864,
+      "edgeRun": 650
+    },
+    {
+      "name": "landmark-panorama",
+      "kind": "landmark",
+      "width": 1536,
+      "height": 1024,
+      "expectedWidth": 1536,
+      "expectedHeight": 1024,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024,
+      "cropTop": 0,
+      "unchangedNativeCrop": true,
+      "clear": 1094603,
+      "solid": 430421,
+      "edgeRun": 0
+    },
+    {
+      "name": "stone-foundation",
+      "kind": "foundation",
+      "width": 1254,
+      "height": 1254,
+      "expectedWidth": 1254,
+      "expectedHeight": 1254,
+      "sourceWidth": 1254,
+      "sourceHeight": 1254,
+      "cropTop": 0,
+      "unchangedNativeCrop": true,
+      "clear": 0,
+      "solid": 1572516,
+      "edgeRun": 650
+    }
+  ]
+}

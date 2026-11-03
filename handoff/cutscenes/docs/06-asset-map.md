@@ -34,12 +34,16 @@ The original inline office/host photographs were visible in the conversation but
 | `references/locations/downtown-wall-street.webp` | `game/assets/art-v2/downtown-wallstreet.webp` |
 | `references/locations/midtown-505-blue-glass-entrance.webp` | `game/assets/art-v2/midtown-fifth.webp` |
 | `references/locations/midtown-bryant-garden.webp` | `game/assets/art-v2/midtown-garden.webp` |
-| `references/locations/midtown-warm-skyline.webp` | `game/assets/midtown-v15/atmosphere.webp` |
+| `references/locations/midtown-dry-city.webp` | `game/assets/midtown-v16/dry-city-atmosphere.webp` |
+| `references/locations/midtown-empire-state-chrysler.webp` | `game/assets/midtown-v16/landmark-panorama.webp` |
+| `references/locations/midtown-library-frontage.webp` | `game/assets/midtown-v16/library-frontage.webp` |
+| `references/locations/midtown-masonry-street.webp` | `game/assets/midtown-v16/masonry-street.webp` |
+| `references/locations/midtown-stone-foundation.webp` | `game/assets/midtown-v16/stone-foundation.webp` |
 | `references/locations/midtown-glass-offices.webp` | `game/assets/midtown-v15/glass-canyon.webp` |
 | `references/locations/midtown-limestone-cafe.webp` | `game/assets/midtown-v15/limestone-cafe.webp` |
 | `references/locations/midtown-construction.webp` | `game/assets/midtown-v15/construction-corner.webp` |
 
-City architectural assets have transparent silhouettes intended for composition over their district atmosphere. Do not treat an isolated alpha panel as a completed scene or add a flat checkerboard behind it. `game/scripts/scenery.js` defines the current route, source crops and shared atmosphere. `game/scripts/park-scenery.js` preserves the approved three-painting Park camera. `opening-storefronts.js` and `midtown-storefronts.js` describe the venue placement and office frontage.
+City architectural assets have transparent silhouettes intended for composition over their district atmosphere. Do not treat an isolated alpha panel as a completed scene or add a flat checkerboard behind it. `game/scripts/scenery.js` defines the current route, landmark panorama, source crops and shared vertical street projection. `game/scripts/park-scenery.js` preserves the approved three-painting Park camera. `opening-storefronts.js` and `midtown-storefronts.js` describe the venue placement and office frontage. The three retained `midtown-v15` office/café/construction assets are still active; its reflective atmosphere and the older portrait skyline are superseded.
 
 `references/gameplay/downtown-gameplay.png`, `midtown-gameplay.png`, `central-park-gameplay.png` and `office-gameplay.png` show actual current rendering and scale. These contain gameplay/UI context; prepare clean picture frames before video generation. If there is a difference between an isolated painting and the live composition, inspect the renderer/camera rather than arbitrarily stretching the painting.
 

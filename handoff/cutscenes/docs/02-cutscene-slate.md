@@ -30,7 +30,7 @@ Keep likeness, costume, planted feet and coherent architecture throughout. Compo
 
 | Time | Picture and action | Camera and cut |
 |---|---|---|
-| 0.0–1.2 | Warm glass offices and a limestone café establish the dense v1.5 Midtown street; a few street trees soften the view. | Begin settled on a coherent composition using the current artwork. |
+| 0.0–1.2 | Warm glass offices and lower library/masonry frontages establish the dry v1.6 Midtown street; the wide landmark view has clear silhouettes. | Begin settled on a coherent composition using the current artwork. |
 | 1.2–3.7 | The runner crosses a short stretch left to right; a small gust lifts a few leaves. | One smooth tracking move; building geometry remains fixed. |
 | 3.7–5.0 | Runner exits toward the chapter's route; the camera settles on the ordinary streetscape. | Match the gameplay travel direction; retain breathing room. |
 

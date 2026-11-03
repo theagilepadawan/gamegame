@@ -1,0 +1,382 @@
+{
+  "reports": [
+    {
+      "id": "park",
+      "shape": "flat",
+      "distance": 0,
+      "changed": 0
+    },
+    {
+      "id": "park",
+      "shape": "flat",
+      "distance": 1257,
+      "changed": 0
+    },
+    {
+      "id": "park",
+      "shape": "flat",
+      "distance": 17401,
+      "changed": 0
+    },
+    {
+      "id": "park",
+      "shape": "uphill",
+      "distance": 0,
+      "changed": 0
+    },
+    {
+      "id": "park",
+      "shape": "uphill",
+      "distance": 1257,
+      "changed": 0
+    },
+    {
+      "id": "park",
+      "shape": "uphill",
+      "distance": 17401,
+      "changed": 0
+    },
+    {
+      "id": "park",
+      "shape": "downhill",
+      "distance": 0,
+      "changed": 0
+    },
+    {
+      "id": "park",
+      "shape": "downhill",
+      "distance": 1257,
+      "changed": 0
+    },
+    {
+      "id": "park",
+      "shape": "downhill",
+      "distance": 17401,
+      "changed": 0
+    },
+    {
+      "id": "park",
+      "shape": "wave",
+      "distance": 0,
+      "changed": 0
+    },
+    {
+      "id": "park",
+      "shape": "wave",
+      "distance": 1257,
+      "changed": 0
+    },
+    {
+      "id": "park",
+      "shape": "wave",
+      "distance": 17401,
+      "changed": 0
+    },
+    {
+      "id": "opening",
+      "shape": "flat",
+      "distance": 0,
+      "changed": 0
+    },
+    {
+      "id": "opening",
+      "shape": "flat",
+      "distance": 1257,
+      "changed": 0
+    },
+    {
+      "id": "opening",
+      "shape": "flat",
+      "distance": 17401,
+      "changed": 0
+    },
+    {
+      "id": "opening",
+      "shape": "uphill",
+      "distance": 0,
+      "changed": 0
+    },
+    {
+      "id": "opening",
+      "shape": "uphill",
+      "distance": 1257,
+      "changed": 0
+    },
+    {
+      "id": "opening",
+      "shape": "uphill",
+      "distance": 17401,
+      "changed": 0
+    },
+    {
+      "id": "opening",
+      "shape": "downhill",
+      "distance": 0,
+      "changed": 0
+    },
+    {
+      "id": "opening",
+      "shape": "downhill",
+      "distance": 1257,
+      "changed": 0
+    },
+    {
+      "id": "opening",
+      "shape": "downhill",
+      "distance": 17401,
+      "changed": 0
+    },
+    {
+      "id": "opening",
+      "shape": "wave",
+      "distance": 0,
+      "changed": 0
+    },
+    {
+      "id": "opening",
+      "shape": "wave",
+      "distance": 1257,
+      "changed": 0
+    },
+    {
+      "id": "opening",
+      "shape": "wave",
+      "distance": 17401,
+      "changed": 0
+    },
+    {
+      "id": "midtown",
+      "shape": "flat",
+      "distance": 0,
+      "changed": 262215
+    },
+    {
+      "id": "midtown",
+      "shape": "flat",
+      "distance": 1257,
+      "changed": 262245
+    },
+    {
+      "id": "midtown",
+      "shape": "flat",
+      "distance": 17401,
+      "changed": 262245
+    },
+    {
+      "id": "midtown",
+      "shape": "uphill",
+      "distance": 0,
+      "changed": 284386
+    },
+    {
+      "id": "midtown",
+      "shape": "uphill",
+      "distance": 1257,
+      "changed": 284406
+    },
+    {
+      "id": "midtown",
+      "shape": "uphill",
+      "distance": 17401,
+      "changed": 284401
+    },
+    {
+      "id": "midtown",
+      "shape": "downhill",
+      "distance": 0,
+      "changed": 285300
+    },
+    {
+      "id": "midtown",
+      "shape": "downhill",
+      "distance": 1257,
+      "changed": 285326
+    },
+    {
+      "id": "midtown",
+      "shape": "downhill",
+      "distance": 17401,
+      "changed": 285329
+    },
+    {
+      "id": "midtown",
+      "shape": "wave",
+      "distance": 0,
+      "changed": 261972
+    },
+    {
+      "id": "midtown",
+      "shape": "wave",
+      "distance": 1257,
+      "changed": 265157
+    },
+    {
+      "id": "midtown",
+      "shape": "wave",
+      "distance": 17401,
+      "changed": 260871
+    }
+  ],
+  "projection": [
+    {
+      "key": "joju",
+      "offset": -60,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "omars",
+      "offset": -60,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "gussy",
+      "offset": -60,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "fifth",
+      "offset": -60,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "joju",
+      "offset": 0,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "omars",
+      "offset": 0,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "gussy",
+      "offset": 0,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "fifth",
+      "offset": 0,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "joju",
+      "offset": 23.018645,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "omars",
+      "offset": 23.018645,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "gussy",
+      "offset": 23.018645,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "fifth",
+      "offset": 23.018645,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "joju",
+      "offset": 75,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "omars",
+      "offset": 75,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "gussy",
+      "offset": 75,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "fifth",
+      "offset": 75,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "joju",
+      "offset": 220,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "omars",
+      "offset": 220,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "gussy",
+      "offset": 220,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    },
+    {
+      "key": "fifth",
+      "offset": 220,
+      "sameX": true,
+      "quadShift": true,
+      "hostShift": true,
+      "contactShift": true
+    }
+  ]
+}

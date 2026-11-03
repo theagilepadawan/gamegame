@@ -1,0 +1,24 @@
+{
+  "version": "1.6.0",
+  "baseReference": "21a147b7a7579165134787e779c345a89d7c2966",
+  "url": "http://127.0.0.1:4181/release/The-Long-Run-NBIM.html",
+  "suites": [
+    "midtown-atmosphere",
+    "midtown-grounding",
+    "scenery",
+    "art-layers",
+    "venues",
+    "venue-pacing",
+    "office-host",
+    "water",
+    "standalone"
+  ],
+  "passed": 9,
+  "htmlBytes": 40427626,
+  "embeddedAssets": 66,
+  "htmlSha256": "7da5731cecf44389ef97c32b1974429a24a5eb78dc291dda175c5132dd0f9ff2",
+  "scope": "Nine affected suites against the exact standalone. Grounding ran in a separate browser while the other eight ran sequentially. Historical full-suite results remain separate.",
+  "command": "TEST_URL=http://127.0.0.1:4181/release/The-Long-Run-NBIM.html PACING_CAPTURE=0 node tests/<suite>.mjs",
+  "log": "PASS: exact venue placement/timing, unchanged Downtown/Park pixels, original assets, native Midtown art and desktop/mobile captures.\n[scenery] finite Story and landmark-free Endless geometry passed\nPASS: unique Story panels, no mirrored landmarks, Endless continuation, complete assets, Pixi/WebGL/Canvas paths, desktop and mobile scene captures.\n[art-layers] 22 native crops and alpha silhouettes passed\n[art-layers] opening joins and moving frames captured\n[art-layers] midtown joins and moving frames captured\n[art-layers] park joins and moving frames captured\nPASS: 22 native architectural crops, separated alpha silhouettes, complete chapter coverage, every reachable join, moving join sequences, and DPR2 captures. Captures still require visual review.\nPASS venues desktop: separate blocks, native full frontages, complete 505 entrance before victory, tyre contact and once-only greeting.\nPASS venues mobile-dpr2: separate blocks, native full frontages, complete 505 entrance before victory, tyre contact and once-only greeting.\nPASS venues canvas: separate blocks, native full frontages, complete 505 entrance before victory, tyre contact and once-only greeting.\n[venue-pacing] desktop opening: kabin native 21.70s, frontage 25.87s, hero 35.40s; lei native 53.13s, frontage 53.67s, hero 64.43s\n[venue-pacing] desktop midtown: joju native 19.10s, frontage 19.67s, hero 24.87s; omars native 30.03s, frontage 30.63s, hero 35.80s; gussy native 41.03s, frontage 41.47s, hero 46.83s; fifth native 51.87s, frontage 52.50s, hero 57.63s\n[venue-pacing] mobile-dpr2 opening: kabin native 18.97s, frontage 20.87s, hero 37.93s; lei native 53.07s, frontage 53.67s, hero 68.17s\n[venue-pacing] mobile-dpr2 midtown: joju native 17.53s, frontage 18.13s, hero 25.47s; omars native 28.87s, frontage 29.50s, hero 36.80s; gussy native 40.30s, frontage 40.77s, hero 48.23s; fifth native 51.53s, frontage 52.23s, hero 59.47s\n[venue-pacing] compact opening: kabin native 21.20s, frontage 25.83s, hero 36.17s; lei native 53.13s, frontage 53.67s, hero 65.40s\n[venue-pacing] compact midtown: joju native 18.63s, frontage 19.20s, hero 24.97s; omars native 29.67s, frontage 30.27s, hero 36.00s; gussy native 40.80s, frontage 41.23s, hero 47.17s; fifth native 51.77s, frontage 52.43s, hero 58.10s\nPASS: actual chapter starts, alpha-tested native/frontage reveal, runner-center timing, ordinary blocks between venues, no simultaneous named frontages, complete entrances before victory.\nPASS office host desktop: late chapter, grounded scale, stable head/feet, once-only wrist greeting, reduced motion and pause.\nPASS office host mobile-dpr2: late chapter, grounded scale, stable head/feet, once-only wrist greeting, reduced motion and pause.\nPASS office host canvas: late chapter, grounded scale, stable head/feet, once-only wrist greeting, reduced motion and pause.\nPASS water pixi: 27742 changed rendered lake pixels, stable bank, frozen pause and reduced motion.\nPASS: 40 baseline assets unchanged; release fonts, scripts, art and audio load without external requests; Contrarian remains playable offline.\n",
+  "groundingLog": "Artifact: 40427626 bytes; SHA-256 7da5731cecf44389ef97c32b1974429a24a5eb78dc291dda175c5132dd0f9ff2; 66 unique embedded data assets.\nPASS Midtown grounding desktop: landmark vista, real double/triple jumps and jetpack, projected architecture/venues/host, opaque dry ground, renderer composition.\nPASS Midtown grounding mobile-dpr2: landmark vista, real double/triple jumps and jetpack, projected architecture/venues/host, opaque dry ground, renderer composition.\nPASS Midtown grounding canvas: landmark vista, real double/triple jumps and jetpack, projected architecture/venues/host, opaque dry ground, renderer composition.\n"
+}

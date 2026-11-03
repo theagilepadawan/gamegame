@@ -1,0 +1,25 @@
+[
+  {
+    "renderer": "pixi",
+    "motion": {
+      "changed": 27742,
+      "maximum": 147,
+      "meanDelta": 3.5815375
+    },
+    "fixedBank": {
+      "changed": 0,
+      "maximum": 0,
+      "meanDelta": 0
+    },
+    "paused": {
+      "changed": 0,
+      "maximum": 0,
+      "meanDelta": 0
+    },
+    "reduced": {
+      "changed": 0,
+      "maximum": 0,
+      "meanDelta": 0
+    }
+  }
+]

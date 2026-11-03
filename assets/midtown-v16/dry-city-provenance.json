@@ -1,0 +1,28 @@
+{
+  "version": "1.6.0",
+  "asset": "assets/midtown-v16/dry-city-atmosphere.webp",
+  "nativeDimensions": [
+    1536,
+    1024
+  ],
+  "mode": "RGB",
+  "sourceMaster": "/workspace/generated_images/exec-1821d8cb-3f0e-42a8-8476-ae51cd184a19.png",
+  "sourceSha256": "74a29f5dd59b321583ba767f3a0e2e4fbb35bc7f3fd005e1c2a700a09b882496",
+  "runtimeSha256": "88a66d07771bce5f5de212b92f22606d29a6e3cde8335e8c08c19067cb6754f5",
+  "runtimeBytes": 600118,
+  "encoding": "WebP quality 95, method 6; no resampling, cropping or pixel repainting outside imagegen",
+  "referenceInputs": [
+    "assets/midtown-v15/atmosphere.webp"
+  ],
+  "generation": "Imagegen edit preserving warm golden-hour palette, continuous city depth and street registration, replacing the wet reflective asphalt with dry matte warm-gray paving. Supporting architecture has varied flat/stepped masonry rooflines and no recognizable Empire State or Chrysler silhouette. Separate hero landmark artwork is composed at runtime.",
+  "registration": {
+    "sidewalkBackY": 773,
+    "curbTopY": 796,
+    "curbBottomY": 822,
+    "dryRoadExtentY": [
+      823,
+      1023
+    ]
+  },
+  "review": "Native generated image inspected. Bottom ~200 pixels read as solid matte asphalt with sparse joints and mineral texture; no water, puddles, mirror reflections, water-ripple glints or reflected vertical light bands. Warm layered anonymous Midtown masonry/glass buildings remain behind the low tree belt. No artificial enlargement is claimed."
+}

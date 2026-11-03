@@ -1,0 +1,55 @@
+{
+  "version": "1.6.0",
+  "purpose": "Distinct low and medium rooflines in Midtown, preserving clear sky for the unique landmark panorama.",
+  "artwork": "Generated with imagegen; one composition correction per design. No resizing, pixel repainting or alpha modification after generation.",
+  "encoding": "Native 1024x1536 RGBA PNG encoded to WebP at quality96; renderer applies the documented native crop.",
+  "palette": "Warm limestone and terracotta, bronze lighting, amber shop windows, cool blue shadows, dry matte paving.",
+  "assets": [
+    {
+      "path": "assets/midtown-v16/library-frontage.webp",
+      "master": "/workspace/generated_images/exec-d0eb4272-99d7-429e-a6c5-cbcfb2633106.png",
+      "initialGeneration": "/workspace/generated_images/exec-626f6148-e3b0-4a1d-bca6-e753de927566.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "alpha128Bounds": [
+        8,
+        440,
+        1016,
+        1149
+      ],
+      "recommendedCropTop": 0,
+      "nativePavementY": 1130,
+      "postCropPavementY": 1130,
+      "nativeCurbBottomY": 1148,
+      "bytes": 350624,
+      "sha256": "6ebd5e6c23664bc9983d100d24c4990cdaf0e998042772a206fe794c157acf4d",
+      "masterSha256": "782c515f1a1706a951af8e23a3f3e1b3fbc7c7cbbf73ba374706fef0a018f6c5"
+    },
+    {
+      "path": "assets/midtown-v16/masonry-street.webp",
+      "master": "/workspace/generated_images/exec-71602800-a60a-4d24-b0b3-3ef3d9a7641b.png",
+      "initialGeneration": "/workspace/generated_images/exec-c7c199a6-d6fc-45d3-93d6-9feb18df704f.png",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "alpha128Bounds": [
+        43,
+        491,
+        982,
+        1317
+      ],
+      "recommendedCropTop": 170,
+      "nativePavementY": 1300,
+      "postCropPavementY": 1130,
+      "nativeCurbBottomY": 1317,
+      "bytes": 364152,
+      "sha256": "ded2cba0ff43e1dacfc007042307dced3205751a83f365719f45064583cf633d",
+      "masterSha256": "9cd1682d6fabdd39479756db113b7142787417880c1466641995cc34a18aaf2b"
+    }
+  ]
+}
