@@ -1,0 +1,12 @@
+{
+  "reference": "assets/original-32.webp",
+  "reference_sha256": "dc3847d0736597cc89a56380e7e1e1c139188dfbe32fa39f7f830457e2a5d8e8",
+  "edit": "Localized skyline correction: replace Midtown towers and extra spires with Financial District offices. Preserve the complete painted street, One WTC, bridge, lamps and warm dusk composition.",
+  "generated_source": "/workspace/generated_images/exec-86eaf09e-42c4-4aca-9b09-b28d3b795854.png",
+  "path": "assets/downtown-v112/lower-manhattan.webp",
+  "sha256": "c09baf0aec5df1ba69bfce01b4bd82b579fb415c799e43f79290b40f7ca73636",
+  "dimensions": [
+    1536,
+    1024
+  ]
+}

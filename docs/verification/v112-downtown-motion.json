@@ -1,0 +1,1576 @@
+[
+  {
+    "profile": "desktop",
+    "runner": "nicolai",
+    "action": "ground",
+    "time": 0,
+    "distance": 0,
+    "camera": -4000,
+    "renderer": "pixi-webgl",
+    "grounded": true,
+    "flight": false,
+    "water": 0,
+    "kinds": [
+      "painting",
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ],
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": false,
+        "rect": {
+          "x": 2710.1083333333336,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": false,
+        "rect": {
+          "x": 3697.4,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  },
+  {
+    "profile": "desktop",
+    "runner": "nicolai",
+    "action": "double",
+    "time": 20,
+    "distance": 6822.75,
+    "camera": -3392.557516082186,
+    "renderer": "pixi-webgl",
+    "grounded": false,
+    "flight": false,
+    "water": 0,
+    "kinds": [
+      "painting",
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ],
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": false,
+        "rect": {
+          "x": 2065.140020456503,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": false,
+        "rect": {
+          "x": 3052.4316871231695,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  },
+  {
+    "profile": "desktop",
+    "runner": "nicolai",
+    "action": "ground",
+    "time": 36,
+    "distance": 11880,
+    "camera": -2687.2625262896545,
+    "renderer": "pixi-webgl",
+    "grounded": true,
+    "flight": false,
+    "water": 0,
+    "kinds": [
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": false,
+        "rect": {
+          "x": 1273.9773255813952,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": false,
+        "rect": {
+          "x": 2261.2689922480617,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  },
+  {
+    "profile": "desktop",
+    "runner": "nicolai",
+    "action": "flight",
+    "time": 52,
+    "distance": 17839.981481481384,
+    "camera": -563.3211327332135,
+    "renderer": "pixi-webgl",
+    "grounded": true,
+    "flight": true,
+    "water": 0,
+    "kinds": [
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": true,
+        "rect": {
+          "x": 341.5901566072398,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": false,
+        "rect": {
+          "x": 1328.881823273906,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  },
+  {
+    "profile": "desktop",
+    "runner": "nicolai",
+    "action": "ground",
+    "time": 56,
+    "distance": 19080.24999999989,
+    "camera": 0,
+    "renderer": "pixi-webgl",
+    "grounded": true,
+    "flight": false,
+    "water": 0,
+    "kinds": [
+      "painting",
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ],
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": true,
+        "rect": {
+          "x": 147.56095427793844,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": false,
+        "rect": {
+          "x": 1134.8526209446047,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  },
+  {
+    "profile": "desktop",
+    "runner": "nicolai",
+    "action": "ground",
+    "time": 66,
+    "distance": 22680.24999999989,
+    "camera": 0,
+    "renderer": "pixi-webgl",
+    "grounded": true,
+    "flight": false,
+    "water": 0,
+    "kinds": [
+      "painting",
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ],
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": false,
+        "rect": {
+          "x": -415.62767621301737,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": true,
+        "rect": {
+          "x": 571.6639904536489,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  },
+  {
+    "profile": "phone",
+    "runner": "trond",
+    "action": "ground",
+    "time": 0,
+    "distance": 0,
+    "camera": -4000,
+    "renderer": "pixi-webgl",
+    "grounded": true,
+    "flight": false,
+    "water": 0,
+    "kinds": [
+      "painting",
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ],
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": false,
+        "rect": {
+          "x": 2816.723717948718,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": false,
+        "rect": {
+          "x": 3804.0153846153844,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  },
+  {
+    "profile": "phone",
+    "runner": "trond",
+    "action": "double",
+    "time": 20,
+    "distance": 6822.75,
+    "camera": -3392.557516082186,
+    "renderer": "pixi-webgl",
+    "grounded": false,
+    "flight": false,
+    "water": 0,
+    "kinds": [
+      "painting",
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ],
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": false,
+        "rect": {
+          "x": 2206.9106376300274,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": false,
+        "rect": {
+          "x": 3194.202304296694,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  },
+  {
+    "profile": "phone",
+    "runner": "trond",
+    "action": "ground",
+    "time": 36,
+    "distance": 11880,
+    "camera": -2687.2625262896545,
+    "renderer": "pixi-webgl",
+    "grounded": true,
+    "flight": false,
+    "water": 0,
+    "kinds": [
+      "painting",
+      "painting",
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ],
+      [
+        1536,
+        1024
+      ],
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": false,
+        "rect": {
+          "x": 1458.8717799642222,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": false,
+        "rect": {
+          "x": 2446.1634466308888,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  },
+  {
+    "profile": "phone",
+    "runner": "trond",
+    "action": "flight",
+    "time": 52,
+    "distance": 17839.981481481384,
+    "camera": -563.3211327332135,
+    "renderer": "pixi-webgl",
+    "grounded": true,
+    "flight": true,
+    "water": 0,
+    "kinds": [
+      "painting",
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ],
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": true,
+        "rect": {
+          "x": 577.3061585065743,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": false,
+        "rect": {
+          "x": 1564.5978251732406,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  },
+  {
+    "profile": "phone",
+    "runner": "trond",
+    "action": "ground",
+    "time": 56,
+    "distance": 19080.24999999989,
+    "camera": 0,
+    "renderer": "pixi-webgl",
+    "grounded": true,
+    "flight": false,
+    "water": 0,
+    "kinds": [
+      "painting",
+      "painting",
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ],
+      [
+        1536,
+        1024
+      ],
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": true,
+        "rect": {
+          "x": 393.8528892809195,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": false,
+        "rect": {
+          "x": 1381.1445559475858,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  },
+  {
+    "profile": "phone",
+    "runner": "trond",
+    "action": "ground",
+    "time": 66,
+    "distance": 22680.24999999989,
+    "camera": 0,
+    "renderer": "pixi-webgl",
+    "grounded": true,
+    "flight": false,
+    "water": 0,
+    "kinds": [
+      "painting",
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ],
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": true,
+        "rect": {
+          "x": -138.6380667914318,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": true,
+        "rect": {
+          "x": 848.6535998752345,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  },
+  {
+    "profile": "canvas",
+    "runner": "nicolai",
+    "action": "ground",
+    "time": 0,
+    "distance": 0,
+    "camera": -4000,
+    "renderer": "canvas-fallback",
+    "grounded": true,
+    "flight": false,
+    "water": 0,
+    "kinds": [
+      "painting",
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ],
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": false,
+        "rect": {
+          "x": 2710.1083333333336,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": false,
+        "rect": {
+          "x": 3697.4,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  },
+  {
+    "profile": "canvas",
+    "runner": "nicolai",
+    "action": "double",
+    "time": 20,
+    "distance": 6825.5,
+    "camera": -3391.8492666335374,
+    "renderer": "canvas-fallback",
+    "grounded": false,
+    "flight": false,
+    "water": 0,
+    "kinds": [
+      "painting",
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ],
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": false,
+        "rect": {
+          "x": 2064.7098069193225,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": false,
+        "rect": {
+          "x": 3052.001473585989,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  },
+  {
+    "profile": "canvas",
+    "runner": "nicolai",
+    "action": "ground",
+    "time": 36,
+    "distance": 11880,
+    "camera": -2687.2625262896545,
+    "renderer": "canvas-fallback",
+    "grounded": true,
+    "flight": false,
+    "water": 0,
+    "kinds": [
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": false,
+        "rect": {
+          "x": 1273.9773255813952,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": false,
+        "rect": {
+          "x": 2261.2689922480617,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  },
+  {
+    "profile": "canvas",
+    "runner": "nicolai",
+    "action": "flight",
+    "time": 52,
+    "distance": 17843.194444444347,
+    "camera": -560.3277804160132,
+    "renderer": "canvas-fallback",
+    "grounded": true,
+    "flight": true,
+    "water": 0,
+    "kinds": [
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": true,
+        "rect": {
+          "x": 341.08751654864864,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": false,
+        "rect": {
+          "x": 1328.379183215315,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  },
+  {
+    "profile": "canvas",
+    "runner": "nicolai",
+    "action": "ground",
+    "time": 56,
+    "distance": 19080.24999999989,
+    "camera": 0,
+    "renderer": "canvas-fallback",
+    "grounded": true,
+    "flight": false,
+    "water": 0,
+    "kinds": [
+      "painting",
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ],
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": true,
+        "rect": {
+          "x": 147.56095427793844,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": false,
+        "rect": {
+          "x": 1134.8526209446047,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  },
+  {
+    "profile": "canvas",
+    "runner": "nicolai",
+    "action": "ground",
+    "time": 66,
+    "distance": 22680.24999999989,
+    "camera": 0,
+    "renderer": "canvas-fallback",
+    "grounded": true,
+    "flight": false,
+    "water": 0,
+    "kinds": [
+      "painting",
+      "painting"
+    ],
+    "native": [
+      [
+        1536,
+        1024
+      ],
+      [
+        1536,
+        1024
+      ]
+    ],
+    "shops": [
+      {
+        "key": "kabin",
+        "panel": 3,
+        "segment": 3,
+        "sourceRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "nativeRect": [
+          558,
+          610,
+          228,
+          114
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 3710,
+        "visible": false,
+        "rect": {
+          "x": -415.62767621301737,
+          "y": 321.6796875,
+          "width": 166.25,
+          "height": 60.1171875
+        }
+      },
+      {
+        "key": "lei",
+        "panel": 4,
+        "segment": 4,
+        "sourceRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "nativeRect": [
+          440,
+          622,
+          168,
+          108
+        ],
+        "integrated": true,
+        "fullArchitecture": true,
+        "nativeWidth": 1536,
+        "nativeHeight": 1024,
+        "renderMode": "painted",
+        "worldX": 4675.416666666666,
+        "visible": true,
+        "rect": {
+          "x": 571.6639904536489,
+          "y": 328.0078125,
+          "width": 122.5,
+          "height": 56.953125
+        }
+      }
+    ]
+  }
+]

@@ -36,9 +36,9 @@ try{
     });
   }
   console.log(`Testing ${env.TEST_URL}`);
-  // v1.6 is now the exact scenery oracle. The v1.9/1.10 composition and traffic
-  // tests remain historical: their replacement panorama is no longer loaded.
-  const selected = (env.BROWSER_TESTS || 'modes,menu,v16-restoration,midtown-grounding,office-host,props,water,gaps,map-avatars,standalone').split(',');
+  // Downtown follows the actual uploaded paintings. Midtown retains its current
+  // composition; verify both against independent snapshots.
+  const selected = (env.BROWSER_TESTS || 'modes,menu,downtown-reference,downtown-rendering,city-regressions,midtown-grounding,office-host,props,water,gaps,map-avatars,standalone').split(',');
   for(const test of selected) await run(`tests/${test}.mjs`);
   console.log('All release browser checks passed.');
 }finally{

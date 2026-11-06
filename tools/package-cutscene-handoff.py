@@ -269,6 +269,12 @@ location_sources = {
     'assets/scenery/park-2.webp': 'Central Park — approved Bethesda',
 }
 location_labels = {
+    'lower-manhattan.webp': 'Downtown — original warm composition with corrected skyline',
+    'opening-west.webp': 'Downtown — original Tribeca approach',
+    'opening-bridge.webp': 'Downtown — original painted bridge and promenade',
+    'opening-2.webp': 'Downtown — Seaport street hosting Kabin',
+    'opening-3.webp': 'Downtown — Battery street hosting LEI',
+    'opening-battery-loop.webp': 'Downtown — anonymous Endless continuation',
     'downtown-01.webp': 'Downtown — One World Trade Center',
     'downtown-02.webp': 'Downtown — Wall Street',
     'downtown-03.webp': 'Downtown — bounded harbor and Brooklyn Bridge',
@@ -289,7 +295,7 @@ location_labels = {
     'stone-foundation.webp': 'City terrain — native v1.6 stone foundation',
 }
 for relative in sorted(runtime_used):
-    if relative.startswith(('assets/art-v2/', 'assets/midtown-v15/', 'assets/midtown-v16/', 'assets/venue-details-v111/')):
+    if relative.startswith(('assets/art-v2/', 'assets/midtown-v15/', 'assets/midtown-v16/', 'assets/venue-details-v111/', 'assets/downtown-v112/', 'assets/scenery/opening-')):
         location_sources[relative] = location_labels.get(Path(relative).name, Path(relative).stem)
 assert any(path.startswith('assets/venue-details-v111/') for path in location_sources), 'Current venue detail art is not referenced by the runtime'
 locations = refs / 'locations'
@@ -299,7 +305,7 @@ location_index = [
     '# Native location references', '',
     'Open these exact files in the editable game tree. Each native image is stored once; no reduced substitute is used here.', '',
     'The runtime manifests and storefront metadata define course order, alignment and venue spacing. Gameplay captures show their final composition.', '',
-    'Downtown and Midtown use the exact v1.6 architecture, composition and movement. Six native venue-detail crops are painted once inside their original frontages by `venue-details.js`; they have no independent camera.', '',
+    'Downtown uses the complete warm paintings and camera from the actual supplied HTML; its former global river/cutout composition is removed. Midtown remains current. Six native venue-detail crops belong inside their street façades with no independent camera.', '',
     '| Location | Native pixels | Source |', '|---|---:|---|',
 ]
 for relative, label in location_sources.items():
@@ -322,7 +328,7 @@ if host_master.exists():
 # Use current Downtown/Midtown release captures. Park retains its unchanged art.
 # All required files must exist; do not silently substitute a previous city view.
 captures = {
-    'downtown-gameplay.png': 'release/Opening-v111-detail.png',
+    'downtown-gameplay.png': 'release/Opening-v112-street.png',
     'central-park-gameplay.png': 'release/Park-v111-seating.png',
     'midtown-gameplay.png': 'release/Midtown-v111-detail.png',
     'office-gameplay.png': 'release/Midtown-v111-office.png',

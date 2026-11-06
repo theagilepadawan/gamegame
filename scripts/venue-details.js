@@ -1,10 +1,10 @@
-/* Current native storefront details registered inside the v1.6 architecture.
+/* Current native storefront details registered inside their street façades.
    Prepared once per source crop; no independent camera, street or façade. */
 (function () {
   "use strict";
   const definitions = [
-    {id:"opening", panel:3, key:"kabin", rect:[310,903,410,235], path:"assets/venue-details-v111/kabin.webp"},
-    {id:"opening", panel:8, key:"lei", rect:[288,836,444,344], path:"assets/venue-details-v111/lei.webp"},
+    {id:"opening", panel:3, key:"kabin", rect:[558,610,228,114], path:"assets/venue-details-v111/kabin.webp"},
+    {id:"opening", panel:4, key:"lei", rect:[440,622,168,108], path:"assets/venue-details-v111/lei.webp"},
     {id:"midtown", panel:0, key:"joju", rect:[232,876,566,335], path:"assets/venue-details-v111/joju.webp"},
     {id:"midtown", panel:2, key:"omars", rect:[239,933,553,278], path:"assets/venue-details-v111/omars.webp"},
     {id:"midtown", panel:3, key:"gussy", rect:[208,847,691,335], path:"assets/venue-details-v111/gussy.webp"},
@@ -19,7 +19,10 @@
     paint(ctx, id, panel, cropTop) {
       const entry = find(id, panel); if (!entry) return;
       const [x,y,w,h] = entry.rect;
+      ctx.save();
+      if (id === "opening") ctx.filter = "brightness(.88) saturate(.9)";
       ctx.drawImage(entry.image, x, y - cropTop, w, h);
+      ctx.restore();
     },
     inspect: () => definitions.map(({id,panel,key,rect,image}) => ({id,panel,key,rect:rect.slice(),nativeWidth:image.naturalWidth,nativeHeight:image.naturalHeight}))
   };

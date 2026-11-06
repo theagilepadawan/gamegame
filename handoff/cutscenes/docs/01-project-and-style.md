@@ -26,31 +26,4 @@ Opening Bell already ends with a bespoke fund-history reveal: the course becomes
 | Asset quality | Detailed native source art; crisp, readable signs; believable feet/tyres on pavement; convincing scale and material. Raster enlargement does not create new detail. |
 | Music | Contrarian uses the supplied Pixel Adventure track exclusively during the event; ordinary level music must not overlap it. |
 
-The packaged v1.11 restores the exact v1.6 Downtown and Midtown art composition, layer movement and curbs after the user rejected v1.10's reinterpretation and added traffic. The six current venue fronts remain as native crops registered inside the v1.6 buildings. 505 keeps its full blue glass and host. Central Park retains its approved backdrop, with more deliberate tree groups and bench footings. Two later Midtown overheads move slowly on guide rails. Current Endless generation and map miniatures remain. Use the location index and current captures; the v1.9/v1.10 panorama and traffic modules are historical. A broader cartoon finance-prop pass is proposed separately in game/docs/finance-props-direction.md.
-
-## Rendering style
-
-Detailed 2D painted game art with readable silhouettes, realistic human proportions softened by illustrative brushwork, clear facial likeness and strong material cues. Characters can be expressive without becoming rubber-limbed caricatures. Keep clothing silhouettes and colors stable across frames. Avoid live-action footage, glossy plastic 3D characters, emoji props and heavy comic outlines.
-
-The camera should feel composed rather than restless: one slow push or short tracking movement per shot, settled starts and ends, and action that can be understood immediately. Architectural verticals stay straight. Foreground and background move at believable relative depths. Quiet environmental motion—leaves, water, clothing—supports the main action.
-
-## Brand colors and type
-
-These values come from the active theme in `game/game.css`:
-
-| Token | Value | Use |
-|---|---|---|
-| Midnight | `#001538` | Main field and dark type |
-| Off-white | `#f5f2eb` | Main light text |
-| Polar | `#c3e9ee` | Quiet supporting tone |
-| Sea | `#4ec2e2` | Cyan accent |
-| Sand | `#f4cea4` | Warm accent |
-| Electric blue | `#0026ff` | Strong brand accent |
-
-The UI uses the packaged Norges Bank font with browser fallbacks. Compose titles and logos as exact vector/HTML/editor overlays after video generation. Image-to-video models should not regenerate the NBIM mark, office lettering, financial numbers or UI. Leave readable text out of picture generation wherever practical.
-
-## Humor and character
-
-Recommended tone: a composed investor facing a ridiculous market, then a small knowing reaction. Examples of optional editorial captions: “A different perspective.”, “Hype is temporary.”, “The horizon is long.” and “Let it compound.” These are proposed captions, not quotations attributed to Nicolai or colleagues.
-
-The user mentioned SpaceX/IPO humor and possible mini-bosses as ideas. The implemented adversary is the **IPO Hype Machine**, firing branching price paths. Do not imply a real IPO date, official endorsement, actual holding, or breaking fund news. The cutscene can use a playful generic roadshow/rocket motif already present in the game.
+The packaged v1.12 restores Downtown's complete warm street paintings from the actual earlier supplied HTML, including its original camera movement. The rejected global river and alpha building composition is gone. One WTC remains; the misplaced Midtown towers were locally corrected. Current Kabin and LEI fronts sit in separate late street façades, behind the original lamps. Midtown, the complete 505 glass/host, Central Park, runners, Endless and map miniatures remain current. Use the location index and final captures. Do not treat the old inferred `a551054` version association as the user's visual authority. The broader cartoon finance-prop pass is still a separate proposal in game/docs/finance-props-direction.md.

@@ -1,17 +1,9 @@
-/* Native architectural layers share one continuous atmosphere and ground plane.
-   No sky/road tiles, mirrored landmarks, or translucent architectural seams. */
+/* Midtown keeps its existing architecture and projection. Downtown delegates
+   to the complete painted streets from the supplied visual reference. */
 (function () {
   "use strict";
   var SOURCE_W = 1024, SOURCE_H = 1430;
   var definitions = {
-    opening: {
-      originalIndex: 1, loopStart: 12, heroX: 441, backdropScale: 568 / 540,
-      route: [0, 1, 2, 0, 2, 3, 4, 5, 6, 7, 8, 5, 9, 10], bridgeBlock: 8,
-      backdrop: "assets/art-v2/downtown-atmosphere.webp",
-      names: ["tribeca-approach", "lower-manhattan", "tribeca-block", "kabin", "wall-street", "seaport-street", "brooklyn-bridge", "east-river", "lei", "seaport-block", "battery-waterfront"],
-      files: ["assets/art-v2/downtown-tribeca.webp", "assets/art-v2/downtown-wtc.webp", "assets/art-v2/downtown-block.webp", "assets/art-v2/downtown-kabin.webp", "assets/art-v2/downtown-wallstreet.webp", "assets/art-v2/downtown-seaport.webp", "assets/art-v2/downtown-waterfront.webp", "assets/art-v2/downtown-waterfront.webp", "assets/art-v2/downtown-lei.webp", "assets/art-v2/downtown-block.webp", "assets/art-v2/downtown-waterfront.webp"],
-      cropTops: [128, 38, 24, -5, 137, 77, 5, 4, 66, 24, 4]
-    },
     midtown: {
       originalIndex: 4, loopStart: 21, backdropScale: 1,
       // Every entry is a complete native-size block. Anonymous streets can
@@ -24,7 +16,7 @@
       contentScales: { 8: 1130 / 1325 }
     }
   };
-  var images = window.NBIMParkScenery ? NBIMParkScenery.images.slice() : [], byPath = new Map(), prepared = new WeakMap(), contexts = new WeakMap();
+  var images = [...(window.NBIMParkScenery?.images || []), ...NBIMDowntownScenery.images], byPath = new Map(), prepared = new WeakMap(), contexts = new WeakMap();
   var loaded = function (img) { return !!(img && (img.complete && img.naturalWidth || img.getContext && img.width && img.height)); };
   function load(path) {
     if (byPath.has(path)) return byPath.get(path);
@@ -36,7 +28,6 @@
   });
   images.push(...(window.LR_VENUE_DETAILS?.images || []));
   var joinTree = load("assets/art-v2/city-plane-tree.webp");
-  var bridge = load("assets/art-v2/downtown-bridge-wide.webp");
   var foundationImage = load("assets/midtown-v16/stone-foundation.webp");
   function projection(id, run, cameraY) {
     if (id !== "midtown" || !run) return { streetOffset: 0, skylineOffset: 0 };
@@ -50,21 +41,13 @@
   }
   function layout(id, distance, W, H, mode, view) {
     if (id === "park" && window.NBIMParkScenery) return NBIMParkScenery.layout(id, distance, W, H, mode);
-    id = definitions[id] ? id : "opening";
-    var def = definitions[id], height = id === "opening" ? H : H + 16;
+    if (id !== "midtown") return NBIMDowntownScenery.layout("opening", distance, W, H, mode);
+    var def = definitions[id], height = H + 16;
     var width = height * SOURCE_W / SOURCE_H, stride = width;
     var total = def.route.length, stripWidth = stride * total;
     var endless = (mode || modeNow()) === "endless";
     var runDistance = Math.max(0, Number(distance) || 0), initialOffset = 0;
     var hold = 0, ease = 0, easedDistance = runDistance;
-    if (id === "opening") {
-      var compactHud = window.innerWidth <= 650;
-      var heroFraction = compactHud ? .24 : .35;
-      initialOffset = Math.max(0, stride + width * def.heroX / SOURCE_W - W * heroFraction);
-      hold = compactHud ? 2400 : 1500; ease = compactHud ? 2000 : 2400;
-      var afterHold = Math.max(0, runDistance - hold);
-      easedDistance = afterHold < ease ? afterHold * afterHold / (2 * ease) : afterHold - ease / 2;
-    }
     if (id === "midtown") {
       // Ordinary blocks establish Midtown before the first venue. This modest
       // pause leaves the world composition, rather than image scaling, in
@@ -72,14 +55,14 @@
       hold = 1000;
       easedDistance = Math.max(0, runDistance - hold);
     }
-    var finishDistance = id === "opening" ? 25920 : 19200;
+    var finishDistance = 19200;
     var rate = endless ? .145 : Math.max(0, stripWidth - W - initialOffset) / (finishDistance - hold - ease / 2);
     var travel = initialOffset + easedDistance * rate;
     var scroll = endless ? travel : Math.min(travel, Math.max(0, stripWidth - W));
     var first = Math.max(0, Math.floor(scroll / stride)), last = Math.ceil((scroll + W) / stride);
     if (!endless) last = Math.min(last, total - 1);
     var streetOffset = id === "midtown" && Number.isFinite(view && view.streetOffset) ? view.streetOffset : 0;
-    var panels = [], y = id === "opening" ? 0 : -8 + streetOffset;
+    var panels = [], y = -8 + streetOffset;
     for (var index = first; index <= last; index++) {
       var routeIndex = index < total ? index : def.loopStart + (index - total) % (total - def.loopStart);
       var sourceIndex = def.route[routeIndex];
@@ -109,13 +92,6 @@
         empireTip: [landmarkX + 604 * landmarkScale, H * .824 + streetOffset - 590 * landmarkScale],
         chryslerTip: [landmarkX + 1101 * landmarkScale, H * .824 + streetOffset - 471 * landmarkScale] };
       if (landmark.x < W && landmark.x + landmark.width > 0) layers.push(landmark);
-    }
-    if (id === "opening") {
-      var bridgeWidth = stride * 2.35, bridgeHeight = bridgeWidth * 724 / 2171;
-      var bridgeX = stride * def.bridgeBlock - scroll - bridgeWidth / 2;
-      if (bridgeX < W && bridgeX + bridgeWidth > 0) layers.push({ id: "opening:complete-brooklyn-bridge",
-        kind: "bridge", sourceIndex: 6, original: false, x: bridgeX, y: H * .61 - bridgeHeight * 593 / 724,
-        width: bridgeWidth, height: bridgeHeight, nativeWidth: 2171, nativeHeight: 724 });
     }
     layers = layers.concat(panels.filter(function (panel) { return !panel.vista; }));
     // Complete foreground trees overlap the ends of architectural groups. Their
@@ -153,10 +129,10 @@
   }
   function source(id, panel, original) {
     if (id === "park" && window.NBIMParkScenery) return NBIMParkScenery.source(id, panel, original);
+    if (id !== "midtown") return NBIMDowntownScenery.source("opening", panel);
     var def = definitions[id];
     if (panel.kind === "atmosphere") return loaded(def.background) ? def.background : null;
     if (panel.kind === "tree") return loaded(joinTree) ? joinTree : null;
-    if (panel.kind === "bridge") return loaded(bridge) ? bridge : null;
     if (panel.kind === "landmark") return loaded(def.images[4]) ? def.images[4] : null;
     var img = def.images[panel.sourceIndex];
     if (window.LR_VENUE_DETAILS?.needed(id, panel.sourceIndex) && !LR_VENUE_DETAILS.ready) return null;
@@ -251,10 +227,11 @@
     lamps: function () { return []; },
     inspect: function (id, distance, W, H, mode, view) {
       if (id === "park" && window.NBIMParkScenery) return NBIMParkScenery.inspect(id, distance, W, H, mode);
+      if (id !== "midtown") return NBIMDowntownScenery.inspect("opening", distance, W, H, mode);
       var scene = layout(id, distance, W || 1000, H || 540, mode, view), def = definitions[scene.id];
-      return Object.assign(scene, { ready: def.images.every(loaded) && loaded(def.background) && loaded(joinTree) && (scene.id !== "opening" || loaded(bridge)),
-        loadedPanels: def.images.filter(loaded).length, maxSourceWidth: scene.id === "opening" ? 2171 : 1536, nativeHeight: 1536,
-        landmarkSourceSize: scene.id === "opening" ? [2171, 724] : null,
+      return Object.assign(scene, { ready: def.images.every(loaded) && loaded(def.background) && loaded(joinTree),
+        loadedPanels: def.images.filter(loaded).length, maxSourceWidth: 1536, nativeHeight: 1536,
+        landmarkSourceSize: null,
         effectiveSourceHeight: SOURCE_H, commonAtmosphere: true, architectureFeather: 0,
         originalRepeats: false, tailExcludesOriginal: true, mirrored: false });
     }

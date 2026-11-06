@@ -37,9 +37,9 @@ try{
     retired: !!(window.LR_CITY_VISTAS || window.LR_STREET_LIFE || window.LR_STREET_FOUNDATION),
     stone: [LR_SCENERY.foundationImage.naturalWidth,LR_SCENERY.foundationImage.naturalHeight]
   }));
-  assert.deepEqual(artContract,{park:2,opening:11,midtown:11,
+  assert.deepEqual(artContract,{park:2,opening:5,midtown:11,
     details:['kabin','lei','joju','omars','gussy','fifth'],retired:false,stone:[1254,1254]},
-    'Exact v1.6 layer set with the six current native frontage crops');
+    'Complete Downtown paintings and preserved Midtown with six current native frontage crops');
   const addedArt=await page.evaluate(()=>[...LR_VENUE_DETAILS.images,...LR_PROPS.images,...LR_OFFICE_HOST.images].map(image=>({embedded:image.src.startsWith('data:'),ready:image.complete&&image.naturalWidth>0})));
   assert.ok(addedArt.length>=13&&addedArt.every(image=>image.embedded&&image.ready),'Venue, prop and host artwork is decoded and embedded');
   // Continue through the real Contrarian event after loading with no network.

@@ -1,0 +1,19 @@
+{
+  "version": "1.12.0",
+  "archive": "/workspace/nbim-arcade/release/The-Long-Run-NBIM.zip",
+  "bytes": 30859452,
+  "sha256": "d9123d31004e1f9da1f8cc6456039ea66db44fd9ee478aa912c63e60ec144bb1",
+  "htmlBytes": 41856063,
+  "htmlSha256": "7d56d1f4dd40d89488cdc8e3882b4e3d2404d54e5c0641d969eb3a9643ceba97",
+  "crcVerified": true,
+  "htmlByteIdentical": true,
+  "checksums": [
+    "The-Long-Run-NBIM.html",
+    "The-Long-Run-NBIM.zip",
+    "The-Long-Run-Cutscene-Handoff.zip",
+    "Opening-v112-lei.png",
+    "Opening-v112-skyline.png",
+    "Opening-v112-street.png"
+  ],
+  "omitted": []
+}

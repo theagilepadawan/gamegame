@@ -1,0 +1,536 @@
+{
+  "referenceSHA256": "9fd060927fc13512f82b18c86e9edc8cf19de59357f5874169d9e8644b263488",
+  "profiles": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "layouts": 88,
+      "pixels": [
+        {
+          "sourceIndex": 0,
+          "variant": null,
+          "different": 0,
+          "outside": 0
+        },
+        {
+          "sourceIndex": 2,
+          "variant": null,
+          "different": 0,
+          "outside": 0
+        },
+        {
+          "sourceIndex": 3,
+          "variant": null,
+          "different": 22042,
+          "outside": 0
+        },
+        {
+          "sourceIndex": 4,
+          "variant": null,
+          "different": 16774,
+          "outside": 0
+        },
+        {
+          "sourceIndex": 4,
+          "variant": "battery-loop",
+          "different": 16774,
+          "outside": 0
+        }
+      ],
+      "coverage": [
+        {
+          "mode": "chapter",
+          "distance": 0,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 4000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 8000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 12000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 16000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 20000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 25920,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 58000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 180000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 0,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 4000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 8000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 12000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 16000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 20000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 25920,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 58000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 180000,
+          "holes": 0
+        }
+      ],
+      "appearances": [
+        {
+          "key": "kabin",
+          "start": 14520,
+          "end": 21080,
+          "firstFull": 15580,
+          "lastFull": 20020,
+          "worldX": 3710
+        },
+        {
+          "key": "lei",
+          "start": 20820,
+          "end": 25920,
+          "firstFull": 21600,
+          "lastFull": 25920,
+          "worldX": 4675.416666666666
+        }
+      ],
+      "sourceCount": 6,
+      "sources": [
+        [
+          1536,
+          1024
+        ],
+        [
+          1536,
+          1024
+        ],
+        [
+          1536,
+          1024
+        ],
+        [
+          1536,
+          1024
+        ],
+        [
+          1536,
+          1024
+        ],
+        [
+          1536,
+          1024
+        ]
+      ],
+      "forbidden": false
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "layouts": 88,
+      "pixels": [
+        {
+          "sourceIndex": 0,
+          "variant": null,
+          "different": 0,
+          "outside": 0
+        },
+        {
+          "sourceIndex": 2,
+          "variant": null,
+          "different": 0,
+          "outside": 0
+        },
+        {
+          "sourceIndex": 3,
+          "variant": null,
+          "different": 22042,
+          "outside": 0
+        },
+        {
+          "sourceIndex": 4,
+          "variant": null,
+          "different": 16774,
+          "outside": 0
+        },
+        {
+          "sourceIndex": 4,
+          "variant": "battery-loop",
+          "different": 16774,
+          "outside": 0
+        }
+      ],
+      "coverage": [
+        {
+          "mode": "chapter",
+          "distance": 0,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 4000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 8000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 12000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 16000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 20000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 25920,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 58000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 180000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 0,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 4000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 8000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 12000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 16000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 20000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 25920,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 58000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 180000,
+          "holes": 0
+        }
+      ],
+      "appearances": [
+        {
+          "key": "kabin",
+          "start": 14520,
+          "end": 21080,
+          "firstFull": 15580,
+          "lastFull": 20020,
+          "worldX": 3710
+        },
+        {
+          "key": "lei",
+          "start": 20820,
+          "end": 25920,
+          "firstFull": 21600,
+          "lastFull": 25920,
+          "worldX": 4675.416666666666
+        }
+      ],
+      "sourceCount": 6,
+      "sources": [
+        [
+          1536,
+          1024
+        ],
+        [
+          1536,
+          1024
+        ],
+        [
+          1536,
+          1024
+        ],
+        [
+          1536,
+          1024
+        ],
+        [
+          1536,
+          1024
+        ],
+        [
+          1536,
+          1024
+        ]
+      ],
+      "forbidden": false
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "layouts": 88,
+      "pixels": [
+        {
+          "sourceIndex": 0,
+          "variant": null,
+          "different": 0,
+          "outside": 0
+        },
+        {
+          "sourceIndex": 2,
+          "variant": null,
+          "different": 0,
+          "outside": 0
+        },
+        {
+          "sourceIndex": 3,
+          "variant": null,
+          "different": 22042,
+          "outside": 0
+        },
+        {
+          "sourceIndex": 4,
+          "variant": null,
+          "different": 16774,
+          "outside": 0
+        },
+        {
+          "sourceIndex": 4,
+          "variant": "battery-loop",
+          "different": 16774,
+          "outside": 0
+        }
+      ],
+      "coverage": [
+        {
+          "mode": "chapter",
+          "distance": 0,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 4000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 8000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 12000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 16000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 20000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 25920,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 58000,
+          "holes": 0
+        },
+        {
+          "mode": "chapter",
+          "distance": 180000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 0,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 4000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 8000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 12000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 16000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 20000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 25920,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 58000,
+          "holes": 0
+        },
+        {
+          "mode": "endless",
+          "distance": 180000,
+          "holes": 0
+        }
+      ],
+      "appearances": [
+        {
+          "key": "kabin",
+          "start": 14560,
+          "end": 21100,
+          "firstFull": 15620,
+          "lastFull": 20040,
+          "worldX": 3710
+        },
+        {
+          "key": "lei",
+          "start": 20840,
+          "end": 25920,
+          "firstFull": 21620,
+          "lastFull": 25920,
+          "worldX": 4675.416666666666
+        }
+      ],
+      "sourceCount": 6,
+      "sources": [
+        [
+          1536,
+          1024
+        ],
+        [
+          1536,
+          1024
+        ],
+        [
+          1536,
+          1024
+        ],
+        [
+          1536,
+          1024
+        ],
+        [
+          1536,
+          1024
+        ],
+        [
+          1536,
+          1024
+        ]
+      ],
+      "forbidden": false
+    }
+  ]
+}

@@ -32,31 +32,12 @@ Start with `references/locations/INDEX.md`. It links directly to the exact nativ
 | Approved Central Park Bow Bridge | `game/assets/original-33.webp` |
 | Approved Central Park Ramble | `game/assets/scenery/park-1.webp` |
 | Approved Central Park Bethesda | `game/assets/scenery/park-2.webp` |
-| Downtown architecture and complete bridge | Native `downtown-*.webp` files under `game/assets/art-v2/`, composed by `scenery.js` |
+| Downtown complete warm streets | `game/assets/downtown-v112/lower-manhattan.webp` and `game/assets/scenery/opening-*.webp`, composed by `downtown-scenery.js` |
 | Midtown architecture | `game/assets/art-v2/midtown-*.webp`, `game/assets/midtown-v15/` and `game/assets/midtown-v16/` |
 | Unique Midtown skyline | `game/assets/midtown-v16/landmark-panorama.webp` and `dry-city-atmosphere.webp` |
 | Midtown stone foundation | `game/assets/midtown-v16/stone-foundation.webp` |
 | Current Kabin, LEI, JOJU, Omar's, Gussy's and 505 details | `game/assets/venue-details-v111/`, with native source bounds and hashes in its manifest |
 
-`game/scripts/scenery.js` is the actual v1.6 composition and camera layout. `venue-details.js` paints the current six venue crops into their original frontage rectangles once per source. It does not create an independent camera or street island. `park-scenery.js` retains the approved Park background. The replacement panorama, added traffic and separate foundation modules are no longer loaded.
+`game/scripts/downtown-scenery.js` restores the actual supplied complete paintings and original camera layout. `scenery.js` preserves current Midtown and delegates Downtown/Park. `venue-details.js` paints the six current native venue crops once inside their façades. Downtown restores the original foreground lamps over the shop details. No independent venue camera or street island is added. The rejected global Downtown river and cutout buildings are absent.
 
-Portrait architecture remains at its original 1024×1536 source resolution, with native landmark, bridge and material sizes recorded in the index. Storefront crops retain native pixels; they are not enlarged to manufacture detail. Current sources and final gameplay captures define composition.
-
-Venue frontages occupy separate blocks within the continuous streets. `opening-storefronts.js` and `midtown-storefronts.js` identify their native rectangles and course placement. Full ordinary street sections between the venues are part of the art direction. Preserve 505's complete blue/cyan glazing and revolving doors; `office-host.js` attaches the retained host to that entrance. Do not recreate cutout-building islands, import their old separate parallax, or pack multiple venue references into one crowded cinematic background.
-
-`references/gameplay/downtown-gameplay.png`, `midtown-gameplay.png`, `central-park-gameplay.png` and `office-gameplay.png` show current rendering and scale. `chapter-map-characters.png` shows the miniature runner treatment. These contain gameplay/UI context; prepare clean picture frames before video generation. If an isolated native tile differs from the live composition, inspect the renderer/camera rather than stretching the painting.
-
-Retired scenery and venue-island artwork are omitted from active location references. All 40 original source files remain in `game/assets/` for provenance and regression checks, so **presence alone does not mean an asset is currently rendered**. The earlier HTML is a visual guide, not authority to replace the current game. Original Park plate `original-33` remains active; the v1.8 city sheets are historical beside the detailed current tiles.
-
-## Props, brand and audio
-
-| Material | Where to look |
-|---|---|
-| Current warm pickups and risk equipment | `game/assets/props-v18/`, including native atlas, extraction manifest/provenance; `game/scripts/prop-art.js` controls sizes and small signs |
-| Capital-reserve pickup and equipped effect art | `game/assets/original-21.webp`, `original-22.webp`; actual effect drawn by engine `Po` methods |
-| Park trees/benches and environmental textures | `game/assets/original-35.webp`, `original-36.webp`; inspect actual renderer for atlas rectangles |
-| Jetpack and IPO Hype Machine | Engine drawing code plus live gameplay. They are not necessarily standalone full character paintings. Capture clean reference views before recreating them. |
-| Typography and exact brand treatment | `game/game.css`, original WOFF2/SVG assets and current rendered UI |
-| Audio | `references/audio/`; see `04-audio.md` for exact runtime mapping and measured durations |
-
-For a clean screenshot, run the game locally and inspect `window.longRun`; use the existing browser tests as controlled examples. Test-only direct state changes and screenshot fixtures are not integration APIs for shipping a cutscene player.
+Downtown native sources are 1536×1024. Midtown architecture retains its existing native source sizes; the index records exact dimensions. Storefront crops retain their native pixels. Current gameplay captures define final placement and composition.

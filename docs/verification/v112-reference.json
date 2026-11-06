@@ -1,0 +1,403 @@
+{
+  "reference": "a551054 repository snapshot / Midtown only",
+  "renderers": [
+    "openingGround",
+    "districtBackground",
+    "districtGround",
+    "pixiBackground",
+    "frameComposition",
+    "cameraAndSimulation"
+  ],
+  "profiles": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "layouts": 352,
+      "projection": 27,
+      "pixels": [
+        {
+          "id": "midtown",
+          "key": "atmosphere:-1",
+          "w": 1536,
+          "h": 1024,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:6",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:9",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:10",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "tree:-2",
+          "w": 1024,
+          "h": 1536,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "landmark:4",
+          "w": 1536,
+          "h": 1024,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:1",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:0",
+          "w": 1024,
+          "h": 1430,
+          "different": 189610,
+          "outside": 0,
+          "venue": "joju"
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:7",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:8",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:2",
+          "w": 1024,
+          "h": 1430,
+          "different": 153734,
+          "outside": 0,
+          "venue": "omars"
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:3",
+          "w": 1024,
+          "h": 1430,
+          "different": 231485,
+          "outside": 0,
+          "venue": "gussy"
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:5",
+          "w": 1024,
+          "h": 1430,
+          "different": 197632,
+          "outside": 0,
+          "venue": "fifth"
+        }
+      ],
+      "assets": 28,
+      "decodedBytes": 142243272,
+      "retired": false
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "layouts": 352,
+      "projection": 27,
+      "pixels": [
+        {
+          "id": "midtown",
+          "key": "atmosphere:-1",
+          "w": 1536,
+          "h": 1024,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:6",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:9",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:10",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "tree:-2",
+          "w": 1024,
+          "h": 1536,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "landmark:4",
+          "w": 1536,
+          "h": 1024,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:1",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:0",
+          "w": 1024,
+          "h": 1430,
+          "different": 189610,
+          "outside": 0,
+          "venue": "joju"
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:7",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:8",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:2",
+          "w": 1024,
+          "h": 1430,
+          "different": 153734,
+          "outside": 0,
+          "venue": "omars"
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:3",
+          "w": 1024,
+          "h": 1430,
+          "different": 231485,
+          "outside": 0,
+          "venue": "gussy"
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:5",
+          "w": 1024,
+          "h": 1430,
+          "different": 197632,
+          "outside": 0,
+          "venue": "fifth"
+        }
+      ],
+      "assets": 28,
+      "decodedBytes": 142243272,
+      "retired": false
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "layouts": 352,
+      "projection": 27,
+      "pixels": [
+        {
+          "id": "midtown",
+          "key": "atmosphere:-1",
+          "w": 1536,
+          "h": 1024,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:6",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:9",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:10",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "tree:-2",
+          "w": 1024,
+          "h": 1536,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "landmark:4",
+          "w": 1536,
+          "h": 1024,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:1",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:0",
+          "w": 1024,
+          "h": 1430,
+          "different": 189610,
+          "outside": 0,
+          "venue": "joju"
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:7",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:8",
+          "w": 1024,
+          "h": 1430,
+          "different": 0,
+          "outside": 0,
+          "venue": null
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:2",
+          "w": 1024,
+          "h": 1430,
+          "different": 153734,
+          "outside": 0,
+          "venue": "omars"
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:3",
+          "w": 1024,
+          "h": 1430,
+          "different": 231485,
+          "outside": 0,
+          "venue": "gussy"
+        },
+        {
+          "id": "midtown",
+          "key": "architecture:5",
+          "w": 1024,
+          "h": 1430,
+          "different": 197632,
+          "outside": 0,
+          "venue": "fifth"
+        }
+      ],
+      "assets": 28,
+      "decodedBytes": 142243272,
+      "retired": false
+    }
+  ]
+}

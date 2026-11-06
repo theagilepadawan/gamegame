@@ -1,0 +1,28 @@
+[
+  {
+    "version": "v1.12",
+    "district": "opening",
+    "viewport": "960x540 DPR1",
+    "backend": "cloud Chromium software WebGL; synchronous GPU finish",
+    "assets": {
+      "count": 28,
+      "decodedBytes": 142243272
+    },
+    "frames": 240,
+    "median": 11.200000017881393,
+    "p95": 26.899999976158142
+  },
+  {
+    "version": "v1.11",
+    "district": "opening",
+    "viewport": "960x540 DPR1",
+    "backend": "cloud Chromium software WebGL; synchronous GPU finish",
+    "assets": {
+      "count": 32,
+      "decodedBytes": 167404856
+    },
+    "frames": 240,
+    "median": 19.69999998807907,
+    "p95": 50.20000001788139
+  }
+]
