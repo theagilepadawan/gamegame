@@ -10,7 +10,7 @@ The reference audio is copied byte for byte from the current game. The following
 | `references/audio/04-nicolai-laugh.mp3` | `game/assets/original-38.mp3` | 1.176 s | Mono / 48 kHz | User-supplied Nicolai laugh |
 | `references/audio/05-contrarian-pixel-adventure.mp3` | `game/assets/original-39.mp3` | 64.848 s | Stereo / 48 kHz | Exclusive Contrarian event music |
 
-The game credits the main soundtrack as **Extended 16-Bit Bitcrushed — radicalTomography**, and the Contrarian recording as **Pixel Adventure**. The user earlier supplied a legacy In Good Company tune, but the latest game uses the files above. A separate clean legacy recording is not included in this handoff; do not substitute an assumed version.
+The main soundtrack is displayed as **Downtown Good Company**, with the original composer credit **radicalTomography** retained (source recording: **Extended 16-Bit Bitcrushed**). The Contrarian display title is **Good ol’ Company** (source recording: **Pixel Adventure**). The user earlier supplied a legacy In Good Company tune, but the latest game uses the files above. A separate clean legacy recording is not included in this handoff; do not substitute an assumed version.
 
 ## Recommended treatment
 
@@ -45,7 +45,7 @@ Use the names supplied by the user, without replacing the recordings:
 - Midtown: **Good Company Never Dies** (original-19.mp3).
 - Central Park: **Diversified Ballad** (original-20.mp3).
 - Contrarian: **Good ol’ Company** (original-39.mp3, the Pixel Adventure source recording).
-- Opening Bell/Endless: **Extended 16-Bit Bitcrushed**, radicalTomography.
+- Opening Bell/Endless: **Downtown Good Company**, radicalTomography (original source: Extended 16-Bit Bitcrushed).
 
 The compact in-game now-playing label appears for five seconds on an audible
 run/results page or soundtrack change. Audio settings carry the same titles.

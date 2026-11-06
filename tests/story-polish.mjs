@@ -20,7 +20,7 @@ try{
  // Stop the visual clock while exercising the real soundtrack and DOM events.
  await page.evaluate(()=>{const next=requestAnimationFrame.bind(window);window.requestAnimationFrame=()=>0;return new Promise(next)});
  await page.locator('#now-playing').waitFor({state:'visible'});
- assert.equal(await page.locator('#now-playing-title').innerText(),'Extended 16-Bit Bitcrushed');
+ assert.equal(await page.locator('#now-playing-title').innerText(),'Downtown Good Company');
  await page.waitForTimeout(5150);
  assert.equal(await page.locator('#now-playing').isVisible(),false,'Title disappears after five seconds');
  await page.evaluate(()=>{SA.startMusic('contrarian')});
@@ -30,7 +30,7 @@ try{
  assert.equal(await page.evaluate(()=>SA.track.paused),true,'Event music remains exclusive');
  await page.evaluate(()=>SA.endMusic());
  await page.waitForFunction(()=>!SA.track.paused);
- assert.equal(await page.locator('#now-playing-title').innerText(),'Extended 16-Bit Bitcrushed');
+ assert.equal(await page.locator('#now-playing-title').innerText(),'Downtown Good Company');
  await page.evaluate(()=>{SA.toggle()});
  assert.equal(await page.locator('#now-playing').isVisible(),false);
  await page.evaluate(()=>{q.won=false;q.dead=true;qQ()});

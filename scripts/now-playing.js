@@ -3,7 +3,7 @@
 (function () {
   "use strict";
   // Display titles supplied by the user. Audio files and playback stay intact.
-  const titles = {main: "Extended 16-Bit Bitcrushed", midtown: "Good Company Never Dies",
+  const titles = {main: "Downtown Good Company", midtown: "Good Company Never Dies",
     park: "Diversified Ballad", contrarian: "Good ol’ Company"};
   let mixer, timer, revision = 0, shown = "", current = "";
   const card = document.createElement("div");

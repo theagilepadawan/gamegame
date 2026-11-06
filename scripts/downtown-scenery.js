@@ -60,11 +60,14 @@
   }
   function source(id, panel) {
     const index = panel.variant === "battery-loop" ? 5 : panel.sourceIndex;
-    const img = images[index], key = index + ":" + panel.venues;
+    // Preserve native storefront detail on Retina screens, without enlarging
+    // every painting or rebuilding a texture each frame. Its camera is unchanged.
+    const detailScale = panel.venues && panel.sourceIndex === 3 ? Math.min(2, window.devicePixelRatio || 1) : 1;
+    const img = images[index], key = index + ":" + panel.venues + ":" + detailScale;
     if (!loaded(img) || !window.LR_VENUE_DETAILS?.ready) return null;
     if (prepared.has(key)) return prepared.get(key);
-    const canvas = document.createElement("canvas"); canvas.width = WIDTH; canvas.height = HEIGHT;
-    const ctx = canvas.getContext("2d"); ctx.drawImage(img,0,0);
+    const canvas = document.createElement("canvas"); canvas.width = WIDTH * detailScale; canvas.height = HEIGHT * detailScale;
+    const ctx = canvas.getContext("2d"); ctx.scale(detailScale,detailScale); ctx.drawImage(img,0,0);
     if (panel.venues) {
       LR_VENUE_DETAILS.paint(ctx,"opening",panel.sourceIndex,0);
       for (const outline of foreground[panel.sourceIndex] || []) {

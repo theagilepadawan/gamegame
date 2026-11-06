@@ -75,9 +75,11 @@ try {
       pixels(()=>LR_PROPS.hazard(context,item,x,base,'midtown',{floorAt:()=>base}));
       const alpha=(x,y)=>context.getImageData(Math.round(x),Math.round(y),1,1).data[3];
       const face=[];
-      // Interior sample points of the real collision face, including the lower
-      // edge of slide hazards. Decoration may extend above but never hides it.
-      for(const fx of [.1,.3,.5,.7,.9])for(const fy of [.15,.5,.92])face.push(alpha(x+item.w*fx,top+(item.type==='high'?85:item.h)*fy));
+      // The restored barrier has separate feet below its solid body. Check its
+      // body and both feet, and keep the full lower-edge check for slide boards.
+      const rows = item.type === 'high' ? [.15,.5,.92] : [.15,.5,.75];
+      for(const fx of [.1,.3,.5,.7,.9])for(const fy of rows)face.push(alpha(x+item.w*fx,top+(item.type==='high'?85:item.h)*fy));
+      if(item.type === 'low')for(const fx of [.15,.72])face.push(alpha(x+item.w*fx,base-item.h*.08));
       const before=LR_PROPS.variant(item);item.x=900;const after=LR_PROPS.variant(item);delete item.x;
       artFaces.push({kind:before,after,face,unchanged:JSON.stringify(item)===original});
     }
@@ -89,7 +91,7 @@ try {
       movingA: pixels(() => drawPickups(.1, false)), movingB: pixels(() => drawPickups(2.1, false))};
     return result;
   });
-  assert.equal(report.images.length, 8);
+  assert.equal(report.images.length, 6);
   assert.ok(report.images.every(image => image.width >= 250 && image.height >= 250), 'Every native painted object is decoded at least 250px across, well above its gameplay size');
   for (const outcome of report.outcomes.slice(0, 4)) {
     assert.equal(outcome.dead, ['walk', 'stand'].includes(outcome.action), `${outcome.type}/${outcome.action}: collision outcome`);
@@ -102,8 +104,8 @@ try {
   assert.deepEqual(report.obstacles.unchangedPark, report.obstacles.originalPark, 'Park bench, branch and paving remain identical outside the small plaque');
   assert.notEqual(report.obstacles.enabledPark.hash,report.obstacles.unchangedPark.hash,'Small Benchmark plaque appears on the original bench');
   assert.notEqual(report.obstacles.upgradedMidtown.hash, report.obstacles.originalMidtown.hash, 'Midtown uses the painted obstacle render path');
-  for(const face of report.faces){assert.equal(face.kind,face.after,'Variant is stable as the obstacle moves');assert.equal(face.unchanged,true,'Rendering does not mutate collision data');assert.ok(face.face.every(a=>a>240),`${face.kind}: solid face fills the physical rectangle`);}
-  assert.equal(new Set(report.faces.map(f=>f.kind)).size,4,'All four finance props exercised');
+  for(const face of report.faces){assert.equal(face.kind,face.after,'Variant is stable as the obstacle moves');assert.equal(face.unchanged,true,'Rendering does not mutate collision data');assert.ok(face.face.every(a=>a>240),`${face.kind}: solid body and support feet remain visible at their physical bounds`);}
+  assert.deepEqual([...new Set(report.faces.map(f=>f.kind))],['cabinet','overhead'],'Restored barrier and market-board art exercised, including the moving hoist');
   assert.deepEqual(report.motion.stillA, report.motion.stillB, 'Reduced motion keeps every pickup still');
   assert.notEqual(report.motion.movingA.hash, report.motion.movingB.hash, 'Normal motion animates the painted pickups');
 

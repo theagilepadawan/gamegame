@@ -5,17 +5,17 @@
     "sourceSha256": "e2f50888486cdb5d11bb984d654d7e8a50963d6112774a035dd3b71ae9a491fc",
     "rect": [
       307,
-      1068,
+      1023,
       410,
-      205
+      250
     ],
     "path": "assets/venue-details-v111/kabin.webp",
     "nativePixels": [
       410,
-      205
+      250
     ],
-    "sha256": "5a169cc363e77852327ef3a7be3851f1d144b542f7d9e8ce8706f7682570fc5b",
-    "processing": "Exact native crop, lossless WebP; no repainting or enlargement."
+    "sha256": "c7fa71a742a095c8be77d351d4a0fcf94d5babc02ddfb1177edb17028fb5aa3f",
+    "processing": "Exact native crop including the original Norwegian flag and balcony rail, lossless WebP; no repainting or enlargement."
   },
   {
     "name": "lei",

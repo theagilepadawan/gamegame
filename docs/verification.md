@@ -1,8 +1,23 @@
-# Release verification — Endless and mobile polish, version 1.15
+# Release verification — Kabin and classic assets, version 1.15.1
 
-This pass retains the accepted city/Park paintings, venue placement, runner
-art and the current default props. None of the pending asset directions has
-been selected. Story scoring/unlock rules and inactive-route scenery remain.
+Patch 1.15.1 restores the earlier striped barrier and copper market-board art
+(option A), with current hitboxes, widths, slope alignment and hoist mechanics.
+Kabin's native crop now includes its original Norwegian flag;
+its entrance stays at the same horizontal position and pavement height. On
+high-density screens, that one cached composite retains up to twice the pixel
+resolution in each dimension. Other city/Park paintings and venue placement
+are unchanged. The main track title is Downtown Good Company; audio and its
+original composer credit are unchanged.
+
+Patch verification passed on the standalone HTML: restored prop rendering and
+actual jump/slide collisions, rewards and reduced motion; Story/music behavior
+including the renamed title; 264 Downtown reference camera/layout comparisons;
+and offline standalone checks with all 40 baseline assets unchanged. DPR2 visual
+review confirmed the original flag, the 3072×2048 cached Kabin composite, and
+its unchanged storefront position. No browser errors were recorded.
+
+The following Endless and mobile evidence was recorded for version 1.15.0;
+those gameplay, menu and camera changes are retained in this patch.
 
 ## Endless opening and difficulty
 

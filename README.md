@@ -4,6 +4,16 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
+## Version 1.15.1 — Kabin detail and classic obstacles
+
+Kabin retains its accepted entrance placement and now includes the original
+Norwegian flag and storefront detail. A cached Retina composite preserves the
+native storefront pixels instead of reducing them before display. The warm
+striped barriers and copper market boards return, with the current slope
+alignment, readable Endless widths and moving hoist retained. The main 16-bit
+track is displayed as **Downtown Good Company**; the recording and composer
+credit are unchanged.
+
 ## Version 1.15 — Endless variety and mobile polish
 
 The first Endless hills now arrive after a short safe lead, with irregular seeded
