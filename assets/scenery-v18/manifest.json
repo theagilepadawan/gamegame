@@ -1,0 +1,51 @@
+{
+  "version": 18,
+  "origin": "Image generation using uploaded earlier-game artwork and retained venue references",
+  "files": [
+    {
+      "name": "midtown-main",
+      "path": "assets/scenery-v18/midtown-main.webp",
+      "source": "/workspace/generated_images/exec-405030c8-0727-4655-8949-5eca59662706.png",
+      "sourceSha256": "e4bfb00f840f0a2b477731e64ace61e3fbe36483b368dc7dcf2d37756573d5dc",
+      "width": 2172,
+      "height": 724,
+      "sha256": "709527626223e114f32974d3e8570b458f8752d7765d181f93024c240606a2fe"
+    },
+    {
+      "name": "midtown-street",
+      "path": "assets/scenery-v18/midtown-street.webp",
+      "source": "/workspace/generated_images/exec-443c614a-5b16-48e3-83af-82a1ae5412cf.png",
+      "sourceSha256": "83a4fe84afbf75f9b302e4c2584e1d9b184492e8af77a3603ed50c0d26175a93",
+      "width": 2172,
+      "height": 724,
+      "sha256": "7be73c838cba88f4f45ce2fe71af5ff925f665fb6c4b430d81c951aa3c020ba8"
+    },
+    {
+      "name": "downtown-main",
+      "path": "assets/scenery-v18/downtown-main.webp",
+      "source": "/workspace/generated_images/exec-8ee47ee9-1490-408c-99ee-c1bbba8dd16f.png",
+      "sourceSha256": "176ad72a79dec1b7ffc829b6684cd4be86a75420842155aa36b5482737ed44d9",
+      "width": 2172,
+      "height": 724,
+      "sha256": "c4a5ad00ea72a7e26869728e6ed3eaf0d091c74def5c68e17f488539b1711af9"
+    },
+    {
+      "name": "downtown-street",
+      "path": "assets/scenery-v18/downtown-street.webp",
+      "source": "/workspace/generated_images/exec-b3eca1f8-e940-4a2f-802e-ec9d6e5b9c2a.png",
+      "sourceSha256": "6d1912b6a3c3beb16729011fcbf6ffb66de90d21dd2dd9b8889a5f079c5c315a",
+      "width": 2172,
+      "height": 724,
+      "sha256": "7137de1bd7d257444534e45f23a088c44346ed049f5fd7273915ef0a8dce3370"
+    },
+    {
+      "name": "downtown-tail",
+      "path": "assets/scenery-v18/downtown-tail.webp",
+      "source": "/workspace/generated_images/exec-123e5014-37b5-4263-adc1-fa1e89d485ae.png",
+      "sourceSha256": "d8bf551ee63cadd426694e0ed98cc83f62aa8bd461e179d031d526111440bfe0",
+      "width": 2172,
+      "height": 724,
+      "sha256": "c62ad066520524ed559525b3a8968eb53785e4ab5636510e3be7a5096cf07975"
+    }
+  ]
+}

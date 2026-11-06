@@ -823,3 +823,8 @@ input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text;-webk
  .map-disc,.chapter-copy,.map-art [data-leg],.journey-arrows button{transition:none}
  .map-node.is-shake .map-disc,.map-node.is-shake .chapter-copy{animation:none}
 }
+/* Keep the authored street and gradual venue reveals intact in very wide
+   windows. Centering uses margins so the game's shake animation still works. */
+@media(min-aspect-ratio:8/3){
+ .stage,.stage:fullscreen{max-width:calc(100dvh * 8 / 3);margin-inline:auto}
+}

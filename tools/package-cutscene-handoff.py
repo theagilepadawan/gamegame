@@ -43,6 +43,7 @@ for name in ['index.html', 'game.css', 'build.mjs', 'serve.mjs', 'package.json',
     copy(ROOT / name, game / name)
 for name in ['scripts', 'tests', 'docs']:
     shutil.copytree(ROOT / name, game / name)
+copy(ROOT / 'tools' / 'package-game.py', game / 'tools' / 'package-game.py')
 
 # Keep all forty baseline files for hash tests, plus current runtime art only.
 # The rejected alternate Park and discarded sprite experiments are not shipped.
@@ -53,31 +54,28 @@ baseline = json.loads((ROOT / 'assets-manifest.json').read_text())
 used.update(a['path'] for a in baseline)
 for relative in sorted(used):
     copy(ROOT / relative, game / relative)
-native_manifest = json.loads((ROOT / 'assets/art-v2/native-manifest.json').read_text())
-native_manifest['files'] = [item for item in native_manifest['files'] if item['path'] in used]
-native_manifest['handoffScope'] = 'Only current runtime city and venue art is included; rejected Park and Midtown redesigns are omitted.'
-(game / 'assets/art-v2/native-manifest.json').write_text(json.dumps(native_manifest, indent=2) + '\n')
-for folder in ['props-v14', 'office-host-v14', 'midtown-v15', 'midtown-v16']:
-    folder_root = ROOT / 'assets' / folder
-    prefix = f'assets/{folder}/'
-    if not folder_root.exists() or not any(path.startswith(prefix) for path in runtime_used):
-        continue
+# Package metadata only for active runtime directories. This naturally excludes
+# retired city-block, venue-island and prop variants as art direction evolves.
+active_folders = sorted({Path(relative).parent for relative in runtime_used if Path(relative).parent != Path('assets')})
+for relative_folder in active_folders:
+    folder_root = ROOT / relative_folder
     for p in folder_root.glob('*.json'):
         data = json.loads(p.read_text())
         if data.get('asset') and data['asset'] not in runtime_used:
             continue
-        # Mixed provenance/manifests must describe only the shipped runtime art.
         for field in ['files', 'assets']:
             if isinstance(data.get(field), list):
                 data[field] = [item for item in data[field] if item.get('path') in runtime_used]
         if any(isinstance(data.get(field), list) and not data[field] for field in ['files', 'assets']):
             continue
-        target = game / 'assets' / folder / p.name
+        target = game / relative_folder / p.name
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(json.dumps(data, indent=2) + '\n')
-if (ROOT / 'art' / 'props-v14' / 'generated-atlas-native.png').exists():
-    copy(ROOT / 'art' / 'props-v14' / 'generated-atlas-native.png',
-         game / 'art' / 'props-v14' / 'generated-atlas-native.png')
+    # Native atlas accompanies extracted runtime cells for art production. It is
+    # source material, not another runtime asset or a claim of higher resolution.
+    atlas = folder_root / 'atlas-native.png'
+    if atlas.is_file():
+        copy(atlas, game / relative_folder / atlas.name)
 
 playable = ROOT / 'release' / 'The-Long-Run-NBIM.html'
 assert playable.is_file(), 'Build the release HTML first'
@@ -126,35 +124,27 @@ aliases = {
     'central-park-approved-bow-bridge.webp': 'assets/original-33.webp',
     'central-park-approved-ramble.webp': 'assets/scenery/park-1.webp',
     'central-park-approved-bethesda.webp': 'assets/scenery/park-2.webp',
-    'downtown-one-world-trade-center.webp': 'assets/art-v2/downtown-wtc.webp',
-    'downtown-complete-brooklyn-bridge.webp': 'assets/art-v2/downtown-bridge-wide.webp',
-    'downtown-wall-street.webp': 'assets/art-v2/downtown-wallstreet.webp',
-    'midtown-505-blue-glass-entrance.webp': 'assets/art-v2/midtown-fifth.webp',
-    'midtown-original-skyline.webp': 'assets/original-34.webp',
-    'midtown-original-bryant-park.webp': 'assets/scenery/midtown-1.webp',
-    'midtown-original-fifth-avenue.webp': 'assets/scenery/midtown-2.webp',
-    'midtown-joju.webp': 'assets/art-v2/midtown-joju.webp',
-    'midtown-omars.webp': 'assets/art-v2/midtown-omars.webp',
-    'midtown-gussy.webp': 'assets/art-v2/midtown-gussy.webp',
+    'downtown-main.webp': 'assets/scenery-v18/downtown-main.webp',
+    'downtown-street.webp': 'assets/scenery-v18/downtown-street.webp',
+    'downtown-anonymous-tail.webp': 'assets/scenery-v18/downtown-tail.webp',
+    'midtown-main.webp': 'assets/scenery-v18/midtown-main.webp',
+    'midtown-street-and-505.webp': 'assets/scenery-v18/midtown-street.webp',
 }
 for name, relative in aliases.items():
     copy(ROOT / relative, refs / 'locations' / name)
-office_master = Path('/workspace/generated_images/exec-2c3023a6-67fb-460a-9e29-f1555fa8c5d9.png')
-if office_master.exists():
-    copy(office_master, refs / 'locations' / 'midtown-505-native-source.png')
 if (ROOT / 'assets' / 'office-host-v14').exists():
     shutil.copytree(ROOT / 'assets' / 'office-host-v14', refs / 'office-host')
 host_master = Path('/workspace/generated_images/exec-d6fba899-76fc-43ae-86e9-cdc4f41b5e25.png')
 if host_master.exists():
     copy(host_master, refs / 'office-host' / 'host-native-source.png')
 
-# Reuse evidence from the exact release browser checks, not old version images.
+# Use current Downtown/Midtown release captures. Park retains its unchanged art.
+# All required files must exist; do not silently substitute a previous city view.
 captures = {
-    'downtown-gameplay.png': 'review/art-direction/opening-start.png',
+    'downtown-gameplay.png': 'release/Opening-v18-cohesive.png',
     'central-park-gameplay.png': 'review/art-direction/park-start.png',
-    'midtown-gameplay.png': 'release/Midtown-v17-restored.png',
-    'office-gameplay.png': 'release/Midtown-v17-office.png',
-    'downtown-bridge-gameplay.png': 'review/downtown/bridge-readable-1440.png',
+    'midtown-gameplay.png': 'release/Midtown-v18-cohesive.png',
+    'office-gameplay.png': 'release/Midtown-v18-office.png',
 }
 for name, relative in captures.items():
     p = ROOT / relative
@@ -180,11 +170,11 @@ metadata = {
     'playableSha256': sha(playable),
     'runtimeAssetCount': len(runtime_used),
     'packagedAssetCountIncludingBaseline': len(used),
-    'included': ['Current editable game source', 'Self-contained playable HTML', 'Native production sprites and location art',
+    'included': ['Current editable game source', 'Self-contained playable HTML', 'Native production sprites, current opaque panoramas and current prop atlas',
                  'Five game audio sources', 'Cutscene production brief, shot slate, prompts and integration notes'],
     'notIncluded': ['No generated cutscene videos', 'No Runway credentials or plugin installation',
                     'Original inline office/host reference photographs were not exposed as downloadable local files',
-                    'No rejected cartoon runner study, v1.3 Park artwork or v1.5/v1.6 Midtown redesigns'],
+                    'No rejected cartoon runner study, alternate Park artwork, retired city-block/venue-island art or superseded prop variants'],
 }
 (STAGE / 'HANDOFF-METADATA.json').write_text(json.dumps(metadata, indent=2) + '\n')
 manifest = [{
@@ -197,7 +187,7 @@ with zipfile.ZipFile(OUT, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as archive
     for p in sorted(STAGE.rglob('*')):
         if p.is_file():
             name = str(p.relative_to(STAGE.parent))
-            entry = zipfile.ZipInfo(name, date_time=(2026, 11, 3, 0, 0, 0))
+            entry = zipfile.ZipInfo(name, date_time=(2026, 11, 6, 0, 0, 0))
             entry.compress_type = zipfile.ZIP_DEFLATED
             entry.external_attr = 0o644 << 16
             archive.writestr(entry, p.read_bytes(), compresslevel=9)

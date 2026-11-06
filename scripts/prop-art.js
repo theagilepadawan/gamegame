@@ -1,14 +1,14 @@
-/* Native painted gameplay objects with crisp, resolution-independent lettering.
-   Draw bounds are the existing gameplay bounds; this module never edits a run. */
+/* Warm, readable props based on the earlier game’s original silhouettes.
+   Native painted sprites and small street signs; collision and reward logic stay in the engine. */
 (function () {
   "use strict";
   const paths = {
-    dividend: "assets/props-v14/dividend.webp",
-    opportunity: "assets/props-v14/opportunity.webp",
-    research: "assets/props-v14/research.webp",
-    conviction: "assets/props-v14/conviction.webp",
-    cabinet: "assets/props-v14/risk-cabinet.webp",
-    overhead: "assets/props-v14/overhead-panel.webp"
+    dividend: "assets/props-v18/dividend.webp",
+    opportunity: "assets/props-v18/opportunity.webp",
+    research: "assets/props-v18/research.webp",
+    conviction: "assets/props-v18/conviction.webp",
+    cabinet: "assets/props-v18/road-barrier.webp",
+    overhead: "assets/props-v18/market-board.webp"
   };
   const art = Object.fromEntries(Object.entries(paths).map(([key, path]) => {
     const image = new Image(); image.src = path; return [key, image];
@@ -67,89 +67,80 @@
     const w = item.w, h = high ? 85 : item.h, top = high ? base - 181 : base - h;
     c.save();
     if (high) {
-      for (const hook of [x + 12, x + w - 12]) {
-        line(c, hook, top - 42, hook, top + 5, "#0d2833", 3);
-        line(c, hook - .5, top - 42, hook - .5, top + 5, "#b8b79b", .8);
+      for (const hook of [x + w * .163, x + w * .842]) {
+        line(c, hook, top - 42, hook, top - h * .07, "#263a3c", 2.6);
+        line(c, hook - .5, top - 42, hook - .5, top - h * .07, "#b7b39a", .7);
       }
     }
-    // A dark full-width backing retains the exact solid collision silhouette.
-    // Native art adds the material detail; the bright rim marks the actionable edge.
-    box(c, x, top, w, h, "#0c202a", 2);
-    c.save(); c.beginPath(); c.rect(x, top, w, h); c.clip();
-    if (high) c.drawImage(image, 0, 64, image.naturalWidth, image.naturalHeight - 64, x, top, w, h);
-    else c.drawImage(image, x, top, w, h);
-    c.restore();
-    line(c, x + .8, top + .8, x + w - .8, top + .8, "#efd2a2", 1.3);
-    line(c, x + w - .8, top + 1.5, x + w - .8, top + h - 1, "#493e32", 1);
-    line(c, x + .5, top + h - 1, x + w - .5, top + h - 1, high ? "#e0b173" : "#9a7653", 1.5);
-    const label = item.label || (high ? "HEADROOM" : "MARKET RISK");
-    const px = x + w * (high ? .50 : .43), py = top + h * (high ? .43 : .33);
-    const pw = w * (high ? .80 : .65), ph = high ? 29 : Math.min(25, h * .34);
-    box(c, px - pw / 2, py - ph / 2, pw, ph, "#06162230", 1.5);
-    const words = label.split(" ");
-    if (!high && words.length > 1) {
-      const split = Math.ceil(words.length / 2);
-      text(c, words.slice(0, split).join(" "), px, py - 5, 9, pw - 4, "#fff1cf");
-      text(c, words.slice(split).join(" "), px, py + 5, 9, pw - 4, "#fff1cf");
-    } else text(c, label, px, py, high ? 11 : 11.5, pw - 5, "#fff1cf");
+    // Original compact construction silhouette; no decorative gold frame.
+    // The image occupies exactly the original solid obstacle rectangle.
     if (high) {
-      // Three small downward chevrons turn the suspended panel into a readable duck cue.
-      for (const dx of [-12, 0, 12]) {
-        line(c, x + w / 2 + dx - 3, top + h - 17, x + w / 2 + dx, top + h - 14, "#eac694", 1.3);
-        line(c, x + w / 2 + dx, top + h - 14, x + w / 2 + dx + 3, top + h - 17, "#eac694", 1.3);
+      // The suspension eyes are decoration above the solid collision box.
+      // Keep the actual board face aligned to that box, as in the old renderer.
+      const eyeHeight = 40, faceHeight = image.naturalHeight - eyeHeight;
+      const eyeDisplay = h * eyeHeight / faceHeight;
+      c.drawImage(image, 0, 0, image.naturalWidth, eyeHeight, x, top - eyeDisplay, w, eyeDisplay);
+      c.drawImage(image, 0, eyeHeight, image.naturalWidth, faceHeight, x, top, w, h);
+    } else c.drawImage(image, x, top, w, h);
+    const label = item.label || (high ? "MARKET RISK" : "DELIVERY");
+    if (high) {
+      // Typography remains live and sharp instead of being baked into an atlas.
+      const pw = w * .82, ph = 18, px = x + w / 2, py = top + h * .20;
+      box(c, px - pw / 2, py - ph / 2, pw, ph, "#302c32", 1.5);
+      text(c, label, px, py + .2, 9.3, pw - 7, "#fff0d1");
+      for (const dx of [-10, 0, 10]) {
+        line(c, x + w / 2 + dx - 2.5, top + h - 11, x + w / 2 + dx, top + h - 8.5, "#f3d5a2", 1);
+        line(c, x + w / 2 + dx, top + h - 8.5, x + w / 2 + dx + 2.5, top + h - 11, "#f3d5a2", 1);
       }
+    } else if (w >= 50) {
+      const pw = w * .75, py = top + h * .42;
+      box(c, x + (w - pw) / 2, py - 6, pw, 12, "#263739ee", 1);
+      text(c, label, x + w / 2, py, 7.2, pw - 4, "#f7e4b7", 600);
     }
     c.restore(); return true;
   }
   function sign(c, item, run, floor, angle) {
     const park = run.districtId === "park", fork = item.role === "fork" || item.route === "fork";
     const rows = fork ? [
-      {label: park ? "CANOPY WALK" : "HIGH CONVICTION", sub: "UPPER ROUTE", y: -181, direction: -1, color: "#ead098"},
-      {label: park ? "LAKESIDE PATH" : "STREET LEVEL", sub: "LOWER ROUTE", y: -127, direction: 0, color: "#b3d6bd"}
+      {label: park ? "CANOPY WALK" : "HIGH CONVICTION", sub: "UPPER ROUTE", y: -168, direction: -1, color: "#e9ce91"},
+      {label: park ? "LAKESIDE PATH" : "STREET LEVEL", sub: "LOWER ROUTE", y: -124, direction: 0, color: "#b7d5b4"}
     ] : [{label: item.label || (park ? "THE LONG VIEW" : "WORK IN PROGRESS"),
-      sub: item.role === "rejoin" ? "ONWARD, TOGETHER" : park ? "LET IT COMPOUND" : "GROWTH TAKES WORK", y: -160, direction: 0, color: "#ead098"}];
+      sub: item.role === "rejoin" ? "ONWARD, TOGETHER" : park ? "LET IT COMPOUND" : "GROWTH TAKES WORK", y: -148, direction: 0, color: "#e9ce91"}];
     c.save(); c.translate(item.x, floor); c.rotate(angle);
-    box(c, -7, -7, 14, 7, "#152f31", 2);
-    box(c, -4, -194, 8, 190, gradient(c, -4, -194, 8, 0, ["#314e4b", "#9ca58a", "#52665e", "#243e3b"]), 2);
-    box(c, -6, -198, 12, 6, "#405852", 2); line(c, -3, -198, 3, -198, "#c6bc91", 1);
+    box(c, -5, -5, 10, 5, "#35483d", 1.5);
+    box(c, -3, -179, 6, 176, gradient(c, -3, -179, 6, 0, ["#4a604f", "#939c7e", "#3d584d"]), 1.5);
+    box(c, -4, -181, 8, 4, "#9b9e7d", 1.3);
     for (const row of rows) {
-      const w = fork ? 195 : 190, left = -w / 2, y = row.y, h = 46;
-      box(c, left + 2, y + 3, w, h, "#091e27bb", 5);
-      box(c, left, y, w, h, gradient(c, left, y, w * .4, h, ["#dbbd83", "#857c59", "#4d5d50"]), 4);
-      box(c, left + 2, y + 2, w - 4, h - 5,
-        gradient(c, left, y, w * .25, h, park ? ["#3d6051", "#23483d", "#16392f"] : ["#315566", "#173b4e", "#102b3d"]), 3);
-      line(c, left + 5, y + 4, -left - 5, y + 4, "#f0dfb56b", .8);
-      line(c, left + 5, y + h - 4, -left - 5, y + h - 4, "#071c245c", 1);
-      bolt(c, left + 7, y + 9, 1.2); bolt(c, -left - 7, y + h - 10, 1.2);
-      line(c, left + 36, y + 10, left + 36, y + h - 10, "#d1caa337", .8);
-      arrow(c, left + 20, y + h / 2, row.direction, row.color, 7.5);
-      text(c, row.label, 14, y + 18, 11, w - 54, "#fff0cb");
-      text(c, row.sub, 14, y + 32, 7.6, w - 54, row.color, 600);
+      const w = fork ? 153 : 145, left = -w / 2, y = row.y, h = 35;
+      box(c, left + 1.5, y + 2, w, h, "#10262966", 3);
+      box(c, left, y, w, h, gradient(c, left, y, w * .2, h, park ? ["#6c7950", "#4b5d43"] : ["#b1936b", "#6b6653"]), 3);
+      box(c, left + 1.2, y + 1.2, w - 2.4, h - 2.4,
+        gradient(c, left, y, w * .2, h, park ? ["#395846", "#24483b"] : ["#315563", "#213e49"]), 2);
+      line(c, left + 4, y + 2, -left - 4, y + 2, "#efdaa777", .8);
+      bolt(c, left + 5, y + h / 2, 1); bolt(c, -left - 5, y + h / 2, 1);
+      arrow(c, left + 18, y + h / 2, row.direction, row.color, 5.5);
+      text(c, row.label, 10, y + 12.5, 8.6, w - 43, "#f8e8c4");
+      text(c, row.sub, 10, y + 24.5, 6.2, w - 43, row.color, 600);
     }
-    // A small foundry plate anchors the NBIM identity without adding another headline.
-    box(c, -18, -65, 36, 15, "#a68f63", 2); box(c, -17, -64, 34, 12, "#1d393e", 1);
-    text(c, "NBIM", 0, -58, 8, 29, "#dfcea0");
     c.restore(); return true;
   }
   function spring(c, item, offset) {
     const x = item.x + offset, y = item.y, w = item.w;
     c.save();
-    box(c, x, y - 4, w, 4, "#0c2630", 1);
-    for (const center of [x + 13, x + w - 13]) {
-      line(c, center - 4, y - 3, center + 4, y - 6, "#b2bc9f", 1.5);
-      line(c, center + 4, y - 6, center - 4, y - 9, "#a2af91", 1.5);
+    box(c, x, y - 13, w, 13, "#244a40", 2.5);
+    box(c, x + 1, y - 12, w - 2, 10,
+      gradient(c, x, y - 12, 0, 10, ["#73a58b", "#477d68", "#315849"]), 2);
+    line(c, x + 1, y - 13, x + w - 1, y - 13, "#c7e8aa", 1.8);
+    line(c, x + 2, y - 2, x + w - 2, y - 2, "#183a35", 1.4);
+    bolt(c, x + 4.5, y - 6.5, .8); bolt(c, x + w - 4.5, y - 6.5, .8);
+    for (let i = 1; i <= 3; i++) {
+      const center = x + w * i / 4;
+      line(c, center - 3, y - 5, center, y - 8, "#d7ebbd", 1.2);
+      line(c, center, y - 8, center + 3, y - 5, "#d7ebbd", 1.2);
     }
-    box(c, x, y - 13, w, 6, gradient(c, x, y - 13, 0, 6, ["#c4d9b1", "#5e957d", "#284d49"]), 2);
-    line(c, x + 1, y - 13, x + w - 1, y - 13, "#d7f8ce", 1.6);
-    bolt(c, x + 5, y - 10, 1); bolt(c, x + w - 5, y - 10, 1);
-    if (!item.used) {
-      c.beginPath(); c.moveTo(x + w / 2, y - 36); c.lineTo(x + w / 2 + 10, y - 26);
-      c.lineTo(x + w / 2, y - 16); c.lineTo(x + w / 2 - 10, y - 26); c.closePath();
-      c.fillStyle = "#103a37"; c.fill(); c.strokeStyle = "#a2d7ae"; c.lineWidth = 1; c.stroke();
-      arrow(c, x + w / 2, y - 26, -2, "#e3f5cb", 5);
-    }
+    if (!item.used) arrow(c, x + w / 2, y - 26, -2, "#d6e8af", 6.5);
     c.restore(); return true;
   }
   window.LR_PROPS = {images: Object.values(art), get ready() {return Object.values(art).every(loaded);},
-    pickup, hazard, sign, spring, version: 14};
+    pickup, hazard, sign, spring, version: 18};
 })();

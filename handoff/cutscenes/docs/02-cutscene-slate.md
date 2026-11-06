@@ -30,7 +30,7 @@ Keep likeness, costume, planted feet and coherent architecture throughout. Compo
 
 | Time | Picture and action | Camera and cut |
 |---|---|---|
-| 0.0–1.2 | The restored original golden-hour Midtown painting establishes the skyline, with its existing Chrysler/Empire State composition preserved. | Begin settled on a coherent composition using the current artwork. |
+| 0.0–1.2 | The current cohesive golden-hour Midtown panorama establishes its skyline and dry streets, preserving the supplied landmark composition. | Begin settled on a coherent composition using the current artwork. |
 | 1.2–3.7 | The runner crosses a short stretch left to right; a small gust lifts a few leaves. | One smooth tracking move; building geometry remains fixed. |
 | 3.7–5.0 | Runner exits toward the chapter's route; the camera settles on the ordinary streetscape. | Match the gameplay travel direction; retain breathing room. |
 

@@ -1737,7 +1737,7 @@ var wo = class {
         let R = (Q * 211 - o * 0.21 + s * (9 + Q % 3 * 3)) % (i + 80), h = 122 + (Q * 53 + s * (12 + Q % 2 * 5)) % 232;
         a.save(), a.translate(R < 0 ? R + i + 80 : R, h), a.rotate(s * 0.5 + Q), this.poly([[-3, 0], [0, -2], [4, 0], [0, 2]], Q % 2 ? "#e5b95b80" : "#b8774680"), a.restore();
       }
-    } else {
+    } else if (!window.LR_SCENERY?.layered) {
       let Q = o * 0.13, R = 890, h = Math.floor(Q / R);
       for (let B = h; B < h + Math.ceil(i / R) + 2; B++) {
         let c = B * R - Q;
@@ -22257,7 +22257,7 @@ function mD() {
 }
 async function qu() {
   try {
-    !document.fullscreenElement && mt.requestFullscreen && await mt.requestFullscreen({ navigationUI: "hide" }), screen.orientation?.lock && await screen.orientation.lock("landscape");
+    !document.fullscreenElement && document.documentElement.requestFullscreen && await document.documentElement.requestFullscreen({ navigationUI: "hide" }), screen.orientation?.lock && await screen.orientation.lock("landscape");
   } catch {
   }
 }

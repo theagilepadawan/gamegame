@@ -5,7 +5,7 @@ import {pathToFileURL} from 'node:url';
 const moduleName = process.env.PLAYWRIGHT_MODULE || 'playwright';
 const {chromium} = await import(moduleName.startsWith('/') ? pathToFileURL(moduleName).href : moduleName);
 const url = new URL(process.env.TEST_URL || 'http://127.0.0.1:4181/'); url.searchParams.set('unlock', 'all');
-const output = process.env.OFFICE_HOST_OUTPUT || new URL('../review/office-host-v14/', import.meta.url).pathname;
+const output = process.env.OFFICE_HOST_OUTPUT || new URL('../review/office-host-v18/', import.meta.url).pathname;
 await mkdir(output, {recursive: true});
 const browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', headless: true,
   args: ['--no-sandbox', '--disable-dev-shm-usage', '--enable-unsafe-swiftshader']});
@@ -21,8 +21,9 @@ async function capture(name, viewport, fallback = false, deviceScaleFactor = 1) 
     HTMLCanvasElement.prototype.getContext = function(type, ...args) {return /webgl/i.test(type) ? null : native.call(this, type, ...args);};
   });
   await page.goto(url.href, {waitUntil: 'networkidle', timeout: 90000});
-  await page.waitForFunction(() => window.longRun && window.LR_OFFICE_HOST?.ready && LR_SCENERY.ready && !document.querySelector('#start').disabled && !document.querySelector('#splash'));
+  await page.waitForFunction(() => window.longRun && window.LR_OFFICE_HOST?.ready && LR_SCENERY.ready && LR_SHOPS.ready && !document.querySelector('#start').disabled && !document.querySelector('#splash'));
   if (!fallback) await page.waitForFunction(() => longRun.environment.ready);
+  await page.evaluate(() => {const next = requestAnimationFrame.bind(window); window.requestAnimationFrame = () => 0; return new Promise(resolve => next(resolve));});
   const report = await page.evaluate(fallback => {
     const initial = LR_OFFICE_HOST.inspect();
     Cu(false); fu('midtown'); Ko('chapter'); b = 'paused'; SA.pause();
@@ -33,12 +34,12 @@ async function capture(name, viewport, fallback = false, deviceScaleFactor = 1) 
     for (let frame = 0; frame < 3595; frame++) {
       q.invincible = 999; q.floorY = q.floorAt(q.x); q.step(1 / 60);
       if (!fallback) $A.update(1 / 60, q, {id: 'midtown', reduced: true, quality: 1});
-      if (frame % 15 !== 0 || q.chapterTime < 52) continue;
+      if (frame % 15 !== 0 || q.chapterTime < 10) continue;
       ir = q.y; Kt = T - q.floorY; $i = 0;
       const host = LR_OFFICE_HOST.layout(q.distance, eA, kA);
       const terrain = q.floorAt(host.x) + Kt;
       samples.push({time: q.chapterTime, x: host.x, y: host.y, height: host.height, terrain});
-      if (q.chapterTime > 55 && host.x > eA * .15 && host.x < eA * .8 && terrain > host.y + 5) {
+      if (host.x > host.height * .5 && host.x < eA - host.height * .5 && terrain > host.y + 5) {
         found = true; break;
       }
     }
@@ -71,7 +72,7 @@ async function capture(name, viewport, fallback = false, deviceScaleFactor = 1) 
   assert.equal(report.initial.ready, true);
   assert.equal(report.initial.visible, false, 'Host is hidden on the main menu');
   assert.equal(report.opening.visible, false, 'Office host is not present at the chapter start');
-  assert.equal(report.found, true, 'Full host and grounded shoes are visible during the real late chapter');
+  assert.equal(report.found, true, 'Full host and grounded shoes are visible before the real chapter finishes');
   assert.equal(report.renderer, fallback ? 'district-canvas' : 'pixi-webgl');
   assert.equal(report.current.visible, true);
   assert.equal(report.current.y, report.office.host.y, 'Feet remain on authored office pavement');

@@ -1,0 +1,176 @@
+{
+  "version": 18,
+  "source": "atlas-native.png",
+  "sourceSha256": "8ae036fa16cdc9de045865d2783f98036736e176bae027921ed1cec005a360e3",
+  "sourceSize": [
+    1536,
+    1024
+  ],
+  "styleReference": "Exact original engine drawings from user-provided reference HTML / git156db81; original-35.webp construction barrier.",
+  "generation": "Imagegen native 3x2 atlas; second edit removes external glow while retaining six silhouettes.",
+  "processing": "Native cell extraction and lossless WebP encoding only. Alpha >2 bounds with2px padding; no scaling, recoloring or repainting.",
+  "assets": {
+    "dividend": {
+      "file": "dividend.webp",
+      "cell": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "crop": [
+        109,
+        108,
+        292,
+        302
+      ],
+      "nativeSize": [
+        292,
+        302
+      ],
+      "bytes": 93634,
+      "sha256": "387255cdded8196382e99eea044dcb7e81081e5773c980ca4a93a3af1bb211be",
+      "alphaBounds": [
+        109,
+        108,
+        401,
+        410
+      ]
+    },
+    "opportunity": {
+      "file": "opportunity.webp",
+      "cell": [
+        512,
+        0,
+        512,
+        512
+      ],
+      "crop": [
+        631,
+        95,
+        269,
+        319
+      ],
+      "nativeSize": [
+        269,
+        319
+      ],
+      "bytes": 57082,
+      "sha256": "5de6ca93389b827953179e05c1ac1196a48bd70e9533f3ebc00ead01a1e3644c",
+      "alphaBounds": [
+        119,
+        95,
+        388,
+        414
+      ]
+    },
+    "research": {
+      "file": "research.webp",
+      "cell": [
+        1024,
+        0,
+        512,
+        512
+      ],
+      "crop": [
+        1078,
+        94,
+        376,
+        340
+      ],
+      "nativeSize": [
+        376,
+        340
+      ],
+      "bytes": 106000,
+      "sha256": "9b11c179b0e170aa6af32242dd6e395d9d412c67c96b9ea2baffd0f3d0832c8d",
+      "alphaBounds": [
+        54,
+        94,
+        430,
+        434
+      ]
+    },
+    "conviction": {
+      "file": "conviction.webp",
+      "cell": [
+        0,
+        512,
+        512,
+        512
+      ],
+      "crop": [
+        78,
+        583,
+        357,
+        356
+      ],
+      "nativeSize": [
+        357,
+        356
+      ],
+      "bytes": 92564,
+      "sha256": "61e629615a7817e3c5fbd6c0f2d10232186ee72d8732f1b71d7d5583f91066df",
+      "alphaBounds": [
+        78,
+        71,
+        435,
+        427
+      ]
+    },
+    "road-barrier": {
+      "file": "road-barrier.webp",
+      "cell": [
+        512,
+        512,
+        512,
+        512
+      ],
+      "crop": [
+        566,
+        604,
+        396,
+        316
+      ],
+      "nativeSize": [
+        396,
+        316
+      ],
+      "bytes": 167972,
+      "sha256": "8bde83cff85933766e64578a15c6dbdad08bcb149b8c09a0cf768353386cc755",
+      "alphaBounds": [
+        54,
+        92,
+        450,
+        408
+      ]
+    },
+    "market-board": {
+      "file": "market-board.webp",
+      "cell": [
+        1024,
+        512,
+        512,
+        512
+      ],
+      "crop": [
+        1085,
+        592,
+        386,
+        328
+      ],
+      "nativeSize": [
+        386,
+        328
+      ],
+      "bytes": 96208,
+      "sha256": "9f883f43542ca0e96579d79f64494473cd3e9dbfe3e08aff9b16835da24f25e5",
+      "alphaBounds": [
+        61,
+        80,
+        447,
+        408
+      ]
+    }
+  }
+}

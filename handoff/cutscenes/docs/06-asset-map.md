@@ -29,28 +29,25 @@ The original inline office/host photographs were visible in the conversation but
 | `references/locations/central-park-approved-bow-bridge.webp` | `game/assets/original-33.webp` |
 | `references/locations/central-park-approved-ramble.webp` | `game/assets/scenery/park-1.webp` |
 | `references/locations/central-park-approved-bethesda.webp` | `game/assets/scenery/park-2.webp` |
-| `references/locations/downtown-one-world-trade-center.webp` | `game/assets/art-v2/downtown-wtc.webp` |
-| `references/locations/downtown-complete-brooklyn-bridge.webp` | `game/assets/art-v2/downtown-bridge-wide.webp` |
-| `references/locations/downtown-wall-street.webp` | `game/assets/art-v2/downtown-wallstreet.webp` |
-| `references/locations/midtown-505-blue-glass-entrance.webp` | `game/assets/art-v2/midtown-fifth.webp` |
-| `references/locations/midtown-original-skyline.webp` | `game/assets/original-34.webp` |
-| `references/locations/midtown-original-bryant-park.webp` | `game/assets/scenery/midtown-1.webp` |
-| `references/locations/midtown-original-fifth-avenue.webp` | `game/assets/scenery/midtown-2.webp` |
-| `references/locations/midtown-joju.webp` | `game/assets/art-v2/midtown-joju.webp` |
-| `references/locations/midtown-omars.webp` | `game/assets/art-v2/midtown-omars.webp` |
-| `references/locations/midtown-gussy.webp` | `game/assets/art-v2/midtown-gussy.webp` |
+| `references/locations/downtown-main.webp` | `game/assets/scenery-v18/downtown-main.webp` |
+| `references/locations/downtown-street.webp` | `game/assets/scenery-v18/downtown-street.webp` |
+| `references/locations/downtown-anonymous-tail.webp` | `game/assets/scenery-v18/downtown-tail.webp` |
+| `references/locations/midtown-main.webp` | `game/assets/scenery-v18/midtown-main.webp` |
+| `references/locations/midtown-street-and-505.webp` | `game/assets/scenery-v18/midtown-street.webp` |
 
-The original Midtown paintings are the backdrop authority. `game/scripts/midtown-scenery.js` preserves their slow horizontal camera and fixed vertical position. `game/scripts/park-scenery.js` preserves the original Park composition; `scenery.js` retains the Downtown route. Midtown venue assets have transparent silhouettes and are separate street-side details, not replacement background panels. The supplied Gussy source includes a library vignette that the renderer masks out: use only its native truck silhouette and original curb as defined by `midtown-storefronts.js`, so NYPL is not duplicated over the restored painting. `midtown-storefronts.js` and `office-host.js` define their scale and anchors. Do not add a checkerboard or substitute the retired v1.5/v1.6 backgrounds.
+The current opaque panoramas are the backdrop authority. `game/assets/scenery-v18/manifest.json` records their native dimensions/provenance and any active join repairs. `game/scripts/midtown-scenery.js` supplies the shared panorama renderer; `scenery.js` configures the Downtown route and anonymous Endless tail. `park-scenery.js` keeps the original Park composition. The current native artwork, not the rendered ground padding, determines available architectural detail.
+
+Venue frontages are baked into their continuous street paintings and use the same camera. `opening-storefronts.js` and `midtown-storefronts.js` describe native frontage bounds; they no longer add independent venue panels. 505's complete blue/cyan glazing and revolving doors are part of the Midtown street reference. `office-host.js` attaches the retained character to that entrance. Do not recreate the older cutout-building islands or import their separate parallax.
 
 `references/gameplay/downtown-gameplay.png`, `midtown-gameplay.png`, `central-park-gameplay.png` and `office-gameplay.png` show actual current rendering and scale. These contain gameplay/UI context; prepare clean picture frames before video generation. If there is a difference between an isolated painting and the live composition, inspect the renderer/camera rather than arbitrarily stretching the painting.
 
-The rejected six-panel v1.3 Park art, v1.5/v1.6 Midtown redesigns and cartoon runner study are intentionally omitted from this handoff. All 40 original source assets remain in `game/assets/` for provenance and regression checks, so **presence alone does not mean an asset is currently rendered**. In particular, old tiny storefront crops `original-10` through `original-16` and the old Downtown plate `original-32` are not authority over the current venue/Downtown composition. The original Park plate `original-33` and restored Midtown plate `original-34` are active.
+Retired scenery, separate venue-island artwork and earlier prop variants are omitted from active production references. All 40 original source files remain in `game/assets/` for provenance and regression checks, so **presence alone does not mean an asset is currently rendered**. The newly supplied earlier HTML is a visual guide, not authority to replace the current game. Original Park plate `original-33` remains active; old city plates and small storefront crops are historical references beside the current panoramas.
 
 ## Props, brand and audio
 
 | Material | Where to look |
 |---|---|
-| Current detailed pickups and risk equipment | `game/assets/props-v14/`, `game/scripts/prop-art.js` |
+| Current warm pickups and risk equipment | `game/assets/props-v18/`, including native atlas, extraction manifest/provenance; `game/scripts/prop-art.js` controls sizes and small signs |
 | Capital-reserve pickup and equipped effect art | `game/assets/original-21.webp`, `original-22.webp`; actual effect drawn by engine `Po` methods |
 | Park trees/benches and environmental textures | `game/assets/original-35.webp`, `original-36.webp`; inspect actual renderer for atlas rectangles |
 | Jetpack and IPO Hype Machine | Engine drawing code plus live gameplay. They are not necessarily standalone full character paintings. Capture clean reference views before recreating them. |

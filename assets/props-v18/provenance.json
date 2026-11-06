@@ -1,0 +1,23 @@
+{
+  "version": 18,
+  "reference": "User-uploaded The-Long-Run-NBIM.html; exact pre-v14 engine shape language, git156db81; original-35.webp construction barrier.",
+  "referenceBoard": "review/props-v18/reference-board.png",
+  "initialGeneration": "/workspace/generated_images/exec-20bfb5a8-7d1b-489c-bd54-6de2b55e65ac.png",
+  "finalGeneration": "/workspace/generated_images/exec-47ecd9aa-a590-484c-b6ba-b943235dbd00.png",
+  "tool": "image_gen.imagegen",
+  "promptSummary": "Faithful polish of the original simple game silhouettes. Transparent1536x1024,3columns\u00d72rows. Round gold N coin, faceted diamond, brass/teal research magnifying glass, angular friendly brass bull face, yellow/charcoal striped construction barrier, plain copper market board with candlestick chart and empty label area. Warm top-left light, crisp tiny-scale readability, restrained edge detail, no ornate gold picture frames.",
+  "secondEdit": "Remove all external glow, haze and shadows; preserve six objects and grid. Requested by coordinating agent.",
+  "sourceSha256": "8ae036fa16cdc9de045865d2783f98036736e176bae027921ed1cec005a360e3",
+  "processing": "Native rectangular cell extraction to tight alpha bounds+2px padding and lossless WebP conversion. No upscaling, color edits, painting or runtime filters.",
+  "runtime": "Existing pickup sizes, positions and animation cadence. Hazards retain original collision rectangles. Park bench/bough sprites remain untouched. Directional signs return to restrained original proportions with live crisp lettering.",
+  "sourceAssetsUnchanged": [
+    "assets/original-35.webp",
+    "all forty baseline assets"
+  ],
+  "verification": {
+    "core": "PASS review/props-v18/core/report.json; existing props suite with native-width threshold256 and screenshot step omitted. All gameplay and rendering assertions retained.",
+    "canvas": "PASS review/props-v18/canvas/report.json: direct prop rendering and gameplay assertions with forcedCanvas. Whole-game composition is outside this prop check scope.",
+    "visual": "Compared review/props-v18/reference-board.png and polished-board.png. All six source silhouettes clear; no ambient alpha halos; overhead face aligned with original collision rectangle and eyes/ropes above.",
+    "scope": "No engine, physics, pickup values, route generation, or Park obstacle art edits."
+  }
+}

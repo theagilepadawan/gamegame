@@ -36,9 +36,10 @@ try{
     });
   }
   console.log(`Testing ${env.TEST_URL}`);
-  // The v1.6 atmosphere/grounding suites describe the rejected fast, projected
-  // Midtown redesign. Restoration now locks the original paintings and camera.
-  for(const test of ['modes','menu','scenery','art-layers','downtown','venues','venue-pacing','office-host','midtown-restoration','props','water','gaps','standalone']) await run(`tests/${test}.mjs`);
+  // Cohesive scenery replaces the older architectural-layer and exact-wet-
+  // painting oracles. One suite covers both cities, venue attachment, full
+  // routes, actual jumps/flight, renderer fallbacks and preserved Park pixels.
+  for(const test of ['modes','menu','cohesive-scenery','responsive-framing','office-host','props','water','gaps','standalone']) await run(`tests/${test}.mjs`);
   console.log('All release browser checks passed.');
 }finally{
   server?.kill('SIGTERM');

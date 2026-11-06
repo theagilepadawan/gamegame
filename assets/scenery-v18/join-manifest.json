@@ -1,0 +1,53 @@
+{
+  "role": "Imagegen-repaired native panorama joins; no independent camera transform",
+  "files": [
+    {
+      "path": "assets/scenery-v18/downtown-join.webp",
+      "imagegenSource": "/workspace/generated_images/exec-122a113d-9d6a-4f12-973b-ac95b1d274f8.png",
+      "nativeWidth": 1118,
+      "nativeHeight": 1407,
+      "scene": "opening",
+      "leftSource": 0,
+      "rightSource": 1,
+      "logicalX": 1852,
+      "logicalY": 0,
+      "logicalWidth": 576,
+      "logicalHeight": 724,
+      "sha256": "b69a0ce59746c4b7f5b4c857dc65918ea46d52498235ef4c8358f8433b2af29a",
+      "sourceReference": "review/art-v18/joins/downtown-join-reference.png",
+      "suggestedFeatherNative": 48
+    },
+    {
+      "path": "assets/scenery-v18/downtown-tail-join.webp",
+      "imagegenSource": "/workspace/generated_images/exec-218fa9fe-e45c-43cf-86e9-5fe68df68ab7.png",
+      "nativeWidth": 1118,
+      "nativeHeight": 1407,
+      "scene": "opening",
+      "leftSource": 1,
+      "rightSource": 2,
+      "logicalX": 1852,
+      "logicalY": 0,
+      "logicalWidth": 576,
+      "logicalHeight": 724,
+      "sha256": "5c9aa890d062554f96b692b1c7c2a14cd4528316985cfe7aa9910d22202b085b",
+      "sourceReference": "review/art-v18/joins/downtown-tail-join-reference.png",
+      "suggestedFeatherNative": 48
+    },
+    {
+      "path": "assets/scenery-v18/midtown-join.webp",
+      "imagegenSource": "/workspace/generated_images/exec-496a76a3-bd83-4758-8d37-dceac94c0821.png",
+      "nativeWidth": 1118,
+      "nativeHeight": 1407,
+      "scene": "midtown",
+      "leftSource": 0,
+      "rightSource": 1,
+      "logicalX": 1852,
+      "logicalY": 0,
+      "logicalWidth": 576,
+      "logicalHeight": 724,
+      "sha256": "af550dfddc03a1a680ac322e75a9208554866cf37f4be9f0b00ae5860b80a46a",
+      "sourceReference": "review/art-v18/joins/midtown-join-reference.png",
+      "suggestedFeatherNative": 48
+    }
+  ]
+}

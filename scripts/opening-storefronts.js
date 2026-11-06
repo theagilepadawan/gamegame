@@ -1,27 +1,24 @@
-/* Complete downtown entrances are painted into separate native-detail blocks.
-   This metadata shares the scenery camera; no second sign/door overlay is drawn. */
+/* Downtown venues occupy real bays in the opaque Seaport street painting. */
 (function () {
   "use strict";
-  var SHOPS = [
-    { key: "kabin", panel: 3, rect: [310, 903, 410, 235] },
-    { key: "lei", panel: 8, rect: [288, 836, 444, 344] }
+  var fixtures = [
+    {key: "kabin", rect: [502, 450, 208, 130]},
+    {key: "lei", rect: [1547, 435, 223, 146]}
   ];
   function spots(distance, W, H, mode) {
-    var scene = window.LR_SCENERY && LR_SCENERY.layout("opening", distance || 0, W || 1000, H || 540, mode);
-    return SHOPS.map(function (shop) {
-      var b = shop.rect, block = scene && scene.blocks.find(function (p) { return p.sourceIndex === shop.panel; });
-      var panel = block && { x: block.worldX - scene.scroll, y: 0, width: scene.width, height: scene.height, sourceWidth: 1024, sourceHeight: 1430 };
-      var cropTop = scene ? scene.cropTops[shop.panel] : 57;
-      var box = [b[0], b[1] - cropTop, b[2], b[3]];
-      return { key: shop.key, panel: shop.panel, segment: block ? block.segment : null, sourceRect: box, nativeRect: b.slice(), integrated: true,
-        fullArchitecture: true, nativeWidth: 1024, nativeHeight: 1536, renderMode: "painted",
-        worldX: block ? block.worldX + (b[0] + b[2] / 2) / 1024 * scene.width : null,
-        visible: !!panel && panel.x + (box[0] + box[2]) / 1024 * panel.width > 0 && panel.x + box[0] / 1024 * panel.width < (W || 1000), rect: panel ? { x: panel.x + box[0] / panel.sourceWidth * panel.width,
-          y: panel.y + box[1] / panel.sourceHeight * panel.height,
-          width: box[2] / panel.sourceWidth * panel.width, height: box[3] / panel.sourceHeight * panel.height } : null };
+    W = W || 1000; H = H || 540;
+    var scene = LR_SCENERY.layout("opening", distance || 0, W, H, mode);
+    var block = scene.blocks[1], scale = scene.artScale, left = block.worldX - scene.scroll;
+    return fixtures.map(function (fixture) {
+      var r = fixture.rect, x = left + r[0] * scale, y = scene.worldTransform.y + r[1] * scale;
+      return {key: fixture.key, panel: 1, segment: 1, sourceRect: r.slice(), nativeRect: r.slice(), integrated: true,
+        fullArchitecture: true, nativeWidth: 2172, nativeHeight: 724, renderMode: "painted",
+        worldX: block.worldX + (r[0] + r[2] / 2) * scale,
+        visible: x + r[2] * scale > 0 && x < W,
+        rect: {x: x, y: y, width: r[2] * scale, height: r[3] * scale}};
     });
   }
-  window.LR_KABIN = { images: [], get ready() { return !!(window.LR_SCENERY && LR_SCENERY.ready); },
-    frontage: function (painting) { return painting; }, spots: spots,
-    gl: function () {}, draw2d: function () {}, drawScreen: function () {} };
+  window.LR_KABIN = {images: [], get ready() {return !!(window.LR_SCENERY && LR_SCENERY.ready);},
+    frontage: function (painting) {return painting;}, spots: spots,
+    gl: function () {}, draw2d: function () {}, drawScreen: function () {}};
 })();

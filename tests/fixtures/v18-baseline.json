@@ -1,0 +1,108 @@
+{
+  "reference": "b365d4324fc4c2be4037b8b936a0131a499107fa",
+  "purpose": "Lock unaffected simulation, original assets, progress/audio behavior and Park composition while city paintings and prop rendering change.",
+  "assets": {
+    "assets/original-00.svg": "e163039806d642c472242fde0edd6e5b8999181563c672d2b45bb74e11102481",
+    "assets/original-01.png": "b84f2fcce82d2c0ccb6cf8fcf419291a7e7c40a21172cdd6c0d7cdcbb63b18ec",
+    "assets/original-02.woff2": "5eb3b71ee30bd68613f860ac7a1b2e63d4f7af1fe264f07b12ab515d19b1b9f9",
+    "assets/original-03.woff2": "36a366a6ed38779a3fcb8706cb1326dbc07f57e99c32e1ca34835e0271daf0cb",
+    "assets/original-04.woff2": "1a101de10b2010e4becf906d07d4f93648d8b8066820c8a06b3520eae830ebf6",
+    "assets/original-05.woff2": "a0ce05257088651c814034ba3c6fdee3fa4e312e3f552112bba04b4faae4fcff",
+    "assets/original-06.woff2": "f3de0c1bed2b412c3bd786af98c4e80af2c47dcff0ba64a0703a0eb4bd37989a",
+    "assets/original-07.webp": "0be1d70b5df0c17ca546df1fccf39abdbdac1c84a5c40454290901ec21f7b1f2",
+    "assets/original-08.svg": "e3acfba90abbe49b0da7dbc5388c427dd8b7165e67f89cbfbd1518976b0af5cc",
+    "assets/original-09.svg": "2de1f226798878fcc82624663b14d14fd734f7e89dedc375e24a1a6e87b7d604",
+    "assets/original-10.webp": "1ce0e3d1e660493a3b42dc69d4beba2fcd832cbed9090f9c029237ec3c8fe0be",
+    "assets/original-11.webp": "0e03b679362eac4ed516283fe2eb72628eb32fd84fcee59c25e8fe60d5abb83b",
+    "assets/original-12.webp": "ab7026010110ffbd54b7519c4a317fc52fde79fe95b79d406fae7c34fc207dbb",
+    "assets/original-13.webp": "38a88edb04a516c44996a1e32c57d2964758de38e41ddd3190e307a9e8f0145c",
+    "assets/original-14.webp": "c35253f6271087281f3b5d64735917f79d6ab6550e049516407264d92f294617",
+    "assets/original-15.webp": "6b2f595137c0358e18b30a4ae5ccb0ccca99df510a023fe3d6bddab3c8708631",
+    "assets/original-16.webp": "983e971107799d94b2712c534cef06136ef6cfe7895d3b5e916a3b376bbbd7d9",
+    "assets/original-17.webp": "44fbb0ae052902e4153b4add60b2668df55df5f32cf66c98a45639287deedc1b",
+    "assets/original-18.webp": "388005196d1b66f940e12daf810513612d2805ca810c9afdfb0e94241ba8c5b1",
+    "assets/original-19.mp3": "0e8e5c01ac041c324b9a03064f59af9caef402c3c31c552f5c45d2eaff48e7e7",
+    "assets/original-20.mp3": "9bd0f9bfedae0664109677e6f1f090cb141ef07abc84430bd3633c2a5ac75ca4",
+    "assets/original-21.webp": "4ca6f8d5da45bb567f9e813888e62343d7a344e807032087d88b3f056172f83c",
+    "assets/original-22.webp": "4af5a9d2bcca68a28de6b186e1246af61044720f706661bc252b4d4c956027fb",
+    "assets/original-23.webm": "e02a2f773c52a1989fa9e6f3113151637a822131c0847de5d456131d082c4806",
+    "assets/original-24.avif": "04dfc8e1a6e59e36a3a3a5c15443a97a92a6d2a7da9d276b050d58be3c7952a7",
+    "assets/original-25.webp": "52dc24c0429ea6ccc5b579a6da8bb79bf41e471fe5108a62009f3c2e195551c0",
+    "assets/original-26.png": "5e3d382db4dd83d59aa5742793ad6b7903409e865c83bcbc54835049f043bc15",
+    "assets/original-27.webp": "f9a6c669e822fbb30a3b5b86cf2dcc58b1a09099681e868b93887465c4e0cf94",
+    "assets/original-28.webp": "16831448d03d57aa308277ee5b7e71d0637a00fc75a7107cd8740edef67efb1b",
+    "assets/original-29.webp": "7fb352a4ae9af65cba1962c645ef97290459044fe470312a8f676701d5ae2079",
+    "assets/original-30.webp": "605050662079da11c110babaf463794373221b778f248f4e9a1626077fa03ef2",
+    "assets/original-31.webp": "a3ea5dc85fc4cbae7381576e34eaaf83d8a0728fe5b48b85fe9eaa613792380e",
+    "assets/original-32.webp": "dc3847d0736597cc89a56380e7e1e1c139188dfbe32fa39f7f830457e2a5d8e8",
+    "assets/original-33.webp": "c3817e5e14060794307c5e3da69a451c920b9d9d0308eaabde4f2a7de9a282ed",
+    "assets/original-34.webp": "13b37e93986e3fe96762dccc5136acd9c74d3cec81394635d394ba58e011d6fa",
+    "assets/original-35.webp": "8604397ea98ce5e3730a063ca535b63a57c81fc37a82dc14cad5e6fece10d3e6",
+    "assets/original-36.webp": "4549bc56f6795e465ae162ac56589f651fdb0cc3c67eac11a2cdadd4853e0c24",
+    "assets/original-37.mp3": "b9e72bf64bdfca7833e91b6cc93c6a245d06603526ed841d71d0d9d3d07645d0",
+    "assets/original-38.mp3": "259f4c7d7d28a0fc03ac60b665507d2df10a0bfd5dae0df7d9895848b829cb54",
+    "assets/original-39.mp3": "d8fc27a6fa989ef52fbd5c303b2d38a5609b3359ba3b2cd121456b01f3acd981"
+  },
+  "modules": {
+    "scripts/park-scenery.js": "359be0da136923c92aac1f1c9e5c19d4eab4776c04835cb8890cc10e8e227735",
+    "scripts/park-shoes.js": "34c79fe62ff89f15a524b38c2e7491720107bfcb544dc17ddc3fd912680d9357",
+    "scripts/runner-unlocks.js": "9e295eb5ae3104a277adf3dd86cc8161035c91dc9047f7675f45b33b9b45191e",
+    "scripts/chapter-progression.js": "1ac3139f9af14f921240e6a5a09d3d399d55f5d4a041f956a8af4736bcf28e60",
+    "scripts/endless.js": "a62e287fee09066f930312acc0ef6ab6365097356e0260407dfe9579889402c1",
+    "scripts/history-reveal.js": "1e6f62ba73d213748f0e288c2da1c5c498cd90c7d37ac7ca57bbdaf5463c0bbf",
+    "scripts/leaderboard.js": "859532e5dedfe38cee9e90753dd4f493a69e440a0797e8508d782756f5ce5a7b",
+    "scripts/touch-guard.js": "44a9bf7f80921793dc56e954d6c15cde56cd7e130b039b32078eee49a9f8c9e8"
+  },
+  "engineSegments": [
+    {
+      "name": "simulation-and-audio",
+      "start": "var Qi = Object.freeze",
+      "end": "var wo = class",
+      "sha256": "9a82d133ea23c3476a477702d693dec8707bc3faadb07815501c9b25bb80b44b"
+    }
+  ],
+  "parkPixels": [
+    {
+      "id": "park",
+      "W": 864,
+      "distance": 0,
+      "hashA": 3949423886,
+      "hashB": 120382634
+    },
+    {
+      "id": "park",
+      "W": 864,
+      "distance": 12000,
+      "hashA": 62539147,
+      "hashB": 4027298027
+    },
+    {
+      "id": "park",
+      "W": 864,
+      "distance": 19200,
+      "hashA": 518093895,
+      "hashB": 2520359143
+    },
+    {
+      "id": "park",
+      "W": 1168,
+      "distance": 0,
+      "hashA": 33455588,
+      "hashB": 38313658
+    },
+    {
+      "id": "park",
+      "W": 1168,
+      "distance": 12000,
+      "hashA": 3463504312,
+      "hashB": 160623904
+    },
+    {
+      "id": "park",
+      "W": 1168,
+      "distance": 19200,
+      "hashA": 3939031008,
+      "hashB": 2123185292
+    }
+  ]
+}

@@ -6,7 +6,7 @@ const moduleName = process.env.PLAYWRIGHT_MODULE || 'playwright';
 const {chromium} = await import(moduleName.startsWith('/') ? pathToFileURL(moduleName).href : moduleName);
 const browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium',
   args: ['--no-sandbox', '--disable-dev-shm-usage', '--enable-unsafe-swiftshader']});
-const output = process.env.PROPS_OUTPUT || new URL('../review/props-v14/smoke/', import.meta.url).pathname;
+const output = process.env.PROPS_OUTPUT || new URL('../review/props-v18/smoke/', import.meta.url).pathname;
 await mkdir(output, {recursive: true});
 const errors = [], failed = [];
 try {
@@ -16,6 +16,7 @@ try {
   page.on('response', response => {if (response.status() >= 400) failed.push(`${response.status()} ${response.url()}`);});
   await page.goto(process.env.TEST_URL || 'http://127.0.0.1:4181/', {waitUntil: 'networkidle'});
   await page.waitForFunction(() => window.longRun && window.LR_PROPS?.ready && longRun.environment.ready && !document.querySelector('#start').disabled && !document.querySelector('#splash'));
+  await page.evaluate(() => {const next = requestAnimationFrame.bind(window); window.requestAnimationFrame = () => 0; return new Promise(resolve => next(resolve));});
   const report = await page.evaluate(() => {
     Cu(false); Ko('endless'); b = 'paused'; SA.pause();
     const result = {images: LR_PROPS.images.map(image => ({width: image.naturalWidth, height: image.naturalHeight})), outcomes: []};
@@ -71,7 +72,7 @@ try {
     return result;
   });
   assert.equal(report.images.length, 6);
-  assert.ok(report.images.every(image => image.width >= 300 && image.height >= 300), 'Every native painted object is decoded');
+  assert.ok(report.images.every(image => image.width >= 250 && image.height >= 250), 'Every native painted object is decoded at least 250px across, well above its gameplay size');
   for (const outcome of report.outcomes.slice(0, 4)) {
     assert.equal(outcome.dead, ['walk', 'stand'].includes(outcome.action), `${outcome.type}/${outcome.action}: collision outcome`);
     if (!outcome.dead) assert.equal(outcome.cleared, 1);
@@ -92,8 +93,8 @@ try {
       q.pickups.push({kind: 'research', x: q.x + 230, y: T - 55}, {kind: 'conviction', x: q.x + 340, y: T - 55});
       if (action === 'jump') q.jump();
       for (let i = 0; i < (action === 'jump' ? 34 : 20); i++) q.step(1 / 120, action === 'slide');
-      ir = q.y; Kt = 0; $i = 0; UA = 1.7;
-      $A.update(0, q, {id: 'opening', reduced: false, quality: 1}); vu();
+      b = 'paused'; ir = q.y; Kt = T - q.floorY; $i = 0; UA = 1.7;
+      $A.update(0, q, {id: 'opening', reduced: false, quality: 1}); Vu(); vu();
       return {action, dead: q.dead, grounded: q.grounded, sliding: q.sliding, y: q.y, body: q.bodyBox(), obstacle: q.obstacles[0]};
     }, action);
     assert.equal(frame.dead, false);

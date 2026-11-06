@@ -13,7 +13,7 @@ Start with the packaged game and its current art. The user has invested heavily 
 5. `docs/03-runway-prompts.md` — generation workflow and pasteable shot prompts.
 6. `docs/04-audio.md` and `docs/05-browser-integration.md` — sound, exports and safe integration.
 
-Also read `docs/07-latest-direction.md`: the user's forthcoming intro reference video, the requested running-shoe transition after Midtown, and the restored Midtown atmosphere take precedence over older proposals where they differ.
+Also read `docs/07-latest-direction.md`: the user's forthcoming intro reference video, the requested running-shoe transition after Midtown, and the current cohesive New York art direction take precedence over older proposals where they differ.
 
 `game/` is the editable source snapshot. In that folder, run `npm start` and open the printed URL. `npm run build` creates one standalone HTML. `npm ci` is needed only for the browser test dependency. The release snapshot and file hashes supplied with the ZIP are the source of truth for the packaged revision; do not resume development from an older chat artifact.
 
@@ -40,11 +40,12 @@ York art and understated fund-world humor. Keep the current Nicolai and Trond
 sprite style. Do not use the rejected cartoon sprite study or redesign the
 characters. 505 Fifth must keep the electric-blue/cyan glass lobby, complete
 paired revolving doors and the office host's supplied likeness/plum suit.
-Central Park must preserve the restored original dreamy painting. Midtown
-uses the restored original golden-hour skyline, Bryant Park and Fifth Avenue
-paintings from before the layered-city rebuild. Keep the original slow, calm
-composition. Only the detailed venue artwork and its careful placement carry
-forward; do not use the rejected v1.5/v1.6 city redesigns.
+Central Park must preserve the restored original dreamy painting. Downtown
+and Midtown use the current warm, opaque panoramas: streets, buildings and
+venues form one coherent painted scene with a calm shared camera. Preserve
+the complete blue/cyan 505 entrance. Do not reintroduce an ocean sheet under
+Downtown, wet Midtown streets or separately drifting venue islands. The older
+HTML is a visual guide; current gameplay and character assets remain.
 
 For LR-OP-01, inspect the intro reference video I will supply before deciding
 its animation treatment, pacing, camera or transitions. That video is not in

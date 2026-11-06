@@ -1,34 +1,49 @@
-# Release verification — Midtown backdrop restoration 1.7
+# Release verification — Cohesive New York artwork 1.8
 
-Midtown restores the pre-rebuild reference `156db816f0a43420b87864f5c61fde7878344035`. The superseded v1.6 report is preserved in `verification-v16.md`.
+Source and standalone browser checks passed for the scopes below. The uploaded earlier HTML matches the `156db81` visual reference after normalization; it guides the warm painted style and simpler props, not a rollback of the current game. Historical v1.7 results remain in `verification-v17.md`.
 
 ## Current change
 
-The original skyline, Bryant Park/NYPL and Fifth Avenue paintings use their original `.085` horizontal parallax, `H + 16` height, `y = -8` and 64-source-pixel overlap. The fast city rebuild, independent panorama, jump-driven backdrop projection and redesigned foundation are removed.
+Downtown and Midtown use opaque panoramas in `assets/scenery-v18/`, with streets, architecture and venue fronts sharing one calm camera. Five base paintings provide each city's main/venue views and an anonymous Downtown Endless tail; three authored join repairs share the same transform. Manifest files record source dimensions and provenance. Dry ground padding preserves the native painted architecture while keeping the lower scene covered during movement.
 
-The four detailed venues use smaller, occasional street-side placements with constant horizontal travel and fixed pavement anchors. Gussy selects the native truck and curb pixels, excluding its miniature library vignette. All source art is unchanged. Complete 505 glazing, revolving doors and the host's restrained greeting remain. Downtown, Central Park, physics, runners, audio and progression are unchanged.
+Six native `props-v18` sprites follow the earlier silhouettes, with smaller signs and crisp runtime lettering. Existing collection/collision/reward behavior, character sheets, audio and progression remain. Central Park keeps its original composition and lake animation. Narrow framing keeps the complete office reachable; very wide screens use a centered 8:3 stage cap, including actual fullscreen.
 
-## Completed checks
+## Source checks
 
-Chromium software WebGL and Canvas checks ran against the final source, with the standalone loading check repeated after the last rendering change.
+`COHESIVE_OUTPUT=review/v18-qa/final node tests/cohesive-scenery.mjs` passed against the editable source at `http://127.0.0.1:4181/?unlock=all`. `review/v18-qa/final/report.json` records desktop Pixi (1440×900, DPR1), mobile Pixi (844×390, DPR2) and forced Canvas (1440×900, DPR1).
 
-- **Restoration:** desktop, mobile DPR2 and Canvas passed. Each profile compared 24 backdrop pixel/layout pairs with an independent frozen copy of the old renderer: zero differences. Each also checked 12 unchanged Downtown/Park rendered checkpoints. Actual double-jump, timed triple-jump and jetpack frames retain the old horizontal parallax and fixed backdrop height.
-- **Venue pacing:** desktop, mobile DPR2 and compact passed using actual chapter progression and visible native alpha. Artwork first enters at approximately 15.03, 26.53, 38.03 and 49.53 seconds. Named frontages never share the viewport; all are fully visible before the finish, including 505 and its host.
-- **Office host:** desktop, mobile DPR2 and Canvas passed late arrival, architectural scale, grounded shoes, stable head/body, one wrist greeting, pause and reduced-motion checks.
-- **Venues:** desktop, mobile DPR2 and Canvas passed complete frontages, tyre contact, full 505 glass and once-only greeting.
-- **Scenery:** desktop, mobile and Canvas passed, including Opening WebGL. Native-art checks passed 11 Downtown crops, four venue sources and reachable painting joins at DPR2.
-- **Final standalone:** all 40 original asset hashes match. Fonts, artwork, code and audio load without external requests; Contrarian remains playable offline. Build: 36,653,178 bytes, 59 embedded assets.
-- **Visual review:** real chapter captures at 0/20/31/33/35/43/55/57.5 seconds cover the original skyline, all venues and 505/host. Omar's doors clear the foreground hill; Gussy no longer duplicates NYPL. Midtown reports zero water meshes. Original painted asphalt reflections are preserved.
+- **Scenery and motion:** 96 layout cases, 24 full-composite opacity checks, six exact Central Park pixel baselines, 67 captures and 1,713 real motion samples across double jumps, Midtown timed triple jumps and jetpack flight. Assertions cover the shared venue/backdrop camera, stable vertical composition, reachable joins and anonymous Endless continuation.
+- **Complete runs:** six actual chapters completed across the three profiles. Every full frontage appeared before the finish. Desktop first reveals were Kabin 40.4 s / LEI 62.0 s and JOJU 23.5 s / Omar's 31.8 s / Gussy 39.9 s / 505 51.3 s.
+- **Office and props:** `office-host.mjs` passed desktop Pixi, mobile Pixi DPR2 and forced Canvas; `props.mjs` passed mobile Pixi DPR2. Reports/captures are under `review/office-host-v18/` and `review/props-v18/smoke/`.
+- **Preservation:** all 40 original asset hashes, eight unchanged modules and the original simulation/audio prefix match their baselines.
 
-Source suites run: `midtown-restoration`, `venue-pacing`, `office-host`, `venues`, `scenery`, `art-layers`. `standalone` ran on the final generated HTML. The complete `npm test` collection was not rerun: unchanged mode/menu/props/gap suites retain their earlier evidence. Historical `midtown-atmosphere` and `midtown-grounding` tests describe the rejected design and are replaced in the release runner.
+A later small join-footer correction was checked separately, rather than representing the whole capture suite as rerun. Focused native-preservation and opacity checks found zero painted-pixel mismatches and no transparent ground pixels in the five base paintings. Three join captures were reviewed after the correction. Evidence is under `review/v18-scene-diagnosis/ground-extension-report.json` and `footer-check/`.
 
-## Artifact identity
+Responsive checks then covered a 900×900 square window (logical 540 wide) with the entire 505 entrance and host visible at 57.81 s; 96 normal-width camera cases retained their previous formula. A 3200×540 viewport centers a 1440×540 stage. Actual HTML fullscreen at 3840×648 retains a centered 1728×648 stage (logical width 1440), complete coverage and no opening venues. Evidence is `review/v18-qa/responsive/report.json`, its square/fullscreen captures, and `responsive-camera-comparison.json`. The simulation/audio preservation check was repeated after the fullscreen presentation fix.
 
-- HTML SHA-256: `11aa260971e72c63e40978f59ee2ecee049593a365046779152604d2f6da29d8`.
-- Playable ZIP: 26,923,755 bytes; SHA-256 `d2ac7d9db9a96593895cb2e9b1de45539eba67ec2ff3323ce5ee697cb89f117f`.
-- Playable ZIP CRC passed; its HTML is byte-identical to the tested build.
-- Handoff/source rebuild and remote download checks are recorded separately in the final delivery evidence and `release/SHA256SUMS.txt`.
+## Standalone browser checks
 
-Current previews: `release/Midtown-v17-restored.png` and `release/Midtown-v17-office.png`. Detailed local test reports are under `review/midtown-v17-restoration*`, `review/midtown-v17-pacing` and `review/midtown-v17-archaeology`.
+The release suites in `review/v18-release/` passed against the self-contained HTML:
 
-These browser checks establish the restoration and rendering behavior; perceived motion comfort still requires the user's review. Physical-device and cross-browser checks were not performed. Administrator policy blocks `file://` navigation in this environment, so offline localhost testing is not direct local-file certification. No cutscene videos or playback gates are added.
+- **Modes/progression:** Story/Endless UI, fixed Story courses, preserved Endless seed, fund-history reveal, keyboard/controller next-chapter defaults, final unlock, retry and new-world behavior.
+- **Chapter menu:** fresh-profile locks, keyboard navigation, touch swipes, reachable small-screen CTA, no scenery preview, controller navigation/start and no browser exceptions.
+- **Water and gaps:** the original Park lake animates within its mask (27,742 changed rendered pixels) with stable banks and frozen pause/reduced motion. Gap tests cover full-depth voids, adjacent/joined support, physics and four seeded slopes, with desktop/mobile/Canvas captures.
+- **Responsive framing:** the square office, centered 8:3 limit, no opening venues and actual fullscreen regression passed on the standalone.
+- **Offline packaging:** all 40 baseline assets match; fonts, scripts, art and audio load without external requests, and Contrarian remains playable after switching offline.
+
+Logs are `modes.log`, `menu.log`, `water.log`, `gaps.log`, `responsive.log` and `standalone.log`. These named suites and the source checks above describe the verified scope; this is not a claim that every historical test was rerun.
+
+## Visual review
+
+The QA agent inspected mobile/Canvas jump and flight apices and city seams: dry asphalt, fixed paintings, harbor water bounded by its shoreline and warm fronts integrated into the streets. The coordinating agent reviewed representative river, pavement, join, mobile triple-jump and complete 505/host views. The inspected joins have no severed architecture or water strips. This records reviewer observations; motion comfort and final art preference still need the user's review.
+
+Current preview PNGs are `Opening-v18-cohesive.png`, `Midtown-v18-cohesive.png` and `Midtown-v18-office.png`. They were captured before the small footer-only correction; their capture metadata shows zero join panels, so that correction does not change their pixels. They preserve the reviewed normal-width composition through the later responsive framing fix.
+
+## Local artifact identity
+
+- HTML: **31,015,326 bytes**, **50 embedded assets**; SHA-256 `a9d82415522051b255015d50bfba54cf8f3df99f61706a0876bd94243a2c6447`.
+- Playable ZIP: **22,671,664 bytes**; SHA-256 `b81af007893a8c9e3761a6670d8ad94bb2a08b80cfa87a3cddb1f01da0f6ef05`.
+- Playable ZIP CRC and exact inner-HTML identity passed; proof is `review/v18-release/game-package.json`.
+- Cutscene handoff ZIP CRC, every file-manifest entry and inner playable HTML passed validation. Rebuilding the packaged editable source produced byte-identical HTML. The handoff is below 100 MiB; its final size/hash and local validation proof are recorded in `review/v18-release/handoff-package.json` and `release/SHA256SUMS.txt`. Remote download verification remains separate and has not yet been claimed.
+
+No cutscene videos or playback gates are added. The intro reference video and post-Midtown running-shoe production remain future work. These Chromium/emulated-device checks are not physical-device or cross-browser certification. Offline localhost testing is not direct `file://` certification where environment policy prevents local-file navigation.
