@@ -32,15 +32,15 @@ Start with `references/locations/INDEX.md`. It links directly to the exact nativ
 | Approved Central Park Bow Bridge | `game/assets/original-33.webp` |
 | Approved Central Park Ramble | `game/assets/scenery/park-1.webp` |
 | Approved Central Park Bethesda | `game/assets/scenery/park-2.webp` |
-| Detailed Downtown route and anonymous Endless continuation | Current `downtown-*.webp` files indexed under `game/assets/scenery-v19/` |
-| Detailed Midtown route | Retained plates 04–15 and adjacent joins under `game/assets/scenery-v19/`; loaded base plates 00–03 are superseded in the opening composition by `city-vistas.js` |
-| Restored Midtown opening vista | `game/assets/city-vistas-v20/`: native v1.6 dry atmosphere, unique landmark panorama, glass frontage, library and transition tree |
-| City stone foundation | `game/assets/street-foundation-v20/stone-foundation.webp`: exact native v1.6 material, clipped to the actual ground and gaps |
-| Complete 505 blue/cyan glass frontage | The current Midtown office tile, identified by `midtown-storefronts.js` and the native-art manifests |
+| Downtown architecture and complete bridge | Native `downtown-*.webp` files under `game/assets/art-v2/`, composed by `scenery.js` |
+| Midtown architecture | `game/assets/art-v2/midtown-*.webp`, `game/assets/midtown-v15/` and `game/assets/midtown-v16/` |
+| Unique Midtown skyline | `game/assets/midtown-v16/landmark-panorama.webp` and `dry-city-atmosphere.webp` |
+| Midtown stone foundation | `game/assets/midtown-v16/stone-foundation.webp` |
+| Current Kabin, LEI, JOJU, Omar's, Gussy's and 505 details | `game/assets/venue-details-v111/`, with native source bounds and hashes in its manifest |
 
-The current composition and indexed native sources are the backdrop authority. Their JSON manifests record native dimensions, generation provenance and alignment. `game/scripts/midtown-scenery.js` supplies the shared native-tile renderer; `city-vistas.js` restores the layered v1.6 Midtown opening before the retained venue street. `scenery.js` configures Downtown and the anonymous Endless continuation. `street-foundation.js` and `street-life.js` add the grounded stone and traffic. `park-scenery.js` keeps the original Park composition. Use the native painting, not a reduced screenshot or renderer-added ground padding, as the detailed architectural source.
+`game/scripts/scenery.js` is the actual v1.6 composition and camera layout. `venue-details.js` paints the current six venue crops into their original frontage rectangles once per source. It does not create an independent camera or street island. `park-scenery.js` retains the approved Park background. The replacement panorama, added traffic and separate foundation modules are no longer loaded.
 
-The 28 v1.9 base paintings are 1024×1536 native pixels, replacing the previous 724-pixel-tall city artwork, with 29 additional authored seam repairs. The renderer retains native density through its prepared canvases and texture upload. Inspect the final metadata and verification record for actual dimensions; a larger file or enlarged raster alone is not evidence of additional detail.
+Portrait architecture remains at its original 1024×1536 source resolution, with native landmark, bridge and material sizes recorded in the index. Storefront crops retain native pixels; they are not enlarged to manufacture detail. Current sources and final gameplay captures define composition.
 
 Venue frontages occupy separate blocks within the continuous streets. `opening-storefronts.js` and `midtown-storefronts.js` identify their native rectangles and course placement. Full ordinary street sections between the venues are part of the art direction. Preserve 505's complete blue/cyan glazing and revolving doors; `office-host.js` attaches the retained host to that entrance. Do not recreate cutout-building islands, import their old separate parallax, or pack multiple venue references into one crowded cinematic background.
 

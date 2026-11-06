@@ -1409,26 +1409,17 @@ var Po = class {
     }
     let Q = s.createLinearGradient(0, Math.min(...E.map((B) => B[1])), 0, I);
     Q.addColorStop(0, a ? "#25313c" : "#243b43"), Q.addColorStop(0.2, "#0a1b2b"), Q.addColorStop(1, "#06121e"), s.fillStyle = Q, s.fill();
-    window.LR_STREET_FOUNDATION?.draw2d(s, {district: "opening", W: A, floorAt: t, distance: i, banks, solids: cuts.solids, bottom: I});
     const contour = (dy, color, width) => {
       s.beginPath();
       for (const bank of banks) bank.forEach(([x, y], index) => index ? s.lineTo(x, y + dy) : s.moveTo(x, y + dy));
       s.strokeStyle = color; s.lineWidth = width; s.stroke();
     };
-    let R = 112, h = (i % R + R) % R;
+    contour(0, "#071622", 9); contour(7, "#526a6f", 3); contour(0, l, 2);
+    let R = 120, h = (i % R + R) % R;
     for (let B = -h; B < A + R; B += R) {
-      let c = t(B), end = t(B + R);
-      s.beginPath(); s.moveTo(B + 1, c + 4); s.lineTo(B + R - 2, end + 4);
-      s.lineTo(B + R - 2, end + 19); s.lineTo(B + 1, c + 19); s.closePath();
-      s.fillStyle = "#a4aaa1"; s.fill();
-      this.line(B + 1, c + 5, B + R - 2, end + 5, "#d2d4ba", 1.3);
-      this.line(B, c + 4, B, c + 33, "#3a4c53", 1.5);
-      if (Math.round((B + i) / R) % 3 === 0) {
-        this.rect(B + 42, t(B + 42) + 12, 40, 8, "#393a35", 2);
-        for (let slot = 0; slot < 6; slot++) this.line(B + 47 + slot * 5, t(B + 42) + 13, B + 47 + slot * 5, t(B + 42) + 18, "#85877a", 1);
-      }
+      let c = t(B);
+      this.line(B, c + 14, B, c + 108, "#7d929723", 1), this.line(B + 10, c + 26, B + 100, t(B + 100) + 26, "#91a9a923", 1), this.rect(B + 9, c + 14, 4, 4, "#b2b8a34d", 1);
     }
-    contour(0, "#152e39", 5); contour(0, l, 1.8);
     s.restore(); LR_GAPS.edges(s, cuts.openings, t, I); s.restore();
   }
   listingBell(A, t, i, r = false) {
@@ -1562,8 +1553,12 @@ var yo = class extends hi {
   }
   prepareDistrict() {
     let A = this.districtId === "park", t = (g) => this.x + g * ye, i = (g) => this.terrainAt(g * ye), r = (g, l, E, I = null, Q = null, R = 54) => {
+      const guidance = !A && l === "high" && !I && (g === 35.4 || g === 55.2);
       this.procedural && !I && (g < 13.5 || g > 30 && g < 37 || g > 47.5) && (g += (this.layoutRandom() - 0.5) * 0.3);
       let h = this.hazard(l, t(g), l === "high" ? 112 : 58, Q ?? (this.procedural && l === "high" ? Math.min(i(g), this.terrainAt(g * ye + 112)) : i(g)));
+      // Two occasional hoists, with a readable, fixed cycle. The base is shared
+      // by rendering and collision; never accumulate offsets or use wall time.
+      if (guidance) h.guidance = {base: h.base, phase: g, period: 3.8}, E = "MOVING GUIDANCE";
       return h.label = E, h.route = I, h.skin = A ? l === "high" ? "branch" : "bench" : l === "high" ? "girder" : "barrier", l === "low" && (h.h = R), h;
     }, o = (g, l = 4, E = 76, I = "dividend", Q = null) => {
       for (let R = 0; R < l; R++) this.pickups.push({ x: t(g + R * 0.24), y: i(g + R * 0.24) - E, kind: I, taken: false, route: Q });
@@ -1587,7 +1582,10 @@ var yo = class extends hi {
     s(38.2, 72, 470, "awning", null, { bounce: 100, setPiece: true }), A ? (s(39.95, 122, 440, "stone", null, { setPiece: true }), s(41.55, 106, 460, "awning", null, { bounce: 100, setPiece: true }), s(43.25, 138, 440, "stone", null, { setPiece: true }), s(44.9, 84, 490, "bridge", null, { setPiece: true }), n(40.4, "puddle", { w: 650, role: "water-garden" })) : (s(39.95, 122, 440, "crumble", null, { setPiece: true }), s(41.55, 122, 460, "crane", null, { amp: 24, phase: 0.3, frequency: 1.2, setPiece: true }), s(43.25, 122, 440, "crumble", null, { setPiece: true }), s(44.9, 84, 490, "scaffold", null, { setPiece: true }));
     for (let [g, l] of [[40.4, "low"], [43, "low"], [46.4, "low"], [49.7, "high"], [52.5, "low"], [55.2, "high"]]) r(g, l, A ? l === "high" ? "LOW BRANCH" : "GARDEN WORKS" : l === "high" ? "HOIST CLEARANCE" : "MATERIALS"), o(g - 0.3, 3, l === "high" ? 34 : 145, "opportunity");
     o(57.5, 7, 65, "opportunity");
-    for (let g = 1.4; g < 58; g += 4.5) n(g, A ? "tree" : "lamp");
+    // Small seating groves frame the benches; keep the lake, bridge and
+    // water-garden sequence open instead of stamping a tree every 4.5 seconds.
+    if (A) for (const g of [2.35, 8.65, 17.35, 31.45, 51.65, 57.4]) n(g, "tree");
+    else for (let g = 1.4; g < 58; g += 4.5) n(g, "lamp");
     for (let g of [2.1, 10.5, 29.9, 36.7, 48.5, 56.8]) n(g, "birds");
     for (let g of [4.8, 11, 30.8, 37, 48.1, 54.2]) n(g, "puddle");
     for (let g of [8.9, 33, 50]) n(g, "sign", { label: A ? "TAKE THE LONG VIEW" : "WORK IN PROGRESS" });
@@ -1617,6 +1615,9 @@ var yo = class extends hi {
     let s = this.setPiece, n = s.active;
     s.active = this.chapterTime >= s.start && this.chapterTime < s.end, s.progress = Math.max(0, Math.min(1, (this.chapterTime - s.start) / (s.end - s.start))), s.active && !n && this.emit("setpiece", { id: s.id, name: s.name });
     for (let g of this.platforms) g.prevY = g.y, g.flex = Math.max(0, (g.flex || 0) - A * 2.6), g.kind === "crane" && (g.y = g.baseY + Math.sin(this.time * g.frequency + g.phase) * g.amp), g.kind === "crumble" && g.collapseAt && this.time >= g.collapseAt && (g.active && (g.active = false, this.emit("worldReaction", { kind: "collapse", id: g.id, x: g.x + g.w / 2, y: g.y })), g.y += 220 * A);
+    for (const g of this.obstacles) if (g.guidance) {
+      g.base = g.guidance.base - 16 + 22 * Math.sin(this.time * Math.PI * 2 / g.guidance.period + g.guidance.phase);
+    }
     for (let g of this.pickups) if (g.platformId) {
       let l = this.platforms.find((E) => E.id === g.platformId);
       l && (g.y = l.y + g.offsetY);
@@ -1726,6 +1727,14 @@ var wo = class {
   groundedBench(A, t, i, r, o) {
     if (!this.propsImage?.complete || !this.propsImage.naturalWidth) return false;
     let s = this.c, n = Math.max(i, r * 1.55), a = A + (i - n) / 2, g = 24 / 310 / (354 / 480), l = 281 / 310 - g * 24 / 480, E = o(a), I = (o(a + n) - E) / n, Q = Math.min((E - t) / l, (o(a + n) - t) / (l + g));
+    // A shallow stone footing ties the seat to the promenade. Its edge follows
+    // the actual terrain; it is decoration, never an extra collision surface.
+    s.save();
+    s.beginPath(); s.moveTo(a - 7, o(a - 7) - 1);
+    for (let x = a - 7; x <= a + n + 7; x += 2) s.lineTo(x, o(x) - 1);
+    s.lineTo(a + n + 7, o(a + n + 7) + 2.5);
+    for (let x = a + n + 7; x >= a - 7; x -= 2) s.lineTo(x, o(x) + 2.5);
+    s.closePath(); s.fillStyle = "#a69b7c"; s.fill(); s.restore();
     return this.supportShadow(a, n, o, 5), s.save(), this.clipAboveGround(a - 2, n + 4, o), s.transform(1, I - Q * g / n, 0, 1, a, E - Q * l + 0.5), this.prop("bench", 0, 0, n, Q), s.restore(), true;
   }
   reframe(A) {
@@ -1733,21 +1742,22 @@ var wo = class {
   }
   background(A, t, i, r, o, s, n = false) {
     let a = this.c, g = A === "park";
+    const view = window.LR_SCENERY?.projection?.(A, typeof q === "undefined" ? null : q, typeof Kt === "undefined" ? 0 : Kt);
     a.save();
     let l = a.createLinearGradient(0, 0, 0, r);
     if (l.addColorStop(0, g ? "#9da79a" : "#b89d84"), l.addColorStop(0.58, g ? "#dec08c" : "#e5c69a"), l.addColorStop(1, g ? "#53655a" : "#5f696a"), a.fillStyle = l, a.fillRect(0, 0, i, r), t?.complete && t.naturalWidth) {
       let Q = r + 16, R = Q * t.naturalWidth / t.naturalHeight, h = o * 0.085, B = Math.floor(h / R);
-      if (window.LR_SCENERY) LR_SCENERY.draw2d(a, A, t, o, i, r);
+      if (window.LR_SCENERY) LR_SCENERY.draw2d(a, A, t, o, i, r, undefined, view);
       else a.drawImage(t, -Math.min(h, Math.max(0, R - i)), -8, R, Q);
-      window.LR_SHOPS && LR_SHOPS.draw2d(a, A, o, i, t, R, Q);
-      window.LR_OFFICE_HOST && LR_OFFICE_HOST.draw2d(a, A, o, i, r, s, n, typeof q === "undefined" ? null : q, typeof Kt === "undefined" ? 0 : Kt);
+      window.LR_SHOPS && LR_SHOPS.draw2d(a, A, o, i, t, R, Q, view);
+      window.LR_OFFICE_HOST && LR_OFFICE_HOST.draw2d(a, A, o, i, r, s, n, typeof q === "undefined" ? null : q, typeof Kt === "undefined" ? 0 : Kt, view);
     }
     if (g) {
       if (!n) for (let Q = 0; Q < 7; Q++) {
         let R = (Q * 211 - o * 0.21 + s * (9 + Q % 3 * 3)) % (i + 80), h = 122 + (Q * 53 + s * (12 + Q % 2 * 5)) % 232;
         a.save(), a.translate(R < 0 ? R + i + 80 : R, h), a.rotate(s * 0.5 + Q), this.poly([[-3, 0], [0, -2], [4, 0], [0, 2]], Q % 2 ? "#e5b95b80" : "#b8774680"), a.restore();
       }
-    } else if (!window.LR_SCENERY?.layered) {
+    } else if (!(A === "midtown" && window.LR_SCENERY?.layered)) {
       let Q = o * 0.13, R = 890, h = Math.floor(Q / R);
       for (let B = h; B < h + Math.ceil(i / R) + 2; B++) {
         let c = B * R - Q;
@@ -1763,16 +1773,33 @@ var wo = class {
     I.addColorStop(0, "#071726af"), I.addColorStop(0.5, "#07172648"), I.addColorStop(1, "#07172600"), a.fillStyle = I, a.fillRect(0, 0, i, 120), a.restore();
   }
   terrain(A, t, i, r = false) {
-    let o = this.c, s = A.districtId === "park", n = [];
+    let o = this.c, s = A.districtId === "park", urban = A.districtId === "midtown", n = [];
     for (let R = -40; R <= t + 48; R += 24) n.push([R, A.floorAt(R)]);
     let a = Math.max(...n.map((R) => R[1])) + 750, g = Math.min(...n.map((R) => R[1]));
     o.save(), o.beginPath(), o.moveTo(n[0][0], a);
     for (let [R, h] of n) o.lineTo(R, h);
     o.lineTo(n.at(-1)[0], a), o.closePath();
-    let l = o.createLinearGradient(0, g, 0, g + 300);
-    l.addColorStop(0, s ? "#86754f" : "#788281"), l.addColorStop(0.08, s ? "#55563b" : "#50646b"), l.addColorStop(0.5, s ? "#2d483c" : "#2a4657"), l.addColorStop(1, s ? "#1d3533" : "#183544"), o.fillStyle = l, o.fill(), o.save(), o.clip();
-    window.LR_STREET_FOUNDATION?.draw2d(o, {district: A.districtId, W: t, floorAt: x => A.floorAt(x), distance: A.chapterDistance ?? A.distance, banks: [n], bottom: a});
-    let E = A.chapterDistance ?? A.distance, I = s ? 92 : 112, Q = (E % I + I) % I;
+    let E = A.chapterDistance ?? A.distance, l = o.createLinearGradient(0, g, 0, g + 300);
+    l.addColorStop(0, s ? "#86754f" : urban ? "#82786a" : "#788281"), l.addColorStop(0.08, s ? "#55563b" : urban ? "#625c53" : "#50646b"), l.addColorStop(0.5, s ? "#2d483c" : urban ? "#3b3935" : "#2a4657"), l.addColorStop(1, s ? "#1d3533" : urban ? "#252626" : "#183544"), o.fillStyle = l, o.fill();
+    // Midtown's platform is a dry masonry foundation. Its texture follows the
+    // terrain's world coordinates, so jump-camera motion cannot expose a
+    // second, motionless water-like surface beneath the playable curb.
+    const foundation = urban && window.LR_SCENERY?.foundationImage;
+    if (foundation?.complete && foundation.naturalWidth) {
+      if (this.foundationMaterial?.image !== foundation) this.foundationMaterial = { image: foundation, pattern: o.createPattern(foundation, "repeat") };
+      const pattern = this.foundationMaterial.pattern;
+      if (pattern) {
+        const tileSize = 320, scale = tileSize / foundation.naturalWidth;
+        pattern.setTransform(new DOMMatrix([scale, 0, 0, scale, -(E % tileSize), 0]));
+        o.fillStyle = pattern; o.fill();
+        const shade = o.createLinearGradient(0, g, 0, g + 390);
+        shade.addColorStop(0, "#29251e26"); shade.addColorStop(.09, "#29251e4d");
+        shade.addColorStop(.6, "#1b1b19a8"); shade.addColorStop(1, "#171918d9");
+        o.fillStyle = shade; o.fill();
+      }
+    }
+    o.save(); o.clip();
+    let I = s ? 92 : 112, Q = (E % I + I) % I;
     for (let R = -Q - I; R < t + I; R += I) {
       let h = A.floorAt(R), B = A.floorAt(R + I);
       if (this.poly([[R + 1, h + 4], [R + I - 2, B + 4], [R + I - 2, B + 19], [R + 1, h + 19]], s ? "#b0a078" : "#a4aaa1"), this.line(R + 1, h + 5, R + I - 2, B + 5, s ? "#e1cba0" : "#d2d4ba", 1.3), this.line(R, h + 4, R, h + 33, s ? "#4a4e3b" : "#3a4c53", 1.5), s) {
@@ -1780,6 +1807,12 @@ var wo = class {
         for (let c = 0; c < 3; c++) {
           let M = R + 15 + c * 23, f = A.floorAt(M);
           this.ellipse(M, f + 30 + c % 2 * 10, 2.6, 1.4, "#c8ac6c30");
+        }
+      } else if (urban) {
+        this.line(R + 3, h + 33, R + I - 3, B + 33, "#342e2645");
+        if (Math.round((R + E) / I) % 3 === 0) {
+          this.rect(R + 42, h + 12, 40, 8, "#393a35", 2);
+          for (let c = 0; c < 6; c++) this.line(R + 47 + c * 5, h + 13, R + 47 + c * 5, h + 18, "#85877a", 1);
         }
       } else if (this.line(R + 3, h + 33, R + I - 3, B + 33, "#92a3a435"), this.line(R + 14, h + 38, R + 14, h + 122, "#93a4a020"), this.rect(R + 9, h + 43, 5, 5, "#a9aea645", 1), Math.round((R + E) / I) % 3 === 0) {
         this.rect(R + 42, h + 12, 40, 8, "#344951", 2);
@@ -1842,7 +1875,7 @@ var wo = class {
   obstacle(A, t, i, r, o = false) {
     let s = this.c, n = A.x, a = A.base ?? t.floorAt(n), g = A.w;
     if (!this.visible(n, g, i, 80)) return;
-    if (window.LR_PROPS?.hazard(s, A, n, a, t.districtId)) return;
+    if (window.LR_PROPS?.hazard(s, A, n, a, t.districtId, t)) return;
     let l = t.districtId === "park", E = A.type === "high", I = E ? a - 181 : a - A.h, Q = E ? 85 : A.h;
     if (s.save(), A.type === "gap") {
       this.rect(n, a, g, 180, l ? "#1d4549" : "#102330");
@@ -1900,7 +1933,7 @@ var wo = class {
     for (let o of A.worldItems || []) {
       if (!this.visible(o.x, o.w || 0, t, 140)) continue;
       let s = this.itemY(o, A);
-      o.kind === "puddle" ? this.puddle(o.x, s, o.w || 100, A) : o.kind === "tree" ? this.tree(o.x, A.floorAt(o.x), A.districtId === "park", o.id || 0, false, (n) => A.floorAt(n)) : o.kind === "lamp" ? this.lamp(o.x, s, A.districtId === "park") : o.kind === "sign" ? this.sign(o, A, s, r) : o.kind === "finish" && this.finish(o.x, s, A, i, r);
+      o.kind === "puddle" ? this.puddle(o.x, s, o.w || 100, A) : o.kind === "tree" ? this.tree(o.x, A.floorAt(o.x), A.districtId === "park", o.id || 0, false, (n) => A.floorAt(n)) : o.kind === "lamp" ? !(window.LR_SCENERY?.layered && A.districtId === "midtown") && this.lamp(o.x, s, A.districtId === "park") : o.kind === "sign" ? this.sign(o, A, s, r) : o.kind === "finish" && this.finish(o.x, s, A, i, r);
     }
   }
   puddle(A, t, i, r) {
@@ -21890,44 +21923,32 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
     s.update();
   }
   drawBackground(A, t, i, r, o = false, s = null) {
-    // Keep only the current district's native scenery textures. High-detail
-    // street tiles must not accumulate across completed chapters and retries.
-    if (this.sceneryDistrict !== A) {
-      for (let tile of this.tiles) tile.sprite.texture = this.backgroundTextures.park;
-      if (this.sceneryTextures) for (let texture of this.sceneryTextures.values()) texture.destroy(true);
-      this.sceneryTextures = new Map();
-      this.sceneryDistrict = A;
-      window.LR_SCENERY?.releaseExcept?.(A);
-    }
-    if (this.openingSprite.visible = A === "opening", this.gradeSprite.visible = A !== "opening", A === "opening") {
-      window.LR_SHOPS && LR_SHOPS.pixi(this, A, t, i, r, qt, W, aA, hA);
-      window.LR_OFFICE_HOST && LR_OFFICE_HOST.pixi(this, A, t, i, r, qt, W);
+    const view = window.LR_SCENERY?.projection?.(A, this.run, this.worldLayer.y);
+    window.LR_OFFICE_HOST && LR_OFFICE_HOST.pixi(this, A, t, i, r, qt, W, view);
+    if (window.LR_SHOPS && LR_SHOPS.pixi(this, A, t, i, r, qt, W, aA, hA, view), this.openingSprite.visible = A === "opening", this.gradeSprite.visible = A !== "opening", A === "opening") {
       for (let R of this.tiles) R.group.visible = false;
       if (this.bindOpeningCanvas(s), !this.openingSource) throw Error("Opening Bell backdrop is unavailable");
       (this.openingSource.width !== this.openingCanvas.width || this.openingSource.height !== this.openingCanvas.height) && (this.openingSource.resize(this.openingCanvas.width, this.openingCanvas.height, 1), this.openingTexture.frame.width = this.openingCanvas.width, this.openingTexture.frame.height = this.openingCanvas.height, this.openingTexture.update()), this.openingSource.update(), this.openingSprite.width = t, this.openingSprite.height = i, this.openingSprite.filters = o ? this.openingFilters : null, this.counts.water = 0;
       return;
     }
     let n = this.backgroundTextures[A], a = i + 16, g = a / n.height, l = n.width * g, Q = 0;
-    let scene = window.LR_SCENERY ? LR_SCENERY.layout(A, r, t, i) : { panels: [{ x: -Math.min(r * 0.085, Math.max(0, l - t)), original: true, sourceIndex: 0 }] };
-    this.sceneryTextures ||= new Map();
-    let activeScenery = new Set();
+    let scene = window.LR_SCENERY ? LR_SCENERY.layout(A, r, t, i, undefined, view) : { panels: [{ x: -Math.min(r * 0.085, Math.max(0, l - t)), original: true, sourceIndex: 0 }] };
+    this.sceneryTextures ||= new WeakMap();
     for (let R = 0; R < this.tiles.length; R++) {
       let h = this.tiles[R], panel = (scene.layers || scene.panels)[R];
       if (h.group.visible = !!panel, !panel) continue;
       let texture = n;
-      if (!scene.authoredLayers && panel.original && window.LR_SCENERY) LR_SCENERY.source(A, panel, gi[A]);
-      if (window.LR_SCENERY && !(!scene.authoredLayers && panel.original)) {
+      if (A === "park" && panel.original && window.LR_SCENERY) LR_SCENERY.source(A, panel, gi[A]);
+      if (window.LR_SCENERY && !(A === "park" && panel.original)) {
         let image = LR_SCENERY.source(A, panel);
         if (!image) { h.group.visible = false; continue; }
         texture = this.sceneryTextures.get(image);
         if (!texture) this.sceneryTextures.set(image, texture = W.from(image));
-        else { this.sceneryTextures.delete(image); this.sceneryTextures.set(image, texture); }
-        activeScenery.add(image);
         if (panel.kind === "water") { texture.source.update(); Q++; }
       }
       // Panel geometry stays in game coordinates; native artwork resolution can
       // increase independently without changing its on-screen size or spacing.
-      h.group.position.set(panel.x, panel.y ?? -8), h.group.scale.set(!scene.authoredLayers ? g : (panel.width ?? l) / texture.width, !scene.authoredLayers ? g : (panel.height ?? a) / texture.height), h.sprite.texture = texture;
+      h.group.position.set(panel.x, panel.y ?? -8), h.group.scale.set(A === "park" ? g : (panel.width ?? l) / texture.width, A === "park" ? g : (panel.height ?? a) / texture.height), h.sprite.texture = texture;
       let M = A === "park" && !scene.authoredLayers && panel.original && !this.reduced && this.quality > 0.4;
       if (h.water.mesh.visible = M, h.mask.visible = M, h.glints.visible = M, M) {
         Q++;
@@ -21943,18 +21964,7 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
         }
       }
     }
-    for (let [image, texture] of this.sceneryTextures) {
-      if (this.sceneryTextures.size <= 12) break;
-      if (activeScenery.has(image)) continue;
-      this.sceneryTextures.delete(image);
-      for (let tile of this.tiles) if (tile.sprite.texture === texture) tile.sprite.texture = this.backgroundTextures.park;
-      texture.destroy(true);
-    }
     this.counts.water = Q;
-    // Venue overlays and their host share a fixed street-side pavement anchor.
-    // Draw in this order so the host remains in front of the entrance.
-    window.LR_SHOPS && LR_SHOPS.pixi(this, A, t, i, r, qt, W, aA, hA);
-    window.LR_OFFICE_HOST && LR_OFFICE_HOST.pixi(this, A, t, i, r, qt, W);
   }
   drawLeaves(A, t, i, r, o, s) {
     let n = this.reduced || s?.transfer ? 0 : Math.round((A === "park" ? 66 : A === "opening" ? s?.flight ? 5 : 24 : 18) * this.quality), a = 0, g = 0;
@@ -22193,7 +22203,7 @@ function pD() {
   return zA === "chapter" ? Ot[at].name.toUpperCase() + " \xB7 " + Ot[at].note : "ONE CITY. AN UNREASONABLY LONG HORIZON.";
 }
 function Mu() {
-  return [si, ng, gt[PA].motion, At.shieldImage, At.reserveImage, Fe, po, zA === "chapter" ? gi[at] : null, zA === "chapter" && at !== "opening" ? er : null, ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || []), ...(window.LR_SHOPS?.images || []), ...(window.LR_PROPS?.images || []), ...(window.LR_OFFICE_HOST?.images || []), ...(window.LR_STREET_FOUNDATION?.images || [])].filter(Boolean);
+  return [si, ng, gt[PA].motion, At.shieldImage, At.reserveImage, Fe, po, zA === "chapter" ? gi[at] : null, zA === "chapter" && at !== "opening" ? er : null, ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || []), ...(window.LR_SHOPS?.images || []), ...(window.LR_PROPS?.images || []), ...(window.LR_OFFICE_HOST?.images || [])].filter(Boolean);
 }
 function SD() {
   nu || ![Fe, er, po, ...Object.values(gi)].every((e24) => e24.complete && e24.naturalWidth) || (nu = true, $A.init({ canvas: m("#environment"), gameplayCanvas: ht, openingCanvas: bA, backgrounds: gi, propsImage: er, ambienceImage: po, ambienceFrames: su }).then(() => $A.resize(eA, kA, ht.width, ht.height)).catch((e24) => console.warn("Using the Canvas renderer:", e24.message)));
@@ -22263,7 +22273,7 @@ function fu(e24) {
 for (let e24 of document.querySelectorAll("[data-district]")) e24.onclick = () => {
   b === "home" && (!window.LR_CH || LR_CH.unlocked(e24.dataset.district) ? fu(e24.dataset.district) : LR_CH.locked(e24));
 };
-for (let e24 of [...Object.values(gt).flatMap((A) => [A.atlas, A.flip, A.motion]), At.shieldImage, At.reserveImage, Fe, er, po, ...Object.values(gi), ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || []), ...(window.LR_SHOPS?.images || []), ...(window.LR_PROPS?.images || []), ...(window.LR_OFFICE_HOST?.images || []), ...(window.LR_STREET_FOUNDATION?.images || [])].filter(Boolean)) e24.onload = Ei, e24.onerror = () => {
+for (let e24 of [...Object.values(gt).flatMap((A) => [A.atlas, A.flip, A.motion]), At.shieldImage, At.reserveImage, Fe, er, po, ...Object.values(gi), ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || []), ...(window.LR_SHOPS?.images || []), ...(window.LR_PROPS?.images || []), ...(window.LR_OFFICE_HOST?.images || [])].filter(Boolean)) e24.onload = Ei, e24.onerror = () => {
   Mu().includes(e24) && (Ei(), m("#load-status").textContent = "Artwork could not load. Choose another chapter or refresh to retry.");
 };
 Gu();
@@ -22805,7 +22815,7 @@ function dQ() {
 function vu(e24 = false) {
   $D(), Ax();
   let A = b !== "home", t = b === "playing" ? $i / (1 / 120) : 1, i = A && q ? q.speed * (1 - t) / 120 : 0, r = A ? Math.max(0, (q?.distance || 0) - i) : 0, o = q?.transfer, s = o ? Math.min(1, o.age / o.duration) : 1, n = o ? s < 0.5 ? !o.toContrarian : o.toContrarian : !!q?.contrarian, a = A ? q?.districtId || "opening" : "opening", g = a !== "opening", l = !e24 && $A.ready && !$A.lost;
-  if (ut.environment = l && g ? $A : null, At.environment = l ? $A : null, tx(), bA.style.transform = n ? "scaleY(-1)" : "none", bA.style.visibility = g || l ? "hidden" : "visible", mt.dataset.location = a, g || (nt && !nt.lost ? nt.render(r, UA, eA, kA) : ag && xD(r)), d.setTransform(ht.width / eA, 0, 0, ht.height / kA, 0, 0), d.clearRect(0, 0, eA, kA), g && !l && ut.background(a, gi[a], eA, kA, r, UA, gA), n && (d.translate(0, kA), d.scale(1, -1)), window.LR_STREET_LIFE?.draw2d(d, {district: a, W: eA, H: kA, distance: r, time: UA, seed: q?.seed || 0, reduced: gA, rearCurb: -8 + 1304 * (kA + 16) / 1750, frontCurb: T}), d.translate(0, o && (o.toContrarian || s < 0.5) ? 0 : Kt), g || WD(r), g ? ut.terrain(q || { districtId: a, floorAt: () => T, distance: r, chapterDistance: r, worldItems: [], setPiece: null }, eA, UA, gA) : A && (q?.mode === "chapter" || q?.procedural) && !q.contrarian && (!o || s >= 0.5) ? At.terrain(eA, (E) => q.floorAt(E - i), q.mode === "chapter" ? q.chapterDistance : r, UA, q.chapterPhase?.id, q.obstacles, i) : At.grid(eA, T, r, UA, A ? q?.obstacles : [], i), A) {
+  if (ut.environment = l && g ? $A : null, At.environment = l ? $A : null, tx(), bA.style.transform = n ? "scaleY(-1)" : "none", bA.style.visibility = g || l ? "hidden" : "visible", mt.dataset.location = a, g || (nt && !nt.lost ? nt.render(r, UA, eA, kA) : ag && xD(r)), d.setTransform(ht.width / eA, 0, 0, ht.height / kA, 0, 0), d.clearRect(0, 0, eA, kA), g && !l && ut.background(a, gi[a], eA, kA, r, UA, gA), n && (d.translate(0, kA), d.scale(1, -1)), d.translate(0, o && (o.toContrarian || s < 0.5) ? 0 : Kt), g || WD(r), g ? ut.terrain(q || { districtId: a, floorAt: () => T, distance: r, chapterDistance: r, worldItems: [], setPiece: null }, eA, UA, gA) : A && (q?.mode === "chapter" || q?.procedural) && !q.contrarian && (!o || s >= 0.5) ? At.terrain(eA, (E) => q.floorAt(E - i), q.mode === "chapter" ? q.chapterDistance : r, UA, q.chapterPhase?.id, q.obstacles, i) : At.grid(eA, T, r, UA, A ? q?.obstacles : [], i), A) {
     if (q) {
       wD(), yD(i);
       for (let I of q.pickups) kD(I, i);

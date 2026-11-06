@@ -1,5 +1,5 @@
 /* A quiet welcome at 505. The host belongs to the office's painted pavement;
-   both renderers share its scale and fixed pavement anchor during jumps. */
+   both renderers share its scale and projected street offset during jumps. */
 (function () {
   "use strict";
   var image = new Image();
@@ -101,7 +101,6 @@
         paint(entry.ctx, { x: FOOT_X, y: FOOT_Y, height: BODY_H }, current.angle);
         entry.ctx.restore(); entry.texture.source.update(); entry.angle = current.angle;
       }
-      env.backgroundLayer.addChild(entry.sprite);
       var scale = current.host.height / BODY_H;
       entry.sprite.visible = true; entry.sprite.scale.set(scale * 2);
       entry.sprite.position.set(current.host.x - FOOT_X * scale, current.host.y - FOOT_Y * scale);

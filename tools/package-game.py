@@ -37,7 +37,9 @@ def file_digest(path):
 def source_input_manifest(source_root):
     """Fingerprint build inputs, excluding packaging-only docs and metadata."""
     source_root = Path(source_root)
-    scripts = sorted((source_root / "scripts").glob("*.js"))
+    # Match build.mjs: archived experiments are not runtime dependencies.
+    scripts = [source_root / path for path in re.findall(
+        r'<script\b[^>]*\bsrc="(scripts/[^"]+)"', (source_root / "index.html").read_text())]
     documents = [source_root / "index.html", source_root / "game.css", *scripts]
     source_text = "\n".join(path.read_text() for path in documents)
     runtime = set(re.findall(r"assets/[A-Za-z0-9_./-]+\.(?:webp|png|svg|avif|mp3|m4a|webm|woff2?)", source_text))

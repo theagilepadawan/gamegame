@@ -23,36 +23,25 @@ try{
   page.on('requestfailed',request=>failed.push(request.url()));
   page.on('pageerror',error=>errors.push(error.message));
   await page.goto(url,{waitUntil:'networkidle',timeout:90000});
-  await page.waitForFunction(()=>window.longRun&&window.LR_MENU&&window.LR_SCENERY?.ready&&window.LR_PROPS?.ready&&window.LR_OFFICE_HOST?.ready&&window.LR_STREET_FOUNDATION?.ready&&window.LR_CITY_VISTAS?.ready&&!document.querySelector('#start').disabled&&!document.querySelector('#splash'),{},{timeout:90000});
+  await page.waitForFunction(()=>window.longRun&&window.LR_MENU&&window.LR_SCENERY?.ready&&window.LR_PROPS?.ready&&window.LR_OFFICE_HOST?.ready&&window.LR_VENUE_DETAILS?.ready&&!document.querySelector('#start').disabled&&!document.querySelector('#splash'),{},{timeout:90000});
   await page.evaluate(()=>document.fonts.ready);
   assert.equal(await page.evaluate(()=>document.fonts.check('18px "Norges Bank"')),true);
   assert.equal(await page.locator('script[src],link[rel="stylesheet"][href]').count(),0,'Release must embed scripts/styles');
   const scenery=await page.evaluate(()=>LR_SCENERY.images.map(image=>({embedded:image.src.startsWith('data:'),ready:image.complete&&image.naturalWidth>0})));
+  assert.ok(scenery.every(image=>image.embedded&&image.ready),'Every referenced scenery layer is embedded and decoded');
   const artContract = await page.evaluate(() => ({
     park: NBIMParkScenery.images.length,
-    independentVenueImages: LR_SHOPS.images.length,
-    opening: LR_SCENERY.inspect('opening', 0, 864, 540, 'chapter').sourceCount,
-    midtown: LR_SCENERY.inspect('midtown', 0, 864, 540, 'chapter').sourceCount,
-    venues: LR_SHOPS.inspect(0, 864, 540).items.map(item => ({key: item.key, mode: item.renderMode}))
+    opening: LR_SCENERY.inspect('opening',0,864,540,'chapter').sourceCount,
+    midtown: LR_SCENERY.inspect('midtown',0,864,540,'chapter').sourceCount,
+    details: LR_VENUE_DETAILS.inspect().map(item=>item.key),
+    retired: !!(window.LR_CITY_VISTAS || window.LR_STREET_LIFE || window.LR_STREET_FOUNDATION),
+    stone: [LR_SCENERY.foundationImage.naturalWidth,LR_SCENERY.foundationImage.naturalHeight]
   }));
-  assert.deepEqual(artContract, {park: 2, independentVenueImages: 0, opening: 12, midtown: 16,
-    venues: ['joju', 'omars', 'gussy', 'fifth'].map(key => ({key, mode: 'painted'}))},
-  'Standalone embeds the extended native city streets, unchanged Park and all four integrated venue fronts');
-  assert.ok(scenery.length >= 30, 'All 28 city plates and unchanged Park sources are present');
-  assert.ok(scenery.every(image=>image.embedded&&image.ready),'Every referenced scenery layer is embedded and decoded');
-  const nativeCity = await page.evaluate(() => [...LR_SCENERY.images.slice(0, 12), ...NBIMMidtownScenery.images.slice(0, 16)]
-    .map(image => ({width: image.naturalWidth, height: image.naturalHeight})));
-  assert.equal(nativeCity.length, 28);
-  assert.ok(nativeCity.every(image => image.width === 1024 && image.height === 1536),
-    'The downloadable HTML retains every native city plate without build-time downsampling');
-  const addedArt=await page.evaluate(()=>[...(window.LR_SHOPS?.images||[]),...(window.LR_PROPS?.images||[]),...(window.LR_OFFICE_HOST?.images||[])].map(image=>({embedded:image.src.startsWith('data:'),ready:image.complete&&image.naturalWidth>0})));
-  assert.ok(addedArt.length>=7&&addedArt.every(image=>image.embedded&&image.ready),'Prop and office-host artwork is decoded and embedded in the standalone');
-  const newCityArt=await page.evaluate(()=>[...LR_CITY_VISTAS.images,...LR_STREET_FOUNDATION.images]
-    .map(image=>({embedded:image.src.startsWith('data:'),ready:image.complete&&image.naturalWidth>0,width:image.naturalWidth,height:image.naturalHeight})));
-  assert.ok(newCityArt.length>=6&&newCityArt.every(image=>image.embedded&&image.ready),
-    'Restored native vista and foundation sources are embedded and decoded');
-  assert.deepEqual(newCityArt.at(-1),{embedded:true,ready:true,width:1254,height:1254},
-    'The stone material retains its original native resolution');
+  assert.deepEqual(artContract,{park:2,opening:11,midtown:11,
+    details:['kabin','lei','joju','omars','gussy','fifth'],retired:false,stone:[1254,1254]},
+    'Exact v1.6 layer set with the six current native frontage crops');
+  const addedArt=await page.evaluate(()=>[...LR_VENUE_DETAILS.images,...LR_PROPS.images,...LR_OFFICE_HOST.images].map(image=>({embedded:image.src.startsWith('data:'),ready:image.complete&&image.naturalWidth>0})));
+  assert.ok(addedArt.length>=13&&addedArt.every(image=>image.embedded&&image.ready),'Venue, prop and host artwork is decoded and embedded');
   // Continue through the real Contrarian event after loading with no network.
   await page.context().setOffline(true);
   for(const [runner,chapter] of [['trond','midtown'],['nicolai','opening']]){

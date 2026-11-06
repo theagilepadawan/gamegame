@@ -172,7 +172,9 @@ copy(ROOT / 'tools' / 'package-game.py', game / 'tools' / 'package-game.py')
 
 # Keep all forty baseline files for hash tests, plus current runtime art only.
 # The rejected alternate Park and discarded sprite experiments are not shipped.
-source_text = '\n'.join(p.read_text() for p in [ROOT / 'index.html', ROOT / 'game.css', *sorted((ROOT / 'scripts').glob('*.js'))])
+active_scripts = [ROOT / path for path in re.findall(
+    r'<script\b[^>]*\bsrc="(scripts/[^"]+)"', (ROOT / 'index.html').read_text())]
+source_text = '\n'.join(p.read_text() for p in [ROOT / 'index.html', ROOT / 'game.css', *active_scripts])
 runtime_used = set(re.findall(r'assets/[A-Za-z0-9_./-]+\.(?:webp|png|svg|avif|mp3|m4a|webm|woff2?)', source_text))
 used = runtime_used.copy()
 baseline = json.loads((ROOT / 'assets-manifest.json').read_text())
@@ -287,9 +289,9 @@ location_labels = {
     'stone-foundation.webp': 'City terrain — native v1.6 stone foundation',
 }
 for relative in sorted(runtime_used):
-    if relative.startswith(('assets/scenery-v19/', 'assets/city-vistas-v20/', 'assets/street-foundation-v20/')):
+    if relative.startswith(('assets/art-v2/', 'assets/midtown-v15/', 'assets/midtown-v16/', 'assets/venue-details-v111/')):
         location_sources[relative] = location_labels.get(Path(relative).name, Path(relative).stem)
-assert any(path.startswith('assets/scenery-v19/') for path in location_sources), 'Current city art is not referenced by the runtime'
+assert any(path.startswith('assets/venue-details-v111/') for path in location_sources), 'Current venue detail art is not referenced by the runtime'
 locations = refs / 'locations'
 locations.mkdir(parents=True, exist_ok=True)
 location_manifest = []
@@ -297,7 +299,7 @@ location_index = [
     '# Native location references', '',
     'Open these exact files in the editable game tree. Each native image is stored once; no reduced substitute is used here.', '',
     'The runtime manifests and storefront metadata define course order, alignment and venue spacing. Gameplay captures show their final composition.', '',
-    'Midtown base plates 00–03 remain in the loaded native set, but `city-vistas.js` replaces their opening composition with the indexed v1.6 vista sources. Use the current gameplay frame and renderer before selecting a cinematic location.', '',
+    'Downtown and Midtown use the exact v1.6 architecture, composition and movement. Six native venue-detail crops are painted once inside their original frontages by `venue-details.js`; they have no independent camera.', '',
     '| Location | Native pixels | Source |', '|---|---:|---|',
 ]
 for relative, label in location_sources.items():
@@ -320,11 +322,11 @@ if host_master.exists():
 # Use current Downtown/Midtown release captures. Park retains its unchanged art.
 # All required files must exist; do not silently substitute a previous city view.
 captures = {
-    'downtown-gameplay.png': 'release/Opening-v110-detail.png',
-    'central-park-gameplay.png': 'review/art-direction/park-start.png',
-    'midtown-gameplay.png': 'release/Midtown-v110-detail.png',
-    'office-gameplay.png': 'release/Midtown-v110-office.png',
-    'chapter-map-characters.png': 'release/Map-v110-characters.png',
+    'downtown-gameplay.png': 'release/Opening-v111-detail.png',
+    'central-park-gameplay.png': 'release/Park-v111-seating.png',
+    'midtown-gameplay.png': 'release/Midtown-v111-detail.png',
+    'office-gameplay.png': 'release/Midtown-v111-office.png',
+    'chapter-map-characters.png': 'release/Map-v111-characters.png',
 }
 for name, relative in captures.items():
     p = ROOT / relative

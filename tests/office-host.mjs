@@ -21,7 +21,7 @@ async function capture(name, viewport, fallback = false, deviceScaleFactor = 1) 
     HTMLCanvasElement.prototype.getContext = function(type, ...args) {return /webgl/i.test(type) ? null : native.call(this, type, ...args);};
   });
   await page.goto(url.href, {waitUntil: 'networkidle', timeout: 90000});
-  await page.waitForFunction(() => window.longRun && window.LR_OFFICE_HOST?.ready && LR_SCENERY.ready && LR_SHOPS.ready && !document.querySelector('#start').disabled && !document.querySelector('#splash'));
+  await page.waitForFunction(() => window.longRun && window.LR_OFFICE_HOST?.ready && LR_SCENERY.ready && LR_SHOPS.inspect(0,864,540).ready && !document.querySelector('#start').disabled && !document.querySelector('#splash'));
   if (!fallback) await page.waitForFunction(() => longRun.environment.ready);
   await page.evaluate(() => {const next = requestAnimationFrame.bind(window); window.requestAnimationFrame = () => 0; return new Promise(resolve => next(resolve));});
   const report = await page.evaluate(fallback => {

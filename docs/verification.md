@@ -1,36 +1,45 @@
-# Release verification — Living city and varied Endless 1.10
+# Release verification — v1.6 street restoration, version 1.11
 
-The reference is the user's identified **v1.6.0**, recovered from commit `a551054`. The current v1.9 game remains the implementation baseline. Midtown restores the original open skyline, glass frontage and library in its opening stretch; later venue streets retain their complete current native paintings and anchors. Downtown retains its current detailed artwork with immediate horizontal movement, grounded traffic and restored stone terrain.
+The user's reference is **v1.6.0**, commit `a551054`. Downtown and Midtown now use that actual renderer and art composition. The v1.10 replacement panoramas, traffic and extra foundation module are absent from the runtime. Six lossless native crops retain the current venue fronts inside the original architecture. The full 505 glass entrance and its host retain their shared anchor.
 
-## Gameplay and preservation
+## Exact-reference checks
 
-- The new Endless director produces 64 distinct geometries from 64 seeds in each of 36 route-family/progression groups. The former director produced one normalized geometry per family across the same seed sample.
-- All 12 route families, seven pickup kinds and 11 obstacle/platform/spring types occur in automatic runs. Tests cover 45,824 continuous terrain samples, deterministic seeds across viewport/reward/spawn-clock changes, escalating combinations and the bounded speed curve.
-- Independent 120 Hz physics testing found and replayed 24 collision-free traversal sequences, without shield absorption or a required triple jump. Seven full-span overhead clearances and jetpack/Contrarian recoveries pass.
-- Forty original assets, seven unaffected modules, nine pinned physics/audio source ranges and 12 procedural Story snapshots remain unchanged. Story/Endless progression, retries, character unlocks, keyboard/controller chapter defaults and seed handling pass.
+`tests/v16-restoration.mjs` compares against an independent v1.6 source fixture. Across desktop, landscape phone and portrait profiles it checks 2,112 layouts, including chapter/endless distances, wide screens and vertical camera offsets. Every checked source pixel outside the six frontage rectangles is identical to v1.6; every frontage contains its current detail crop. The Downtown terrain, district background/terrain and Pixi background methods match pinned v1.6 source hashes. The frame composition and chapter camera/simulation loop also match pinned source hashes from that reference, for six exact function checks in total.
 
-## Scenery, gaps and venues
+The detail-crop manifest records native dimensions, source bounds and SHA-256 hashes. These are source pixels, not upscaled substitutes. Painting into the v1.6 frontage happens once per cached source, not on every animation frame.
 
-Desktop, compact, mobile DPR2 and Canvas fallback profiles pass 216 scene layouts, 66 opacity scans, all six original Park pixel signatures, native bitmap/GPU checks, complete chapter traversal, double/triple jumps, jetpack, Contrarian recovery and bounded caches. The restored native vista pixels and real GPU uploads are verified separately from the current opaque street paintings. Portrait plates remain 1024×1536; the unique landmark source is 1536×1024 and the stone material is 1254×1254.
+## Performance measurement
 
-The current camera has immediate horizontal movement and a gentler opening on ultra-wide views. At logical width 1440, Kabin first appears at 15.9 seconds and JOJU at 9.5 seconds. Current venue anchors stay attached to their full street paintings. Downtown never shows both venues together, and standard Midtown views never contain two complete venues at once.
+A sequential comparison used cloud Chromium, software WebGL, a 960×540 DPR1 viewport, 20 warm-up frames and 96 measured frames per city/version. Each timed frame called the real game loop and waited for GPU completion with `gl.finish()`. These are controlled frame-work measurements, not a claim of physical-device FPS.
 
-The visibility test passes 11 logical widths from 540 to 1440. Complete recognizable Kabin signage/doors remain clear for at least 3.15 seconds, LEI at least 3.35 seconds, and every Midtown frontage at least 3.35 seconds. The final 505 entrance keeps its blue/cyan glass, revolving doors and office host.
+| Measure | v1.10 | Restored build |
+|---|---:|---:|
+| Loaded city/scenery source images | 65 | 32 |
+| Decoded source pixels, RGBA bytes | 408,782,984 | 167,404,856 |
+| Downtown median / p95 frame work | 14.7 / 43.7 ms | 10.7 / 32.6 ms |
+| Midtown median / p95 frame work | 10.6 / 28.5 ms | 9.4 / 23.5 ms |
+| Standalone HTML | 81,676,440 bytes | 42,459,601 bytes |
 
-Full-depth gaps pass actual support/collision, jump/landing, void-pixel and Canvas fallback checks on real seeded uphill, downhill, crest and valley terrain. Stone changes no gap pixels; Park rendering is unchanged by the material module. Traffic tests cover 896 standard layouts and 160 production-depth layouts. Narrow streets use one correctly scaled lane; wheel contact and shadow remain on the road while car bodies naturally overlap the pavement behind them.
+The decoded-source figure excludes textures, prepared canvases, characters, audio and other browser memory. It measures a 59% reduction in this specific city-image set. No backdrop downsampling was used. Physical-phone and Safari performance still require testing on those devices.
 
-## Chapter map
+## Focused gameplay changes
 
-The two map strips contain native, unchanged crops of the approved idle and six running poses. Desktop/mobile tests pass character identity, route travel, reverse facing, stable idle, live reduced-motion changes, mode return and locked-character/chapter behavior. The existing keyboard, controller and touch menu checks pass. Playable character atlases are unchanged.
+Central Park retains its original backdrop. Its decorative trees now form six spaced seating groves; canopies clear the obstacle silhouettes. Bench footings follow the actual terrain without adding collision surfaces.
 
-## Build and delivery
+Two later Midtown overheads use a 3.8-second vertical cycle, fixed guide rails and direction marks. Their visible face and collision box share one simulation position. `tests/guidance-obstacles.mjs` passes 144 collision-enabled slide traversals: both runners, three seeds, two hazards and twelve cycle phases. There is no shield, invincibility or collision bypass in those traversals. Additional standing probes hit the lowered board and clear the raised board, checking that collision follows the motion.
 
-Final HTML: 81,676,440 bytes with 107 embedded resources, SHA-256 `8ed306517a2eae45874f45b7b93201ba8610412f3e9949863bfd63f4fed41379`. The final standalone passed all baseline/native-asset checks, both map characters and course switching offline, and Contrarian entry/return offline, with no external requests, missing resources or browser exceptions.
+The current Endless generator passes its 36 family/progression groups × 64 seed diversity checks, 45,824 continuous-terrain samples, all pickup/platform families and bounded difficulty progression. Its independent 120 Hz physics search and replay pass 24 section witnesses, full-span slide clearance and event recovery. Its 12 Story physics snapshots remain unchanged.
 
-The playable ZIP is 61,020,797 bytes, SHA-256 `34c41755750e9c714b58037687fefec88f31e8891dd4b098bd5c2b6d0acbaf47`; CRCs and byte-identical inner HTML passed. The source handoff packager verifies complete source manifests and a byte-identical rebuild. Current artifact hashes are in `release/SHA256SUMS.txt`.
+The broader cartoon prop-art direction is a **proposal** in `finance-props-direction.md`. This release does not claim to replace all roadwork art. The moving-guidance trial uses the existing board with added guide rails.
 
-Actual gameplay previews are `release/Opening-v110-detail.png`, `release/Midtown-v110-detail.png` and `release/Midtown-v110-office.png` at 1920×1080. `release/Map-v110-characters.png` compares both real chapter-map characters from DPR2 browser captures. All were visually reviewed with the final framing.
+## Browser and delivery checks
 
-These checks use cloud Chromium and software WebGL. Mobile profiles are browser emulation; physical-phone/Safari performance is not certified. The managed browser blocks direct `file://` navigation, so offline verification uses local HTTP loading followed by a fully offline browser context. Native high-resolution city assets retain their existing substantial decoded-memory footprint; CPU/GPU prepared-image caches stay bounded.
+Story/Endless seed handling, chapter defaults, history reveal, keyboard/gamepad progression and retries pass. The first mode-test attempt timed out during a click; a fresh full run passed without changing production controls.
 
-Historical v1.9 results are preserved in `verification-v19.md` and do not certify this release.
+The chapter-map keyboard, controller and touch checks pass, including both miniatures, locked destinations and live reduced-motion changes. All three grounding profiles pass 33 captured states: desktop, landscape phone DPR2 and Canvas fallback, exercising actual double/triple jumps, jetpack, skyline, venue projection, opaque dry ground and office placement. Host greeting/pause, prop collisions and rewards, Park water/bank stability, full-depth gap pixels and gap physics also pass. The host test now reads readiness from the restored v1.6 `inspect()` API.
+
+The final standalone passes offline switching between characters/courses and Contrarian entry/return. All 40 baseline assets remain byte-identical; fonts, art and audio load with no external requests, failed resources or browser exceptions. The final actual-gameplay captures in `release/*-v111-*.png` were reviewed at 1920×1080. The map comparison is an unchanged copy of the existing approved miniature capture.
+
+Final HTML: 42,459,601 bytes, 74 embedded resources, SHA-256 `791fc345f68e2780b03eff385bac0d26246147c2c78d3b4237be6bc54630f6d3`. The playable ZIP is 31,303,436 bytes, SHA-256 `a0fb79a8acd044b2e13e66ac75480b6a8303c7d8aa9c842e3ece5c1ceed423a7`; its CRC and byte-identical inner HTML were verified. The source-handoff packager requires a byte-identical rebuild from the staged source and verifies every archive entry. Current artifact checksums are in `release/SHA256SUMS.txt`.
+
+Earlier v1.10 results are preserved in `verification-v110.md`; they do not certify this restoration.

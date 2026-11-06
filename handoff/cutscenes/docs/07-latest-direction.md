@@ -1,5 +1,14 @@
 # Latest user direction
 
+## Current authority: version 1.11
+
+The user rejected v1.10's lag, traffic direction and reinterpreted city layers. The current build restores the **actual v1.6.0 Downtown and Midtown renderer, composition, parallax, camera and curbs**, with only six native venue-detail patches inside the original architecture. Added traffic and replacement panoramas are removed. Full 505 blue glass and the office host remain. Central Park keeps its original painting, with deliberate seating groves and grounded bench footings. Two late Midtown overheads gently rise and fall; current Endless generation and chapter-map miniatures remain.
+
+Use `game/docs/verification.md`, `game/scripts/scenery.js`, `game/scripts/venue-details.js` and the current native location index. The broader cartoon finance-prop pass is a separate proposal in `game/docs/finance-props-direction.md`; it has not been implemented as new finished art. Earlier directions below explain history and do not override this restoration.
+
+## Historical direction
+
+
 These requests supplement the earlier proposed slate. They describe future cutscene production, not features already implemented in the playable game.
 
 ## Intro reference video

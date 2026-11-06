@@ -36,11 +36,10 @@ try{
     });
   }
   console.log(`Testing ${env.TEST_URL}`);
-  // Cohesive scenery replaces the older architectural-layer and exact-wet-
-  // painting oracles. One suite covers both cities, venue attachment, full
-  // routes, actual jumps/flight, renderer fallbacks and preserved Park pixels.
-  // Visibility also checks that foreground slopes leave each venue readable.
-  for(const test of ['modes','menu','cohesive-scenery','venue-visibility','responsive-framing','office-host','props','water','gaps','standalone']) await run(`tests/${test}.mjs`);
+  // v1.6 is now the exact scenery oracle. The v1.9/1.10 composition and traffic
+  // tests remain historical: their replacement panorama is no longer loaded.
+  const selected = (env.BROWSER_TESTS || 'modes,menu,v16-restoration,midtown-grounding,office-host,props,water,gaps,map-avatars,standalone').split(',');
+  for(const test of selected) await run(`tests/${test}.mjs`);
   console.log('All release browser checks passed.');
 }finally{
   server?.kill('SIGTERM');

@@ -1,0 +1,38 @@
+{
+  "openingGround": {
+    "class": "var Po = class",
+    "start": "  terrain(",
+    "end": "  listingBell(",
+    "sha256": "1a6777b710a372c4f1bf711746ed4b620aacc859e802343b7f776874e9ab6ff9"
+  },
+  "districtBackground": {
+    "class": "var wo = class",
+    "start": "  background(",
+    "end": "  terrain(",
+    "sha256": "03d65044ea61593e5305e5bab8ce82e8440dcd2f7bb2d5f68c7f01cf11c0a98e"
+  },
+  "districtGround": {
+    "class": "var wo = class",
+    "start": "  terrain(",
+    "end": "  platform(",
+    "sha256": "1aaa6dcdc83f1dc3a6cca483747cda028a28b8fff73c6436b22e9e58eb80e634"
+  },
+  "pixiBackground": {
+    "class": "eg = class",
+    "start": "  drawBackground(",
+    "end": "  drawLeaves(",
+    "sha256": "4e8239b09334ea0a5d5b0da1f6744c6b9a8fdb9cab4c9e68b92fba38e7ba6701"
+  },
+  "frameComposition": {
+    "class": "",
+    "start": "function vu(",
+    "end": "function Ku(",
+    "sha256": "8894b6a89f82c9746e3b90befc82ae0ff5e8ef9f92816f882c1801016c3a2e3f"
+  },
+  "cameraAndSimulation": {
+    "class": "",
+    "start": "function Ku(",
+    "end": "window.longRun =",
+    "sha256": "9041846d830a0a147aea6e0dfeabcfcec40e5ae39581e4fcd58dc98ea0583af4"
+  }
+}

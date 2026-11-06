@@ -60,16 +60,31 @@
     }
     c.restore(); return true;
   }
-  function hazard(c, item, x, base, district) {
+  function hazard(c, item, x, base, district, run) {
     if (item.type === "gap" || district === "park") return false;
     const high = item.type === "high", image = high ? art.overhead : art.cabinet;
     if (!loaded(image)) return false;
     const w = item.w, h = high ? 85 : item.h, top = high ? base - 181 : base - h;
     c.save();
     if (high) {
+      if (item.guidance) {
+        const anchor = item.guidance.base - 181;
+        // The hoist frame stays planted on the pavement while the board moves.
+        // Its slim support posts sit behind the playable clearance.
+        for (const rail of [x + 4, x + w - 4]) {
+          const ground = run?.floorAt(rail) ?? item.guidance.base;
+          line(c, rail, anchor - 46, rail, ground, "#102a3b", 5);
+          line(c, rail - .6, anchor - 44, rail - .6, ground - 2, "#b8d8d4", 1);
+          box(c, rail - 6, ground - 3, 12, 3, "#33474b", 1);
+          box(c, rail - 4, anchor - 49, 8, 5, "#dfb866", 1.5);
+        }
+        box(c, x, anchor - 49, w, 5, "#203b4b", 2);
+        line(c, x + 4, anchor - 49, x + w - 4, anchor - 49, "#dfb866", 1);
+      }
       for (const hook of [x + w * .163, x + w * .842]) {
-        line(c, hook, top - 42, hook, top - h * .07, "#263a3c", 2.6);
-        line(c, hook - .5, top - 42, hook - .5, top - h * .07, "#b7b39a", .7);
+        const anchor = item.guidance ? item.guidance.base - 230 : top - 42;
+        line(c, hook, anchor, hook, top - h * .07, "#263a3c", 2.6);
+        line(c, hook - .5, anchor, hook - .5, top - h * .07, "#b7b39a", .7);
       }
     }
     // Original compact construction silhouette; no decorative gold frame.
@@ -88,6 +103,11 @@
       const pw = w * .82, ph = 18, px = x + w / 2, py = top + h * .20;
       box(c, px - pw / 2, py - ph / 2, pw, ph, "#302c32", 1.5);
       text(c, label, px, py + .2, 9.3, pw - 7, "#fff0d1");
+      if (item.guidance) {
+        box(c, x + w / 2 - 13, top + h * .46, 26, 21, "#102e3f", 5);
+        arrow(c, x + w / 2 - 5, top + h * .46 + 10.5, -2, "#c8e6d0", 4.5);
+        arrow(c, x + w / 2 + 5, top + h * .46 + 10.5, 2, "#c8e6d0", 4.5);
+      }
       for (const dx of [-10, 0, 10]) {
         line(c, x + w / 2 + dx - 2.5, top + h - 11, x + w / 2 + dx, top + h - 8.5, "#f3d5a2", 1);
         line(c, x + w / 2 + dx, top + h - 8.5, x + w / 2 + dx + 2.5, top + h - 11, "#f3d5a2", 1);

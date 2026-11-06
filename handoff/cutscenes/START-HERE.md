@@ -17,7 +17,7 @@ Also read `docs/07-latest-direction.md`: the user's forthcoming intro reference 
 
 `game/` is the complete editable source snapshot. With Node.js 20 or newer, run `node serve.mjs` in that folder and open the printed URL, or run `node build.mjs` to create one standalone HTML. Neither command requires an npm install or network access. `npm ci` is needed only for the browser test dependency. The release snapshot and file hashes supplied with the ZIP are the source of truth for the packaged revision; do not resume development from an older chat artifact.
 
-If including the compiled HTML would push this handoff over 100 MiB, packaging omits that duplicate file while retaining every native asset, test, reference and source file. The source-only form includes build instructions, the expected standalone SHA-256 and a verified staged-source rebuild record. The separate `The-Long-Run-NBIM.zip` remains the direct ready-to-play download. Current city references include the 28 native 1024×1536 base paintings and authored seam repairs, the restored v1.6 Midtown opening-vista sources, and the native stone foundation. They are not reduced to meet the archive limit.
+If including the compiled HTML would push this handoff over 100 MiB, packaging omits that duplicate file while retaining every native asset, test, reference and source file. The source-only form includes build instructions, the expected standalone SHA-256 and a verified staged-source rebuild record. The separate `The-Long-Run-NBIM.zip` remains the direct ready-to-play download. Current city references are the exact v1.6 architecture and landmark layers, its native stone foundation, and six current venue-detail crops registered inside that architecture. They are not reduced to meet the archive limit. The separate cartoon finance-prop proposal is in game/docs/finance-props-direction.md.
 
 ## Paste this into the next ChatGPT session
 
@@ -42,18 +42,15 @@ York art and understated fund-world humor. Keep the current Nicolai and Trond
 sprite style. Do not use the rejected cartoon sprite study or redesign the
 characters. 505 Fifth must keep the electric-blue/cyan glass lobby, complete
 paired revolving doors and the office host's supplied likeness/plum suit.
-Central Park must preserve the restored original dreamy painting. Downtown
-and Midtown retain the current high-detail native venue streets. Midtown's
-opening restores the broad v1.6 skyline, glass offices and library before
-joining those streets. Inspect city-vistas.js and the current gameplay frames
-for this layered opening. Sparse traffic belongs to the visible road strip;
-the native stone foundation follows the actual ground and leaves gaps open.
+Central Park must preserve its original dreamy painting. Downtown and Midtown
+now restore the exact v1.6 architecture, layer order, camera and curb treatment.
+Six native storefront crops keep the current venue details inside those original
+buildings. Inspect scenery.js, venue-details.js and the current gameplay frames.
+There is no added traffic or replacement panorama module in the runtime.
 Keep full ordinary city blocks between venue discoveries; do not gather the
 Easter eggs into one crowded view. Preserve the complete blue/cyan 505 entrance
-and its native glass detail. Use references/locations/INDEX.md to open the
-exact source files in game/assets/. Do not reintroduce an ocean
-sheet under Downtown, wet Midtown streets or separately drifting venue islands.
-The older HTML is a visual guide; current gameplay and character assets remain.
+and its glass detail. Use references/locations/INDEX.md to open the exact source
+files in game/assets/. Current character, audio and gameplay systems remain.
 
 For LR-OP-01, inspect the intro reference video I will supply before deciding
 its animation treatment, pacing, camera or transitions. That video is not in

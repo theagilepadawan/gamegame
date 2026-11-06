@@ -1,0 +1,110 @@
+[
+  {
+    "name": "kabin",
+    "source": "assets/scenery-v19/downtown-05.webp",
+    "sourceSha256": "e2f50888486cdb5d11bb984d654d7e8a50963d6112774a035dd3b71ae9a491fc",
+    "rect": [
+      307,
+      1068,
+      410,
+      205
+    ],
+    "path": "assets/venue-details-v111/kabin.webp",
+    "nativePixels": [
+      410,
+      205
+    ],
+    "sha256": "5a169cc363e77852327ef3a7be3851f1d144b542f7d9e8ce8706f7682570fc5b",
+    "processing": "Exact native crop, lossless WebP; no repainting or enlargement."
+  },
+  {
+    "name": "lei",
+    "source": "assets/scenery-v19/downtown-11.webp",
+    "sourceSha256": "6917eb58e3a074a7842332cbb4b32213e37df46b6483aef66041416627e774c7",
+    "rect": [
+      293,
+      974,
+      452,
+      290
+    ],
+    "path": "assets/venue-details-v111/lei.webp",
+    "nativePixels": [
+      452,
+      290
+    ],
+    "sha256": "5f253ea9554f371c1da8d621093dacee213ca768b1a5be693df70d848070d066",
+    "processing": "Exact native crop, lossless WebP; no repainting or enlargement."
+  },
+  {
+    "name": "joju",
+    "source": "assets/scenery-v19/midtown-05.webp",
+    "sourceSha256": "0e0df7a61b362ea9059765ce57c4e80ef2cd9ed6b476de2f979548d9896d3d1e",
+    "rect": [
+      245,
+      882,
+      525,
+      326
+    ],
+    "path": "assets/venue-details-v111/joju.webp",
+    "nativePixels": [
+      525,
+      326
+    ],
+    "sha256": "591f0bafeec110dd7d5465c0f3396fb60c47de92ae631e8d70dcc7369ec6906f",
+    "processing": "Exact native crop, lossless WebP; no repainting or enlargement."
+  },
+  {
+    "name": "omars",
+    "source": "assets/scenery-v19/midtown-08.webp",
+    "sourceSha256": "3d29b9f34d7a5df686b5329002635a4efc18f7240ce3c393c708e1fcc84126e7",
+    "rect": [
+      246,
+      940,
+      529,
+      268
+    ],
+    "path": "assets/venue-details-v111/omars.webp",
+    "nativePixels": [
+      529,
+      268
+    ],
+    "sha256": "783cfcd4a694fe6270db9eed7519b37a2a729e76ecb34e0bc7adf3e97e4f105e",
+    "processing": "Exact native crop, lossless WebP; no repainting or enlargement."
+  },
+  {
+    "name": "gussy",
+    "source": "assets/scenery-v19/midtown-11.webp",
+    "sourceSha256": "6e49df81c64a1c304e30e64b6275595dc3b58142b9c7be552b9e52b3539f204a",
+    "rect": [
+      215,
+      846,
+      680,
+      338
+    ],
+    "path": "assets/venue-details-v111/gussy.webp",
+    "nativePixels": [
+      680,
+      338
+    ],
+    "sha256": "c27c3cf4a4b9331d6fd3773ee44322c31d6088802b289f19bb1967080dc57612",
+    "processing": "Exact native crop, lossless WebP; no repainting or enlargement."
+  },
+  {
+    "name": "fifth",
+    "source": "assets/scenery-v19/midtown-14.webp",
+    "sourceSha256": "0143ad02a0196c7a38a51bbcdcbf763d1a53642a365a9a2a0960dc92e70a0e77",
+    "rect": [
+      257,
+      870,
+      511,
+      390
+    ],
+    "path": "assets/venue-details-v111/fifth.webp",
+    "nativePixels": [
+      511,
+      390
+    ],
+    "sha256": "1548300799c97afe67c2bf450342bdd394bf2926d9480f7f6fc593e54b01209d",
+    "processing": "Exact native crop, lossless WebP; no repainting or enlargement."
+  }
+]
