@@ -4,18 +4,18 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
-## Cohesive New York artwork — 1.8
+## Detailed New York streets — 1.9
 
-- **A continuous painted world:** Downtown and Midtown use new opaque panoramas guided by the earlier game's warm illustrated style. Streets, architecture and venue frontages share one calm camera. Downtown no longer presents an ocean sheet under the course; Midtown uses dry streets with venues integrated into their surroundings.
-- **Landmarks and local places:** Lower Manhattan and Midtown retain their own landmark identities. Kabin, LEI, JOJU, Omar's, Uncle Gussy's and 505 are placed inside the painted streets rather than moving as separate venue islands. The complete blue/cyan 505 glass entrance and its host remain.
-- **Readable game objects:** six native painted pickups/barriers return to the earlier game's simpler silhouettes, warmer materials and restrained detail. Directional signs are smaller. Collection, collision and reward behavior stay with the existing game logic.
-- **Central Park and gameplay:** the original Park scenery, current runners, animations, audio, progression and game mechanics are retained. Endless continues into an anonymous ordinary-street tail, without replaying named landmarks or Easter eggs.
+- **Native detail:** Downtown and Midtown use 28 native 1024×1536 street paintings and 29 authored seam repairs under `assets/scenery-v19/`, replacing the 724-pixel-tall city sheets. Native pixels survive the prepared canvases and texture upload. At matched framing, source sampling is about 2.10× higher in Midtown and 2.18× higher Downtown; fine masonry, windows and venue fronts have substantially more original detail.
+- **Separated local discoveries:** full stretches of ordinary city architecture separate Kabin, LEI, JOJU, Omar's, Uncle Gussy's and 505. Downtown has 12 base paintings and Midtown 16. Venue fronts remain part of a continuous opaque street, with complete blue/cyan 505 glass and its host. The longer painted route shares one horizontal camera, with no jump-driven vertical shift or independent venue islands.
+- **Warmth and continuity:** the previous release's warm palette, dry streets, bounded Downtown harbor, polished `props-v18` pickups and smaller signs remain. Native landmark detail and scene joins are checked at gameplay size; Lower Manhattan and Midtown keep their own landmark identities.
+- **Central Park and gameplay:** the original Park scenery, current runners, animations, audio, progression and game mechanics are retained. Endless cycles through six anonymous ordinary-street paintings, without replaying named landmarks or Easter eggs.
 
-The newly supplied earlier HTML is a visual guide, not a replacement codebase. This work keeps the current game and improves its artwork; it does not restore old gameplay behavior. Verification and the user's review of the new composition are recorded separately.
+The earlier HTML remains a visual guide, not a replacement codebase. The user rejected v1.8's loss of detail and clustered venues while asking to retain its other improvements. The current change addresses those two issues. Actual validation is recorded in `docs/verification.md`; v1.8's historical results are preserved separately and do not certify v1.9.
 
 The current Nicolai and Trond sprite sheets are unchanged. The rejected cartoon runner study and alternate Park artwork are not part of gameplay.
 
-[Cutscene production handoff](release/The-Long-Run-Cutscene-Handoff.zip?raw=1) contains the current game, native references, audio, a proposed shot slate, Runway prompts and browser integration notes. Start with `START-HERE.md` inside the ZIP. Cutscenes are a separate production task; this release does not add video interruptions.
+[Cutscene production handoff](release/The-Long-Run-Cutscene-Handoff.zip?raw=1) contains the complete editable game, native references, audio, a proposed shot slate, Runway prompts and browser integration notes. Start with `START-HERE.md` inside the ZIP. Its location index links to exact native files in the editable game's asset tree. If duplicating the compiled HTML would exceed 100 MiB, the handoff includes verified build instructions and the expected HTML hash instead; every native asset is retained. The separate playable ZIP remains ready to open. Cutscenes are a separate production task; this release does not add video interruptions.
 
 ## Story and Endless
 
@@ -23,7 +23,7 @@ The current Nicolai and Trond sprite sheets are unchanged. The rejected cartoon 
 - **Chapter journey:** a scrollable world map, touch dragging, mouse wheel, arrows and keyboard navigation, with clear progress and locked chapters.
 - **Progression:** wins in Opening Bell and Midtown default to Next chapter, including after the fund-history reveal and when using a controller. The Central Park finale defaults to Main menu. Losing a chapter defaults to Retry chapter.
 - **Story courses:** fixed chapter terrain; seed and New world controls belong to Endless. Switching modes preserves the chosen Endless seed.
-- **Landmark continuity:** Story follows a finite route without mirroring or repeating its landmarks. Endless continues through an anonymous ordinary-street painting without returning to WTC, Brooklyn Bridge or named venues.
+- **Landmark continuity:** Story follows a finite route without mirroring or repeating its landmarks. Endless continues through six anonymous ordinary-street paintings without returning to WTC, Brooklyn Bridge or named venues.
 
 The NBIM branding, music, both runners and their animations, unlocks, fund-history reveal, pickups, jetpack, boss, local leaderboards and environmental effects remain from the supplied build. Leaderboards remain local unless a remote service is explicitly configured.
 
@@ -39,7 +39,7 @@ Requires Node.js 20 or newer. The build and local server have no dependencies.
 npm start
 ```
 
-Open the URL printed by the server. `index.html`, `game.css`, `scripts/` and `assets/` are the editable source. `scripts/engine.js` contains the original bundled game and Pixi runtime, formatted for maintenance. `scripts/scenery.js` and `scripts/midtown-scenery.js` compose the current Downtown/Midtown panoramas and shared venue camera; `scripts/park-scenery.js` preserves the original Park composition; `scripts/chapter-menu.js` controls the chapter map.
+Open the URL printed by the server. `index.html`, `game.css`, `scripts/` and `assets/` are the editable source. `scripts/engine.js` contains the original bundled game and Pixi runtime, formatted for maintenance. `scripts/scenery.js` and `scripts/midtown-scenery.js` compose the native city tiles and shared venue camera; `scripts/park-scenery.js` preserves the original Park composition; `scripts/chapter-menu.js` controls the chapter map.
 
 ```sh
 npm run build

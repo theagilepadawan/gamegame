@@ -2,17 +2,17 @@
 (function () {
   "use strict";
   var fixtures = [
-    {key: "kabin", rect: [502, 450, 208, 130]},
-    {key: "lei", rect: [1547, 435, 223, 146]}
+    {key: "kabin", panel: 5, rect: [307, 1068, 410, 205]},
+    {key: "lei", panel: 11, rect: [293, 974, 452, 290]}
   ];
   function spots(distance, W, H, mode) {
     W = W || 1000; H = H || 540;
     var scene = LR_SCENERY.layout("opening", distance || 0, W, H, mode);
-    var block = scene.blocks[1], scale = scene.artScale, left = block.worldX - scene.scroll;
     return fixtures.map(function (fixture) {
-      var r = fixture.rect, x = left + r[0] * scale, y = scene.worldTransform.y + r[1] * scale;
-      return {key: fixture.key, panel: 1, segment: 1, sourceRect: r.slice(), nativeRect: r.slice(), integrated: true,
-        fullArchitecture: true, nativeWidth: 2172, nativeHeight: 724, renderMode: "painted",
+      var block = scene.blocks[fixture.panel], scale = block.nativeScale, left = block.worldX - scene.scroll;
+      var r = fixture.rect, x = left + r[0] * scale, y = scene.worldTransform.y + (r[1] + block.nativeOffsetY) * scale;
+      return {key: fixture.key, panel: fixture.panel, segment: fixture.panel, sourceRect: r.slice(), nativeRect: r.slice(), integrated: true,
+        fullArchitecture: true, nativeWidth: block.nativeWidth, nativeHeight: block.paintedHeight, nativeOffsetY: block.nativeOffsetY, renderMode: "painted",
         worldX: block.worldX + (r[0] + r[2] / 2) * scale,
         visible: x + r[2] * scale > 0 && x < W,
         rect: {x: x, y: y, width: r[2] * scale, height: r[3] * scale}};

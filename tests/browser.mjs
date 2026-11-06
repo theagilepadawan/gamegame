@@ -39,7 +39,8 @@ try{
   // Cohesive scenery replaces the older architectural-layer and exact-wet-
   // painting oracles. One suite covers both cities, venue attachment, full
   // routes, actual jumps/flight, renderer fallbacks and preserved Park pixels.
-  for(const test of ['modes','menu','cohesive-scenery','responsive-framing','office-host','props','water','gaps','standalone']) await run(`tests/${test}.mjs`);
+  // Visibility also checks that foreground slopes leave each venue readable.
+  for(const test of ['modes','menu','cohesive-scenery','venue-visibility','responsive-framing','office-host','props','water','gaps','standalone']) await run(`tests/${test}.mjs`);
   console.log('All release browser checks passed.');
 }finally{
   server?.kill('SIGTERM');

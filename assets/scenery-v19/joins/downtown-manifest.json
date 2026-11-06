@@ -1,0 +1,498 @@
+{
+  "version": 19,
+  "canonicalHeight": 1536,
+  "curbY": 1304,
+  "storyPairs": 11,
+  "endlessSourceCycle": [
+    4,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "additionalEndlessPairs": [
+    [
+      11,
+      4
+    ],
+    [
+      4,
+      6
+    ],
+    [
+      10,
+      4
+    ]
+  ],
+  "repairs": [
+    {
+      "path": "assets/scenery-v19/joins/downtown-00.webp",
+      "source": "/workspace/generated_images/exec-510c25a9-1629-460b-a7e6-b8e3736528c0.png",
+      "nativeWidth": 809,
+      "nativeHeight": 1942,
+      "scene": "opening",
+      "after": 0,
+      "x": 704,
+      "width": 640,
+      "height": 1536,
+      "feather": 32,
+      "reference": "review/v19-seams/downtown-00-01-reference.png",
+      "sha256": "dc8c0291b67a146c7721640c0710af9b7436f538e4e995f62aca4d008bfcacdb",
+      "sourceSha256": "2066b311b18b305686a5da3291b2ab96a9cef0415fc1a9d29b6d715576b438a5",
+      "status": "verified in actual renderer: continuous sky, architecture, lamp and curb",
+      "file": "assets/scenery-v19/joins/downtown-00.webp",
+      "filename": "downtown-00.webp",
+      "bases": [
+        {
+          "index": 0,
+          "file": "assets/scenery-v19/downtown-00.webp",
+          "sha256": "18b59b7a2c01580eb45de5b251a64801e374e4644dc70acdaa7c3a1d74d1aeb2",
+          "curbY": 1298
+        },
+        {
+          "index": 1,
+          "file": "assets/scenery-v19/downtown-01.webp",
+          "sha256": "de2d704011e38d0f2b61705de5f832f4860f7a405aea2143923f8608a86b7d10",
+          "curbY": 1298
+        }
+      ],
+      "leftSource": 0,
+      "rightSource": 1
+    },
+    {
+      "file": "assets/scenery-v19/joins/downtown-01.webp",
+      "filename": "downtown-01.webp",
+      "source": "/workspace/generated_images/exec-16c59522-e5d7-474b-9198-7c5dfb8dd949.png",
+      "nativeWidth": 809,
+      "nativeHeight": 1942,
+      "scene": "opening",
+      "after": 1,
+      "x": 704,
+      "width": 640,
+      "height": 1536,
+      "feather": 32,
+      "reference": "review/v19-seams/downtown-01-02-reference.png",
+      "sha256": "2445d74e498581d4fd94ed7ecccdff7a1c7114b6e0cfe194c1fa4569d0a55f0b",
+      "sourceSha256": "c4ead889a9d1ebd052c2e5e0d5018d11c7fdd814b78bab9cbae6e4eba2341a54",
+      "status": "verified in actual renderer: continuous sky, architecture and curb; no damaged lamp",
+      "bases": [
+        {
+          "index": 1,
+          "file": "assets/scenery-v19/downtown-01.webp",
+          "sha256": "de2d704011e38d0f2b61705de5f832f4860f7a405aea2143923f8608a86b7d10",
+          "curbY": 1298
+        },
+        {
+          "index": 2,
+          "file": "assets/scenery-v19/downtown-02.webp",
+          "sha256": "ac40707c78a387cdadfa790a42aa068c70e2ba35982d29ba27e17816fc3d48ba",
+          "curbY": 1298
+        }
+      ],
+      "leftSource": 1,
+      "rightSource": 2
+    },
+    {
+      "file": "assets/scenery-v19/joins/downtown-02.webp",
+      "filename": "downtown-02.webp",
+      "source": "/workspace/generated_images/exec-e0bc601d-2f5f-4642-8c8b-e6be44108273.png",
+      "nativeWidth": 809,
+      "nativeHeight": 1942,
+      "scene": "opening",
+      "after": 2,
+      "x": 704,
+      "width": 640,
+      "height": 1536,
+      "feather": 32,
+      "reference": "review/v19-seams/downtown-02-03-reference.png",
+      "sha256": "67e05e4c29caf82de766a944e91241902f6c487d7f35eb174b47449b5db8efad",
+      "sourceSha256": "405a3ca987b264f53de36b36919d2d95f1e984a55b55ee62d833dd9504f8e7d4",
+      "bases": [
+        {
+          "index": 2,
+          "file": "assets/scenery-v19/downtown-02.webp",
+          "sha256": "ac40707c78a387cdadfa790a42aa068c70e2ba35982d29ba27e17816fc3d48ba",
+          "curbY": 1298
+        },
+        {
+          "index": 3,
+          "file": "assets/scenery-v19/downtown-03.webp",
+          "sha256": "a9c3b793babc28515c6bdbd377dafae662c8d6b953dcbaba87d70f47f8beb105",
+          "curbY": 1298
+        }
+      ],
+      "status": "verified in actual renderer: continuous cloudscape, coherent architecture, intact lamps and curb",
+      "leftSource": 2,
+      "rightSource": 3
+    },
+    {
+      "file": "assets/scenery-v19/joins/downtown-03.webp",
+      "filename": "downtown-03.webp",
+      "source": "/workspace/generated_images/exec-0acfd6a1-5a9f-4778-bfb2-9ab08b6b98d0.png",
+      "nativeWidth": 809,
+      "nativeHeight": 1942,
+      "scene": "opening",
+      "after": 3,
+      "x": 704,
+      "width": 640,
+      "height": 1536,
+      "feather": 32,
+      "reference": "review/v19-seams/downtown-03-04-reference.png",
+      "sha256": "4516fc4692f0af49b07fbdfb3fb5cc52c84c5c9f327b63d40c6795b5260c7f3a",
+      "sourceSha256": "b61d18923b401e30b0a6d4682684fd80954a58c0061504ce1ac656354e64fa3a",
+      "bases": [
+        {
+          "index": 3,
+          "file": "assets/scenery-v19/downtown-03.webp",
+          "sha256": "a9c3b793babc28515c6bdbd377dafae662c8d6b953dcbaba87d70f47f8beb105",
+          "curbY": 1298
+        },
+        {
+          "index": 4,
+          "file": "assets/scenery-v19/downtown-04.webp",
+          "sha256": "53127486b5a2e2819ceaafae9fce1bebad6adfb511ade8097f7d0d5fd8ac0c63",
+          "curbY": 1298
+        }
+      ],
+      "status": "verified in actual renderer: continuous cloudscape, coherent architecture, intact lamps and curb",
+      "leftSource": 3,
+      "rightSource": 4
+    },
+    {
+      "file": "assets/scenery-v19/joins/downtown-04.webp",
+      "filename": "downtown-04.webp",
+      "source": "/workspace/generated_images/exec-27eee894-d875-4c8d-b080-f271244d2999.png",
+      "nativeWidth": 809,
+      "nativeHeight": 1942,
+      "scene": "opening",
+      "after": 4,
+      "x": 704,
+      "width": 640,
+      "height": 1536,
+      "feather": 32,
+      "reference": "review/v19-seams/downtown-04-05-reference.png",
+      "sha256": "505aeb2c847488fa375839874ad17cba0da271ddb06b144e467d704bf2f2389d",
+      "sourceSha256": "0b4d109974480df7c18b8b94e2bc4cc67f8945ee70f6c19640cec671f9c0b970",
+      "status": "verified in actual renderer: continuous sky, architecture and curb; no damaged lamp",
+      "bases": [
+        {
+          "index": 4,
+          "file": "assets/scenery-v19/downtown-04.webp",
+          "sha256": "53127486b5a2e2819ceaafae9fce1bebad6adfb511ade8097f7d0d5fd8ac0c63",
+          "curbY": 1298
+        },
+        {
+          "index": 5,
+          "file": "assets/scenery-v19/downtown-05.webp",
+          "sha256": "e2f50888486cdb5d11bb984d654d7e8a50963d6112774a035dd3b71ae9a491fc",
+          "curbY": 1298
+        }
+      ],
+      "leftSource": 4,
+      "rightSource": 5
+    },
+    {
+      "file": "assets/scenery-v19/joins/downtown-04-06.webp",
+      "filename": "downtown-04-06.webp",
+      "source": "/workspace/generated_images/exec-8b6a99d9-ac73-466a-95cf-e5d232f72973.png",
+      "nativeWidth": 809,
+      "nativeHeight": 1942,
+      "scene": "opening",
+      "leftSource": 4,
+      "rightSource": 6,
+      "x": 704,
+      "width": 640,
+      "height": 1536,
+      "feather": 32,
+      "reference": "review/v19-seams/downtown-04-06-reference.png",
+      "sha256": "7c5d6c1dfc23153b2c03d886ff67efaeafbbe8cd5413ce7178f0a483b030a4c6",
+      "sourceSha256": "20d18c77886464c6d1d62b91374f26b9139a22e348af79c0f91cf1c21e705d24",
+      "bases": [
+        {
+          "index": 4,
+          "file": "assets/scenery-v19/downtown-04.webp",
+          "sha256": "53127486b5a2e2819ceaafae9fce1bebad6adfb511ade8097f7d0d5fd8ac0c63",
+          "curbY": 1298
+        },
+        {
+          "index": 6,
+          "file": "assets/scenery-v19/downtown-06.webp",
+          "sha256": "0ae43e833f4f8352418ce534da701c6540ddf1ddffbb0f31c03afde7e3ab3632",
+          "curbY": 1298
+        }
+      ],
+      "status": "verified in actual renderer: continuous sky, architecture, single intact lamp and curb"
+    },
+    {
+      "file": "assets/scenery-v19/joins/downtown-05.webp",
+      "filename": "downtown-05.webp",
+      "source": "/workspace/generated_images/exec-237e656a-4152-4dc2-8598-6e259c00b7da.png",
+      "nativeWidth": 809,
+      "nativeHeight": 1942,
+      "scene": "opening",
+      "after": 5,
+      "x": 704,
+      "width": 640,
+      "height": 1536,
+      "feather": 32,
+      "reference": "review/v19-seams/downtown-05-06-reference.png",
+      "sha256": "813836c9f3d9ef859cf702d87cc84532bdc96bacfc5c98edeace85bac0f62d55",
+      "sourceSha256": "6c73cd58abe7b1a0939e7a1d677cfdd0c88178ae50203d83892d79591b7a1376",
+      "status": "verified in actual renderer: continuous sky, architecture and curb; no damaged lamp",
+      "bases": [
+        {
+          "index": 5,
+          "file": "assets/scenery-v19/downtown-05.webp",
+          "sha256": "e2f50888486cdb5d11bb984d654d7e8a50963d6112774a035dd3b71ae9a491fc",
+          "curbY": 1298
+        },
+        {
+          "index": 6,
+          "file": "assets/scenery-v19/downtown-06.webp",
+          "sha256": "0ae43e833f4f8352418ce534da701c6540ddf1ddffbb0f31c03afde7e3ab3632",
+          "curbY": 1298
+        }
+      ],
+      "leftSource": 5,
+      "rightSource": 6
+    },
+    {
+      "file": "assets/scenery-v19/joins/downtown-06.webp",
+      "filename": "downtown-06.webp",
+      "source": "/workspace/generated_images/exec-43492645-2f7d-4323-8ab7-92808ea68e87.png",
+      "nativeWidth": 809,
+      "nativeHeight": 1942,
+      "scene": "opening",
+      "after": 6,
+      "x": 704,
+      "width": 640,
+      "height": 1536,
+      "feather": 32,
+      "reference": "review/v19-seams/downtown-06-07-reference.png",
+      "sha256": "6783dc4fb9b44af6e7d8f66f4fce1c2a6812589411924322a696ae287bb3b4ab",
+      "sourceSha256": "4ec3aa50bffaef69cf70ab6f077423b8c7cd8278ce4b31270973e7b31716d7e7",
+      "bases": [
+        {
+          "index": 6,
+          "file": "assets/scenery-v19/downtown-06.webp",
+          "sha256": "0ae43e833f4f8352418ce534da701c6540ddf1ddffbb0f31c03afde7e3ab3632",
+          "curbY": 1298
+        },
+        {
+          "index": 7,
+          "file": "assets/scenery-v19/downtown-07.webp",
+          "sha256": "c4fa783dc522e97e68e2c55349bc2e988b55be415eaaa3e36f01eff8f8ac1e5a",
+          "curbY": 1308
+        }
+      ],
+      "status": "verified in actual renderer: continuous cloudscape, coherent architecture, intact lamps and curb",
+      "leftSource": 6,
+      "rightSource": 7
+    },
+    {
+      "file": "assets/scenery-v19/joins/downtown-07.webp",
+      "filename": "downtown-07.webp",
+      "source": "/workspace/generated_images/exec-6f2e34f3-148b-4f87-9e66-e4a020e15069.png",
+      "nativeWidth": 809,
+      "nativeHeight": 1942,
+      "scene": "opening",
+      "after": 7,
+      "x": 704,
+      "width": 640,
+      "height": 1536,
+      "feather": 32,
+      "reference": "review/v19-seams/downtown-07-08-reference.png",
+      "sha256": "e0b97900f0fbad1ae9da0fc8de28c99142fc8ac4efe47c80c38e49b14e81e9b0",
+      "sourceSha256": "d464d8c8ad7cba0d27d5bdbce12f64026e62b6db7541e1aabb97a0ee84351408",
+      "bases": [
+        {
+          "index": 7,
+          "file": "assets/scenery-v19/downtown-07.webp",
+          "sha256": "c4fa783dc522e97e68e2c55349bc2e988b55be415eaaa3e36f01eff8f8ac1e5a",
+          "curbY": 1308
+        },
+        {
+          "index": 8,
+          "file": "assets/scenery-v19/downtown-08.webp",
+          "sha256": "21d25d000c8f3e20b50624c3fd36420fc2dc9f16a88c0d9716ad79d824778c5b",
+          "curbY": 1298
+        }
+      ],
+      "status": "verified in actual renderer: continuous cloudscape, coherent architecture, intact lamps and curb",
+      "leftSource": 7,
+      "rightSource": 8
+    },
+    {
+      "file": "assets/scenery-v19/joins/downtown-08.webp",
+      "filename": "downtown-08.webp",
+      "source": "/workspace/generated_images/exec-a8826834-68d3-48c2-9ec1-7e1e0404989c.png",
+      "nativeWidth": 809,
+      "nativeHeight": 1942,
+      "scene": "opening",
+      "after": 8,
+      "x": 704,
+      "width": 640,
+      "height": 1536,
+      "feather": 32,
+      "reference": "review/v19-seams/downtown-08-09-reference.png",
+      "sha256": "17dfb944a192af9a7b22a5a9d8cf62d1a9c31d668766a8b6e49525725a768311",
+      "sourceSha256": "f3ced781fa1ac3d2f7af08aa286e9509622899a877dfc4f9f997d28bf62922aa",
+      "bases": [
+        {
+          "index": 8,
+          "file": "assets/scenery-v19/downtown-08.webp",
+          "sha256": "21d25d000c8f3e20b50624c3fd36420fc2dc9f16a88c0d9716ad79d824778c5b",
+          "curbY": 1298
+        },
+        {
+          "index": 9,
+          "file": "assets/scenery-v19/downtown-09.webp",
+          "sha256": "3e9eb701ac5464b201f553a31e3197bdd50a2b61791bb03bb33761a69c64fd76",
+          "curbY": 1298
+        }
+      ],
+      "status": "verified in actual renderer: continuous cloudscape, coherent architecture, intact lamps and curb",
+      "leftSource": 8,
+      "rightSource": 9
+    },
+    {
+      "path": "assets/scenery-v19/joins/downtown-09.webp",
+      "source": "/workspace/generated_images/exec-0065708c-78a8-4af3-b3e5-0cfbb48f0995.png",
+      "nativeWidth": 809,
+      "nativeHeight": 1942,
+      "scene": "opening",
+      "x": 704,
+      "width": 640,
+      "height": 1536,
+      "feather": 32,
+      "reference": "review/v19-seams/downtown-09-10-reference.png",
+      "sha256": "2a9db132e818c26cb3e313ab1f62d7d955da854676ec57e4430f060df0223244",
+      "sourceSha256": "a75cfd614a7033423bbb62fbf6ac350d04d27e0ed24f5dcebd79394ec6eb6934",
+      "status": "verified in actual renderer: continuous sky, architecture, lamp and curb",
+      "file": "assets/scenery-v19/joins/downtown-09.webp",
+      "filename": "downtown-09.webp",
+      "after": 9,
+      "bases": [
+        {
+          "index": 9,
+          "file": "assets/scenery-v19/downtown-09.webp",
+          "sha256": "3e9eb701ac5464b201f553a31e3197bdd50a2b61791bb03bb33761a69c64fd76",
+          "curbY": 1298
+        },
+        {
+          "index": 10,
+          "file": "assets/scenery-v19/downtown-10.webp",
+          "sha256": "48dbef0ed237e81389d448d11e3af43c8a714aa6fd679fcbde56c541c0d8dc3c",
+          "curbY": 1298
+        }
+      ],
+      "verification": "review/v19-seams/downtown-09-10-repaired-detail.png",
+      "leftSource": 9,
+      "rightSource": 10
+    },
+    {
+      "path": "assets/scenery-v19/joins/downtown-10-04.webp",
+      "source": "/workspace/generated_images/exec-16ab41cc-f4d7-4c50-863f-bef43f3120c1.png",
+      "nativeWidth": 809,
+      "nativeHeight": 1942,
+      "scene": "opening",
+      "x": 704,
+      "width": 640,
+      "height": 1536,
+      "feather": 32,
+      "reference": "review/v19-seams/downtown-10-04-reference.png",
+      "sha256": "440dc86671cd56b1187e8e3f88294f52bcf61874c4d3384366006b485bdbfd0a",
+      "sourceSha256": "99e712edca72f7e92b03990e75a9bff16f658fe61c54c8cb674dc3e89bab5c68",
+      "status": "verified in actual renderer: continuous sky, architecture, lamp and curb",
+      "file": "assets/scenery-v19/joins/downtown-10-04.webp",
+      "filename": "downtown-10-04.webp",
+      "leftSource": 10,
+      "rightSource": 4,
+      "bases": [
+        {
+          "index": 10,
+          "file": "assets/scenery-v19/downtown-10.webp",
+          "sha256": "48dbef0ed237e81389d448d11e3af43c8a714aa6fd679fcbde56c541c0d8dc3c",
+          "curbY": 1298
+        },
+        {
+          "index": 4,
+          "file": "assets/scenery-v19/downtown-04.webp",
+          "sha256": "53127486b5a2e2819ceaafae9fce1bebad6adfb511ade8097f7d0d5fd8ac0c63",
+          "curbY": 1298
+        }
+      ],
+      "verification": "review/v19-seams/downtown-10-04-repaired-detail.png"
+    },
+    {
+      "path": "assets/scenery-v19/joins/downtown-10.webp",
+      "source": "/workspace/generated_images/exec-1586d0d3-85df-4bac-81aa-226ccb51f6fa.png",
+      "nativeWidth": 809,
+      "nativeHeight": 1942,
+      "scene": "opening",
+      "x": 704,
+      "width": 640,
+      "height": 1536,
+      "feather": 32,
+      "reference": "review/v19-seams/downtown-10-11-reference.png",
+      "sha256": "9984651b0117a9fd8c8f7d053e0125c5838096fd0bbef355eabf062a1e87080d",
+      "sourceSha256": "f8fc91245be19c5b497aa6c822b4a14c73ccc7b53753298f410b407b8771b47a",
+      "status": "verified in actual renderer: continuous sky, architecture, lamp and curb",
+      "file": "assets/scenery-v19/joins/downtown-10.webp",
+      "filename": "downtown-10.webp",
+      "after": 10,
+      "bases": [
+        {
+          "index": 10,
+          "file": "assets/scenery-v19/downtown-10.webp",
+          "sha256": "48dbef0ed237e81389d448d11e3af43c8a714aa6fd679fcbde56c541c0d8dc3c",
+          "curbY": 1298
+        },
+        {
+          "index": 11,
+          "file": "assets/scenery-v19/downtown-11.webp",
+          "sha256": "6917eb58e3a074a7842332cbb4b32213e37df46b6483aef66041416627e774c7",
+          "curbY": 1298
+        }
+      ],
+      "verification": "review/v19-seams/downtown-10-11-repaired-detail.png",
+      "leftSource": 10,
+      "rightSource": 11
+    },
+    {
+      "file": "assets/scenery-v19/joins/downtown-11-04.webp",
+      "filename": "downtown-11-04.webp",
+      "source": "/workspace/generated_images/exec-ccb72911-1401-4edb-b268-059b6225056e.png",
+      "nativeWidth": 809,
+      "nativeHeight": 1942,
+      "scene": "opening",
+      "leftSource": 11,
+      "rightSource": 4,
+      "x": 704,
+      "width": 640,
+      "height": 1536,
+      "feather": 32,
+      "reference": "review/v19-seams/downtown-11-04-reference.png",
+      "sha256": "4f027ef359392eed831143c497c0826feccb322edcf79cc41f55992d611c3ff0",
+      "sourceSha256": "b64690022eaeffd564e0d768c38e417f6600a23f815213012cc344820bcce826",
+      "bases": [
+        {
+          "index": 11,
+          "file": "assets/scenery-v19/downtown-11.webp",
+          "sha256": "6917eb58e3a074a7842332cbb4b32213e37df46b6483aef66041416627e774c7",
+          "curbY": 1298
+        },
+        {
+          "index": 4,
+          "file": "assets/scenery-v19/downtown-04.webp",
+          "sha256": "53127486b5a2e2819ceaafae9fce1bebad6adfb511ade8097f7d0d5fd8ac0c63",
+          "curbY": 1298
+        }
+      ],
+      "status": "verified in actual renderer: continuous sky, architecture, single intact lamp and curb"
+    }
+  ],
+  "status": "All14 Downtown boundaries repaired and visually verified through actual renderer; all frozen base hashes match",
+  "pixelPolicy": "Every generated PNG retains its actual809\u00d71942native dimensions in WebPquality96; no asset resizing or fakeupscale."
+}

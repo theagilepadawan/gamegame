@@ -21879,6 +21879,15 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
     s.update();
   }
   drawBackground(A, t, i, r, o = false, s = null) {
+    // Keep only the current district's native scenery textures. High-detail
+    // street tiles must not accumulate across completed chapters and retries.
+    if (this.sceneryDistrict !== A) {
+      for (let tile of this.tiles) tile.sprite.texture = this.backgroundTextures.park;
+      if (this.sceneryTextures) for (let texture of this.sceneryTextures.values()) texture.destroy(true);
+      this.sceneryTextures = new Map();
+      this.sceneryDistrict = A;
+      window.LR_SCENERY?.releaseExcept?.(A);
+    }
     if (this.openingSprite.visible = A === "opening", this.gradeSprite.visible = A !== "opening", A === "opening") {
       window.LR_SHOPS && LR_SHOPS.pixi(this, A, t, i, r, qt, W, aA, hA);
       window.LR_OFFICE_HOST && LR_OFFICE_HOST.pixi(this, A, t, i, r, qt, W);
@@ -21889,7 +21898,8 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
     }
     let n = this.backgroundTextures[A], a = i + 16, g = a / n.height, l = n.width * g, Q = 0;
     let scene = window.LR_SCENERY ? LR_SCENERY.layout(A, r, t, i) : { panels: [{ x: -Math.min(r * 0.085, Math.max(0, l - t)), original: true, sourceIndex: 0 }] };
-    this.sceneryTextures ||= new WeakMap();
+    this.sceneryTextures ||= new Map();
+    let activeScenery = new Set();
     for (let R = 0; R < this.tiles.length; R++) {
       let h = this.tiles[R], panel = (scene.layers || scene.panels)[R];
       if (h.group.visible = !!panel, !panel) continue;
@@ -21900,6 +21910,8 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
         if (!image) { h.group.visible = false; continue; }
         texture = this.sceneryTextures.get(image);
         if (!texture) this.sceneryTextures.set(image, texture = W.from(image));
+        else { this.sceneryTextures.delete(image); this.sceneryTextures.set(image, texture); }
+        activeScenery.add(image);
         if (panel.kind === "water") { texture.source.update(); Q++; }
       }
       // Panel geometry stays in game coordinates; native artwork resolution can
@@ -21919,6 +21931,13 @@ var tg = (e24, A, t) => Math.max(A, Math.min(t, e24)), qo = (e24, A) => (e24 % A
           h.glints.moveTo(u, V).lineTo(u + 12 + EA(C) * 25, V).stroke({ width: 0.7, color: 16770994, alpha: p });
         }
       }
+    }
+    for (let [image, texture] of this.sceneryTextures) {
+      if (this.sceneryTextures.size <= 12) break;
+      if (activeScenery.has(image)) continue;
+      this.sceneryTextures.delete(image);
+      for (let tile of this.tiles) if (tile.sprite.texture === texture) tile.sprite.texture = this.backgroundTextures.park;
+      texture.destroy(true);
     }
     this.counts.water = Q;
     // Venue overlays and their host share a fixed street-side pavement anchor.

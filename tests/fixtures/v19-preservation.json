@@ -1,0 +1,12 @@
+{
+  "sourceCommit": "5f7c8850c1a0d33f1ce683408b77c0d84cd93292",
+  "unchangedProps": {
+    "scripts/prop-art.js": "19787e79294bdaefd8395c6170e3e188d51da8968478a42196278de40631992b",
+    "assets/props-v18/conviction.webp": "61e629615a7817e3c5fbd6c0f2d10232186ee72d8732f1b71d7d5583f91066df",
+    "assets/props-v18/dividend.webp": "387255cdded8196382e99eea044dcb7e81081e5773c980ca4a93a3af1bb211be",
+    "assets/props-v18/market-board.webp": "9f883f43542ca0e96579d79f64494473cd3e9dbfe3e08aff9b16835da24f25e5",
+    "assets/props-v18/opportunity.webp": "5de6ca93389b827953179e05c1ac1196a48bd70e9533f3ebc00ead01a1e3644c",
+    "assets/props-v18/research.webp": "9b11c179b0e170aa6af32242dd6e395d9d412c67c96b9ea2baffd0f3d0832c8d",
+    "assets/props-v18/road-barrier.webp": "8bde83cff85933766e64578a15c6dbdad08bcb149b8c09a0cf768353386cc755"
+  }
+}

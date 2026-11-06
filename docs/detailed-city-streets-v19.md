@@ -1,0 +1,15 @@
+# Detailed city streets — v1.9
+
+The user asked to retain v1.8's continuous streets, warm composition and other improvements, while correcting two visible regressions: insufficient native backdrop detail and venue Easter eggs clustered together.
+
+The resolution audit found a real loss of information. The 505 entrance changed from roughly 512×386 native pixels to 258×199 while remaining almost the same size on screen. The whole v1.8 painting was only 724 pixels tall. A larger framebuffer or a sharpened enlargement cannot recover that missing detail.
+
+The replacement artwork consists of 28 native 1024×1536 base paintings and 29 authored seam repairs under `assets/scenery-v19/`. The renderer retains the original painted pixels through its prepared canvases and GPU textures. Runtime ground padding and curb-alignment offsets extend the canvas without reducing the painting to the old raster size. At matched framing, source sampling is approximately 2.10× higher in Midtown and 2.18× higher Downtown than v1.8; this does not imply native 4K coverage on every display. Manifests record source dimensions, generation provenance and alignment.
+
+Downtown has 12 base paintings and Midtown has 16. Kabin/LEI and the four Midtown venues occupy distinct blocks separated by substantial stretches of ordinary architecture. Current storefront metadata identifies the exact native frontages and host anchor. Downtown's Endless continuation cycles through anonymous source indices 4, 6, 7, 8, 9 and 10; named venues, WTC, the bridge and Wall Street never enter that loop. Dedicated seam repairs connect the initial transition and loop boundaries.
+
+Streets, architecture and venues remain one opaque painted plane. The longer artwork uses a modest horizontal travel rate through the existing chapter duration; it adds no independent venue parallax, vertical motion on jumps, zoom or different physics model. Downtown's scenery finish distance is 24,000 to account for the IPO phase in the chapter clock; this adjusts backdrop routing rather than chapter duration. Curbs, pavement and complete building fronts connect across authored joins. Downtown retains a bounded harbor view; Midtown retains dry streets and the full blue/cyan 505 glass entrance.
+
+Compact Downtown views use a longer opening ease so Kabin's sign and entrance reach a clear stretch of foreground road. The camera settings blend continuously from ease 5000/cap 0.165 at logical width 540 back to the standard ease 2400/cap 0.15 at width 864. Wider views and Endless retain their timing. Venue positions, artwork and terrain stay fixed; the visibility regression test checks recognizable entrances against actual foreground slopes throughout the run.
+
+Central Park's original composition, the current Nicolai/Trond sheets, the retained office host, `props-v18`, audio, progression and game systems remain. The earlier HTML is still visual guidance rather than replacement source code. Validation and artifact identity belong in `verification.md`; this design note is not a test pass or user approval.

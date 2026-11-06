@@ -24,24 +24,26 @@ The original inline office/host photographs were visible in the conversation but
 
 ## Locations
 
-| Named handoff reference | Runtime source |
+Start with `references/locations/INDEX.md`. It links directly to the exact native files under `game/assets/`; `references/locations/location-manifest.json` records their paths, dimensions and hashes. Large location paintings are stored once in the editable game tree, without resizing or duplicate copies under `references/`.
+
+| Location / material | Current native source |
 |---|---|
-| `references/locations/central-park-approved-bow-bridge.webp` | `game/assets/original-33.webp` |
-| `references/locations/central-park-approved-ramble.webp` | `game/assets/scenery/park-1.webp` |
-| `references/locations/central-park-approved-bethesda.webp` | `game/assets/scenery/park-2.webp` |
-| `references/locations/downtown-main.webp` | `game/assets/scenery-v18/downtown-main.webp` |
-| `references/locations/downtown-street.webp` | `game/assets/scenery-v18/downtown-street.webp` |
-| `references/locations/downtown-anonymous-tail.webp` | `game/assets/scenery-v18/downtown-tail.webp` |
-| `references/locations/midtown-main.webp` | `game/assets/scenery-v18/midtown-main.webp` |
-| `references/locations/midtown-street-and-505.webp` | `game/assets/scenery-v18/midtown-street.webp` |
+| Approved Central Park Bow Bridge | `game/assets/original-33.webp` |
+| Approved Central Park Ramble | `game/assets/scenery/park-1.webp` |
+| Approved Central Park Bethesda | `game/assets/scenery/park-2.webp` |
+| Detailed Downtown route and anonymous Endless continuation | Current `downtown-*.webp` files indexed under `game/assets/scenery-v19/` |
+| Detailed Midtown route | Current `midtown-*.webp` files indexed under `game/assets/scenery-v19/` |
+| Complete 505 blue/cyan glass frontage | The current Midtown office tile, identified by `midtown-storefronts.js` and the native-art manifests |
 
-The current opaque panoramas are the backdrop authority. `game/assets/scenery-v18/manifest.json` records their native dimensions/provenance and any active join repairs. `game/scripts/midtown-scenery.js` supplies the shared panorama renderer; `scenery.js` configures the Downtown route and anonymous Endless tail. `park-scenery.js` keeps the original Park composition. The current native artwork, not the rendered ground padding, determines available architectural detail.
+The current opaque tiles are the backdrop authority. Their JSON manifests record native dimensions, generation provenance and alignment. `game/scripts/midtown-scenery.js` supplies the shared native-tile renderer; `scenery.js` configures Downtown and the anonymous Endless continuation. `park-scenery.js` keeps the original Park composition. Use the native painting, not a reduced screenshot or renderer-added ground padding, as the detailed architectural source.
 
-Venue frontages are baked into their continuous street paintings and use the same camera. `opening-storefronts.js` and `midtown-storefronts.js` describe native frontage bounds; they no longer add independent venue panels. 505's complete blue/cyan glazing and revolving doors are part of the Midtown street reference. `office-host.js` attaches the retained character to that entrance. Do not recreate the older cutout-building islands or import their separate parallax.
+The 28 v1.9 base paintings are 1024×1536 native pixels, replacing the previous 724-pixel-tall city artwork, with 29 additional authored seam repairs. The renderer retains native density through its prepared canvases and texture upload. Inspect the final metadata and verification record for actual dimensions; a larger file or enlarged raster alone is not evidence of additional detail.
 
-`references/gameplay/downtown-gameplay.png`, `midtown-gameplay.png`, `central-park-gameplay.png` and `office-gameplay.png` show actual current rendering and scale. These contain gameplay/UI context; prepare clean picture frames before video generation. If there is a difference between an isolated painting and the live composition, inspect the renderer/camera rather than arbitrarily stretching the painting.
+Venue frontages occupy separate blocks within the continuous streets. `opening-storefronts.js` and `midtown-storefronts.js` identify their native rectangles and course placement. Full ordinary street sections between the venues are part of the art direction. Preserve 505's complete blue/cyan glazing and revolving doors; `office-host.js` attaches the retained host to that entrance. Do not recreate cutout-building islands, import their old separate parallax, or pack multiple venue references into one crowded cinematic background.
 
-Retired scenery, separate venue-island artwork and earlier prop variants are omitted from active production references. All 40 original source files remain in `game/assets/` for provenance and regression checks, so **presence alone does not mean an asset is currently rendered**. The newly supplied earlier HTML is a visual guide, not authority to replace the current game. Original Park plate `original-33` remains active; old city plates and small storefront crops are historical references beside the current panoramas.
+`references/gameplay/downtown-gameplay.png`, `midtown-gameplay.png`, `central-park-gameplay.png` and `office-gameplay.png` show current rendering and scale. These contain gameplay/UI context; prepare clean picture frames before video generation. If an isolated native tile differs from the live composition, inspect the renderer/camera rather than stretching the painting.
+
+Retired scenery and venue-island artwork are omitted from active location references. All 40 original source files remain in `game/assets/` for provenance and regression checks, so **presence alone does not mean an asset is currently rendered**. The earlier HTML is a visual guide, not authority to replace the current game. Original Park plate `original-33` remains active; the v1.8 city sheets are historical beside the detailed current tiles.
 
 ## Props, brand and audio
 

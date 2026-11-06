@@ -1,0 +1,296 @@
+{
+  "version": 19,
+  "district": "midtown",
+  "role": "Sixteen native high-detail opaque city street plates, one shared camera",
+  "sourceTileWidth": 1024,
+  "sourceTileHeight": 1536,
+  "sharedOverlap": 64,
+  "targetCurbY": 1304,
+  "totalAuthoredPixels": 25165824,
+  "linearDetailVsV18": 2.1215469613259668,
+  "venueTileIndices": {
+    "joju": 5,
+    "omars": 8,
+    "gussy": 11,
+    "fifth": 14
+  },
+  "landmarkTileIndices": {
+    "chrysler": 1,
+    "empireState": 2,
+    "library": 3
+  },
+  "files": [
+    {
+      "index": 0,
+      "path": "assets/scenery-v19/midtown-00.webp",
+      "source": "/workspace/generated_images/exec-5420fdfe-ce6b-447a-9bc9-fcbb5609e821.png",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "curbY": 1322,
+      "sha256": "a290604f89f690fe44179f053dc289079386452ee4c5bc3821531ac1f90f3db3",
+      "nativeYOffset": -18,
+      "name": "terracotta-offices",
+      "sourceSha256": "42cbbea61b8088eecafd321ed213076b9ad6361c7a758fec7c6a70ed75a4cae5",
+      "bytes": 850950,
+      "nativePixelProcessing": "Native Imagegen PNG converted to RGB WebP quality96; no resize, sharpen, recolor or AI upscaling."
+    },
+    {
+      "index": 1,
+      "path": "assets/scenery-v19/midtown-01.webp",
+      "source": "/workspace/generated_images/exec-3215b73e-d747-4524-acc1-9ef11e6bc18b.png",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "curbY": 1304,
+      "sha256": "c636e9a0fd920b603b01c0c48fb31def607c91b98d2c2842366dfbe0af514112",
+      "nativeYOffset": 0,
+      "name": "chrysler",
+      "sourceSha256": "1d7faab6c8641de33185d34a4807ee839e3423ca6f6131ec3e20634fb7a6ac79",
+      "bytes": 736038,
+      "nativePixelProcessing": "Native Imagegen PNG converted to RGB WebP quality96; no resize, sharpen, recolor or AI upscaling.",
+      "previousSource": "/workspace/generated_images/exec-0981c93b-24ad-41eb-a762-cfe4578e6ad4.png",
+      "correction": "Targeted Imagegen edit lowers the central distant Chrysler Building, keeping its complete antenna tip at nativey104; street and side architecture retain the same geometry."
+    },
+    {
+      "index": 2,
+      "path": "assets/scenery-v19/midtown-02.webp",
+      "source": "/workspace/generated_images/exec-91ef347a-551a-474c-ae6e-9a73f26dcf78.png",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "curbY": 1305,
+      "sha256": "cd7b7b8a3abbfc489268b022ef2fc9a9ae433540eb0bcbcbd775b715060aab59",
+      "nativeYOffset": -1,
+      "name": "empire-state",
+      "sourceSha256": "0b7ddd7388015b8c8b8b9c308c126d4daa283eb740de505f13bfe2ccf14dd275",
+      "bytes": 783318,
+      "nativePixelProcessing": "Native Imagegen PNG converted to RGB WebP quality96; no resize, sharpen, recolor or AI upscaling."
+    },
+    {
+      "index": 3,
+      "path": "assets/scenery-v19/midtown-03.webp",
+      "source": "/workspace/generated_images/exec-cae65555-5327-4763-9617-85619ead338e.png",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "curbY": 1305,
+      "sha256": "93d580c00cccccfccf659ea7203799ab987511a3178ab400e19d20bc0438a157",
+      "nativeYOffset": -1,
+      "name": "bryant-park-library",
+      "sourceSha256": "412a7cd1924bad80df6e1139e91515b3ddbfb8b0f2a47a8a574dfe125d47f9c6",
+      "bytes": 943272,
+      "nativePixelProcessing": "Native Imagegen PNG converted to RGB WebP quality96; no resize, sharpen, recolor or AI upscaling."
+    },
+    {
+      "index": 4,
+      "path": "assets/scenery-v19/midtown-04.webp",
+      "source": "/workspace/generated_images/exec-9bd1977e-9abb-4964-8673-21952da6bc77.png",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "curbY": 1305,
+      "sha256": "0ec8df8a294721856d9acc62b6721eb2b066061200d809be6d455bbd53bec63f",
+      "nativeYOffset": -1,
+      "name": "cast-iron-street",
+      "sourceSha256": "aa575df2a46174c62617de25a3564b3f3775ea4dd01eb95280dd912e99c7f544",
+      "bytes": 853750,
+      "nativePixelProcessing": "Native Imagegen PNG converted to RGB WebP quality96; no resize, sharpen, recolor or AI upscaling."
+    },
+    {
+      "index": 5,
+      "path": "assets/scenery-v19/midtown-05.webp",
+      "source": "/workspace/generated_images/exec-204588b4-699e-4011-a6af-2754ccd66f5c.png",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "curbY": 1264,
+      "venue": {
+        "key": "joju",
+        "rect": [
+          245,
+          882,
+          525,
+          326
+        ]
+      },
+      "sha256": "0e0df7a61b362ea9059765ce57c4e80ef2cd9ed6b476de2f979548d9896d3d1e",
+      "nativeYOffset": 40,
+      "name": "joju",
+      "sourceSha256": "a1b6cba2f082bad37ef49fe292a95e7bfd0b09093e6e2821f72247f9ef6d309e",
+      "bytes": 775828,
+      "nativePixelProcessing": "Native Imagegen PNG converted to RGB WebP quality96; no resize, sharpen, recolor or AI upscaling."
+    },
+    {
+      "index": 6,
+      "path": "assets/scenery-v19/midtown-06.webp",
+      "source": "/workspace/generated_images/exec-b6c6a9fa-6606-46de-bcf6-0775e4d1ac90.png",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "curbY": 1319,
+      "sha256": "75a874e0fe31ec99d96be4a369f1e702f200d8ec35fca1eab98ff7fdbe0a5071",
+      "nativeYOffset": -15,
+      "name": "glass-offices",
+      "sourceSha256": "abb4c3a2a2ea9a32acc5045f4968907693a7da8b2519f0db57d4218c8adb5853",
+      "bytes": 713272,
+      "nativePixelProcessing": "Native Imagegen PNG converted to RGB WebP quality96; no resize, sharpen, recolor or AI upscaling."
+    },
+    {
+      "index": 7,
+      "path": "assets/scenery-v19/midtown-07.webp",
+      "source": "/workspace/generated_images/exec-ffc4bff8-7317-465d-80b5-5559c8cd1a91.png",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "curbY": 1305,
+      "sha256": "3a750bbc80bc6fc5182add7cb3010a4bf76dd3d2bae6fb88b22b2bc3afaddb1d",
+      "nativeYOffset": -1,
+      "name": "brick-cafe-street",
+      "sourceSha256": "052cbb52fd052faf956b78a5d83ef05504513836272361378ea6eda77668cd48",
+      "bytes": 887282,
+      "nativePixelProcessing": "Native Imagegen PNG converted to RGB WebP quality96; no resize, sharpen, recolor or AI upscaling."
+    },
+    {
+      "index": 8,
+      "path": "assets/scenery-v19/midtown-08.webp",
+      "source": "/workspace/generated_images/exec-2bdb0ae8-54dc-4770-8633-f6fcc978ae0f.png",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "curbY": 1279,
+      "venue": {
+        "key": "omars",
+        "rect": [
+          246,
+          940,
+          529,
+          268
+        ]
+      },
+      "sha256": "3d29b9f34d7a5df686b5329002635a4efc18f7240ce3c393c708e1fcc84126e7",
+      "nativeYOffset": 25,
+      "name": "omars",
+      "sourceSha256": "805d3887271ea7c342b6795a5adfd7aa19972e3f178abfc2197f297beaf660b1",
+      "bytes": 781930,
+      "nativePixelProcessing": "Native Imagegen PNG converted to RGB WebP quality96; no resize, sharpen, recolor or AI upscaling."
+    },
+    {
+      "index": 9,
+      "path": "assets/scenery-v19/midtown-09.webp",
+      "source": "/workspace/generated_images/exec-4a41ac0d-036b-434b-84da-2d4c3c5b64be.png",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "curbY": 1305,
+      "sha256": "da1e8628f519cb7b7daf156fb1f376ec42cd201c75b17ab039d4aa0006849172",
+      "nativeYOffset": -1,
+      "name": "art-deco-clock",
+      "sourceSha256": "52e5a60db381c868813ddc1cfe28906216765be1cb13ca0090fc4fdfa8353a69",
+      "bytes": 804910,
+      "nativePixelProcessing": "Native Imagegen PNG converted to RGB WebP quality96; no resize, sharpen, recolor or AI upscaling."
+    },
+    {
+      "index": 10,
+      "path": "assets/scenery-v19/midtown-10.webp",
+      "source": "/workspace/generated_images/exec-fda28005-eea3-415e-97fd-33e277d3f89e.png",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "curbY": 1305,
+      "sha256": "2fc2e1f5f4292a96337e6ff9f85c3e43164acf7379e20c2dce1e6e607b6e1239",
+      "nativeYOffset": -1,
+      "name": "brownstone-bay-windows",
+      "sourceSha256": "dff2d1a09840a8e2767726a4d37b96d015ad4922b54024156d568e3f511128de",
+      "bytes": 873228,
+      "nativePixelProcessing": "Native Imagegen PNG converted to RGB WebP quality96; no resize, sharpen, recolor or AI upscaling."
+    },
+    {
+      "index": 11,
+      "path": "assets/scenery-v19/midtown-11.webp",
+      "source": "/workspace/generated_images/exec-cef5080a-a5f5-4d28-b8e0-513295ba31de.png",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "curbY": 1216,
+      "venue": {
+        "key": "gussy",
+        "rect": [
+          215,
+          846,
+          680,
+          338
+        ],
+        "contactY": 1184,
+        "wheels": [
+          344,
+          796
+        ]
+      },
+      "sha256": "6e49df81c64a1c304e30e64b6275595dc3b58142b9c7be552b9e52b3539f204a",
+      "nativeYOffset": 88,
+      "name": "gussy",
+      "sourceSha256": "1eb041ba5911af6f9609d7612cf13784c764bae8a6ee862e133e472e8ddea3ef",
+      "bytes": 770450,
+      "nativePixelProcessing": "Native Imagegen PNG converted to RGB WebP quality96; no resize, sharpen, recolor or AI upscaling."
+    },
+    {
+      "index": 12,
+      "path": "assets/scenery-v19/midtown-12.webp",
+      "source": "/workspace/generated_images/exec-23fea370-67b9-4e25-a832-b069f19ca65c.png",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "curbY": 1327,
+      "sha256": "9ac540516e5b49daea6f9a590cf88b9e79e5ebab19ae140aa472cf3d0190be6c",
+      "nativeYOffset": -23,
+      "name": "honey-brick-offices",
+      "sourceSha256": "91880afae579c0da842aa779a37ef0a9dbdb495d3a997c3f522166444568386f",
+      "bytes": 846076,
+      "nativePixelProcessing": "Native Imagegen PNG converted to RGB WebP quality96; no resize, sharpen, recolor or AI upscaling."
+    },
+    {
+      "index": 13,
+      "path": "assets/scenery-v19/midtown-13.webp",
+      "source": "/workspace/generated_images/exec-a84080ab-00f4-4144-a5d2-d0e0d2724e87.png",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "curbY": 1318,
+      "sha256": "effc112ecd60056c33aa2e8a1acb3caa22f65b0b5a4949f31c6598ddb44b461d",
+      "nativeYOffset": -14,
+      "name": "copper-glass-offices",
+      "sourceSha256": "33b04f703f00d28053671d345c2f702f0ca58b7e70f9475f7add585957e2bc0d",
+      "bytes": 727948,
+      "nativePixelProcessing": "Native Imagegen PNG converted to RGB WebP quality96; no resize, sharpen, recolor or AI upscaling."
+    },
+    {
+      "index": 14,
+      "path": "assets/scenery-v19/midtown-14.webp",
+      "source": "/workspace/generated_images/exec-e7a2b729-0c60-4ff4-8273-9affa94cd069.png",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "curbY": 1304,
+      "venue": {
+        "key": "fifth",
+        "rect": [
+          257,
+          870,
+          511,
+          390
+        ],
+        "host": {
+          "x": 789,
+          "y": 1265,
+          "height": 190
+        }
+      },
+      "sha256": "0143ad02a0196c7a38a51bbcdcbf763d1a53642a365a9a2a0960dc92e70a0e77",
+      "nativeYOffset": 0,
+      "name": "fifth",
+      "sourceSha256": "88a5648dab2147111a9b6d56c8d09e1e82eee4a071df60d1d2af0992469221f9",
+      "bytes": 678140,
+      "nativePixelProcessing": "Native Imagegen PNG converted to RGB WebP quality96; no resize, sharpen, recolor or AI upscaling."
+    },
+    {
+      "index": 15,
+      "path": "assets/scenery-v19/midtown-15.webp",
+      "source": "/workspace/generated_images/exec-f0a3a8df-8b6c-45df-be48-f465199f517a.png",
+      "nativeWidth": 1024,
+      "nativeHeight": 1536,
+      "curbY": 1304,
+      "sha256": "fa29f65a6e078068fbe3b56e87f605103d24aba975ce1ff1048daf5579cdaf43",
+      "nativeYOffset": 0,
+      "name": "limestone-courtyard",
+      "sourceSha256": "5621ca8ec83e4555efd8ea55c456602314c86438be5f0bbe3d4c607cf277d612",
+      "bytes": 805472,
+      "nativePixelProcessing": "Native Imagegen PNG converted to RGB WebP quality96; no resize, sharpen, recolor or AI upscaling."
+    }
+  ]
+}

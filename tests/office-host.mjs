@@ -5,7 +5,7 @@ import {pathToFileURL} from 'node:url';
 const moduleName = process.env.PLAYWRIGHT_MODULE || 'playwright';
 const {chromium} = await import(moduleName.startsWith('/') ? pathToFileURL(moduleName).href : moduleName);
 const url = new URL(process.env.TEST_URL || 'http://127.0.0.1:4181/'); url.searchParams.set('unlock', 'all');
-const output = process.env.OFFICE_HOST_OUTPUT || new URL('../review/office-host-v18/', import.meta.url).pathname;
+const output = process.env.OFFICE_HOST_OUTPUT || new URL('../review/office-host-v19/', import.meta.url).pathname;
 await mkdir(output, {recursive: true});
 const browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', headless: true,
   args: ['--no-sandbox', '--disable-dev-shm-usage', '--enable-unsafe-swiftshader']});

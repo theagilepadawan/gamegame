@@ -1,49 +1,75 @@
-# Release verification — Cohesive New York artwork 1.8
+# Release verification — Detailed New York streets 1.9
 
-Source and standalone browser checks passed for the scopes below. The uploaded earlier HTML matches the `156db81` visual reference after normalization; it guides the warm painted style and simpler props, not a rollback of the current game. Historical v1.7 results remain in `verification-v17.md`.
+## Final release verdict
 
-## Current change
+PASS on the final 76,020,336-byte standalone HTML, SHA256 `0832fd48c71cba94287d0ffbe02f4c17653eb83d62d402fa2ef1eafbd6dbf24e`.
 
-Downtown and Midtown use opaque panoramas in `assets/scenery-v18/`, with streets, architecture and venue fronts sharing one calm camera. Five base paintings provide each city's main/venue views and an anonymous Downtown Endless tail; three authored join repairs share the same transform. Manifest files record source dimensions and provenance. Dry ground padding preserves the native painted architecture while keeping the lower scene covered during movement.
+After the compact-only camera correction, the actual 900×900 viewport (logical W540) passed both complete chapters, all 216 geometry cases,66 opacity scans, native source/GPU checks, double/triple jumps, jetpack, district changes, retries and Contrarian recovery. The focused report is `review/v19-qa/post-timing-compact/report.json`; the preceding full five-profile artwork matrix remains separately recorded below.
 
-Six native `props-v18` sprites follow the earlier silhouettes, with smaller signs and crisp runtime lettering. Existing collection/collision/reward behavior, character sheets, audio and progression remain. Central Park keeps its original composition and lake animation. Narrow framing keeps the complete office reachable; very wide screens use a centered 8:3 stage cap, including actual fullscreen.
+The new visibility gate passed all 11 logical widths:540,600,640,680,720,760,800,864,960,1168 and 1440. Kabin's complete name sign and double door remain clear of foreground terrain for 2.75–4.35 s, including 2.90 s in the compact view. LEI's complete frontage remains clear for at least 3.40 s before victory. Every Midtown venue also passes, with the shortest complete-frontage interval 2.55 s. Six standard gameplay acceptance frames and a compact Kabin frame are under `review/v19-qa/visibility-final/`; full temporal measurements are in its `report.json`.
 
-## Source checks
+The final adjustment interpolates only compact Downtown's easing and maximum horizontal rate (up to 0.165) back to the existing 0.15 desktop behavior by W864. Standard desktop composition, Endless, all native artwork, venue world positions and gameplay remain unchanged.
 
-`COHESIVE_OUTPUT=review/v18-qa/final node tests/cohesive-scenery.mjs` passed against the editable source at `http://127.0.0.1:4181/?unlock=all`. `review/v18-qa/final/report.json` records desktop Pixi (1440×900, DPR1), mobile Pixi (844×390, DPR2) and forced Canvas (1440×900, DPR1).
+Final standalone verification passed the 40 original asset hashes, all 99 embedded resources, native dimensions for all 28 city plates, no external requests/errors, and an offline Contrarian event after local HTTP loading. The game ZIP is 56,756,647 bytes, SHA256 `2272410246df4966491d13461a382826fa3437bae6d2e5e277793d825e8c8888`, with verified ZIP CRCs and the exact final HTML inside.
 
-- **Scenery and motion:** 96 layout cases, 24 full-composite opacity checks, six exact Central Park pixel baselines, 67 captures and 1,713 real motion samples across double jumps, Midtown timed triple jumps and jetpack flight. Assertions cover the shared venue/backdrop camera, stable vertical composition, reachable joins and anonymous Endless continuation.
-- **Complete runs:** six actual chapters completed across the three profiles. Every full frontage appeared before the finish. Desktop first reveals were Kabin 40.4 s / LEI 62.0 s and JOJU 23.5 s / Omar's 31.8 s / Gussy 39.9 s / 505 51.3 s.
-- **Office and props:** `office-host.mjs` passed desktop Pixi, mobile Pixi DPR2 and forced Canvas; `props.mjs` passed mobile Pixi DPR2. Reports/captures are under `review/office-host-v18/` and `review/props-v18/smoke/`.
-- **Preservation:** all 40 original asset hashes, eight unchanged modules and the original simulation/audio prefix match their baselines.
+## Frozen-art release matrix
 
-A later small join-footer correction was checked separately, rather than representing the whole capture suite as rerun. Focused native-preservation and opacity checks found zero painted-pixel mismatches and no transparent ground pixels in the five base paintings. Three join captures were reviewed after the correction. Evidence is under `review/v18-scene-diagnosis/ground-extension-report.json` and `footer-check/`.
+All five profiles passed against the embedded standalone HTML with SHA256 `fba48d9480a865238271c74a32367a76da0504412157db7697c567ecdcf9bd3f` (76,019,707 bytes). The subsequent compact-Downtown timing adjustment passed the additional final-build checks above; the artwork and standard desktop framing are identical.
 
-Responsive checks then covered a 900×900 square window (logical 540 wide) with the entire 505 entrance and host visible at 57.81 s; 96 normal-width camera cases retained their previous formula. A 3200×540 viewport centers a 1440×540 stage. Actual HTML fullscreen at 3840×648 retains a centered 1728×648 stage (logical width 1440), complete coverage and no opening venues. Evidence is `review/v18-qa/responsive/report.json`, its square/fullscreen captures, and `responsive-camera-comparison.json`. The simulation/audio preservation check was repeated after the fullscreen presentation fix.
+| Profile | Browser viewport | DPR | Scope |
+|---|---:|---:|---|
+| Desktop |1440×900|1|Full chapters, venues, double/triple jump, jetpack, native textures, retries, district changes and Contrarian recovery|
+| Mobile browser emulation |844×390|2|Same full-route coverage|
+| Forced Canvas |1440×900|1|Same full-route coverage with WebGL unavailable|
+|1080 detail|1920×1080|1|Decoded/cached/native GPU dimensions and exact source pixels|
+|1080 detail at DPR2|1920×1080|2|Same checks against the actual 3840×2160 framebuffer|
 
-## Standalone browser checks
+The matrix includes 216 layout cases,66 full-image opacity scans (including the anonymous Endless loop through 1,000,000 units), six exact Central Park pixel hashes and 95 actual-gameplay screenshots. No page errors or failed resources occurred. At most 11 scenery panels were visible. Prepared bitmap, raw WebGL and Pixi caches each stayed at or below 12 entries through complete chapters; inactive bitmap/texture caches clear on district changes. Restart and real Contrarian entry/recovery passed.
 
-The release suites in `review/v18-release/` passed against the self-contained HTML:
+## Native detail
 
-- **Modes/progression:** Story/Endless UI, fixed Story courses, preserved Endless seed, fund-history reveal, keyboard/controller next-chapter defaults, final unlock, retry and new-world behavior.
-- **Chapter menu:** fresh-profile locks, keyboard navigation, touch swipes, reachable small-screen CTA, no scenery preview, controller navigation/start and no browser exceptions.
-- **Water and gaps:** the original Park lake animates within its mask (27,742 changed rendered pixels) with stable banks and frozen pause/reduced motion. Gap tests cover full-depth voids, adjacent/joined support, physics and four seeded slopes, with desktop/mobile/Canvas captures.
-- **Responsive framing:** the square office, centered 8:3 limit, no opening venues and actual fullscreen regression passed on the standalone.
-- **Offline packaging:** all 40 baseline assets match; fonts, scripts, art and audio load without external requests, and Contrarian remains playable after switching offline.
+All 28 main city images decode at 1024×1536. Their complete original rows remain in native-size prepared canvases; alignment adds top/ground padding without resizing the paintings. Repair images retain their own higher native dimensions. Across the five profiles,16,121,856 sampled source channels matched their cached equivalents exactly. Actual WebGL/Pixi texture dimensions match the native prepared images.
 
-Logs are `modes.log`, `menu.log`, `water.log`, `gaps.log`, `responsive.log` and `standalone.log`. These named suites and the source checks above describe the verified scope; this is not a claim that every historical test was rerun.
+At the same display size, the main-painting sampling density improves 2.10× linearly in Midtown and 2.18× Downtown, or approximately 4.41–4.74× in pixel area. At 1920×1080 DPR1, each native source pixel spans 0.6619 physical pixels. At DPR2 it spans 1.3238 physical pixels, versus approximately 2.78–2.88 previously. This is a substantial native-detail restoration; the source art remains below native 4K display density.
 
-## Visual review
+The 505 entrance itself rises from 258×199 to 511×390 native pixels (3.88× area). Its slightly smaller displayed frontage produces approximately 2.1× the linear sampling density. Actual 1:1 screenshot crops show sharper lettering, glass mullions, ceiling lights and door hardware. See `review/v19-resolution/COMPARISON.md` and its two unresampled screenshot crops.
 
-The QA agent inspected mobile/Canvas jump and flight apices and city seams: dry asphalt, fixed paintings, harbor water bounded by its shoreline and warm fronts integrated into the streets. The coordinating agent reviewed representative river, pavement, join, mobile triple-jump and complete 505/host views. The inspected joins have no severed architecture or water strips. This records reviewer observations; motion comfort and final art preference still need the user's review.
+## Venue spacing and timing
 
-Current preview PNGs are `Opening-v18-cohesive.png`, `Midtown-v18-cohesive.png` and `Midtown-v18-office.png`. They were captured before the small footer-only correction; their capture metadata shows zero join panels, so that correction does not change their pixels. They preserve the reviewed normal-width composition through the later responsive framing fix.
+Downtown venue centers are 1908.60 logical pixels apart, with 1765.96 pixels of ordinary street between their complete frontages. Midtown center gaps are 939.08–967.87 pixels, with 742.00–779.72 pixels of ordinary street between frontages. Downtown never shows both venues at once through the widest supported view. Midtown shows at most two partial venues; standard desktop never shows two complete frontages together. No venue starts on screen.
 
-## Local artifact identity
+At standard W864, initial entries occur at 26.2 s/64.9 s in Downtown and 15.2 s/27.7 s/40.0 s/52.6 s in Midtown. At the widest W1440, the first Midtown venue arrives 8.2 s into the run. All complete horizontal frontages appear before actual victory, including the Downtown IPO pickup's chapter-clock advance.
 
-- HTML: **31,015,326 bytes**, **50 embedded assets**; SHA-256 `a9d82415522051b255015d50bfba54cf8f3df99f61706a0876bd94243a2c6447`.
-- Playable ZIP: **22,671,664 bytes**; SHA-256 `b81af007893a8c9e3761a6670d8ad94bb2a08b80cfa87a3cddb1f01da0f6ef05`.
-- Playable ZIP CRC and exact inner-HTML identity passed; proof is `review/v18-release/game-package.json`.
-- Cutscene handoff ZIP CRC, every file-manifest entry and inner playable HTML passed validation. Rebuilding the packaged editable source produced byte-identical HTML. The handoff is below 100 MiB; its final size/hash and local validation proof are recorded in `review/v18-release/handoff-package.json` and `release/SHA256SUMS.txt`. Remote download verification remains separate and has not yet been claimed.
+A second visual gate was added after the initial screenshots exposed a terrain occlusion problem: a frontage can fit horizontally while an uphill foreground hides it. `tests/venue-visibility.mjs` now measures the complete named sign and entrance against 17 terrain samples every 0.05 s, across 11 widths from 540 to 1440. It requires a sustained 2 s clear recognition interval and captures all six actual-gameplay acceptance frames. The final compact-Downtown correction passes this gate, as recorded above.
 
-No cutscene videos or playback gates are added. The intro reference video and post-Midtown running-shoe production remain future work. These Chromium/emulated-device checks are not physical-device or cross-browser certification. Offline localhost testing is not direct `file://` certification where environment policy prevents local-file navigation.
+## Preservation
+
+All 40 baseline assets, eight unchanged behavior modules, the simulation/audio source segment, the v18 prop renderer and its six runtime sprites retain their baseline hashes. Central Park retains all six exact pixel checks. Existing office-host checks passed on desktop, mobile DPR2 and Canvas: stable body/feet, a single wrist greeting, pause and reduced motion. Responsive checks passed square office/LEI reachability, the centered 8:3 stage cap and actual fullscreen.
+
+## Resource footprint and practical scope
+
+The 57 loaded city images contain 89,612,206 native pixels and total 39,388,482 encoded bytes (37.56MiB). Their combined RGBA footprint is 358,448,824 bytes (341.84MiB) before prepared canvases, GPU textures and the game's other assets. The source Image objects remain loaded even though prepared/GPU caches are bounded; browser decode-cache management can vary. The final embedded HTML is 76.02MB before ZIP compression.
+
+Managed Chromium blocks direct `file://` navigation with `ERR_BLOCKED_BY_ADMINISTRATOR` before the game loads. Direct local-file opening was therefore unavailable for certification; the complete embedded game was verified through local HTTP and then with the browser context offline.
+
+The tests use headless Chromium and software WebGL in the cloud. MobileDPR2 is browser emulation; no physical phone or Safari memory/performance claim is made.
+
+## Release previews
+
+The following actual 1920×1080 gameplay captures use an opaque runner and the normal game HUD:
+
+- `release/Opening-v19-detail.png` — complete One World Trade Center, NYSE, bull and dry connected street.
+- `release/Midtown-v19-detail.png` — complete recognizable Midtown skyline and warm streetscape.
+- `release/Midtown-v19-office.png` — full blue/cyan 505 glass, revolving doors, adjacent host and ordinary offices on both sides.
+
+These standard desktop previews are unchanged by the compact-only timing correction.
+
+## Additional release checks and artifact identity
+
+Story/Endless progression, keyboard/controller defaults, chapter-menu touch navigation, props/rewards, Park water motion/pause, seeded terrain gaps and Canvas fallback checks passed. The final standalone test verifies all 28 native base-image dimensions, all 40 original asset hashes, embedded fonts/scripts/art/audio and the real Contrarian event with the browser context offline. It made no external resource requests and produced no browser exceptions. Direct file:// navigation was blocked by the managed browser’s administrator policy before loading, so this check used local HTTP followed by offline mode.
+
+Final standalone: 76,020,336 bytes, 99 embedded assets, SHA-256 `0832fd48c71cba94287d0ffbe02f4c17653eb83d62d402fa2ef1eafbd6dbf24e`. Playable ZIP: 56,756,647 bytes, SHA-256 `2272410246df4966491d13461a382826fa3437bae6d2e5e277793d825e8c8888`. ZIP CRC and byte-identical inner HTML were verified. Current artifact hashes belong in `release/SHA256SUMS.txt`; remote download identity is checked separately after publication.
+
+The handoff packager verifies a byte-identical staged-source rebuild and every archived file hash. If the full handoff exceeds 100 MiB, it retains all native artwork, source and references and omits only duplicate compiled HTML, with build instructions and the expected standalone hash. The separately delivered playable ZIP always contains the ready-to-play HTML. Packaging fixtures passed full/source-only acceptance, stale/tampered input rejection and atomic preservation of the previous archive on failure.
+
+The v1.8 verification record is preserved byte for byte in `verification-v18.md`. Its results do not certify this release. All checks described here were run in the current cloud workspace on 6 November 2026.

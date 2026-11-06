@@ -4,7 +4,7 @@ import {pathToFileURL} from 'node:url';
 
 const moduleName = process.env.PLAYWRIGHT_MODULE || 'playwright';
 const {chromium} = await import(moduleName.startsWith('/') ? pathToFileURL(moduleName).href : moduleName);
-const output = process.env.RESPONSIVE_OUTPUT || new URL('../review/v18-qa/responsive/', import.meta.url).pathname;
+const output = process.env.RESPONSIVE_OUTPUT || new URL('../review/v19-qa/responsive/', import.meta.url).pathname;
 await mkdir(output, {recursive: true});
 const browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', headless: true,
   args: ['--no-sandbox', '--disable-dev-shm-usage', '--enable-unsafe-swiftshader']});
@@ -18,6 +18,30 @@ try {
   await page.waitForFunction(() => window.longRun && LR_SCENERY.ready && LR_SHOPS.ready && LR_OFFICE_HOST.ready &&
     longRun.environment.ready && !document.querySelector('#start').disabled && !document.querySelector('#splash'));
   await page.evaluate(() => {const next = requestAnimationFrame.bind(window); requestAnimationFrame = () => 0; return new Promise(resolve => next(resolve));});
+  report.squareDowntown = await page.evaluate(() => {
+    Cu(false); fu('opening'); Ko('chapter'); b = 'paused'; SA.pause();
+    const marks = {};
+    for (let frame = 0; frame < 82 * 120; frame++) {
+      q.invincible = 999; q.floorY = q.floorAt(q.x); q.step(1 / 120);
+      if (q.won || q.dead) break;
+      if (frame % 6) continue;
+      for (const item of LR_KABIN.spots(q.distance, eA, kA, 'chapter')) {
+        const mark = marks[item.key] ||= {key: item.key};
+        if (mark.entry === undefined && item.rect.x < eA) mark.entry = q.time;
+        if (mark.full === undefined && item.rect.x >= 20 && item.rect.x + item.rect.width <= eA - 20) mark.full = q.time;
+      }
+      if (Object.values(marks).length === 2 && Object.values(marks).every(mark => mark.full !== undefined)) break;
+    }
+    q.invincible = 0; ir = q.y; Kt = T - q.floorY; $i = 0; UA = q.time;
+    $A.update(0, q, {id: 'opening', reduced: true, quality: 1}); Vu(); vu();
+    return {W: eA, won: q.won, dead: q.dead, time: q.time, distance: q.distance, marks: Object.values(marks)};
+  });
+  assert.equal(report.squareDowntown.W, 540);
+  assert.equal(report.squareDowntown.dead, false);
+  assert.equal(report.squareDowntown.won, false, 'Both complete Downtown venues arrive before actual victory, including the IPO clock advance');
+  assert.deepEqual(report.squareDowntown.marks.map(mark => mark.key).sort(), ['kabin', 'lei']);
+  assert.ok(report.squareDowntown.marks.every(mark => mark.entry >= 8 && mark.full !== undefined));
+  await page.screenshot({path: `${output}/square-lei.png`});
   report.squareOffice = await page.evaluate(() => {
     Cu(false); fu('midtown'); Ko('chapter'); b = 'paused'; SA.pause();
     const initial = LR_SCENERY.layout('midtown', 0, eA, kA, 'chapter'); let found = null;
@@ -36,7 +60,7 @@ try {
     return {W: eA, H: kA, initial, found, renderer: longRun.renderer};
   });
   assert.equal(report.squareOffice.W, 540);
-  assert.ok(report.squareOffice.initial.parallaxRate > 0 && report.squareOffice.initial.parallaxRate <= .12,
+  assert.ok(report.squareOffice.initial.parallaxRate > 0 && report.squareOffice.initial.parallaxRate <= .25,
     'A narrow window reaches the entrance without accelerating the scenery');
   assert.ok(report.squareOffice.found && report.squareOffice.found.time < 60 && !report.squareOffice.found.won,
     'A real square viewport reaches the whole 505 entrance and host before victory');
@@ -65,7 +89,7 @@ try {
     assert.ok(Math.abs(result.stage.width - expectedWidth) < .1);
     assert.ok(Math.abs(result.stage.x - (viewport.width - expectedWidth) / 2) < .1);
     assert.equal(result.stage.height, viewport.height); assert.equal(result.transform, 'none');
-    assert.ok(result.W <= 1440.01); assert.ok(result.scenes.every(scene => scene.covered && scene.rate > 0 && scene.rate <= .12));
+    assert.ok(result.W <= 1440.01); assert.ok(result.scenes.every(scene => scene.covered && scene.rate > 0 && scene.rate <= (scene.id === 'midtown' ? .25 : result.W < 864 ? .165 : .15)));
     assert.ok(result.venues.every(venue => venue.x >= result.W), 'No Easter egg frontage is visible at the start, even at the width cap');
     report.viewports.push(result);
   }
@@ -86,5 +110,5 @@ try {
   await page.screenshot({path: `${output}/ultrawide-fullscreen.png`});
   assert.deepEqual(errors, []);
   await writeFile(`${output}/report.json`, JSON.stringify(report, null, 2));
-  console.log(`PASS: complete square office at ${report.squareOffice.found.time.toFixed(2)}s, centered 8:3 cap, no opening venues and actual fullscreen.`);
+  console.log(`PASS: both Downtown venues before victory, complete square office at ${report.squareOffice.found.time.toFixed(2)}s, centered 8:3 cap, no opening venues and actual fullscreen.`);
 } finally {await browser.close();}

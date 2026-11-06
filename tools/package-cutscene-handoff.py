@@ -1,30 +1,155 @@
 #!/usr/bin/env python3
 """Build the cutscene-agent handoff from the current, tested game source.
 
-Requires Python 3 and Pillow. Run npm run build / npm test first. This exports
-unaltered source art and extracts native atlas cells; it does not generate art.
+Requires Node.js 20+, Python 3 and Pillow. Run npm run build / npm test first.
+This exports unaltered source art and extracts native atlas cells; it does not
+generate art. A verified source-only fallback preserves native assets when
+duplicating the compiled HTML would exceed the archive size limit.
 """
 from pathlib import Path
 from PIL import Image, ImageDraw
 import hashlib
+import importlib.util
 import json
 import re
 import shutil
 import subprocess
+import tempfile
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 STAGE = ROOT / 'review' / 'cutscene-handoff' / 'The-Long-Run-Cutscene-Handoff'
 OUT = ROOT / 'release' / 'The-Long-Run-Cutscene-Handoff.zip'
+MAX_ARCHIVE_BYTES = 100 * 1024 * 1024
 
 
 def sha(path):
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    digest = hashlib.sha256()
+    with path.open('rb') as source:
+        for chunk in iter(lambda: source.read(1024 * 1024), b''):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def copy(src, dest):
     dest.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(src, dest)
+
+
+def verify_source_rebuild(game, playable):
+    spec = importlib.util.spec_from_file_location('nbim_game_package', ROOT / 'tools' / 'package-game.py')
+    helpers = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(helpers)
+    inputs = helpers.source_input_manifest(game)
+    assert inputs == helpers.source_input_manifest(ROOT), 'Packaged build inputs differ from the current source'
+    with tempfile.TemporaryDirectory(prefix='nbim-handoff-rebuild-', dir=ROOT / 'review') as temporary:
+        rebuilt = Path(temporary) / playable.name
+        subprocess.run(['node', str(game / 'build.mjs'), str(rebuilt)], cwd=game,
+                       check=True, capture_output=True, text=True)
+        assert rebuilt.stat().st_size == playable.stat().st_size and sha(rebuilt) == sha(playable), \
+            'Packaged editable source does not reproduce the current standalone HTML'
+    return {'verified': True, 'command': ['node', 'build.mjs', '<standalone-output>'],
+            'bytes': playable.stat().st_size, 'sha256': sha(playable),
+            'inputManifestSha256': helpers.input_manifest_digest(inputs), 'inputs': inputs}
+
+
+def write_metadata_and_manifest(stage, metadata):
+    (stage / 'HANDOFF-METADATA.json').write_text(json.dumps(metadata, indent=2) + '\n')
+    manifest = [{'path': str(path.relative_to(stage)), 'bytes': path.stat().st_size, 'sha256': sha(path)}
+                for path in sorted(stage.rglob('*')) if path.is_file() and path != stage / 'FILES-SHA256.json']
+    (stage / 'FILES-SHA256.json').write_text(json.dumps(manifest, indent=2) + '\n')
+    return manifest
+
+
+def write_archive(stage, output):
+    with zipfile.ZipFile(output, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+        for path in sorted(stage.rglob('*')):
+            if not path.is_file():
+                continue
+            entry = zipfile.ZipInfo(str(path.relative_to(stage.parent)), date_time=(2026, 11, 6, 0, 0, 0))
+            entry.create_system = 3
+            entry.compress_type = zipfile.ZIP_DEFLATED
+            entry.external_attr = 0o100644 << 16
+            archive.writestr(entry, path.read_bytes(), compresslevel=9)
+
+
+def source_only_instructions(metadata):
+    expected = metadata['expectedStandalone']
+    return f'''# Build and play this complete source handoff
+
+This ZIP contains all editable source, native artwork, tests, audio and production
+references. The duplicate compiled HTML was omitted to keep the archive below
+100 MiB while retaining the full native asset quality. The separately delivered
+`The-Long-Run-NBIM.zip` contains the ready-to-play HTML.
+
+## Recreate the exact standalone game
+
+Install Node.js 20 or newer if needed. No npm install or network access is needed
+for this build. From the handoff's `game/` directory, run:
+
+```sh
+node build.mjs ../playable/{expected['filename']}
+```
+
+The packaging process ran this build from the staged source and verified its
+output against the current release. Expected output:
+
+- Version: `{metadata['gameVersion']}`
+- File: `{expected['filename']}`
+- Bytes: `{expected['bytes']}`
+- SHA-256: `{expected['sha256']}`
+
+The same hash is recorded in `EXPECTED-STANDALONE-SHA256.txt`. After building,
+run `shasum -a 256 -c EXPECTED-STANDALONE-SHA256.txt` from `playable/`, or compare
+the output of PowerShell `Get-FileHash -Algorithm SHA256` with the hash above.
+
+Open the generated HTML in a current browser. To play directly from the editable
+source instead, run `node serve.mjs` inside `game/` and open the printed local URL.
+Browser tests use Playwright and require the separate test dependency setup;
+playing or building the game does not.
+
+`HANDOFF-METADATA.json` records `playableIncluded: false`, the verified rebuild
+and every build-input hash. `FILES-SHA256.json` covers all files in this ZIP.
+'''
+
+
+def finalize_handoff(stage, output, metadata, max_archive_bytes=MAX_ARCHIVE_BYTES):
+    proof = metadata.get('sourceRebuild', {})
+    assert proof.get('verified') is True and proof.get('sha256') == metadata['playableSha256'], \
+        'Verify the staged-source rebuild before packaging a handoff'
+    output.parent.mkdir(exist_ok=True)
+    temporary = output.with_suffix('.zip.tmp')
+    try:
+        manifest = write_metadata_and_manifest(stage, metadata)
+        write_archive(stage, temporary)
+        full_archive_bytes = temporary.stat().st_size
+        if full_archive_bytes >= max_archive_bytes:
+            expected = metadata['expectedStandalone']
+            (stage / 'playable' / expected['filename']).unlink()
+            metadata['playableIncluded'] = False
+            metadata['archiveMode'] = 'source-only'
+            metadata['included'] = [item for item in metadata['included'] if item != 'Self-contained playable HTML']
+            metadata['included'].append('Verified source build reproducing the standalone HTML byte for byte')
+            metadata['notIncluded'].append('Duplicate compiled HTML; recreate it with playable/BUILD-AND-PLAY.md or use the separate playable ZIP')
+            (stage / 'playable' / 'BUILD-AND-PLAY.md').write_text(source_only_instructions(metadata))
+            (stage / 'playable' / 'EXPECTED-STANDALONE-SHA256.txt').write_text(
+                f"{expected['sha256']}  {expected['filename']}\n")
+            manifest = write_metadata_and_manifest(stage, metadata)
+            write_archive(stage, temporary)
+        assert temporary.stat().st_size < max_archive_bytes, \
+            'Complete source handoff exceeds the archive cap; retain native assets and review redundant reference copies'
+        with zipfile.ZipFile(temporary) as archive:
+            assert archive.testzip() is None
+            for item in manifest:
+                data = archive.read(stage.name + '/' + item['path'])
+                assert len(data) == item['bytes'] and hashlib.sha256(data).hexdigest() == item['sha256'], item['path']
+        temporary.replace(output)
+        return {'archive': str(output), 'bytes': output.stat().st_size, 'sha256': sha(output),
+                'files': len(manifest) + 1, 'folder': str(stage),
+                'playableIncluded': metadata['playableIncluded'], 'fullArchiveBytes': full_archive_bytes,
+                'sourceRebuildVerified': True, 'standaloneSha256': metadata['playableSha256']}
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 if STAGE.exists():
@@ -61,13 +186,21 @@ for relative_folder in active_folders:
     folder_root = ROOT / relative_folder
     for p in folder_root.glob('*.json'):
         data = json.loads(p.read_text())
-        if data.get('asset') and data['asset'] not in runtime_used:
-            continue
-        for field in ['files', 'assets']:
-            if isinstance(data.get(field), list):
-                data[field] = [item for item in data[field] if item.get('path') in runtime_used]
-        if any(isinstance(data.get(field), list) and not data[field] for field in ['files', 'assets']):
-            continue
+        if isinstance(data, dict):
+            if data.get('asset') and data['asset'] not in runtime_used:
+                continue
+            for field in ['files', 'assets']:
+                rows = data.get(field)
+                # Only trim manifests whose entries explicitly name runtime
+                # asset paths. Artist provenance may instead use filenames or
+                # source-image records; retain that metadata without guessing.
+                if isinstance(rows, list) and rows and all(
+                    isinstance(item, dict) and isinstance(item.get('path'), str)
+                    and item['path'].startswith('assets/') for item in rows
+                ):
+                    data[field] = [item for item in rows if item['path'] in runtime_used]
+            if any(isinstance(data.get(field), list) and not data[field] for field in ['files', 'assets']):
+                continue
         target = game / relative_folder / p.name
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(json.dumps(data, indent=2) + '\n')
@@ -79,6 +212,7 @@ for relative_folder in active_folders:
 
 playable = ROOT / 'release' / 'The-Long-Run-NBIM.html'
 assert playable.is_file(), 'Build the release HTML first'
+source_rebuild = verify_source_rebuild(game, playable)
 copy(playable, STAGE / 'playable' / playable.name)
 
 refs = STAGE / 'references'
@@ -120,18 +254,51 @@ for i, item in enumerate(frames):
     draw.text((col * 288 + 16, y + 330), Path(item['path']).stem, fill='#c3e9ee')
 board.save(refs / 'production-character-board.jpg', quality=94)
 
-aliases = {
-    'central-park-approved-bow-bridge.webp': 'assets/original-33.webp',
-    'central-park-approved-ramble.webp': 'assets/scenery/park-1.webp',
-    'central-park-approved-bethesda.webp': 'assets/scenery/park-2.webp',
-    'downtown-main.webp': 'assets/scenery-v18/downtown-main.webp',
-    'downtown-street.webp': 'assets/scenery-v18/downtown-street.webp',
-    'downtown-anonymous-tail.webp': 'assets/scenery-v18/downtown-tail.webp',
-    'midtown-main.webp': 'assets/scenery-v18/midtown-main.webp',
-    'midtown-street-and-505.webp': 'assets/scenery-v18/midtown-street.webp',
+# Native city tiles already live in game/assets. Index those exact files rather
+# than duplicating the much larger location set or reducing its pixel density.
+location_sources = {
+    'assets/original-33.webp': 'Central Park — approved Bow Bridge',
+    'assets/scenery/park-1.webp': 'Central Park — approved Ramble',
+    'assets/scenery/park-2.webp': 'Central Park — approved Bethesda',
 }
-for name, relative in aliases.items():
-    copy(ROOT / relative, refs / 'locations' / name)
+location_labels = {
+    'downtown-01.webp': 'Downtown — One World Trade Center',
+    'downtown-02.webp': 'Downtown — Wall Street',
+    'downtown-03.webp': 'Downtown — bounded harbor and Brooklyn Bridge',
+    'downtown-05.webp': 'Downtown — Kabin',
+    'downtown-11.webp': 'Downtown — LEI',
+    'midtown-01.webp': 'Midtown — Chrysler Building',
+    'midtown-02.webp': 'Midtown — Empire State Building',
+    'midtown-03.webp': 'Midtown — Bryant Park / library',
+    'midtown-05.webp': 'Midtown — JOJU',
+    'midtown-08.webp': "Midtown — Omar's",
+    'midtown-11.webp': "Midtown — Uncle Gussy's",
+    'midtown-14.webp': 'Midtown — complete 505 Fifth glass entrance',
+}
+for relative in sorted(runtime_used):
+    if relative.startswith('assets/scenery-v19/'):
+        location_sources[relative] = location_labels.get(Path(relative).name, Path(relative).stem)
+assert any(path.startswith('assets/scenery-v19/') for path in location_sources), 'Current city art is not referenced by the runtime'
+locations = refs / 'locations'
+locations.mkdir(parents=True, exist_ok=True)
+location_manifest = []
+location_index = [
+    '# Native location references', '',
+    'Open these exact files in the editable game tree. Each native image is stored once; no reduced substitute is used here.', '',
+    'The runtime manifests and storefront metadata define course order, alignment and venue spacing. Gameplay captures show their final composition.', '',
+    '| Location | Native pixels | Source |', '|---|---:|---|',
+]
+for relative, label in location_sources.items():
+    assert relative in used, f'Location source is missing from the packaged game: {relative}'
+    with Image.open(ROOT / relative) as source:
+        width, height = source.size
+    item = {'label': label, 'path': 'game/' + relative, 'nativeWidth': width,
+            'nativeHeight': height, 'sha256': sha(ROOT / relative),
+            'role': 'Exact native production image; linked from the index, not resized or duplicated'}
+    location_manifest.append(item)
+    location_index.append(f'| {label} | {width}×{height} | [{Path(relative).name}](../../game/{relative}) |')
+(locations / 'INDEX.md').write_text('\n'.join(location_index) + '\n')
+(locations / 'location-manifest.json').write_text(json.dumps(location_manifest, indent=2) + '\n')
 if (ROOT / 'assets' / 'office-host-v14').exists():
     shutil.copytree(ROOT / 'assets' / 'office-host-v14', refs / 'office-host')
 host_master = Path('/workspace/generated_images/exec-d6fba899-76fc-43ae-86e9-cdc4f41b5e25.png')
@@ -141,10 +308,10 @@ if host_master.exists():
 # Use current Downtown/Midtown release captures. Park retains its unchanged art.
 # All required files must exist; do not silently substitute a previous city view.
 captures = {
-    'downtown-gameplay.png': 'release/Opening-v18-cohesive.png',
+    'downtown-gameplay.png': 'release/Opening-v19-detail.png',
     'central-park-gameplay.png': 'review/art-direction/park-start.png',
-    'midtown-gameplay.png': 'release/Midtown-v18-cohesive.png',
-    'office-gameplay.png': 'release/Midtown-v18-office.png',
+    'midtown-gameplay.png': 'release/Midtown-v19-detail.png',
+    'office-gameplay.png': 'release/Midtown-v19-office.png',
 }
 for name, relative in captures.items():
     p = ROOT / relative
@@ -168,33 +335,17 @@ metadata = {
     'repository': 'https://github.com/theagilepadawan/gamegame',
     'sourceSnapshot': 'The exact packaged game/ tree; individual file hashes in FILES-SHA256.json',
     'playableSha256': sha(playable),
+    'playableIncluded': True,
+    'archiveMode': 'source-and-playable',
+    'expectedStandalone': {'filename': playable.name, 'bytes': playable.stat().st_size, 'sha256': sha(playable)},
+    'sourceRebuild': source_rebuild,
     'runtimeAssetCount': len(runtime_used),
     'packagedAssetCountIncludingBaseline': len(used),
-    'included': ['Current editable game source', 'Self-contained playable HTML', 'Native production sprites, current opaque panoramas and current prop atlas',
+    'included': ['Current editable game source', 'Self-contained playable HTML', 'Native production sprites, detailed city tiles and current prop atlas',
+                 'Location index linking to exact native game assets without duplicate city-art copies',
                  'Five game audio sources', 'Cutscene production brief, shot slate, prompts and integration notes'],
     'notIncluded': ['No generated cutscene videos', 'No Runway credentials or plugin installation',
                     'Original inline office/host reference photographs were not exposed as downloadable local files',
-                    'No rejected cartoon runner study, alternate Park artwork, retired city-block/venue-island art or superseded prop variants'],
+                    'No rejected cartoon runner study, alternate Park artwork, retired city-block/venue-island art, low-detail v1.8 city sheets or superseded prop variants'],
 }
-(STAGE / 'HANDOFF-METADATA.json').write_text(json.dumps(metadata, indent=2) + '\n')
-manifest = [{
-    'path': str(p.relative_to(STAGE)), 'bytes': p.stat().st_size, 'sha256': sha(p)
-} for p in sorted(STAGE.rglob('*')) if p.is_file()]
-(STAGE / 'FILES-SHA256.json').write_text(json.dumps(manifest, indent=2) + '\n')
-
-OUT.parent.mkdir(exist_ok=True)
-with zipfile.ZipFile(OUT, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
-    for p in sorted(STAGE.rglob('*')):
-        if p.is_file():
-            name = str(p.relative_to(STAGE.parent))
-            entry = zipfile.ZipInfo(name, date_time=(2026, 11, 6, 0, 0, 0))
-            entry.compress_type = zipfile.ZIP_DEFLATED
-            entry.external_attr = 0o644 << 16
-            archive.writestr(entry, p.read_bytes(), compresslevel=9)
-with zipfile.ZipFile(OUT) as archive:
-    assert archive.testzip() is None
-    for item in manifest:
-        data = archive.read(STAGE.name + '/' + item['path'])
-        assert hashlib.sha256(data).hexdigest() == item['sha256'], item['path']
-print(json.dumps({'archive': str(OUT), 'bytes': OUT.stat().st_size, 'sha256': sha(OUT),
-                  'files': len(manifest) + 1, 'folder': str(STAGE)}, indent=2))
+print(json.dumps(finalize_handoff(STAGE, OUT, metadata), indent=2))

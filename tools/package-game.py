@@ -34,6 +34,55 @@ def file_digest(path):
     return checksum.hexdigest()
 
 
+def source_input_manifest(source_root):
+    """Fingerprint build inputs, excluding packaging-only docs and metadata."""
+    source_root = Path(source_root)
+    scripts = sorted((source_root / "scripts").glob("*.js"))
+    documents = [source_root / "index.html", source_root / "game.css", *scripts]
+    source_text = "\n".join(path.read_text() for path in documents)
+    runtime = set(re.findall(r"assets/[A-Za-z0-9_./-]+\.(?:webp|png|svg|avif|mp3|m4a|webm|woff2?)", source_text))
+    assets = runtime | {item["path"] for item in json.loads((source_root / "assets-manifest.json").read_text())}
+    # The source atlas accompanies the runtime sprites in the editable handoff.
+    for folder in {Path(relative).parent for relative in runtime}:
+        atlas = folder / "atlas-native.png"
+        if (source_root / atlas).is_file():
+            assets.add(atlas.as_posix())
+    paths = {"build.mjs", "index.html", "game.css", "assets-manifest.json", *assets,
+             *(path.relative_to(source_root).as_posix() for path in scripts)}
+    return [{"path": relative, "bytes": (source_root / relative).stat().st_size,
+             "sha256": file_digest(source_root / relative)} for relative in sorted(paths)]
+
+
+def input_manifest_digest(inputs):
+    return digest(json.dumps(inputs, sort_keys=True, separators=(",", ":")).encode("utf-8"))
+
+
+def verify_handoff_manifest(archive, folder):
+    """Check every stored file without extracting or executing archive content."""
+    prefix = folder + "/"
+    names = archive.namelist()
+    if len(names) != len(set(names)) or any(not name.startswith(prefix) for name in names):
+        raise ValueError("Handoff has duplicate entries or unexpected archive roots")
+    manifest_name = prefix + "FILES-SHA256.json"
+    manifest = json.loads(archive.read(manifest_name))
+    if not isinstance(manifest, list):
+        raise ValueError("Handoff file manifest must be a list")
+    expected = {manifest_name}
+    for item in manifest:
+        relative = item.get("path", "")
+        if not isinstance(relative, str) or not relative or relative.startswith("/") or "\\" in relative or ".." in relative.split("/"):
+            raise ValueError("Handoff manifest contains an unsafe path")
+        name = prefix + relative
+        if name in expected:
+            raise ValueError("Handoff manifest repeats a path")
+        expected.add(name)
+        data = archive.read(name)
+        if len(data) != item.get("bytes") or digest(data) != item.get("sha256"):
+            raise ValueError(f"Handoff manifest mismatch: {relative}")
+    if expected != set(names):
+        raise ValueError("Handoff file manifest does not describe the complete archive")
+
+
 def verify_game(html, version):
     with zipfile.ZipFile(ARCHIVE) as archive:
         if set(archive.namelist()) != {HTML.name, "READ-ME.txt"}:
@@ -92,9 +141,39 @@ def current_handoff(version, html_hash):
         if metadata.get("gameVersion") != version or metadata.get("playableSha256") != html_hash:
             return False
         folder = candidates[0].rsplit("/", 1)[0]
-        playable = archive.read(f"{folder}/playable/{HTML.name}")
-        if digest(playable) != html_hash:
-            raise ValueError("Current handoff metadata does not match its playable HTML")
+        playable_name = f"{folder}/playable/{HTML.name}"
+        included = metadata.get("playableIncluded", True)
+        if not isinstance(included, bool):
+            raise ValueError("Handoff playableIncluded must be a boolean")
+        if included:
+            if digest(archive.read(playable_name)) != html_hash:
+                raise ValueError("Current handoff metadata does not match its playable HTML")
+        else:
+            if playable_name in archive.namelist():
+                raise ValueError("Source-only handoff unexpectedly contains compiled HTML")
+            proof = metadata.get("sourceRebuild", {})
+            if proof.get("verified") is not True or proof.get("sha256") != html_hash or proof.get("bytes") != HTML.stat().st_size:
+                raise ValueError("Source-only handoff has no matching verified rebuild")
+            inputs = proof.get("inputs")
+            if not isinstance(inputs, list) or input_manifest_digest(inputs) != proof.get("inputManifestSha256"):
+                raise ValueError("Source-only handoff rebuild input manifest is invalid")
+            current_inputs = source_input_manifest(ROOT)
+            if inputs != current_inputs:
+                return False
+            # The package creator has rebuilt these exact inputs. Compare them
+            # against both the current workspace and stored bytes; a metadata
+            # hash claim alone cannot make an unrelated source archive current.
+            for item in current_inputs:
+                data = archive.read(f"{folder}/game/{item['path']}")
+                if len(data) != item["bytes"] or digest(data) != item["sha256"]:
+                    raise ValueError(f"Source-only handoff build input mismatch: {item['path']}")
+            package = json.loads(archive.read(f"{folder}/game/package.json"))
+            if package.get("version") != version:
+                raise ValueError("Source-only handoff package version does not match")
+            instructions = archive.read(f"{folder}/playable/BUILD-AND-PLAY.md").decode("utf-8")
+            if html_hash not in instructions:
+                raise ValueError("Source-only handoff instructions lack the expected HTML hash")
+            verify_handoff_manifest(archive, folder)
         return True
 
 

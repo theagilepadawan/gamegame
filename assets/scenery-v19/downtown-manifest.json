@@ -1,0 +1,234 @@
+{
+  "version": 19,
+  "district": "opening",
+  "nativeTileSize": [
+    1024,
+    1536
+  ],
+  "overlapNative": 64,
+  "curbTarget": 1304,
+  "logicalCanvasHeight": 1680,
+  "generation": "Imagegen native-detail repaint/outpaint of original1024x1536 facade assets; common WTC sky/ground template retained. No upscaling. Full opaque connected streets.",
+  "storyOrder": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "recommendedAnonymousTailOrder": [
+    4,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "files": [
+    {
+      "key": "00-historic",
+      "path": "assets/scenery-v19/downtown-00.webp",
+      "source": "/workspace/generated_images/exec-6fb4f639-b3b0-42ee-a5a7-01bbaed5e133.png",
+      "width": 1024,
+      "height": 1536,
+      "curbY": 1298,
+      "sha256": "18b59b7a2c01580eb45de5b251a64801e374e4644dc70acdaa7c3a1d74d1aeb2",
+      "sourceSha256": "2f87065f948d49b591edcc4ed75a9a86f97d154510c0da9d08e9cc16b7e032a6",
+      "paintedHeight": 1536,
+      "encoding": "WebP quality96 method6; original native pixels, no resampling",
+      "tile": 0,
+      "opaque": true
+    },
+    {
+      "key": "01-wtc",
+      "path": "assets/scenery-v19/downtown-01.webp",
+      "source": "/workspace/generated_images/exec-ae08a7a2-bf68-4754-aa53-4617f3696b36.png",
+      "width": 1024,
+      "height": 1536,
+      "curbY": 1298,
+      "sha256": "de2d704011e38d0f2b61705de5f832f4860f7a405aea2143923f8608a86b7d10",
+      "sourceSha256": "6cfb9d69250c69aa6fd212b1af46980442942722771230119bce24a9d71e21af",
+      "paintedHeight": 1536,
+      "encoding": "WebP quality96 method6; original native pixels, no resampling",
+      "tile": 1,
+      "opaque": true
+    },
+    {
+      "key": "02-wallstreet",
+      "path": "assets/scenery-v19/downtown-02.webp",
+      "source": "/workspace/generated_images/exec-483492cf-e3c8-4cc8-89a0-37b0ffcbedae.png",
+      "width": 1024,
+      "height": 1536,
+      "curbY": 1298,
+      "sha256": "ac40707c78a387cdadfa790a42aa068c70e2ba35982d29ba27e17816fc3d48ba",
+      "sourceSha256": "76e073de28883a3728165cb6f993e1b1591c234c2cafc57002a7d93f6058a3a8",
+      "paintedHeight": 1536,
+      "encoding": "WebP quality96 method6; original native pixels, no resampling",
+      "tile": 2,
+      "opaque": true
+    },
+    {
+      "key": "03-bridge",
+      "path": "assets/scenery-v19/downtown-03.webp",
+      "source": "/workspace/generated_images/exec-172c621c-ff33-4559-b506-c0d6c9cec72e.png",
+      "width": 1024,
+      "height": 1536,
+      "curbY": 1298,
+      "sha256": "a9c3b793babc28515c6bdbd377dafae662c8d6b953dcbaba87d70f47f8beb105",
+      "sourceSha256": "aa50338fb2d21057a8e3ca95499f112a7e37104d6a7db7a08e7a40d8bfadc973",
+      "paintedHeight": 1536,
+      "encoding": "WebP quality96 method6; original native pixels, no resampling",
+      "tile": 3,
+      "opaque": true
+    },
+    {
+      "key": "04-seaport",
+      "path": "assets/scenery-v19/downtown-04.webp",
+      "source": "/workspace/generated_images/exec-6c459036-33a3-46ca-a981-517767805c28.png",
+      "width": 1024,
+      "height": 1536,
+      "curbY": 1298,
+      "sha256": "53127486b5a2e2819ceaafae9fce1bebad6adfb511ade8097f7d0d5fd8ac0c63",
+      "sourceSha256": "d92e5044a7224529ad92ad4d8e7410f6751a28e104d1852d6562db4d900e1ed2",
+      "paintedHeight": 1536,
+      "encoding": "WebP quality96 method6; original native pixels, no resampling",
+      "tile": 4,
+      "opaque": true
+    },
+    {
+      "key": "05-kabin",
+      "path": "assets/scenery-v19/downtown-05.webp",
+      "source": "/workspace/generated_images/exec-ada742a7-6693-482a-a9de-d66b9e8f08b7.png",
+      "width": 1024,
+      "height": 1536,
+      "curbY": 1298,
+      "sha256": "e2f50888486cdb5d11bb984d654d7e8a50963d6112774a035dd3b71ae9a491fc",
+      "sourceSha256": "bf32723b6474a42d07c332de51f9b4f2ff9693c1e419d941d15b9688b253cd7b",
+      "paintedHeight": 1536,
+      "encoding": "WebP quality96 method6; original native pixels, no resampling",
+      "tile": 5,
+      "opaque": true,
+      "venue": {
+        "key": "kabin",
+        "rect": [
+          307,
+          1068,
+          410,
+          205
+        ],
+        "sign": [
+          404,
+          1075,
+          213,
+          62
+        ]
+      }
+    },
+    {
+      "key": "06-tribeca",
+      "path": "assets/scenery-v19/downtown-06.webp",
+      "source": "/workspace/generated_images/exec-43ff7212-0002-48ea-9779-a6e12739f670.png",
+      "width": 1024,
+      "height": 1536,
+      "curbY": 1298,
+      "sha256": "0ae43e833f4f8352418ce534da701c6540ddf1ddffbb0f31c03afde7e3ab3632",
+      "sourceSha256": "c53cfb4b35843106e817e58786bd30ad2ae73b72facdeeef5fab04979a15926e",
+      "paintedHeight": 1536,
+      "encoding": "WebP quality96 method6; original native pixels, no resampling",
+      "tile": 6,
+      "opaque": true
+    },
+    {
+      "key": "07-books",
+      "path": "assets/scenery-v19/downtown-07.webp",
+      "source": "/workspace/generated_images/exec-d25b4af4-d577-45a0-bc90-6c7498be10ee.png",
+      "width": 1024,
+      "height": 1536,
+      "curbY": 1308,
+      "sha256": "c4fa783dc522e97e68e2c55349bc2e988b55be415eaaa3e36f01eff8f8ac1e5a",
+      "sourceSha256": "6172e42f90b85ba136aad47eac08df4a31b2fa48a3ed323934ba3b165d62cde6",
+      "paintedHeight": 1536,
+      "encoding": "WebP quality96 method6; original native pixels, no resampling",
+      "tile": 7,
+      "opaque": true
+    },
+    {
+      "key": "08-ordinary",
+      "path": "assets/scenery-v19/downtown-08.webp",
+      "source": "/workspace/generated_images/exec-5a8c59c4-964f-4aaf-85a8-17356c9d1694.png",
+      "width": 1024,
+      "height": 1536,
+      "curbY": 1298,
+      "sha256": "21d25d000c8f3e20b50624c3fd36420fc2dc9f16a88c0d9716ad79d824778c5b",
+      "sourceSha256": "82a07d9e1e48a68625bcc2db445a6256834eeb2729b6740ff2c7847a9fbed5b3",
+      "paintedHeight": 1536,
+      "encoding": "WebP quality96 method6; original native pixels, no resampling",
+      "tile": 8,
+      "opaque": true
+    },
+    {
+      "key": "09-commerce",
+      "path": "assets/scenery-v19/downtown-09.webp",
+      "source": "/workspace/generated_images/exec-1abe348e-9162-45f5-9b67-fc926a646cef.png",
+      "width": 1024,
+      "height": 1536,
+      "curbY": 1298,
+      "sha256": "3e9eb701ac5464b201f553a31e3197bdd50a2b61791bb03bb33761a69c64fd76",
+      "sourceSha256": "d0fcd4671181df5793341469d322a7cd464f71921d6ab7ca28078e5687cc3d4b",
+      "paintedHeight": 1536,
+      "encoding": "WebP quality96 method6; original native pixels, no resampling",
+      "tile": 9,
+      "opaque": true
+    },
+    {
+      "key": "10-alley",
+      "path": "assets/scenery-v19/downtown-10.webp",
+      "source": "/workspace/generated_images/exec-0b16e7b1-8632-47df-9e95-3e426d8cc5c3.png",
+      "width": 1024,
+      "height": 1536,
+      "curbY": 1298,
+      "sha256": "48dbef0ed237e81389d448d11e3af43c8a714aa6fd679fcbde56c541c0d8dc3c",
+      "sourceSha256": "db91aedc81619eb4cc37f4921ec9b2454155427dddb31a7abee1f6e92a569ae2",
+      "paintedHeight": 1536,
+      "encoding": "WebP quality96 method6; original native pixels, no resampling",
+      "tile": 10,
+      "opaque": true
+    },
+    {
+      "key": "11-lei",
+      "path": "assets/scenery-v19/downtown-11.webp",
+      "source": "/workspace/generated_images/exec-b42ec311-8c27-48a6-870e-610bde12c205.png",
+      "width": 1024,
+      "height": 1536,
+      "curbY": 1298,
+      "sha256": "6917eb58e3a074a7842332cbb4b32213e37df46b6483aef66041416627e774c7",
+      "sourceSha256": "da2f5fc8c2fc5e526f5da88a9e19383112797f09bae614eaa1ccc57916753edd",
+      "paintedHeight": 1536,
+      "encoding": "WebP quality96 method6; original native pixels, no resampling",
+      "tile": 11,
+      "opaque": true,
+      "venue": {
+        "key": "lei",
+        "rect": [
+          293,
+          974,
+          452,
+          290
+        ],
+        "sign": [
+          294,
+          981,
+          451,
+          106
+        ]
+      }
+    }
+  ]
+}
