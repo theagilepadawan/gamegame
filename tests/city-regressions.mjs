@@ -17,7 +17,7 @@ const pinned=JSON.parse(await readFile(new URL('./fixtures/v16-renderer-hashes.j
 const engine=await readFile(new URL('../scripts/engine.js',import.meta.url),'utf8');
 for(const [name,item] of Object.entries(pinned)) {
  const start=engine.indexOf(item.start,engine.indexOf(item.class)),end=engine.indexOf(item.end,start);
- assert.equal(sha(engine.slice(start,end)),item.sha256,`${name}: physics/camera/curb renderer unchanged`);
+ assert.equal(sha(engine.slice(start,end)),item.sha256,`${name}: approved renderer baseline (${item.revision || "original painted-city behavior"})`);
 }
 const manifest=JSON.parse(await readFile(new URL('../assets/venue-details-v111/manifest.json',import.meta.url)));
 for(const item of manifest)assert.equal(sha(await readFile(new URL('../'+item.path,import.meta.url))),item.sha256);

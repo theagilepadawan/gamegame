@@ -10,7 +10,7 @@ for(const [route,time,seed,character] of cases){
  function fixture(){const q=new c.hi(540,seed,{mode:'endless',procedural:true,character,ambientJetpacks:false});q.time=time;q.distance=G.distanceAtTime(time);q.nextX=q.x+500;q.autoSpawn=false;q.spawn(route);q.y=q.floorY;return q}
  const q=fixture(),target=q.distance+q.nextX-q.x;
  const result=controlSearch(c,q,target);report.push({route,time,seed,character,...result});
- await mkdir('review/v114',{recursive:true});await writeFile('review/v114/endless-traversal.json',JSON.stringify(report,null,2));
+ await mkdir('review/v115',{recursive:true});await writeFile('review/v115/endless-traversal.json',JSON.stringify(report,null,2));
  assert.ok(result.pass,`No control path for ${JSON.stringify(report.at(-1))}`);
  if([23,34,35].includes(route)){const idle=fixture();for(let f=0;f<3600&&!idle.dead&&!idle.qaDamage&&idle.distance<target;f++)idle.step(1/120,false);assert.ok(idle.dead||idle.qaDamage,'Gap really requires player input')}
  console.log(`PASS: ${character}, route ${route}, seed ${seed}, ${time}s, compact viewport, no damage or super-jump.`);

@@ -1,6 +1,6 @@
 # Latest user direction
 
-## Current authority: version 1.13
+## Current authority: version 1.15 (art continues from 1.13)
 
 Downtown keeps the accepted v1.12 warm street restoration. Midtown now also
 uses the original complete warm skyline, Bryant Park/library and Fifth Avenue
@@ -62,3 +62,13 @@ the actual older designs, plus Park bench/branch alternatives. Those choices
 are in the separate The-Long-Run-Asset-Choices.zip; none has been selected or
 integrated. Do not treat the new concept atlases as approved runtime art.
 The game's backdrop, venues and default obstacles remain the v1.13 source.
+
+## Version 1.15: Endless and phone presentation
+
+Use the current game source for the more pronounced seeded Endless hills,
+broader gap combinations and corrected opening obstacle proportions. Phone play
+is a fixed 7.14% closer; menu framing is unchanged. Short landscape menus reflow,
+and the five-second Now playing card uses a small vector record illustration.
+No new scenery, runner art or pending asset direction was selected in this pass.
+The runtime performance API reports display-driven render FPS and fixed 120 Hz
+physics. Do not treat cloud browser timings as measurements of a real phone.

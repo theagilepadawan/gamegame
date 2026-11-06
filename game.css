@@ -837,10 +837,66 @@ input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text;-webk
 .mode-switch button.is-locked{opacity:.55}
 .mode-switch button.is-locked::after{content:" · LOCKED";font-size:.56em;letter-spacing:.08em}
 .mode-switch button.is-locked:focus-visible{opacity:1;outline:2px solid var(--sea);outline-offset:4px}
-.now-playing{position:absolute;right:20px;bottom:43px;z-index:35;display:flex;gap:9px;align-items:center;max-width:calc(100% - 40px);padding:8px 12px;border:1px solid #d2ddd12e;border-radius:5px;background:#082b3ce8;color:#f4e8d1;font:500 11px/1.3 Arial,sans-serif;letter-spacing:.02em;pointer-events:none;animation:music-arrive .28s ease-out}
+/* Short landscape screens get a complete menu with a comfortable Play target.
+   Reflow the title into one line on phones instead of squeezing every label. */
+@media(max-height:560px) and (orientation:landscape){
+ #intro{top:max(62px,12vh);width:min(540px,50vw)}
+ #intro .mode-switch button{min-height:34px;font-size:11px;padding:6px 17px}
+ .chapter-browser{--map-height:clamp(120px,30vh,166px);--map-width:calc(var(--map-height)*3.583333)}
+ .journey-arrows button{width:32px;height:32px;min-width:32px}
+ .journey-heading{min-height:32px;margin-bottom:5px}
+ .journey-kicker{font-size:7px}.journey-progress{font-size:8px}
+ #intro #start{min-height:44px;width:min(330px,100%);font-size:13px;margin-top:8px;padding:11px 18px}
+ #intro .start-note{margin-top:10px}
+}
+@media(pointer:coarse) and (max-height:560px) and (orientation:landscape){
+ #intro .start-note{display:none}
+ .stage:not(.playing) #ticker{display:none}
+}
+@media(max-height:420px) and (orientation:landscape){
+ #intro{top:60px}
+ #intro h1.marquee{display:flex;align-items:baseline;gap:.18em;font-size:31px;line-height:1;margin-bottom:10px}
+ #intro h1.marquee .mq-2{font-size:1em;margin:0}
+ #intro h1.marquee .mq-chart{width:.82em;height:.75em}
+ #intro .mode-switch{margin-bottom:7px}
+ .chapter-browser{--map-height:112px;margin-bottom:5px}
+ .map-footer{margin-top:7px;font-size:5px}
+ #intro #start{margin-top:7px}
+ #intro .start-note{display:none}
+ .stage:not(.playing) #ticker{display:none}
+ #intro.is-endless h1.marquee{font-size:31px}
+}
+@media(max-height:350px) and (orientation:landscape){
+ #intro{top:53px}
+ #intro h1.marquee,#intro.is-endless h1.marquee{font-size:25px;margin-bottom:7px}
+ #intro .mode-switch button{min-height:32px;font-size:10px;padding:5px 14px}
+ .chapter-browser{--map-height:96px;margin-bottom:4px}
+ .journey-heading{min-height:30px;margin-bottom:4px}
+ .journey-arrows button{width:30px;height:30px;min-width:30px}
+ .map-footer{display:none}
+ #intro #start{min-height:40px;margin-top:6px;font-size:12px}
+}
+
+/* A five-second record sleeve, with the typography leading the illustration. */
+.now-playing{position:absolute;right:max(22px,env(safe-area-inset-right));bottom:max(44px,env(safe-area-inset-bottom));z-index:35;display:flex;gap:11px;align-items:center;width:max-content;max-width:min(330px,calc(100% - 32px));min-height:66px;padding:8px 17px 8px 9px;border:1px solid #b6d6d04d;border-radius:12px;background:linear-gradient(120deg,#103447f5,#001538f5);box-shadow:0 5px 20px #00153855,inset 0 1px 0 #ffffff12;color:#f5f2eb;font-family:var(--sans);pointer-events:none;isolation:isolate;animation:music-card 5s ease both;overflow:hidden}
 .now-playing[hidden]{display:none}
-.music-note{color:#b8dcd2;font-size:15px}
-#now-playing-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-@keyframes music-arrive{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
-@media(pointer:coarse){.now-playing{bottom:118px;right:14px;padding:6px 9px;font-size:10px}}
-@media(prefers-reduced-motion:reduce){.now-playing{animation:none}}
+.music-record{display:block;flex:0 0 49px;width:49px;height:49px}
+.music-record svg{display:block;width:100%;height:100%;overflow:visible}
+.record-disc{transform-origin:34px 29px;animation:record-turn 8s linear infinite}
+.music-copy{min-width:0;display:flex;flex-direction:column;gap:5px}
+.music-label{display:flex;gap:7px;align-items:center;color:var(--sea);font-size:9px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;line-height:1.2}
+.music-label::before{content:"";width:4px;height:4px;background:var(--sea);border-radius:50%;box-shadow:0 0 5px #4ec2e266}
+#now-playing-title{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:600;line-height:1.3;letter-spacing:.01em}
+.now-playing::after{content:"";position:absolute;bottom:0;left:0;height:2px;width:100%;background:linear-gradient(90deg,var(--sea),var(--sand));transform-origin:left;animation:music-dwell 5s linear both;opacity:.65}
+@keyframes music-card{0%{opacity:0;transform:translateY(6px)}7%,90%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(3px)}}
+@keyframes music-dwell{to{transform:scaleX(0)}}
+@keyframes record-turn{to{transform:rotate(360deg)}}
+@media(pointer:coarse){
+ .now-playing{right:max(14px,env(safe-area-inset-right));bottom:auto;top:70px;min-height:56px;gap:8px;padding:6px 12px 6px 6px;max-width:min(292px,calc(100% - 28px))}
+ .music-record{flex-basis:42px;width:42px;height:42px}
+ .music-label{font-size:8px;letter-spacing:1.25px}
+ #now-playing-title{font-size:12px}
+ .playing .now-playing[data-track="contrarian"]{top:auto;bottom:92px}
+ .stage:not(.playing) .now-playing{top:auto;bottom:18px}
+}
+@media(prefers-reduced-motion:reduce){.now-playing,.record-disc,.now-playing::after{animation:none}.now-playing::after{display:none}}

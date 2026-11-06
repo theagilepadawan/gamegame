@@ -71,7 +71,7 @@ for(let seed=0;seed<128;seed++){
  for(const x of positions){
   const y=a.at(x);assert.equal(y,b.at(x));assert.ok(Number.isFinite(y));
   const slope=a.slopeAt(x);terrain.maxSlope=Math.max(terrain.maxSlope,Math.abs(slope));
-  assert.ok(Math.abs(slope)<=.240001);assert.ok(Math.abs((a.at(x+.01)-a.at(x-.01))/.02-slope)<.00001,'Continuous terrain derivative');terrain.samples++;
+  assert.ok(Math.abs(slope)<=.375001);assert.ok(Math.abs((a.at(x+.01)-a.at(x-.01))/.02-slope)<.00001,'Continuous terrain derivative');terrain.samples++;
  }
  for(let n=1;n<=10;n++)if(Math.abs(a.at(900+n*4800)-422)>1)terrain.nonResetBoundaries++;
  assert.equal(a.at(500),422);

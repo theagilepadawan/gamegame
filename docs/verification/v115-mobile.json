@@ -1,0 +1,194 @@
+[
+  {
+    "width": 568,
+    "height": 320,
+    "chapters": [
+      {
+        "id": "opening",
+        "button": {
+          "x": 34.078125,
+          "y": 260,
+          "width": 284,
+          "height": 40
+        }
+      },
+      {
+        "id": "midtown",
+        "button": {
+          "x": 34.078125,
+          "y": 260,
+          "width": 284,
+          "height": 40
+        }
+      },
+      {
+        "id": "park",
+        "button": {
+          "x": 34.078125,
+          "y": 260,
+          "width": 284,
+          "height": 40
+        }
+      }
+    ],
+    "performance": {
+      "samples": 120,
+      "fps": 19.4,
+      "frameP95Ms": 83.4,
+      "cpuP95Ms": 14.7,
+      "physicsHz": 120,
+      "pixelRatio": 1,
+      "pixelRatioCap": 2,
+      "mobileZoom": 1.071,
+      "worldWidth": 894.6,
+      "worldHeight": 504,
+      "renderer": "pixi-webgl"
+    },
+    "camera": {
+      "count": 3872,
+      "minAheadMargin": 77.9519755426536,
+      "minHeadroom": 101
+    },
+    "hitch": {
+      "samples": 1,
+      "fps": 2.5,
+      "frameP95Ms": 400,
+      "cpuP95Ms": 21.7,
+      "physicsHz": 120,
+      "pixelRatio": 1,
+      "pixelRatioCap": 2,
+      "mobileZoom": 1,
+      "worldWidth": 958.5,
+      "worldHeight": 540,
+      "renderer": "pixi-webgl"
+    }
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "chapters": [
+      {
+        "id": "opening",
+        "button": {
+          "x": 50.625,
+          "y": 310,
+          "width": 330,
+          "height": 44
+        }
+      },
+      {
+        "id": "midtown",
+        "button": {
+          "x": 50.625,
+          "y": 310,
+          "width": 330,
+          "height": 44
+        }
+      },
+      {
+        "id": "park",
+        "button": {
+          "x": 50.625,
+          "y": 310,
+          "width": 330,
+          "height": 44
+        }
+      }
+    ],
+    "performance": {
+      "samples": 119,
+      "fps": 2.7,
+      "frameP95Ms": 733.3,
+      "cpuP95Ms": 68.2,
+      "physicsHz": 120,
+      "pixelRatio": 2,
+      "pixelRatioCap": 2.25,
+      "mobileZoom": 1.071,
+      "worldWidth": 1090.7,
+      "worldHeight": 504,
+      "renderer": "pixi-webgl"
+    },
+    "camera": {
+      "count": 3872,
+      "minAheadMargin": 77.9519755426536,
+      "minHeadroom": 101
+    },
+    "hitch": {
+      "samples": 1,
+      "fps": 2.5,
+      "frameP95Ms": 400,
+      "cpuP95Ms": 18.8,
+      "physicsHz": 120,
+      "pixelRatio": 2,
+      "pixelRatioCap": 2.25,
+      "mobileZoom": 1,
+      "worldWidth": 1168.6,
+      "worldHeight": 540,
+      "renderer": "pixi-webgl"
+    }
+  },
+  {
+    "width": 1280,
+    "height": 549,
+    "chapters": [
+      {
+        "id": "opening",
+        "button": {
+          "x": 76.796875,
+          "y": 412.390625,
+          "width": 330,
+          "height": 44
+        }
+      },
+      {
+        "id": "midtown",
+        "button": {
+          "x": 76.796875,
+          "y": 412.390625,
+          "width": 330,
+          "height": 44
+        }
+      },
+      {
+        "id": "park",
+        "button": {
+          "x": 76.796875,
+          "y": 412.390625,
+          "width": 330,
+          "height": 44
+        }
+      }
+    ],
+    "performance": {
+      "samples": 118,
+      "fps": 4.2,
+      "frameP95Ms": 416.7,
+      "cpuP95Ms": 71.6,
+      "physicsHz": 120,
+      "pixelRatio": 1,
+      "pixelRatioCap": 2.25,
+      "mobileZoom": 1.071,
+      "worldWidth": 1175.1,
+      "worldHeight": 504,
+      "renderer": "pixi-webgl"
+    },
+    "camera": {
+      "count": 3872,
+      "minAheadMargin": 77.9519755426536,
+      "minHeadroom": 101
+    },
+    "hitch": {
+      "samples": 1,
+      "fps": 2.5,
+      "frameP95Ms": 400,
+      "cpuP95Ms": 8.5,
+      "physicsHz": 120,
+      "pixelRatio": 1,
+      "pixelRatioCap": 2.25,
+      "mobileZoom": 1,
+      "worldWidth": 1259,
+      "worldHeight": 540,
+      "renderer": "pixi-webgl"
+    }
+  }
+]

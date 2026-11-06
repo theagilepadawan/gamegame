@@ -75,8 +75,14 @@
     if (item.type === "gap" || district === "park") return false;
     const high = item.type === "high", kind = variant(item), image = art[kind];
     if (!loaded(image)) return false;
-    const w = item.w, h = high ? 85 : item.h, top = high ? base - 181 : base - h;
+    const w = item.w, h = high ? 85 : item.h;
     c.save();
+    if (!high && item.groundSlope) {
+      c.translate(x + w / 2, base);
+      c.transform(1, item.groundSlope, 0, 1, 0, 0);
+      x = -w / 2; base = 0;
+    }
+    const top = high ? base - 181 : base - h;
     if (high) {
       if (item.guidance) {
         const anchor = item.guidance.base - 181;

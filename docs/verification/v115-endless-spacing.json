@@ -1,0 +1,21 @@
+{
+  "sections": 1600,
+  "gaps": 1449,
+  "maxTerrainRange": 308.26239932349324,
+  "maxEntities": 35,
+  "opening": {
+    "seeds": 128,
+    "minTerrainRange": 111.90055536834433,
+    "minGaps": 3,
+    "minBroad": 1
+  },
+  "distinctWidths": 1337,
+  "gapBands": [
+    244,
+    430,
+    600,
+    175
+  ],
+  "minGapSeconds": 0.27693819636029365,
+  "maxGapSeconds": 4.400686404258013
+}

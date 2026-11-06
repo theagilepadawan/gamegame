@@ -1,0 +1,331 @@
+{
+  "deterministic": true,
+  "viewportIndependent": true,
+  "rewardIndependent": true,
+  "spawnClockIndependent": true,
+  "diversity": [
+    {
+      "family": "MARKET RHYTHM",
+      "time": 0,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "ROOFTOP DIVIDENDS",
+      "time": 0,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "BREAKOUT SPRINGS",
+      "time": 0,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "LIQUIDITY GAPS",
+      "time": 0,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "FLOATING AVERAGES",
+      "time": 0,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "SELL-OFF STEPS",
+      "time": 0,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "MOMENTUM EXPRESS",
+      "time": 0,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "MIXED SIGNALS",
+      "time": 0,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "UPPER MARKET",
+      "time": 0,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "BREATHING ROOM",
+      "time": 0,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "DIVIDEND LADDER",
+      "time": 0,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "VOLATILITY RUN",
+      "time": 0,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "STEPPING STONES",
+      "time": 0,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "THE WIDE SPREAD",
+      "time": 0,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "MARKET RHYTHM",
+      "time": 90,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "ROOFTOP DIVIDENDS",
+      "time": 90,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "BREAKOUT SPRINGS",
+      "time": 90,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "LIQUIDITY GAPS",
+      "time": 90,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "FLOATING AVERAGES",
+      "time": 90,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "SELL-OFF STEPS",
+      "time": 90,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "MOMENTUM EXPRESS",
+      "time": 90,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "MIXED SIGNALS",
+      "time": 90,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "UPPER MARKET",
+      "time": 90,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "BREATHING ROOM",
+      "time": 90,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "DIVIDEND LADDER",
+      "time": 90,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "VOLATILITY RUN",
+      "time": 90,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "STEPPING STONES",
+      "time": 90,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "THE WIDE SPREAD",
+      "time": 90,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "MARKET RHYTHM",
+      "time": 300,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "ROOFTOP DIVIDENDS",
+      "time": 300,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "BREAKOUT SPRINGS",
+      "time": 300,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "LIQUIDITY GAPS",
+      "time": 300,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "FLOATING AVERAGES",
+      "time": 300,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "SELL-OFF STEPS",
+      "time": 300,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "MOMENTUM EXPRESS",
+      "time": 300,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "MIXED SIGNALS",
+      "time": 300,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "UPPER MARKET",
+      "time": 300,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "BREATHING ROOM",
+      "time": 300,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "DIVIDEND LADDER",
+      "time": 300,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "VOLATILITY RUN",
+      "time": 300,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "STEPPING STONES",
+      "time": 300,
+      "distinct": 64,
+      "seeds": 64
+    },
+    {
+      "family": "THE WIDE SPREAD",
+      "time": 300,
+      "distinct": 64,
+      "seeds": 64
+    }
+  ],
+  "terrain": {
+    "seeds": 128,
+    "samples": 45824,
+    "maxSlope": 0.34218492177770055,
+    "nonResetBoundaries": 1260
+  },
+  "components": {
+    "families": [
+      34,
+      23,
+      21,
+      28,
+      35,
+      32,
+      29,
+      33,
+      26,
+      30,
+      27,
+      25,
+      31,
+      22,
+      24,
+      20
+    ],
+    "powerups": [
+      "opportunity",
+      "research",
+      "dividend",
+      "conviction",
+      "jetpack",
+      "diversification",
+      "contrarian"
+    ],
+    "types": [
+      "gap",
+      "low",
+      "billboard",
+      "awning",
+      "bull",
+      "roof",
+      "train",
+      "spring",
+      "high",
+      "crumble",
+      "crane"
+    ]
+  },
+  "difficulty": {
+    "early": {
+      "pressure": 0,
+      "tier": 0,
+      "actionGap": 1.65,
+      "rest": 1.3,
+      "gapTime": 0.92,
+      "actions": 3,
+      "movingAmplitude": 12,
+      "movingFrequency": 1
+    },
+    "late": {
+      "pressure": 0.9706778408761062,
+      "tier": 6,
+      "actionGap": 1.3782102045546902,
+      "rest": 1.0573305397809736,
+      "gapTime": 1.075308454540177,
+      "actions": 5,
+      "movingAmplitude": 23.648134090513274,
+      "movingFrequency": 1.4368050283942477
+    }
+  },
+  "speedCap": 700
+}

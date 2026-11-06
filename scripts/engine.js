@@ -682,7 +682,10 @@ var hi = class {
     this.updateSlideRecovery(A, i, t);
     let a = this.bodyBox();
     for (let l of this.obstacles) {
-      let E = { x: l.x + 5, y: l.base - (l.type === "high" ? 181 : l.h), w: l.w - 10, h: l.type === "high" ? 85 : l.h - 4 };
+      // Endless low props follow their bank. Sample the same sheared body at
+      // the runner, so the painted slope and collision height stay registered.
+      let bodyBase = l.base + (l.groundSlope || 0) * (Math.max(l.x, Math.min(l.x + l.w, this.x)) - l.x - l.w / 2);
+      let E = { x: l.x + 5, y: bodyBase - (l.type === "high" ? 181 : l.h), w: l.w - 10, h: l.type === "high" ? 85 : l.h - 4 };
       Pe(a, E) && this.hit(l.type === "high" ? "A meeting you should have ducked." : "The market priced in your landing."), !l.passed && l.x + l.w < this.x - 20 && (l.passed = true, this.cleared++, this.flow++, this.bonus += 25);
     }
     if (this.dead || this.updateBoss(A, r, a), this.dead) return;
@@ -22197,6 +22200,9 @@ function GQ() {
 var Eu = () => (q?.mode ?? zA) === "chapter" ? q?.districtId ? "nyc.district." + q.districtId + ".best" : "nyc.opening-bell.best" : "nyc.chapter-build.best", cu = (e24) => String(Math.floor(e24 / 60)).padStart(2, "0") + ":" + String(Math.floor(e24 % 60)).padStart(2, "0");
 function fQ() {
   let e24 = mt.getBoundingClientRect();
+  // A fixed, modest phone close-up; no jump-driven zoom or CSS-clipped controls.
+  // Keep at least 540 world units across for a readable obstacle approach.
+  kA = b !== "home" && gg.matches && e24.width > e24.height && e24.width / e24.height * 504 >= 540 ? 504 : 540;
   eA = e24.width / e24.height * kA, EQ = Math.min(devicePixelRatio || 1, Vo);
   for (let A of [ht, bA]) A.width = Math.round(e24.width * EQ), A.height = Math.round(e24.height * EQ);
   if (q?.resize) {
@@ -22329,6 +22335,7 @@ function Ko(e24 = zA, A = {}) {
   // Story is an authored journey; only Endless offers changeable worlds.
   let t = e24 === "chapter" ? STORY_SEED : A.seed ?? qe, i = { character: PA, procedural: true };
   q = e24 === "chapter" && at !== "opening" ? new yo(eA, t, { ...i, districtId: at }) : new hi(eA, t, { ...i, mode: e24 }), b = "playing", ut.reset(), $A.reset(), SA.stopClips(), SA.endMusic({ resume: false }), window.LR_CH && LR_CH.music(SA, q), LRS(), SA.play(), q.grounded && q.floorY != null && (q.y = q.floorY), Kt = T - (q.floorY ?? T), $i = 0, ir = q.y, bt = [], Ht = [], ze = [], rr = 1, tr = 1, ni = -1, rg = 0, hQ = -1, Xt = 0, _t = -1, fe = 0, Ar = 1, RQ = false, mt.classList.add("playing");
+  fQ();
   for (let r of ["#intro", "#home-caption", "#results", "#pause-screen"]) m(r).classList.add("hidden");
   for (let r of ["#live-hud", "#pause", "#touch-controls"]) m(r).classList.remove("hidden");
   m("#district").textContent = Ot[q.districtId || "opening"].place, m("#pause").textContent = "\u2161", m("#pause").setAttribute("aria-label", "Pause"), m("#event").classList.remove("show", "hidden"), m("#next-chapter").classList.add("hidden"), m("#ticker-text").textContent = q.districtId === "park" ? "A long horizon leaves room for a walk in the park." : q.districtId === "midtown" ? "The growth outlook is under construction." : "Markets react to markets reacting.", Vu(), ht.focus({ preventScroll: true }), CA(392, 0.09), setTimeout(() => CA(587, 0.13), 100);
@@ -22378,6 +22385,7 @@ function CQ() {
 }
 function Cu(e24 = true) {
   e24 && zA === "endless" && (qe = vo()), ze = [], Xt = 0, _t = -1, ni = -1, b = "home", SA.stop(), Kt = 0, q = null, De(), ut.reset(), $A.reset(), mt.classList.remove("playing");
+  fQ();
   for (let A of ["#intro", "#home-caption"]) m(A).classList.remove("hidden");
   for (let A of ["#results", "#pause-screen", "#live-hud", "#pause", "#touch-controls", "#chapter-strip", "#next-chapter"]) m(A).classList.add("hidden");
   m("#event").classList.remove("show"), m("#effects").replaceChildren(), Eg(), Ei(), m("#start").focus({ preventScroll: true });
@@ -22861,6 +22869,7 @@ function vu(e24 = false) {
   d.globalAlpha = 1, o && _D(o, s), uo = l && $A.render({ id: a, W: eA, H: kA, distance: r, time: UA, cameraY: o && (o.toContrarian || s < 0.5) ? 0 : Kt, run: A ? q : null, reduced: gA, quality: dQ(), openingCanvas: bA, playing: b === "playing" || b === "paused", inverted: n, transfer: o }), mt.classList.toggle("pixi-world", !!uo), l && !uo && vu(true);
 }
 function Ku(e24) {
+  const frameStart = performance.now();
   let A = (e24 - au) / 1e3 || 0, t = Math.min(0.05, A);
   if (au = e24, QQ += t, (b === "playing" || b === "home") && (UA += t), b === "playing") {
     for (q.districtId && ut.update(t, q, gA), $i += t * (window.LR_FX ? LR_FX.ts(t) : 1); $i >= 1 / 120 && b === "playing"; ) ir = q.y, q.step(1 / 120, og.size > 0 || $t.has("ArrowDown") || $t.has("KeyS")), FD(), $i -= 1 / 120;
@@ -22877,10 +22886,31 @@ function Ku(e24) {
   }
   if ((b === "playing" || b === "home") && $A.update(t, q, { id: b === "home" ? "opening" : q?.districtId || "opening", reduced: gA, quality: dQ() }), b === "playing" && !q.transfer) {
     let i = q.floorY ?? T, r = q.flight ? q.flightKind === "cruise" ? T - i : 0 : T - (q.terrainProfile && q.terrainProfile.districtId === "opening" && !q.contrarian ? 0.62 * i + 0.38 * q.floorAt(q.x + 220) : i) + Math.max(0, i - 207 - q.y);
+    if (q.mode === "endless" && !q.flight && !q.contrarian) r = endlessCameraY(q, eA, kA);
     Kt += (r - Kt) * (1 - Math.exp(-t * 8));
   }
-  QQ > Bu && m("#event").classList.remove("show"), vu(), A > 0.024 && A < 0.1 ? Co++ : Co = Math.max(0, Co - 1), Co > 90 && Vo > 1 && (Vo = Math.max(1, Vo - 0.25), Co = 0, fQ()), requestAnimationFrame(Ku);
+  QQ > Bu && m("#event").classList.remove("show"), vu(), A > 0.024 && A < 0.1 ? Co++ : Co = Math.max(0, Co - 1), Co > 90 && Vo > 1 && (Vo = Math.max(1, Vo - 0.25), Co = 0, fQ());
+  // Count real visible stalls too; only omit startup/background-tab intervals.
+  if (frameMeter.visible && !document.hidden && A > 0 && (b === "playing" || b === "home")) {
+    frameMeter.intervals[frameMeter.index] = A * 1000;
+    frameMeter.work[frameMeter.index] = performance.now() - frameStart;
+    frameMeter.index = (frameMeter.index + 1) % 120;
+    frameMeter.count = Math.min(120, frameMeter.count + 1);
+  }
+  frameMeter.visible = !document.hidden;
+  requestAnimationFrame(Ku);
 }
+function endlessCameraY(run, width, height) {
+  const floor = run.floorY ?? T, reach = Math.max(0, Math.min(width - run.x - 24, run.speed * .9));
+  let lowest = floor;
+  for (let n = 1; n <= 4; n++) lowest = Math.max(lowest, run.floorAt(run.x + reach * n / 4));
+  // Read the descending bank before reaching it. The background stays still;
+  // only the existing terrain camera anticipates the next 0.9 seconds.
+  // A separate headroom bound keeps double/super jumps in view.
+  return Math.max(Math.min(T - floor, height - 80 - lowest), T - 207 - run.y);
+}
+const frameMeter = { intervals: new Float32Array(120), work: new Float32Array(120), index: 0, count: 0, visible: false };
+document.addEventListener("visibilitychange", () => { frameMeter.visible = false; });
 window.longRun = { get state() {
   return b;
 }, get seed() {
@@ -22896,6 +22926,14 @@ window.longRun = { get state() {
   return at;
 }, get environment() {
   return { ...$A.stats, ready: $A.ready, lost: $A.lost, compositing: !!uo, quality: dQ() };
+}, get performance() {
+  const frames = Array.from(frameMeter.intervals.subarray(0, frameMeter.count)).sort((a, b) => a - b);
+  const work = Array.from(frameMeter.work.subarray(0, frameMeter.count)).sort((a, b) => a - b);
+  const mean = frames.reduce((sum, value) => sum + value, 0) / (frames.length || 1);
+  const rounded = value => Math.round((value || 0) * 10) / 10;
+  return { samples: frames.length, fps: rounded(mean ? 1000 / mean : 0), frameP95Ms: rounded(frames[Math.floor(frames.length * .95)]),
+    cpuP95Ms: rounded(work[Math.floor(work.length * .95)]), physicsHz: 120, pixelRatio: EQ, pixelRatioCap: Vo,
+    mobileZoom: rounded(540 / kA * 100) / 100, worldWidth: rounded(eA), worldHeight: kA, renderer: this.renderer };
 }, get renderer() {
   return uo ? "pixi-webgl" : b === "home" && zA === "chapter" && at !== "opening" || q?.districtId ? "district-canvas" : nt ? "webgl" : "canvas-fallback";
 }, get snapshot() {

@@ -1,81 +1,112 @@
-# Release verification — Story and Endless polish, version 1.14
+# Release verification — Endless and mobile polish, version 1.15
 
-This release keeps the accepted v1.13 city and Park art/cameras unchanged.
-All new asset directions are confined to asset-options/ and the separate
-review download. A is the actual previous artwork in both comparison sets.
-The current game art is deliberately not replaced pending the user's choice.
+This pass retains the accepted city/Park paintings, venue placement, runner
+art and the current default props. None of the pending asset directions has
+been selected. Story scoring/unlock rules and inactive-route scenery remain.
 
-## Changes and regression coverage
+## Endless opening and difficulty
 
-Story has no competitive HUD, grades, tally, record writes, points popups or
-score submission. Internal pickup mechanics remain intact. The local board
-has one tab, Endless; old Story saves are retained without being displayed.
-Endless is guarded at selection and run start and requires all three completed
-chapters, including with the old chapter-demo query. Fresh, partial, malformed
-and completed saves are exercised. Normal story wins, default next-chapter
-focus, the history reveal, both controller and keyboard progression, retries,
-seed preservation and persistent final unlock are checked through the real UI.
+Director version 4 replaces the very long terrain fade with individually
+seeded, irregularly spaced hill/valley knots. The first 650 world units are
+level; subsequent crests are full amplitude. Analytic slopes join continuously
+and are bounded at 0.375. Sampling does not generate an unbounded knot cache.
 
-An unchosen Story route is retained as visible scenery behind the chosen path.
-Its previous non-interaction rules remain: it cannot catch a jump or hit the
-runner on the other route. Thirty-two actual physics probes cover both routes,
-runners and districts, paired with browser checks that no entities disappear
-when the upper route is chosen. A caught camera/landing regression was fixed
-by separating route visibility from collision eligibility.
+The opening hurdle artwork was squeezed into speed-dependent widths as small
+as 41 pixels. Low hurdles now use 98–116-pixel bodies and high boards 146–166,
+with the actual collision width following the visible body. Low bodies follow
+the bank angle; their collision height follows the same slope at the runner.
+A high board over
+a steep span becomes a jump hurdle to retain slide clearance.
 
-The now-playing label lasts five seconds for an audible run/results page or
-track change. Browser checks cover expiry, actual audio playback, chapter
-changes, exclusive Contrarian playback/return, mute and results. The user supplied the display titles: Midtown “Good Company Never Dies”,
-Central Park “Diversified Ballad”, Contrarian “Good ol’ Company”. They are
-configurable in scripts/now-playing.js. The widget owns no audio playback.
+Gap encounters stay in circulation among the fourteen families. Uneven banks,
+short/held jumps, longer double jumps and stepping-platform chasms appear early.
+The gap and island families each include a broader crossing at a seeded index.
+Uphill gaps retain a landing allowance. Speed, combination count and wide-gap
+frequency increase with distance; ordinary landings and recovery remain.
 
-## Endless
+Model checks include:
 
-Version 3 of the director retains a deterministic, aperiodic spatial terrain
-field and independent geometry/reward/event random streams. Larger terrain
-amplitudes add more pronounced hills and valleys without periodic resets.
-Fourteen section families include uneven landing banks and broad platform
-crossings over long chasms. Ground hurdles no longer overlap low platform
-sequences. Optional upper routes have standing headroom. Speed still caps at
-700 world units/second and later runs increase combination complexity and gap
-width rather than remove all recovery time.
+- Deterministic courses across viewport widths, reward collection and frame/
+  spawn clocks; different seeds produce different courses.
+- 42 family/time combinations × 64 seeds, with all families, event types,
+  powerups and platform types reached through normal scheduling.
+- 45,824 continuous height/derivative samples across 128 seeds.
+- 1,600 actual-model sections: no mandatory hurdle hidden beneath a low roof,
+  readable hurdle separation and at most 35 entities per generated section.
+  The 1,449 gaps occupy four width bands (244 / 430 / 600 / 175) with 1,337
+  distinct normalized widths. The longest crossings have real platforms.
+- The opening 30 seconds of all 128 sampled seeds vary in height by at least
+  111.9 world units. With normal jetpack/event scheduling, the first minute
+  includes at least three gaps and one broad crossing in every sampled seed;
+  a single long chasm can include several separate platform jumps.
+- Actual 120 Hz input searches cover all fourteen families at opening and
+  later speeds, plus eight compact-screen cases with both runners and
+  ten-minute difficulty. They require no damage credit, invulnerability or
+  triple jump. No-input counterexamples confirm the gaps need player action.
+  These witnesses cover tested cases, not a mathematical proof of every seed.
 
-Executed model checks:
+## Mobile and music
 
-- Same seed produces identical course geometry/rewards across viewport sizes,
-  collection decisions and different frame/spawn clocks. Different seeds differ.
-- 42 family/time cases × 64 seeds have parameterized layouts. All families,
-  powerups, event types and platform types occur through normal scheduling.
-- 45,824 terrain samples cover 128 seeds, distant coordinates, continuity and
-  derivative bounds. Terrain does not reset to a fixed course packet.
-- 1,600 real-model sections across 32 seeds: no ground hurdle hidden under a
-  low platform, readable obstacle approach distances, at most 34 entities per
-  generated section. 968 gaps include 859 distinct widths to 0.1 ms precision;
-  four width bands contain 216 / 482 / 205 / 65 openings. Largest holes have
-  physical stepping platforms, not a required temporary powerup.
-- 28 section traversals (14 families at early and later speeds) use searched
-  actual inputs through 120 Hz engine physics, with no damage, shield credit,
-  invulnerability or required triple jump. Another eight varied-seed traversals
-  test compact screens and both runners, including ten-minute difficulty.
-  No-input counterexamples fall into the tested holes.
-- Twelve original Story snapshots retain identical authored movement states.
+The Story menu reflows at short landscape heights. On the shortest screens,
+the title occupies one line, Play remains at least 40 pixels tall, and the
+bottom margin is at least 16 pixels in the three tested phone layouts. Decorative
+footer/loading copy is omitted where it competed with navigation. Map scrolling,
+chapter locks, selection miniatures, both modes and next-chapter flow remain.
 
-Reports: docs/verification/v114-endless-*.json. Commands:
-node tests/endless-generation.mjs; node tests/endless-spacing.mjs;
-node tests/endless-fairness.mjs; node tests/endless-traversal.mjs;
-node tests/story-route-physics.mjs.
+Touch gameplay uses a fixed 504-unit logical height instead of 540: a 7.14%
+close-up. Home framing returns to 540. Portrait play still pauses for rotation,
+and the close-up is disabled if it would leave less than 540 world units across.
+Endless terrain-camera look-ahead previews the next 0.9 seconds of a descent so
+approaching obstacles do not slip below the closer viewport. Independent jump
+headroom prevents the look-ahead from cutting off a double or super jump. Story
+camera rules and the stationary painted background framing are unchanged.
+Physics/collision coordinates are not scaled or changed. Backgrounds retain
+their existing camera behavior; there is no animated zoom on jumps.
 
-## Presentation and release
+The five-second music card has a custom inline vector record/sleeve, a clear
+Now playing label and larger title text. It stays above the touch controls and
+below the top HUD. During Contrarian music it moves above the touch controls,
+clear of the event badge and inverted course. Track changes reset the short display; muted or paused audio
+hides it. Reduced motion disables record rotation and entrance/progress motion.
+The widget never owns audio playback. Confirmed titles remain Good Company
+Never Dies, Diversified Ballad and Good ol’ Company.
 
-The existing city reference checks, seams/coverage, venue grounding, office
-host, gap rendering, original runner atlases, props, 144 moving-board slide
-traversals, Park lake, map controls and offline standalone checks remain part
-of release validation. Midtown's real double/triple jumps and jetpack frames
-passed on desktop, phone DPR2 and Canvas after the route regression fix.
-The final standalone is rebuilt from the exact editable source; packaging
-verifies ZIP CRC, embedded HTML and the cutscene handoff's source rebuild.
-release/SHA256SUMS.txt records the delivered files. The art chooser is tested
-on desktop and mobile with working selections and no horizontal overflow.
+Touch layout checks cover 568×320, 844×390 at DPR2 and 1280×549, all three chapter
+buttons, page-to-game zoom and return, music/HUD/control bounds and prop widths.
+The screenshots were reviewed at their rendered sizes. Another 3,872 downhill/
+jump camera targets per viewport retain at least 77.9 units below the incoming
+bank and 101 units of standing-sprite headroom in the sampled cases.
 
-These sampled checks do not prove every possible endless seed is solvable,
-and cloud software rendering is not a guarantee of performance on all devices.
+## Frame-rate setup
+
+The game draws on requestAnimationFrame, so its ceiling follows the display
+rather than a hard-coded 60 FPS cap. Simulation runs at fixed 1/120-second steps
+with interpolated drawing. The catch-up delta is capped at 50 ms. Rendering uses
+Pixi/WebGL with the existing Canvas fallback. Resolution starts at min(device DPR,
+2.25); sustained slow frames reduce the cap in 0.25 steps down to 1. Particle
+quality is also reduced on touch devices. The existing resolution controller
+only steps down during a session; it does not automatically raise the cap again.
+
+`longRun.performance` reports a bounded rolling 120-frame sample: measured FPS,
+frame-interval p95, JS/render-submission CPU p95, physics Hz, effective pixel
+ratio/cap, logical viewport, renderer and zoom. CPU submission time excludes
+asynchronous GPU completion. This is deliberately a developer API, not another
+in-game overlay. Cloud Chromium uses software rendering, so its FPS must not be
+reported as a measurement of a physical iPhone/Android GPU or a 60 FPS guarantee.
+
+## Regression and delivery
+
+Checks were completed in batches as the mobile camera and music card were refined.
+The original city draw functions remain pinned; the frame-loop pin records the
+intentional v1.15 Endless look-ahead and FPS instrumentation. Story physics is
+protected by its separate twelve saved reference snapshots.
+
+The built standalone is exercised through the browser suite: progression,
+score-free Story, persistent Endless unlock, five-second audible-track behavior,
+exclusive Contrarian audio, inactive-route physics/visibility, menu controls,
+city motion/grounding, 505/host details, hazards/pickups, gaps, miniatures and
+offline-after-load behavior. Original source assets remain byte-identical.
+
+The game archive must contain the exact tested HTML. The cutscene handoff must
+rebuild that same HTML from its editable source. Packaging validates both;
+public download SHA-256/CRC checks follow publication of the immutable commit.

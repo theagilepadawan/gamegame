@@ -101,9 +101,9 @@ async function main() {
   // After unrelated presentation/copy edits, replay previously discovered
   // witnesses through the current real engine instead of repeating the search.
   const replay = process.env.ENDLESS_REPLAY_REPORT ? JSON.parse(await fs.readFile(process.env.ENDLESS_REPLAY_REPORT, 'utf8')) : null;
-  assert.equal(G.version, 3);
+  assert.equal(G.version, 4);
   const sample = new c.hi(540, 42, {mode: 'endless', procedural: true});
-  assert.equal(sample.terrainProfile.version, 3, 'Constructor uses the new terrain in real Endless');
+  assert.equal(sample.terrainProfile.version, 4, 'Constructor uses the new terrain in real Endless');
   sample.spawn(20);
   assert.equal(G.inspect(sample).history.at(-1).route, 20, 'Real engine spawn delegates to the new generator');
   const report = {sourceSha256: {engine: createHash('sha256').update(engine).digest('hex'), endless: createHash('sha256').update(endless).digest('hex'), generator: createHash('sha256').update(generator).digest('hex')}, storyReference: baseline.reference, storyChecks: [], compactReaction: [], physics: [], bars: 0, events: []};

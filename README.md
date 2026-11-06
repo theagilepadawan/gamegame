@@ -4,6 +4,29 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
+## Version 1.15 — Endless variety and mobile polish
+
+The first Endless hills now arrive after a short safe lead, with irregular seeded
+crests and valleys instead of a long fade into barely visible slopes. Gap-heavy
+encounters stay in circulation. Single- and double-jump spans, uneven landing
+banks and broad stepping-platform chasms appear earlier; wider gaps become more
+common with distance. Opening obstacle widths now preserve the artwork's readable
+proportions instead of shrinking with the starting speed.
+
+Short landscape screens get a reflowed Story heading, a roomier chapter/Play layout
+and larger touch targets. Phone gameplay has a fixed 7.14% closer view, with no
+jump-driven zoom; the home view and minimum approach space remain intact.
+
+The five-second music card has a custom vector record/sleeve, a clear “Now playing”
+label, larger song text and a restrained fade. Actual playback still controls it.
+`longRun.performance` exposes measured rolling FPS, frame/CPU p95, renderer,
+resolution and zoom. Drawing follows requestAnimationFrame; physics uses fixed
+120 Hz steps. The existing pixel-ratio cap adapts from 2.25 toward 1 under sustained
+slow frames. These settings are not a guarantee of 60 FPS on every device.
+
+The accepted city/Park artwork, Easter eggs and pending asset choices remain.
+See [release verification](docs/verification.md) for test evidence and limitations.
+
 ## Version 1.14 — Story, Endless and asset choices
 
 Story now focuses on the three chapters: no score HUD, result grades, high-score

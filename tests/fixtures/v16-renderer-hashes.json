@@ -33,6 +33,7 @@
     "class": "",
     "start": "function Ku(",
     "end": "window.longRun =",
-    "sha256": "9041846d830a0a147aea6e0dfeabcfcec40e5ae39581e4fcd58dc98ea0583af4"
+    "sha256": "4074d9b89d03c95b3b77404518c47dafe3de0ceb294ff2792a363cd80f2558a7",
+    "revision": "1.15: added measured FPS and Endless-only downhill look-ahead; Story camera expression and fixed-step simulation retained."
   }
 }

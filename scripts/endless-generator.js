@@ -2,7 +2,7 @@
    while terrain, section layout, rewards and rare events use separate streams. */
 (function () {
   "use strict";
-  var VERSION = 3, GROUND = 422;
+  var VERSION = 4, GROUND = 422;
   var FAMILIES = [
     { id: 20, name: "MARKET RHYTHM", kind: "rhythm", unlock: 0 },
     { id: 21, name: "ROOFTOP DIVIDENDS", kind: "roofs", unlock: 0 },
@@ -16,8 +16,8 @@
     { id: 29, name: "BREATHING ROOM", kind: "recovery", unlock: 0 },
     { id: 30, name: "DIVIDEND LADDER", kind: "ladder", unlock: 15 },
     { id: 31, name: "VOLATILITY RUN", kind: "volatility", unlock: 65 },
-    { id: 34, name: "STEPPING STONES", kind: "islands", unlock: 25 },
-    { id: 35, name: "THE WIDE SPREAD", kind: "ravine", unlock: 50 }
+    { id: 34, name: "STEPPING STONES", kind: "islands", unlock: 0 },
+    { id: 35, name: "THE WIDE SPREAD", kind: "ravine", unlock: 18 }
   ];
   var clamp = function (x, lo, hi) { return Math.max(lo, Math.min(hi, x)); };
   var mix = function (x) { x >>>= 0; x = Math.imul(x ^ x >>> 16, 2146121005); x = Math.imul(x ^ x >>> 15, 2221713035); return (x ^ x >>> 16) >>> 0; };
@@ -44,7 +44,7 @@
     var pressure = 1 - Math.exp(-Math.max(0, time) / 170);
     return { pressure: pressure, tier: Math.min(6, Math.floor(Math.max(0, time) / 45)),
       actionGap: 1.65 - .28 * pressure, rest: 1.30 - .25 * pressure,
-      gapTime: .48 + .18 * pressure, actions: Math.min(5, 3 + Math.floor(Math.max(0, time) / 100)),
+      gapTime: .92 + .16 * pressure, actions: Math.min(5, 3 + Math.floor(Math.max(0, time) / 100)),
       movingAmplitude: 12 + 12 * pressure, movingFrequency: 1.0 + .45 * pressure };
   }
   function state(q) {
@@ -56,38 +56,33 @@
   }
   function terrain(seed, ground) {
     ground = Number.isFinite(ground) ? ground : GROUND;
-    var r = stream(seed, 0, 0x54455252), scales = [
-      { period: between(r, 3800, 6200), budget: .070, salt: 0x4c4f4e47 },
-      { period: between(r, 1200, 2400), budget: .055, salt: 0x4d454449 },
-      { period: between(r, 520, 980), budget: .020, salt: 0x53484f52 }
-    ];
-    scales.forEach(function (s) { s.amplitude = s.period * s.budget / 3; s.phase = between(r, 0, s.period); });
-    function noise(x, derivative) {
-      var sum = 0;
-      scales.forEach(function (s) {
-        var u = (x + s.phase) / s.period, cell = Math.floor(u), t = u - cell;
-        var a = mix((seed >>> 0) ^ Math.imul(cell, 2246822519) ^ s.salt) / 4294967296 * 2 - 1;
-        var b = mix((seed >>> 0) ^ Math.imul(cell + 1, 2246822519) ^ s.salt) / 4294967296 * 2 - 1;
-        sum += derivative ? (b - a) * 6 * t * (1 - t) / s.period * s.amplitude : (a + (b - a) * t * t * (3 - 2 * t)) * s.amplitude;
-      });
-      return sum;
+    // Irregular, individually seeded hills. Neighbouring knots have zero
+    // derivative, so crests and valley floors join without a camera jolt.
+    // The short first bank is safe; the very first hill is already full size.
+    var r = stream(seed, 0, 0x54455252), period = between(r, 1050, 1500), lead = 650;
+    function hash(i, salt) { return mix((seed >>> 0) ^ Math.imul(i, 2246822519) ^ salt) / 4294967296; }
+    function knot(i) {
+      if (i <= 0) return {x: lead, y: ground};
+      return {x: lead + period * (i + (hash(i, 0x504f534e) - .5) * .16),
+        y: ground + (hash(i, 0x48454947) * 2 - 1) * period * .105};
     }
-    var origin = noise(900, false);
-    function at(x, derivative) {
-      x = Number.isFinite(x) ? x : 0;
-      if (x <= 900) return derivative ? 0 : ground;
-      var t = clamp((x - 900) / 6000, 0, 1), fade = t * t * (3 - 2 * t), value = noise(x, false) - origin;
-      return derivative ? noise(x, true) * fade + value * 6 * t * (1 - t) / 6000 : ground + value * fade;
+    function sample(x, derivative) {
+      if (!Number.isFinite(x) || x <= lead) return derivative ? 0 : ground;
+      var i = Math.max(0, Math.floor((x - lead) / period)), a = knot(i), b = knot(i + 1);
+      if (x < a.x) { b = a; a = knot(--i); }
+      else if (x > b.x) { a = b; b = knot(i + 2); }
+      var span = b.x - a.x, t = clamp((x - a.x) / span, 0, 1);
+      return derivative ? (b.y - a.y) * 6 * t * (1 - t) / span : a.y + (b.y - a.y) * t * t * (3 - 2 * t);
     }
     return Object.freeze({ version: VERSION, districtId: "endless", seed: seed >>> 0, ground: ground,
-      signature: "endless-v3-" + mix(seed ^ 0x54455252).toString(16).padStart(8, "0"), maxSlope: .24,
-      knots: Object.freeze([Object.freeze({ x: 0, y: ground }), Object.freeze({ x: 900, y: ground })]),
-      at: function (x) { return at(x, false); }, slopeAt: function (x) { return at(x, true); },
+      signature: "endless-v4-" + mix(seed ^ 0x54455252).toString(16).padStart(8, "0"), maxSlope: .375,
+      knots: Object.freeze([Object.freeze({x: 0, y: ground}), Object.freeze(knot(0))]),
+      at: function (x) { return sample(x, false); }, slopeAt: function (x) { return sample(x, true); },
       knotsIn: function (start, end) {
         if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) return [];
-        var points = [], step = Math.max(240, Math.ceil((end - start) / 512));
-        for (var x = start; x <= end; x += step) points.push({ x: x, y: at(x, false) });
-        if (!points.length || points[points.length - 1].x !== end) points.push({ x: end, y: at(end, false) });
+        var points = [], step = Math.max(160, Math.ceil((end - start) / 512));
+        for (var x = start; x <= end; x += step) points.push({x: x, y: sample(x, false)});
+        if (!points.length || points[points.length - 1].x !== end) points.push({x: end, y: sample(end, false)});
         return points;
       } });
   }
@@ -110,6 +105,12 @@
       else {
         var available = FAMILIES.filter(function (f) { return f.unlock <= planTime && f.id !== 29 && recent.indexOf(f.id) < 0; });
         if (!available.length) available = FAMILIES.filter(function (f) { return f.unlock <= planTime && f.id !== 29; });
+        // Keep strong gap encounters in circulation instead of allowing a
+        // long opening run to contain only rooftops and tiny spring holes.
+        if (index > 0 && !s.recent.slice(-2).some(function (id) { return [23, 34, 35].includes(id); })) {
+          var crossings = available.filter(function (f) { return [23, 34, 35].includes(f.id); });
+          if (crossings.length) available = crossings;
+        }
         family = choose(layout, available);
       }
     }
@@ -139,12 +140,15 @@
       }
     }
     function hurdle(t, kind) {
-      var width = v * between(layout, kind === "high" ? .18 : .12, kind === "high" ? .24 : .16);
+      // Art has a wide, readable silhouette even at the opening speed.
+      // Collision uses this same width: there is no invisible extra obstacle.
+      var width = kind === "high" ? between(layout, 146, 166) : between(layout, 98, 116);
       var x = xAt(t), floor = floorRange(x, width);
       // Keep a bar's entire slide envelope clear on crests and sloping ground.
       // Steeper spans become a readable jump rather than an ambiguous ceiling.
-      if (kind === "high" && floor.max - floor.min > 24) kind = "low";
+      if (kind === "high" && floor.max - floor.min > 24) { kind = "low"; width = 116; floor = floorRange(x, width); }
       var object = q.hazard(kind, x, width, kind === "high" ? floor.min : q.floorAt(x + width / 2));
+      if (kind === "low") object.groundSlope = (q.floorAt(x + width) - q.floorAt(x)) / width;
       actions.push({ type: kind, t: t, widthTime: width / v, x: x, width: width });
       coins(t - .16, .32, kind === "high" ? 35 : 140, "opportunity", 3);
       endTime = Math.max(endTime, t + width / v + .8);
@@ -153,7 +157,7 @@
     function gap(t, time, stepping) {
       var x = xAt(t), width = v * time, slope = (q.floorAt(x + width + 40) - q.floorAt(x - 40)) / (width + 80);
       // A rise shortens a ground jump's landing window. Reserve extra margin.
-      width *= slope < 0 ? clamp(1 + slope * 1.5, .76, 1) : 1;
+      width *= slope < 0 ? clamp(1 + slope * 1.65, .60, 1) : 1;
       q.hazard("gap", x, width, q.floorAt(x));
       gapRanges.push([x, x + width]);
       actions.push({ type: "gap", t: t, widthTime: width / v, x: x, width: width });
@@ -178,11 +182,20 @@
       var x = xAt(t); q.springs.push({ x: x, w: between(layout, 48, 70), y: q.floorAt(x), used: false });
       endTime = Math.max(endTime, t + 1.2);
     }
+    function gapBudget() {
+      // Mix tap, held-jump and double-jump spans from the first minute.
+      // Broad gaps become more common with distance; banks vary separately.
+      var roll = layout(), pressure = d.pressure;
+      if (roll < .12) return between(layout, .34, .46);
+      if (roll < .38 - pressure * .12) return between(layout, .52, .66);
+      if (roll < .70 - pressure * .10) return between(layout, .72, .84);
+      return between(layout, .88, d.gapTime);
+    }
     function groundSequence(types, start) {
       var t = start;
       types.forEach(function (kind) {
         if (kind === "gap") {
-          const opening = gap(t, between(layout, .27, d.gapTime));
+          const opening = gap(t, gapBudget());
           t += opening.duration + between(layout, 1.05, 1.55);
         } else { hurdle(t, kind); t += d.actionGap + between(layout, .05, .55); }
       });
@@ -224,18 +237,20 @@
           groundSequence(Array.from({ length: count }, function () { return layout() < .7 ? "low" : "gap"; }), lead); break;
         case "gaps":
           t = lead;
-          for (var i = 0, n = integer(layout, 1, Math.min(3, count)); i < n; i++) {
+          var n = integer(layout, 2, Math.max(2, Math.min(3, count))), broad = integer(layout, 0, n - 1);
+          for (var i = 0; i < n; i++) {
             // Each opening gets a width and an independent landing bank, never
             // a fixed beat. Later runs admit full double-jump stretches.
-            var opening = gap(t, between(layout, .26, d.gapTime));
+            var opening = gap(t, i === broad ? between(layout, .88, d.gapTime) : gapBudget());
             t += opening.duration + between(layout, 1.05, 1.85);
           }
           break;
         case "islands":
           t = lead;
-          for (var i = 0, n = integer(layout, 2, 4); i < n; i++) {
-            var opening = gap(t, between(layout, .28, Math.min(.54, d.gapTime)));
-            t += opening.duration + between(layout, .80, 1.25);
+          var n = integer(layout, 2, 4), longerBank = integer(layout, 0, n - 1);
+          for (var i = 0; i < n; i++) {
+            var opening = gap(t, i === longerBank ? between(layout, .80, .92 + d.pressure * .08) : between(layout, .42, .70));
+            t += opening.duration + between(layout, 1.05, 1.65);
           }
           break;
         case "ravine":
