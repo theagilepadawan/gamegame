@@ -4,22 +4,24 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
-## Version 1.12 — restore the warm Downtown streets
+## Version 1.13 — warm Midtown and finance obstacles
 
-Downtown uses the complete painted streets from the earlier supplied HTML,
-with its original scrolling, opening hold and pavement. The rejected global
-river and detached building composition are removed. One World Trade Center
-remains; the misplaced Midtown towers were corrected locally. Kabin and LEI
-retain their current native detail in separate later street façades, with the
-original lampposts and foreground silhouettes in front of them.
+Midtown returns to the original complete golden skyline, Bryant Park and Fifth
+Avenue paintings. A matching ordinary restaurant block spaces the current venue
+details along the course. The city has one slow horizontal scroll: jumping and
+jetpacks no longer lift the buildings or move a separate skyline. The lossless
+original masters recover detail, and the venue composites render at 2090×1176.
+The blue 505 glass, revolving doors, host and other native venue crops are retained.
 
-Midtown, Central Park, runners, gameplay, Endless generation and chapter-map
-miniatures retain their current behavior. This is a Downtown-only correction.
+Fine Print book stacks, Fee Drag cases, Red Tape portfolios and Moving Guidance
+boards replace generic city barriers. Their solid faces match the existing
+collision rectangles. Two late Midtown boards retain their slow, predictable
+vertical cycle. Park keeps its original bench and adds a small Benchmark plaque.
 
-[Verification](docs/verification.md) identifies the actual uploaded reference
-and the checks performed. The previous association between the user's version
-label and repository commit `a551054` was an inference, not evidence that it was
-their requested visual reference. That composition was rejected for Downtown.
+The accepted Downtown restoration, Park scenery, runners, gameplay, Endless
+variation and chapter-map miniatures remain. [Verification](docs/verification.md)
+records the actual checks and limitations. The earlier repository snapshot
+`a551054` is not the user's supplied warm painted backdrop; do not restore it.
 
 The current Nicolai and Trond sprite sheets are unchanged. The rejected cartoon runner study and alternate Park artwork are not part of gameplay.
 
@@ -47,7 +49,7 @@ Requires Node.js 20 or newer. The build and local server have no dependencies.
 npm start
 ```
 
-Open the URL printed by the server. `index.html`, `game.css`, `scripts/` and `assets/` are the editable source. `scripts/engine.js` contains the bundled game and Pixi runtime, formatted for maintenance. `scripts/downtown-scenery.js` restores the supplied complete street paintings; `scripts/scenery.js` retains Midtown and delegates Downtown/Park; `scripts/venue-details.js` patches only six storefront areas once, at native source resolution. `scripts/park-scenery.js` preserves the original Park backdrop, `scripts/chapter-menu.js` controls the chapter map, and `scripts/endless-generator.js` owns seeded Endless generation. Retired panorama/traffic modules remain in the repository for history but are absent from the runtime and its asset dependency list.
+Open the URL printed by the server. `index.html`, `game.css`, `scripts/` and `assets/` are the editable source. `scripts/engine.js` contains the bundled game and Pixi runtime, formatted for maintenance. `scripts/downtown-scenery.js` restores the supplied complete street paintings; `scripts/midtown-painted.js` restores the warm Midtown paintings; `scripts/scenery.js` delegates all three districts; `scripts/venue-details.js` patches only six storefront areas once, at native source resolution. `scripts/park-scenery.js` preserves the original Park backdrop, `scripts/chapter-menu.js` controls the chapter map, and `scripts/endless-generator.js` owns seeded Endless generation. Retired panorama/traffic modules remain in the repository for history but are absent from the runtime and its asset dependency list.
 
 ```sh
 npm run build
@@ -65,7 +67,7 @@ npx playwright install chromium
 npm test
 ```
 
-The current browser suite checks modes, map navigation, the actual uploaded Downtown layout and native non-venue pixels, unchanged Midtown composition, actual jump/flight camera projection, the office host, props, Park water, physical gaps and offline packaging. `tests/guidance-obstacles.mjs` checks collision-enabled traversal of the two moving hazards across both runners and all movement phases. Earlier composition/traffic tests remain historical where they describe modules no longer loaded. The release verification records which checks actually ran. Browser tests use `/usr/bin/chromium`; `CHROMIUM_PATH`, `PLAYWRIGHT_MODULE` and `TEST_URL` can select another installation or hosted build for the existing suites.
+The current browser suite checks modes, map navigation, the actual uploaded Downtown layout and native non-venue pixels, warm Midtown composition, fixed backdrop positions during real jumps/flight, the office host, props, Park water, physical gaps and offline packaging. `tests/guidance-obstacles.mjs` checks collision-enabled traversal of the two moving hazards across both runners and all movement phases. Earlier composition/traffic tests remain historical where they describe modules no longer loaded. The release verification records which checks actually ran. Browser tests use `/usr/bin/chromium`; `CHROMIUM_PATH`, `PLAYWRIGHT_MODULE` and `TEST_URL` can select another installation or hosted build for the existing suites.
 
 The Endless generation and independent collision-enabled fairness checks run directly in Node:
 

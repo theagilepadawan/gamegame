@@ -7,13 +7,24 @@
     opportunity: "assets/props-v18/opportunity.webp",
     research: "assets/props-v18/research.webp",
     conviction: "assets/props-v18/conviction.webp",
-    cabinet: "assets/props-v18/road-barrier.webp",
-    overhead: "assets/props-v18/market-board.webp"
+    finePrint: "assets/props-v113/fine-print.webp",
+    feeDrag: "assets/props-v113/fee-drag.webp",
+    redTape: "assets/props-v113/red-tape.webp",
+    guidance: "assets/props-v113/moving-guidance.webp"
   };
   const art = Object.fromEntries(Object.entries(paths).map(([key, path]) => {
     const image = new Image(); image.src = path; return [key, image];
   }));
   const loaded = image => image && image.complete && image.naturalWidth > 0;
+  // Native registration separates decorative handles/bows from each solid face.
+  // These faces map to exactly the rectangles used by engine collision checks.
+  const bodyTop = {finePrint: 92, feeDrag: 95, redTape: 130, guidance: 73};
+  function variant(item) {
+    if (item.type === "high") return item.guidance ? "guidance" : "redTape";
+    let seed = 0;
+    for (const char of String(item.label || item.id || "FINE PRINT")) seed = Math.imul(seed, 31) + char.charCodeAt(0) | 0;
+    return (seed >>> 1) % 2 ? "feeDrag" : "finePrint";
+  }
   function box(c, x, y, w, h, color, radius = 0) {
     c.fillStyle = color; c.beginPath(); c.roundRect(x, y, w, h, radius); c.fill();
   }
@@ -27,7 +38,7 @@
   function text(c, label, x, y, size, width, color, weight = 700) {
     c.font = `${weight} ${size}px Arial,sans-serif`;
     const measured = c.measureText(label).width;
-    if (measured > width) c.font = `${weight} ${Math.max(7.5, size * width / measured)}px Arial,sans-serif`;
+    if (measured > width) c.font = `${weight} ${Math.max(3, size * width / measured)}px Arial,sans-serif`;
     c.textAlign = "center"; c.textBaseline = "middle"; c.fillStyle = color; c.fillText(label, x, y, width);
   }
   function bolt(c, x, y, r = 1.5) {
@@ -62,7 +73,7 @@
   }
   function hazard(c, item, x, base, district, run) {
     if (item.type === "gap" || district === "park") return false;
-    const high = item.type === "high", image = high ? art.overhead : art.cabinet;
+    const high = item.type === "high", kind = variant(item), image = art[kind];
     if (!loaded(image)) return false;
     const w = item.w, h = high ? 85 : item.h, top = high ? base - 181 : base - h;
     c.save();
@@ -73,51 +84,54 @@
         // Its slim support posts sit behind the playable clearance.
         for (const rail of [x + 4, x + w - 4]) {
           const ground = run?.floorAt(rail) ?? item.guidance.base;
-          line(c, rail, anchor - 46, rail, ground, "#102a3b", 5);
-          line(c, rail - .6, anchor - 44, rail - .6, ground - 2, "#b8d8d4", 1);
+          line(c, rail, anchor - 60, rail, ground, "#102a3b", 5);
+          line(c, rail - .6, anchor - 58, rail - .6, ground - 2, "#b8d8d4", 1);
           box(c, rail - 6, ground - 3, 12, 3, "#33474b", 1);
-          box(c, rail - 4, anchor - 49, 8, 5, "#dfb866", 1.5);
+          box(c, rail - 4, anchor - 63, 8, 5, "#dfb866", 1.5);
         }
-        box(c, x, anchor - 49, w, 5, "#203b4b", 2);
-        line(c, x + 4, anchor - 49, x + w - 4, anchor - 49, "#dfb866", 1);
+        box(c, x, anchor - 63, w, 5, "#203b4b", 2);
+        line(c, x + 4, anchor - 63, x + w - 4, anchor - 63, "#dfb866", 1);
       }
-      for (const hook of [x + w * .163, x + w * .842]) {
-        const anchor = item.guidance ? item.guidance.base - 230 : top - 42;
+      for (const hook of (item.guidance ? [.235,.74] : [.14,.86]).map(p=>x+w*p)) {
+        const anchor = item.guidance ? item.guidance.base - 244 : top - 42;
         line(c, hook, anchor, hook, top - h * .07, "#263a3c", 2.6);
         line(c, hook - .5, anchor, hook - .5, top - h * .07, "#b7b39a", .7);
       }
     }
-    // Original compact construction silhouette; no decorative gold frame.
-    // The image occupies exactly the original solid obstacle rectangle.
-    if (high) {
-      // The suspension eyes are decoration above the solid collision box.
-      // Keep the actual board face aligned to that box, as in the old renderer.
-      const eyeHeight = 40, faceHeight = image.naturalHeight - eyeHeight;
-      const eyeDisplay = h * eyeHeight / faceHeight;
-      c.drawImage(image, 0, 0, image.naturalWidth, eyeHeight, x, top - eyeDisplay, w, eyeDisplay);
-      c.drawImage(image, 0, eyeHeight, image.naturalWidth, faceHeight, x, top, w, h);
-    } else c.drawImage(image, x, top, w, h);
-    const label = item.label || (high ? "MARKET RISK" : "DELIVERY");
-    if (high) {
-      // Typography remains live and sharp instead of being baked into an atlas.
-      const pw = w * .82, ph = 18, px = x + w / 2, py = top + h * .20;
-      box(c, px - pw / 2, py - ph / 2, pw, ph, "#302c32", 1.5);
-      text(c, label, px, py + .2, 9.3, pw - 7, "#fff0d1");
-      if (item.guidance) {
-        box(c, x + w / 2 - 13, top + h * .46, 26, 21, "#102e3f", 5);
-        arrow(c, x + w / 2 - 5, top + h * .46 + 10.5, -2, "#c8e6d0", 4.5);
-        arrow(c, x + w / 2 + 5, top + h * .46 + 10.5, 2, "#c8e6d0", 4.5);
+    if (kind === "feeDrag") {
+      // Lightweight paper trails behind the solid case. No collidable strings.
+      c.save(); c.globalAlpha *= .65;
+      for (let i = 2; i >= 0; i--) {
+        const px = x + w - 3 + i * 6, py = base - 11 - i * 2;
+        box(c, px, py, 8, 10, "#e5d6ad", 1);
+        for (let row = 0; row < 3; row++) line(c, px + 2, py + 3 + row * 2, px + 6, py + 3 + row * 2, "#8f8468", .6);
       }
-      for (const dx of [-10, 0, 10]) {
-        line(c, x + w / 2 + dx - 2.5, top + h - 11, x + w / 2 + dx, top + h - 8.5, "#f3d5a2", 1);
-        line(c, x + w / 2 + dx, top + h - 8.5, x + w / 2 + dx + 2.5, top + h - 11, "#f3d5a2", 1);
-      }
-    } else if (w >= 50) {
-      const pw = w * .75, py = top + h * .42;
-      box(c, x + (w - pw) / 2, py - 6, pw, 12, "#263739ee", 1);
-      text(c, label, x + w / 2, py, 7.2, pw - 4, "#f7e4b7", 600);
+      c.restore();
     }
+    const cap = bodyTop[kind], face = image.naturalHeight - cap, decorationHeight = h * cap / face;
+    c.drawImage(image, 0, 0, image.naturalWidth, cap, x, top - decorationHeight, w, decorationHeight);
+    c.drawImage(image, 0, cap, image.naturalWidth, face, x, top, w, h);
+    // Quiet typography reinforces the joke; the silhouette carries the action.
+    if (kind === "guidance") {
+      text(c, "MOVING GUIDANCE", x + w * .48, top + h * .125, 7.2, w * .43, "#fff0c6");
+      arrow(c, x + w - 7, top + h * .48, -2, "#fff0c6", 3.3);
+      arrow(c, x + w - 7, top + h * .68, 2, "#fff0c6", 3.3);
+    } else if (kind === "redTape") {
+      box(c, x + w * .10, top + h * .70, w * .37, 12, "#172c40e8", 2);
+      text(c, "RED TAPE", x + w * .285, top + h * .70 + 6, 7, w * .33, "#f5dba9");
+    } else if (kind === "finePrint") {
+      text(c, "FINE", x + w * .18, top + h * .41, 5.2, w * .145, "#f6dfa9");
+      text(c, "PRINT", x + w * .18, top + h * .55, 5.2, w * .145, "#f6dfa9");
+    } else text(c, "FEE DRAG", x + w * .51, top + h * .72, 6.5, w * .35, "#4a351f");
+    // Mark the actual edge to clear, rather than the decorative bow or handle.
+    line(c, x + 3, high ? top + h - 1 : top + 1, x + w - 3, high ? top + h - 1 : top + 1, high ? "#f5d5a8" : "#f5e3b8", 1);
     c.restore(); return true;
+  }
+  function benchmark(c, x, y, w, h) {
+    const pw = Math.min(28, w * .31), ph = Math.max(5, h * .105), px = x + w * .53, py = y + h * .22;
+    box(c, px - pw / 2, py - ph / 2, pw, ph, "#2a3027", 1);
+    box(c, px - pw / 2 + .6, py - ph / 2 + .6, pw - 1.2, ph - 1.2, "#c1a668", .7);
+    text(c, "BENCHMARK", px, py, 4.2, pw - 3, "#283d35", 700);
   }
   function sign(c, item, run, floor, angle) {
     const park = run.districtId === "park", fork = item.role === "fork" || item.route === "fork";
@@ -162,5 +176,5 @@
     c.restore(); return true;
   }
   window.LR_PROPS = {images: Object.values(art), get ready() {return Object.values(art).every(loaded);},
-    pickup, hazard, sign, spring, version: 18};
+    pickup, hazard, sign, spring, benchmark, variant, registration: bodyTop, version: 113};
 })();

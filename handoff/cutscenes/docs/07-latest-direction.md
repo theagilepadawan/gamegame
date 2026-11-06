@@ -1,10 +1,22 @@
 # Latest user direction
 
-## Current authority: version 1.11
+## Current authority: version 1.13
 
-The user rejected v1.10's lag, traffic direction and reinterpreted city layers. The current build restores the **actual v1.6.0 Downtown and Midtown renderer, composition, parallax, camera and curbs**, with only six native venue-detail patches inside the original architecture. Added traffic and replacement panoramas are removed. Full 505 blue glass and the office host remain. Central Park keeps its original painting, with deliberate seating groves and grounded bench footings. Two late Midtown overheads gently rise and fall; current Endless generation and chapter-map miniatures remain.
+Downtown keeps the accepted v1.12 warm street restoration. Midtown now also
+uses the original complete warm skyline, Bryant Park/library and Fifth Avenue
+paintings, recovered from their lossless masters. A matching ordinary restaurant
+block spaces the current Joju and Omar's fronts. Gussy's sits on the painted
+curb; 505 keeps its complete electric-blue/cyan glass and host. The city has a
+single slow horizontal camera and never rises with jumps or flight. Current
+native venue detail remains; the rejected river/cutout composition is absent.
 
-Use `game/docs/verification.md`, `game/scripts/scenery.js`, `game/scripts/venue-details.js` and the current native location index. The broader cartoon finance-prop pass is a separate proposal in `game/docs/finance-props-direction.md`; it has not been implemented as new finished art. Earlier directions below explain history and do not override this restoration.
+The small finance-prop pass is implemented: Fine Print, Fee Drag, Red Tape,
+Moving Guidance and a Benchmark plaque on the original Park bench. Existing
+collisions, the two slow moving boards, gameplay, runners, Endless, map and audio
+remain. Use `game/docs/verification.md`, `game/docs/scenery.md` and
+`game/docs/finance-props-direction.md` for exact scope. Test completion is not
+user visual acceptance. Do not return to the incorrectly inferred `a551054`
+version association.
 
 ## Historical direction
 
@@ -29,10 +41,10 @@ Keep this transition compatible with the existing next-chapter action, history r
 
 The user wants the warmth and movement of their earlier supplied city backdrop, retaining current gameplay and detailed Easter eggs. A prior agent incorrectly associated the user's “1.6.0” label with repository commit `a551054`; that identity was not established, and its broad Downtown river/cutout composition was explicitly rejected.
 
-Version 1.12 corrects Downtown only using the actual earlier supplied HTML (SHA-256 `9fd060927fc13512f82b18c86e9edc8cf19de59357f5874169d9e8644b263488`). Complete warm street paintings carry the skyline, façades, lamps and pavement together. Original slow scrolling/intro hold are preserved. Only inappropriate skyline towers were locally corrected. Detailed Kabin and LEI fronts sit in separate later street paintings with original foreground lamps restored in front. There is no global Downtown river layer or detached building composition. Water is confined to the original painted waterfront views behind the promenade.
+Version 1.12 corrected Downtown using the actual earlier supplied HTML (SHA-256 `9fd060927fc13512f82b18c86e9edc8cf19de59357f5874169d9e8644b263488`). Complete warm street paintings carry the skyline, façades, lamps and pavement together. Original slow scrolling/intro hold are preserved. Only inappropriate skyline towers were locally corrected. Detailed Kabin and LEI fronts sit in separate later street paintings with original foreground lamps restored in front. There is no global Downtown river layer or detached building composition. Water is confined to the original painted waterfront views behind the promenade.
 
-Midtown/Park retain the current implementation. Keep the full blue/cyan 505 glass, revolving doors and host anchor. Current native venue files remain intact. Do not import an earlier gameplay build or regroup Easter eggs. Endless continues through anonymous street paintings without repeating WTC, the bridge or named fronts.
+Version 1.13 extends the same complete-painting approach to Midtown. Park retains its original scenery. Keep the full blue/cyan 505 glass, revolving doors and host anchor. Current native venue files remain intact. Do not import an earlier gameplay build or regroup Easter eggs. Endless continues through anonymous street paintings without repeating WTC, the bridge or named fronts.
 
 The chapter map now uses miniature Nicolai and Trond cropped from the approved playable atlases. They run briefly between course markers and then settle into a still pose; reduced motion uses a static change. This does not change the character art direction. Endless has a new seeded route director, continuous terrain and progressive combinations. These are gameplay changes, not newly commissioned cutscene beats.
 
-Use `references/locations/INDEX.md` and `location-manifest.json` to open the exact native source files in `game/assets/`; large city artwork is stored once, without downsampling. Current runtime manifests and gameplay captures define final composition. `assets/props-v18/`, Central Park, existing runner sheets, audio and game systems remain. Previous scenery versions are historical references, not current production authority. Test completion and user acceptance must be stated separately.
+Use `references/locations/INDEX.md` and `location-manifest.json` to open the exact native source files in `game/assets/`; large city artwork is stored once, without downsampling. Current runtime manifests and gameplay captures define final composition. The four pickups in `assets/props-v18/`, Central Park, existing runner sheets, audio and game systems remain. New obstacle sources are in `assets/props-v113/`. Previous scenery versions are historical references, not current production authority. Test completion and user acceptance must be stated separately.

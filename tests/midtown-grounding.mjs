@@ -6,17 +6,17 @@ import {pathToFileURL} from 'node:url';
 const moduleName = process.env.PLAYWRIGHT_MODULE || 'playwright';
 const {chromium} = await import(moduleName.startsWith('/') ? pathToFileURL(moduleName).href : moduleName);
 const url = new URL(process.env.TEST_URL || 'http://127.0.0.1:4181/'); url.searchParams.set('unlock', 'all');
-const output = process.env.GROUNDING_OUTPUT || new URL('../review/midtown-v16-qa/after/', import.meta.url).pathname;
+const output = process.env.GROUNDING_OUTPUT || new URL('../review/v113-qa/motion/', import.meta.url).pathname;
 await mkdir(output, {recursive: true});
 const browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', headless: true,
   args: ['--no-sandbox', '--disable-dev-shm-usage', '--enable-unsafe-swiftshader']});
 assert.ok(!process.env.GROUNDING_VIEW || ['desktop', 'mobile-dpr2', 'canvas'].includes(process.env.GROUNDING_VIEW), 'Known grounding viewport');
 assert.ok(!process.env.GROUNDING_CASE || ['landmark', 'double', 'triple', 'office', 'flight'].includes(process.env.GROUNDING_CASE), 'Known grounding case');
 const report = {url: url.href, selection: {view: process.env.GROUNDING_VIEW || null, case: process.env.GROUNDING_CASE || null}, motion: [], screenshots: [], visualReviewRequired: [
-  'No still reflective water band appears between the city curb and the moving playable street.',
+  'Original warm city paintings have no added water or separate skyline layer.',
   'The street foundation reads as dry masonry/subgrade at jump apex, slope, descent and landing.',
   'The full Empire State silhouette reads as a unique landmark above ordinary offices.',
-  '505 blue glass, host feet and all venue artwork follow one shared near-scene camera projection.'
+  '505 glass and host stay anchored to the painted pavement throughout jumps.'
 ]};
 async function open(name, viewport, fallback, dpr) {
   const context = await browser.newContext({viewport, deviceScaleFactor: dpr, reducedMotion: 'no-preference'});
@@ -93,23 +93,8 @@ async function snapshot(test, label) {
       const c = tc.getImageData(x, y, 1, 1).data;
       blueExcess += c[2] - c[0]; transparentMaterial += c[3] !== 255 ? 1 : 0; materialSamples++;
     }
-    const near = projected.layers.filter(p => p.kind === 'architecture' || p.kind === 'tree' || p.kind === 'landmark').map(p => {
-      const original = base.layers.find(old => old.id === p.id);
-      return {id: p.id, dy: p.y - original.y};
-    });
-    const landmark = projected.landmark;
-    const crownOcclusions = [];
-    if (landmark) for (const [name, tip] of [['Empire State', landmark.empireTip], ['Chrysler', landmark.chryslerTip]]) {
-      for (const panel of projected.layers.filter(p => p.kind === 'architecture' || p.kind === 'tree')) {
-        const image = LR_SCENERY.source('midtown', panel);
-        const sample = document.createElement('canvas'); sample.width = image.width || image.naturalWidth; sample.height = image.height || image.naturalHeight;
-        const pc = sample.getContext('2d', {willReadFrequently: true}); pc.drawImage(image, 0, 0);
-        for (const dy of [10, 35, 75]) {
-          const x = (tip[0] - panel.x) / panel.width * sample.width, y = (tip[1] + dy - panel.y) / panel.height * sample.height;
-          if (x >= 0 && y >= 0 && x < sample.width && y < sample.height && pc.getImageData(Math.floor(x), Math.floor(y), 1, 1).data[3] > 224) crownOcclusions.push({name, panel: panel.id, dy});
-        }
-      }
-    }
+    const near = projected.layers.map(p => ({id:p.id, dy:p.y-base.layers.find(old=>old.segment===p.segment).y, y:p.y, kind:p.kind}));
+    const landmark = null, crownOcclusions = [];
     const actualTiles = fallback ? [] : projected.layers.map((p, i) => ({id: p.id, expectedY: p.y, actualY: $A.tiles[i]?.group.y}));
     return {frame: qaFrame, time: q.time, distance: q.distance, renderDistance, y: q.y, camera: Kt, floor: q.floorY,
       screenGround: q.floorY + Kt, expectedOffset: q.floorY + Kt - T, grounded: q.grounded, jumpCount: q.jumpCount,
@@ -119,22 +104,15 @@ async function snapshot(test, label) {
       water: longRun.environment.active.water, error: longRun.environment.error};
   }, test.fallback);
   assert.equal(state.renderer, test.fallback ? 'district-canvas' : 'pixi-webgl');
-  assert.ok(Math.abs(state.view.streetOffset - state.expectedOffset) < 1e-6, `${label}: street follows screen-ground camera lift, not raw hill compensation`);
-  for (const panel of state.near) assert.ok(Math.abs(panel.dy - state.expectedOffset) < 1e-6, `${label}: ${panel.id} follows the near camera exactly once`);
+  assert.deepEqual(state.view, {streetOffset:0,skylineOffset:0}, `${label}: jumping never lifts the painted city`);
+  for (const panel of state.near) {assert.equal(panel.dy,0,`${label}: painting ignores the jump camera`);assert.equal(panel.y,-8);assert.equal(panel.kind,'painting');}
   for (const tile of state.actualTiles) assert.ok(Math.abs(tile.actualY - tile.expectedY) < 1e-6, `${label}: actual Pixi tile ${tile.id} consumes projected position`);
   for (let i = 0; i < state.baseVenues.length; i++) {
     const a = state.baseVenues[i], z = state.renderedVenues[i];
     assert.equal(a.x, z.x); assert.equal(a.width, z.width); assert.equal(a.segment, z.segment);
-    for (let j = 0; j < a.quad.length; j++) assert.ok(Math.abs(z.quad[j][1] - a.quad[j][1] - state.expectedOffset) < 1e-6, `${label}: ${a.key} glazing follows its building`);
+    for (let j = 0; j < a.quad.length; j++) assert.ok(Math.abs(z.quad[j][1] - a.quad[j][1]) < 1e-6, `${label}: ${a.key} glazing stays on the original painted building`);
   }
-  if (state.renderedHost.visible) assert.ok(Math.abs(state.renderedHost.y - state.baseHost.y - state.expectedOffset) < 1e-6, `${label}: host feet share the projected office anchor`);
-  if (label === 'landmark-vista') {
-    assert.ok(state.landmark && state.landmark.width > state.H * 1.5, 'Landmarks occupy a wide native panorama, not a portrait block');
-    for (const [name, tip] of [['Empire State', state.landmark.empireTip], ['Chrysler', state.landmark.chryslerTip]]) {
-      assert.ok(tip[0] > 35 && tip[0] < state.W - 35 && tip[1] > 55 && tip[1] < state.H * .6, `${name}: complete crown is inside the readable vista`);
-    }
-    assert.deepEqual(state.crownOcclusions, [], 'Foreground office blocks do not obscure the landmark crowns at their main reveal');
-  }
+  if (state.renderedHost.visible) assert.ok(Math.abs(state.renderedHost.y - state.baseHost.y) < 1e-6, `${label}: host feet share the projected office anchor`);
   assert.equal(state.uncovered, 0, `${label}: city ground covers every sampled lower-viewport pixel during camera motion`);
   assert.equal(state.transparentMaterial, 0, `${label}: physical street foundation remains opaque`);
   assert.ok(state.materialSamples > 4, `${label}: actual visible foundation was sampled`);
@@ -184,17 +162,17 @@ try {
     if (process.env.GROUNDING_VIEW && process.env.GROUNDING_VIEW !== name) continue;
     const test = await open(name, viewport, fallback, dpr);
     const selected = process.env.GROUNDING_CASE;
-    if (!selected || selected === 'landmark') {await seek(test.page, 12); await snapshot(test, 'landmark-vista');}
+    if (!selected || selected === 'landmark') {await seek(test.page, 3); await snapshot(test, 'landmark-vista');}
     if (!selected || selected === 'double') await doubleJump(test, 9, 'slope-jump');
     if (!selected || selected === 'triple') await tripleJump(test);
-    if (!selected || selected === 'office') await doubleJump(test, 54, 'office-jump');
+    if (!selected || selected === 'office') await doubleJump(test, 58, 'office-jump');
     if (!selected || selected === 'flight') {
       await seek(test.page, 18); await advance(test.page, 65, 'flight'); await snapshot(test, 'jetpack-rise');
       await advance(test.page, 60, 'coast'); await snapshot(test, 'jetpack-coast');
     }
     assert.deepEqual(test.errors, []); assert.deepEqual(test.failed, []);
     await test.context.close();
-    console.log(`PASS Midtown grounding ${name}${selected ? ' / ' + selected : ''}: ${selected ? 'selected capture checks' : 'landmark vista, real double/triple jumps and jetpack'}, projected architecture/venues/host, opaque dry ground, renderer composition.`);
+    console.log(`PASS Midtown grounding ${name}${selected ? ' / ' + selected : ''}: ${selected ? 'selected capture checks' : 'landmark vista, real double/triple jumps and jetpack'}, fixed paintings/venues/host during camera motion, opaque dry ground, renderer composition.`);
   }
   await writeFile(`${output}/report.json`, JSON.stringify(report, null, 2));
 } finally {await browser.close();}

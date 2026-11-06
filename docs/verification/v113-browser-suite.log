@@ -1,0 +1,56 @@
+
+> nbim-the-long-run@1.13.0 test
+> node tests/browser.mjs
+
+Testing http://127.0.0.1:4181/release/The-Long-Run-NBIM.html
+[modes] loading
+[modes] home ready
+[modes] finishing loss
+[modes] finishing chapter
+[modes] history reveal active
+[modes] finishing chapter
+[modes] gamepad next chapter
+[modes] finishing chapter
+[modes] finishing loss
+[modes] finishing loss
+PASS: Story/Endless UI, stable Story courses, preserved Endless seed, history reveal, keyboard/gamepad chapter defaults, final unlock, retries and new worlds.
+PASS Fresh-profile locks preserve the selected playable chapter and explain the next unlock
+PASS Arrow, Home, Enter and Space operate the chapter menu without starting a run
+PASS Story shows the chapter map; only Endless shows enabled world controls
+PASS Real touch swipe selects the final unlocked card without accidentally starting
+PASS Small layout keeps the CTA reachable, moves the player pin, and never previews chapter scenery
+PASS Controller horizontal input navigates the map and A starts the selected chapter
+PASS No browser exceptions
+{
+  "passed": 7,
+  "url": "http://127.0.0.1:4181/release/The-Long-Run-NBIM.html",
+  "checks": [
+    "Fresh-profile locks preserve the selected playable chapter and explain the next unlock",
+    "Arrow, Home, Enter and Space operate the chapter menu without starting a run",
+    "Story shows the chapter map; only Endless shows enabled world controls",
+    "Real touch swipe selects the final unlocked card without accidentally starting",
+    "Small layout keeps the CTA reachable, moves the player pin, and never previews chapter scenery",
+    "Controller horizontal input navigates the map and A starts the selected chapter",
+    "No browser exceptions"
+  ]
+}
+PASS Downtown: 264 reference camera/layout comparisons; unchanged native street paintings outside detailed shops; opaque coverage; separated late Easter eggs.
+PASS Downtown rendering: 18 actual gameplay states, desktop/phone DPR2/Canvas, both runners, real double-jump and jetpack.
+PASS warm Midtown: 2376 fixed-camera layouts, opaque seams, late/spaced venues, full 505, original lossless paintings and unchanged curb/physics.
+Artifact: 48789803 bytes; SHA-256 577ffc8b70e4a0dce1db8aea91cff9f7ff218552ea446035301bc0afd0b6abf3; 63 unique embedded data assets.
+PASS Midtown grounding desktop: landmark vista, real double/triple jumps and jetpack, fixed paintings/venues/host during camera motion, opaque dry ground, renderer composition.
+PASS Midtown grounding mobile-dpr2: landmark vista, real double/triple jumps and jetpack, fixed paintings/venues/host during camera motion, opaque dry ground, renderer composition.
+PASS Midtown grounding canvas: landmark vista, real double/triple jumps and jetpack, fixed paintings/venues/host during camera motion, opaque dry ground, renderer composition.
+PASS office host desktop: late chapter, grounded scale, stable head/feet, once-only wrist greeting, reduced motion and pause.
+PASS office host mobile-dpr2: late chapter, grounded scale, stable head/feet, once-only wrist greeting, reduced motion and pause.
+PASS office host canvas: late chapter, grounded scale, stable head/feet, once-only wrist greeting, reduced motion and pause.
+PASS: painted prop readiness, real collision/jump/slide and reward events, spring launch, original Park geometry plus Benchmark plaque, reduced/normal motion and DPR2 gameplay captures.
+PASS 144 real collision-enabled moving-guidance slide traversals across both runners, seeds and all twelve phases; Park grove clearance.
+PASS water pixi: 27742 changed rendered lake pixels, stable bank, frozen pause and reduced motion.
+PASS: real bank contact, continuous voids, adjacent-hole support, joined-hole physics, and jump/landing on four seeded slopes.
+PASS: full-depth gap captures on desktop/mobile and Canvas fallback, with no browser exceptions.
+PASS desktop identity, native run frames, route travel, return facing, stable idle, live reduced motion and mode return
+PASS both miniatures and all destinations fit the compact touch layout
+PASS locked runner previews and locked chapters preserve the playable map marker
+PASS: 40 baseline assets unchanged; release fonts, scripts, native city art, map runners and audio load without external requests; course/character switching and Contrarian remain playable offline.
+All release browser checks passed.

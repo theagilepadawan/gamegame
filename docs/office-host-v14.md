@@ -39,11 +39,11 @@ The cutscene handoff includes this final PNG at `references/office-host/host-nat
 `scripts/midtown-storefronts.js` owns the office anchor, exposed through
 `LR_SHOPS.inspect(...).items.find(item => item.key === 'fifth').host`.
 
-- Native office-art feet anchor: **[782, 1265]**.
-- Character height in office-art coordinates: **190 px**.
-- Office crop top: **128 px**.
-- At a 540 px game height, the host is approximately **73.9 px** tall and her
-  feet are at **434.1 px**, next to the right revolving door.
+- Version 1.13 native painting feet anchor: **[657, 711]** in the 1672×941 Fifth Avenue source.
+- Character height in painting coordinates: **70 px**, half the full 505 entrance height.
+- No vertical crop or jump-camera offset is applied.
+- At a 540 px game height, the host is approximately **41.4 px** tall and her
+  feet are at **412.1 px**, on the painted pavement beside the right door.
 
 Her placement uses the same scenery camera as the office. Both revolving doors
 and the 505 transom remain readable. The foreground hill can briefly obscure
@@ -76,4 +76,4 @@ fully visible planted figure before the finish, checks architectural scale,
 and exercises desktop Pixi, DPR2 phone landscape and Canvas fallback. Pixel
 hash comparisons verify that the head/body and shoes do not move when the
 wrist moves, the gesture settles, and reduced motion holds the original pose.
-Evidence is written to `review/office-host-v14/`.
+Current release evidence is written to `review/v113-qa/office/`.

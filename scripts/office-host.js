@@ -1,5 +1,5 @@
 /* A quiet welcome at 505. The host belongs to the office's painted pavement;
-   both renderers share its scale and projected street offset during jumps. */
+   both renderers share its fixed architectural anchor during jumps. */
 (function () {
   "use strict";
   var image = new Image();
@@ -38,7 +38,6 @@
     ctx.lineTo(780, 406); ctx.lineTo(740, 411); ctx.lineTo(706, 374); ctx.closePath();
   }
   function portrait(ctx, angle) {
-    if (Math.abs(angle) < .0001) { ctx.drawImage(image, 0, 0); return; }
     // Move only the palm about its wrist. The cuff overlaps the seam; using
     // the same native pixels avoids a mismatched sleeve or face between poses.
     ctx.save();

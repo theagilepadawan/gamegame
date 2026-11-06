@@ -33,11 +33,13 @@ Start with `references/locations/INDEX.md`. It links directly to the exact nativ
 | Approved Central Park Ramble | `game/assets/scenery/park-1.webp` |
 | Approved Central Park Bethesda | `game/assets/scenery/park-2.webp` |
 | Downtown complete warm streets | `game/assets/downtown-v112/lower-manhattan.webp` and `game/assets/scenery/opening-*.webp`, composed by `downtown-scenery.js` |
-| Midtown architecture | `game/assets/art-v2/midtown-*.webp`, `game/assets/midtown-v15/` and `game/assets/midtown-v16/` |
-| Unique Midtown skyline | `game/assets/midtown-v16/landmark-panorama.webp` and `dry-city-atmosphere.webp` |
+| Midtown architecture | `game/assets/midtown-v113/`, composed by `midtown-painted.js` |
+| Unique Midtown skyline | `game/assets/midtown-v113/skyline.webp` — complete original golden painting |
 | Midtown stone foundation | `game/assets/midtown-v16/stone-foundation.webp` |
 | Current Kabin, LEI, JOJU, Omar's, Gussy's and 505 details | `game/assets/venue-details-v111/`, with native source bounds and hashes in its manifest |
 
-`game/scripts/downtown-scenery.js` restores the actual supplied complete paintings and original camera layout. `scenery.js` preserves current Midtown and delegates Downtown/Park. `venue-details.js` paints the six current native venue crops once inside their façades. Downtown restores the original foreground lamps over the shop details. No independent venue camera or street island is added. The rejected global Downtown river and cutout buildings are absent.
+`game/scripts/downtown-scenery.js` restores the actual supplied complete paintings and original camera layout. `midtown-painted.js` restores the complete warm Midtown paintings, and `scenery.js` delegates all three districts. `venue-details.js` paints the six current native venue crops once inside their façades. Downtown restores the original foreground lamps over the shop details. No independent venue camera or street island is added. The rejected global Downtown river and cutout buildings are absent.
 
-Downtown native sources are 1536×1024. Midtown architecture retains its existing native source sizes; the index records exact dimensions. Storefront crops retain their native pixels. Current gameplay captures define final placement and composition.
+Downtown native sources are 1536×1024. Midtown source paintings are 1672×941, recovered from lossless masters; cached composites are 2090×1176 for sharper venue detail. Storefront crops retain their native pixels. Current gameplay captures define final placement and composition.
+
+Finance obstacle sources are in `game/assets/props-v113/`, including the native transparent atlas and exact crop/body registration manifest. The four existing pickups remain in `props-v18/`.

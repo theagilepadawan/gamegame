@@ -36,9 +36,9 @@ try{
     });
   }
   console.log(`Testing ${env.TEST_URL}`);
-  // Downtown follows the actual uploaded paintings. Midtown retains its current
-  // composition; verify both against independent snapshots.
-  const selected = (env.BROWSER_TESTS || 'modes,menu,downtown-reference,downtown-rendering,city-regressions,midtown-grounding,office-host,props,water,gaps,map-avatars,standalone').split(',');
+  // Both cities use complete warm paintings; protect fixed background motion,
+  // native venue detail and actual jump/slide collision behavior.
+  const selected = (env.BROWSER_TESTS || 'modes,menu,downtown-reference,downtown-rendering,city-regressions,midtown-grounding,office-host,props,guidance-obstacles,water,gaps,map-avatars,standalone').split(',');
   for(const test of selected) await run(`tests/${test}.mjs`);
   console.log('All release browser checks passed.');
 }finally{

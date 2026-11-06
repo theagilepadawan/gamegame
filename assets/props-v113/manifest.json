@@ -1,0 +1,72 @@
+{
+  "version": "1.13",
+  "source": "atlas-native.png",
+  "sourceSha256": "53dc1dde68dc2029d2dc423dcb4fa0dcf816ba592a53f98cee8f786c8963e062",
+  "sourceSize": [
+    1536,
+    1024
+  ],
+  "processing": "Native sprite extraction and lossless WebP encoding only; no scaling, recoloring or repainting. The bodyTop registration excludes decorative handles, bow, bookmark and suspension eyes from the solid obstacle face.",
+  "assets": {
+    "fine-print": {
+      "file": "fine-print.webp",
+      "crop": [
+        21,
+        0,
+        746,
+        498
+      ],
+      "nativeSize": [
+        725,
+        498
+      ],
+      "bodyTop": 92,
+      "sha256": "b595c4ee9b0ed09f3819fd200f169247d2e2103cfa7d8dcc573e56a1f374bc6c"
+    },
+    "fee-drag": {
+      "file": "fee-drag.webp",
+      "crop": [
+        817,
+        0,
+        1492,
+        492
+      ],
+      "nativeSize": [
+        675,
+        492
+      ],
+      "bodyTop": 95,
+      "sha256": "b1b6de91faeb986ed6ef9a8d3352fce316fb456cd087c5e5e0c9df63d5da1d23"
+    },
+    "red-tape": {
+      "file": "red-tape.webp",
+      "crop": [
+        15,
+        512,
+        753,
+        1005
+      ],
+      "nativeSize": [
+        738,
+        493
+      ],
+      "bodyTop": 130,
+      "sha256": "076f2790360105be9618ced8a2dcceda18795292c43f41f4334c39c509443efd"
+    },
+    "moving-guidance": {
+      "file": "moving-guidance.webp",
+      "crop": [
+        801,
+        521,
+        1486,
+        1009
+      ],
+      "nativeSize": [
+        685,
+        488
+      ],
+      "bodyTop": 73,
+      "sha256": "48b94e4325c2aeb9cbc135fcd5363ab6d2663370be6dd05dcc45416a4880a68b"
+    }
+  }
+}

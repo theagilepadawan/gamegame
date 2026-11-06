@@ -1,0 +1,50 @@
+[
+  {
+    "name": "skyline",
+    "source": "/workspace/gamegame/art/districts/midtown-original.png",
+    "nativeSize": [
+      1672,
+      941
+    ],
+    "path": "assets/midtown-v113/skyline.webp",
+    "sourceSHA256": "b5a20c2dabd0cf10472ec31fbcb96de5a7aaa85bc2480045c7dd31ac8e0cf102",
+    "sha256": "6a4384b69c3aa72d9e191653b73f8c6cec7ee0e1ec54cfc71baf8fa52168390a",
+    "processing": "Lossless WebP encoding only. Existing master composition preserved; restaurant-street is a new matching ordinary block."
+  },
+  {
+    "name": "restaurant-street",
+    "source": "/workspace/generated_images/exec-5e710555-6052-4c17-bd65-f52dc4f29975.png",
+    "nativeSize": [
+      1672,
+      941
+    ],
+    "path": "assets/midtown-v113/restaurant-street.webp",
+    "sourceSHA256": "539dfd75838e373a0e645c6d28ab3de2dfda3e9a6f35cdb3883c68803d467142",
+    "sha256": "d5c252689daa4964271bf0982f27d951a48e956f60291ef88dbff10c840a3a5b",
+    "processing": "Lossless WebP encoding only. Existing master composition preserved; restaurant-street is a new matching ordinary block."
+  },
+  {
+    "name": "bryant-park",
+    "source": "art/scenery/midtown/bryant-park-generated.png",
+    "nativeSize": [
+      1672,
+      941
+    ],
+    "path": "assets/midtown-v113/bryant-park.webp",
+    "sourceSHA256": "cfa6382aab37fac48fd5c6937ddc4763aaa69741f36f65119f0cf739ba1eb705",
+    "sha256": "753defd0f7c67ef7203d3add5aaf4961e15db81da0a283d3aa4abd1f2cff9744",
+    "processing": "Lossless WebP encoding only. Existing master composition preserved; restaurant-street is a new matching ordinary block."
+  },
+  {
+    "name": "fifth-avenue",
+    "source": "art/scenery/midtown/fifth-avenue-generated.png",
+    "nativeSize": [
+      1672,
+      941
+    ],
+    "path": "assets/midtown-v113/fifth-avenue.webp",
+    "sourceSHA256": "933f4fc628d27afc5386ce439bf0d4dd52d41e68ec16ad832edf13d646f2af78",
+    "sha256": "9992392426f6cc8ee4da316bb51c87cb459daec5569911d6e02daec4d677b0e7",
+    "processing": "Lossless WebP encoding only. Existing master composition preserved; restaurant-street is a new matching ordinary block."
+  }
+]

@@ -287,15 +287,19 @@ location_labels = {
     'midtown-08.webp': "Midtown — Omar's",
     'midtown-11.webp': "Midtown — Uncle Gussy's",
     'midtown-14.webp': 'Midtown — complete 505 Fifth glass entrance',
-    'dry-city-atmosphere.webp': 'Midtown — restored v1.6 dry skyline atmosphere',
+    'skyline.webp': 'Midtown — original golden skyline, lossless master',
+    'restaurant-street.webp': 'Midtown — warm ordinary restaurant street',
+    'bryant-park.webp': 'Midtown — original Bryant Park and library, lossless master',
+    'fifth-avenue.webp': 'Midtown — original glass-office street, lossless master',
+    'dry-city-atmosphere.webp': 'Midtown — archived separate skyline atmosphere',
     'landmark-panorama.webp': 'Midtown — unique Empire State / Chrysler vista',
-    'glass-canyon.webp': 'Midtown — restored v1.6 glass-office frontage',
-    'library-frontage.webp': 'Midtown — restored v1.6 library frontage',
+    'glass-canyon.webp': 'Midtown — archived glass-office frontage',
+    'library-frontage.webp': 'Midtown — archived library frontage',
     'city-plane-tree.webp': 'Midtown — native street-tree transition',
-    'stone-foundation.webp': 'City terrain — native v1.6 stone foundation',
+    'stone-foundation.webp': 'City terrain — current native stone foundation',
 }
 for relative in sorted(runtime_used):
-    if relative.startswith(('assets/art-v2/', 'assets/midtown-v15/', 'assets/midtown-v16/', 'assets/venue-details-v111/', 'assets/downtown-v112/', 'assets/scenery/opening-')):
+    if relative.startswith(('assets/art-v2/', 'assets/midtown-v15/', 'assets/midtown-v16/', 'assets/venue-details-v111/', 'assets/downtown-v112/', 'assets/midtown-v113/', 'assets/scenery/opening-')):
         location_sources[relative] = location_labels.get(Path(relative).name, Path(relative).stem)
 assert any(path.startswith('assets/venue-details-v111/') for path in location_sources), 'Current venue detail art is not referenced by the runtime'
 locations = refs / 'locations'
@@ -305,7 +309,7 @@ location_index = [
     '# Native location references', '',
     'Open these exact files in the editable game tree. Each native image is stored once; no reduced substitute is used here.', '',
     'The runtime manifests and storefront metadata define course order, alignment and venue spacing. Gameplay captures show their final composition.', '',
-    'Downtown uses the complete warm paintings and camera from the actual supplied HTML; its former global river/cutout composition is removed. Midtown remains current. Six native venue-detail crops belong inside their street façades with no independent camera.', '',
+    'Downtown uses the complete warm paintings and camera from the actual supplied HTML; its former global river/cutout composition is removed. Midtown restores its original complete warm paintings with fixed vertical framing. Six native venue-detail crops belong inside their street façades with no independent camera.', '',
     '| Location | Native pixels | Source |', '|---|---:|---|',
 ]
 for relative, label in location_sources.items():
@@ -329,9 +333,10 @@ if host_master.exists():
 # All required files must exist; do not silently substitute a previous city view.
 captures = {
     'downtown-gameplay.png': 'release/Opening-v112-street.png',
-    'central-park-gameplay.png': 'release/Park-v111-seating.png',
-    'midtown-gameplay.png': 'release/Midtown-v111-detail.png',
-    'office-gameplay.png': 'release/Midtown-v111-office.png',
+    'central-park-gameplay.png': 'release/Park-v113-benchmark.png',
+    'midtown-gameplay.png': 'release/Midtown-v113-street.png',
+    'office-gameplay.png': 'release/Midtown-v113-office.png',
+    'finance-guidance-gameplay.png': 'release/Midtown-v113-guidance.png',
     'chapter-map-characters.png': 'release/Map-v111-characters.png',
 }
 for name, relative in captures.items():
@@ -363,7 +368,7 @@ metadata = {
     'runtimeAssetCount': len(runtime_used),
     'packagedAssetCountIncludingBaseline': len(used),
     'included': ['Current editable game source', 'Self-contained playable HTML', 'Native production sprites, detailed city tiles and current prop atlas',
-                 'Restored v1.6 Midtown vista sources, native stone material, chapter-map runner strips and authoring notes',
+                 'Restored warm Midtown lossless paintings, native finance-obstacle atlas, stone material, chapter-map runner strips and authoring notes',
                  'Location index linking to exact native game assets without duplicate city-art copies',
                  'Five game audio sources', 'Cutscene production brief, shot slate, prompts and integration notes'],
     'notIncluded': ['No generated cutscene videos', 'No Runway credentials or plugin installation',

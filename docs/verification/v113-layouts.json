@@ -1,0 +1,74 @@
+{
+  "reference": "Original warm Midtown lossless paintings / current six native venue crops",
+  "profiles": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "layouts": 792,
+      "coverageSamples": 26664,
+      "reveals": {
+        "joju": 13.016666666666893,
+        "omars": 24.516666666666556,
+        "gussy": 42.516666666665536,
+        "fifth": 55.016666666664825
+      },
+      "fullyVisible": {
+        "joju": 16.01666666666704,
+        "omars": 27.516666666666385,
+        "gussy": 45.76666666666535,
+        "fifth": 57.76666666666467
+      },
+      "assets": 19,
+      "decodedBytes": 85627976,
+      "retired": false
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "layouts": 792,
+      "coverageSamples": 26664,
+      "reveals": {
+        "joju": 13.016666666666893,
+        "omars": 24.516666666666556,
+        "gussy": 42.516666666665536,
+        "fifth": 55.016666666664825
+      },
+      "fullyVisible": {
+        "joju": 16.01666666666704,
+        "omars": 27.516666666666385,
+        "gussy": 45.76666666666535,
+        "fifth": 57.76666666666467
+      },
+      "assets": 19,
+      "decodedBytes": 85627976,
+      "retired": false
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "layouts": 792,
+      "coverageSamples": 26664,
+      "reveals": {
+        "joju": 22.51666666666667,
+        "omars": 31.516666666666158,
+        "gussy": 46.01666666666534,
+        "fifth": 56.01666666666477
+      },
+      "fullyVisible": {
+        "joju": 24.76666666666654,
+        "omars": 34.01666666666602,
+        "gussy": 48.516666666665195,
+        "fifth": 58.26666666666464
+      },
+      "assets": 19,
+      "decodedBytes": 85627976,
+      "retired": false
+    }
+  ]
+}

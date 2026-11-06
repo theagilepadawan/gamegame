@@ -1735,7 +1735,7 @@ var wo = class {
     s.lineTo(a + n + 7, o(a + n + 7) + 2.5);
     for (let x = a + n + 7; x >= a - 7; x -= 2) s.lineTo(x, o(x) + 2.5);
     s.closePath(); s.fillStyle = "#a69b7c"; s.fill(); s.restore();
-    return this.supportShadow(a, n, o, 5), s.save(), this.clipAboveGround(a - 2, n + 4, o), s.transform(1, I - Q * g / n, 0, 1, a, E - Q * l + 0.5), this.prop("bench", 0, 0, n, Q), s.restore(), true;
+    return this.supportShadow(a, n, o, 5), s.save(), this.clipAboveGround(a - 2, n + 4, o), s.transform(1, I - Q * g / n, 0, 1, a, E - Q * l + 0.5), this.prop("bench", 0, 0, n, Q), window.LR_PROPS?.benchmark(s, 0, 0, n, Q), s.restore(), true;
   }
   reframe(A) {
     for (let t of [this.splashes, this.ripples, this.flights]) for (let i of t) i.x += A;

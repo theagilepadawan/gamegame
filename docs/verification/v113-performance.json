@@ -1,0 +1,50 @@
+[
+  {
+    "version": "v1.12",
+    "district": "midtown",
+    "raster": {
+      "pixelRatio": 2.25,
+      "foreground": [
+        960,
+        540
+      ],
+      "background": [
+        960,
+        540
+      ]
+    },
+    "viewport": "960x540 DPR1",
+    "backend": "cloud Chromium software WebGL; synchronous GPU finish",
+    "assets": {
+      "count": 28,
+      "decodedBytes": 142243272
+    },
+    "frames": 240,
+    "median": 14.400000005960464,
+    "p95": 39.5
+  },
+  {
+    "version": "v1.13",
+    "district": "midtown",
+    "raster": {
+      "pixelRatio": 2.25,
+      "foreground": [
+        960,
+        540
+      ],
+      "background": [
+        960,
+        540
+      ]
+    },
+    "viewport": "960x540 DPR1",
+    "backend": "cloud Chromium software WebGL; synchronous GPU finish",
+    "assets": {
+      "count": 19,
+      "decodedBytes": 85627976
+    },
+    "frames": 240,
+    "median": 11.400000005960464,
+    "p95": 37.5
+  }
+]

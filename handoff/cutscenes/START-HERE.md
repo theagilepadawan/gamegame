@@ -17,7 +17,7 @@ Also read `docs/07-latest-direction.md`: the user's forthcoming intro reference 
 
 `game/` is the complete editable source snapshot. With Node.js 20 or newer, run `node serve.mjs` in that folder and open the printed URL, or run `node build.mjs` to create one standalone HTML. Neither command requires an npm install or network access. `npm ci` is needed only for the browser test dependency. The release snapshot and file hashes supplied with the ZIP are the source of truth for the packaged revision; do not resume development from an older chat artifact.
 
-If including the compiled HTML would push this handoff over 100 MiB, packaging omits that duplicate file while retaining every native asset, test, reference and source file. The source-only form includes build instructions, the expected standalone SHA-256 and a verified staged-source rebuild record. The separate `The-Long-Run-NBIM.zip` remains the direct ready-to-play download. Current city references are Downtown’s complete warm street paintings from the supplied HTML, unchanged current Midtown architecture and six detailed native venue fronts. They are not reduced to meet the archive limit. The separate cartoon finance-prop proposal is in game/docs/finance-props-direction.md.
+If including the compiled HTML would push this handoff over 100 MiB, packaging omits that duplicate file while retaining every native asset, test, reference and source file. The source-only form includes build instructions, the expected standalone SHA-256 and a verified staged-source rebuild record. The separate `The-Long-Run-NBIM.zip` remains the direct ready-to-play download. Current city references are Downtown’s complete warm street paintings from the supplied HTML, the original complete warm Midtown paintings and six detailed native venue fronts. They are not reduced to meet the archive limit. The small implemented cartoon finance-prop pass is documented in game/docs/finance-props-direction.md.
 
 ## Paste this into the next ChatGPT session
 
@@ -43,9 +43,9 @@ sprite style. Do not use the rejected cartoon sprite study or redesign the
 characters. 505 Fifth must keep the electric-blue/cyan glass lobby, complete
 paired revolving doors and the office host's supplied likeness/plum suit.
 Central Park must preserve its original dreamy painting. Downtown now restores the complete warm paintings and camera from the supplied
-HTML. The rejected full-screen river/cutout composition is gone. Midtown keeps
-its current architecture. Six native storefront crops retain venue detail inside
-those streets. Inspect downtown-scenery.js, scenery.js, venue-details.js and the
+HTML. The rejected full-screen river/cutout composition is gone. Midtown also returns to its warm complete paintings with calm horizontal scrolling
+and fixed vertical framing. Six native storefront crops retain venue detail inside
+those streets. Inspect downtown-scenery.js, midtown-painted.js, scenery.js, venue-details.js and the
 current gameplay frames.
 There is no added traffic or replacement panorama module in the runtime.
 Keep full ordinary city blocks between venue discoveries; do not gather the
