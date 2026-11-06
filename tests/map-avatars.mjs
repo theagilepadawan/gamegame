@@ -104,6 +104,7 @@ try {
   await p.clock.runFor(32);
   await settled(p, 'park', 'trond');
   await p.clock.resume();
+  await p.evaluate(() => {LR_CH.order.forEach(id => LR_CH.done(id)); LR_CH.paint();});
   await p.locator('[data-mode="endless"]').click();
   await p.locator('#chapter-browser').waitFor({state: 'hidden'});
   assert.equal(await p.locator('#chapter-browser').isVisible(), false);

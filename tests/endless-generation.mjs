@@ -54,7 +54,7 @@ for(let seed=1;seed<=32;seed++){
  const log=course(seed),seen=[],lastEvent={jetpack:null,contrarian:null};
  for(const row of log){
   routes.add(row.route);row.pickups.forEach(p=>powerups.add(p[0]));row.shape.forEach(p=>types.add(p[0]==='s'?'spring':p[1]));
-  if(row.route<32){assert.ok(!seen.slice(-4).includes(row.route),`Immediate motif repetition: seed${seed}`);}
+  if(G.families.some(f=>f.id===row.route)){assert.ok(!seen.slice(-4).includes(row.route),`Immediate motif repetition: seed${seed}`);}
   seen.push(row.route);
   if(row.event){if(lastEvent[row.event]!==null)eventGaps.push({kind:row.event,worldGap:row.from-lastEvent[row.event]});lastEvent[row.event]=row.from;}
  }
@@ -71,7 +71,7 @@ for(let seed=0;seed<128;seed++){
  for(const x of positions){
   const y=a.at(x);assert.equal(y,b.at(x));assert.ok(Number.isFinite(y));
   const slope=a.slopeAt(x);terrain.maxSlope=Math.max(terrain.maxSlope,Math.abs(slope));
-  assert.ok(Math.abs(slope)<=.160001);assert.ok(Math.abs((a.at(x+.01)-a.at(x-.01))/.02-slope)<.00001,'Continuous terrain derivative');terrain.samples++;
+  assert.ok(Math.abs(slope)<=.240001);assert.ok(Math.abs((a.at(x+.01)-a.at(x-.01))/.02-slope)<.00001,'Continuous terrain derivative');terrain.samples++;
  }
  for(let n=1;n<=10;n++)if(Math.abs(a.at(900+n*4800)-422)>1)terrain.nonResetBoundaries++;
  assert.equal(a.at(500),422);
@@ -85,4 +85,4 @@ const output={deterministic:true,viewportIndependent:true,rewardIndependent:true
  components:{families:[...routes],powerups:[...powerups],types:[...types]},difficulty:{early,late},speedCap:700};
 await fs.mkdir(path.join(root,'review/v20-endless'),{recursive:true});
 await fs.writeFile(path.join(root,'review/v20-endless/generation-report.json'),JSON.stringify(output,null,2));
-console.log(`PASS: deterministic viewport/reward/frame-independent course; ${diversity.length} diversity cases ×64seeds; all12families/powerups/platforms; ${terrain.samples} continuous terrain samples; bounded escalating difficulty.`);
+console.log(`PASS: deterministic viewport/reward/frame-independent course; ${diversity.length} diversity cases ×64seeds; all14families/powerups/platforms; ${terrain.samples} continuous terrain samples; bounded escalating difficulty.`);

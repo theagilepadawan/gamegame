@@ -7,7 +7,7 @@
   var NAMES = { opening: "Opening Bell", midtown: "Midtown", park: "Central Park" };
   var KEY = "lr.chapters.done";
   var demo = /[?&]unlock=all\b/.test(location.search);
-  function read() { try { return JSON.parse(localStorage.getItem(KEY) || "[]") || []; } catch (e) { return []; } }
+  function read() { try { var value = JSON.parse(localStorage.getItem(KEY) || "[]"); return Array.isArray(value) ? value.filter(function (id) { return ORDER.indexOf(id) >= 0; }) : []; } catch (e) { return []; } }
   function write(list) { try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {} }
   var prev = function (id) { var i = ORDER.indexOf(id); return i > 0 ? ORDER[i - 1] : null; };
   // each chapter's soundtrack: Opening Bell keeps the original, Midtown charges, Central Park ends gracefully
@@ -25,8 +25,10 @@
     track: function (SA) { return SA && SA.track ? SA.track.__lrKey || "main" : null; },
     unlocked: function (id) { if (demo || id === "opening") return true; var p = prev(id); return !!p && read().indexOf(p) >= 0; },
     completed: function (id) { return read().indexOf(id) >= 0; },
+    endlessUnlocked: function () { return ORDER.every(function (id) { return CH.completed(id); }); },
     // a chapter was won: remember it, and say what it opened
     done: function (id) {
+      if (ORDER.indexOf(id) < 0) return {first: false, unlocked: null, final: false};
       var list = read(), first = list.indexOf(id) < 0;
       if (first) { list.push(id); write(list); }
       var next = ORDER[ORDER.indexOf(id) + 1];
@@ -34,6 +36,13 @@
     },
     // the picker: locks on the chapters still to earn
     paint: function () {
+      var endless = document.querySelector('[data-mode="endless"]'), openEndless = CH.endlessUnlocked();
+      if (endless) {
+        endless.classList.toggle("is-locked", !openEndless);
+        endless.setAttribute("aria-disabled", String(!openEndless));
+        endless.setAttribute("aria-label", openEndless ? "Endless" : "Endless — finish Story to unlock");
+        endless.title = openEndless ? "A new horizon every run" : "Finish all three Story chapters to unlock";
+      }
       document.querySelectorAll("[data-district]").forEach(function (b) {
         var id = b.dataset.district, open = CH.unlocked(id);
         b.classList.toggle("is-locked", !open);
@@ -50,7 +59,7 @@
       b.classList.remove("is-shake"); void b.offsetWidth; b.classList.add("is-shake");
       if (note) {
         if (!note.classList.contains("is-hint")) note.__was = note.textContent;
-        note.textContent = "Finish " + NAMES[prev(id)] + " to unlock " + NAMES[id] + "."; note.classList.add("is-hint");
+        note.textContent = b.dataset.mode === "endless" ? "Finish all three Story chapters to unlock Endless." : "Finish " + NAMES[prev(id)] + " to unlock " + NAMES[id] + "."; note.classList.add("is-hint");
         clearTimeout(note.__t); note.__t = setTimeout(function () { note.classList.remove("is-hint"); if (note.__was != null) note.textContent = note.__was; }, 2600);
       }
     }

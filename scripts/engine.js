@@ -371,7 +371,7 @@ var hi = class {
     if (this.grounded || this.vy < 0 || this.flight || this.transfer) return false;
     let A = this.vy * 0.1 + 1950 * 0.1 * 0.1 / 2, t = (Math.sqrt(this.vy * this.vy + 3900 * Math.max(0, this.floorY - this.y)) - this.vy) / 1950;
     return (!LR_GAPS.find(this.obstacles, this.x, -this.speed * t) || this.invincible > 0) && this.floorY - this.y <= A ? true : this.platforms.some((r) => {
-      if (!r.active || r.y < this.y || r.y - this.y > A) return false;
+      if (!r.active || this.onRoute && !this.onRoute(r) || r.y < this.y || r.y - this.y > A) return false;
       let o = (Math.sqrt(this.vy * this.vy + 3900 * (r.y - this.y)) - this.vy) / 1950, s = r.x - this.speed * o;
       return this.x + 10 > s && this.x - 10 < s + r.w && (!r.collapseAt || r.collapseAt > this.time + o);
     });
@@ -1595,8 +1595,15 @@ var yo = class extends hi {
     if (this.routeResolved || this.chapterTime < 16.2) return;
     let A = this.platforms.find((o) => o.id === this.support), t = this.platforms.find((o) => o.entry && this.x >= o.x && this.x <= o.x + o.w), i = !!(!this.flight && !this.flightLanding && (A && (A.entry || A.route === "high") || t && this.y <= t.y + 8));
     this.routeChoice = { id: i ? "high" : "low", label: i ? this.district.highRoute : this.district.lowRoute }, this.routeResolved = true;
-    let r = i ? "low" : "high";
-    this.obstacles = this.obstacles.filter((o) => o.route !== r), this.pickups = this.pickups.filter((o) => o.route !== r), this.platforms = this.platforms.filter((o) => o.route !== r), this.emit("routeChoice", { ...this.routeChoice });
+    // Choosing a route records the journey; the other route remains in the
+    // world. Removing it here made visible props below the runner vanish.
+    this.emit("routeChoice", { ...this.routeChoice });
+  }
+  onRoute(item) {
+    // The unchosen branch stays visible as scenery. Its former collision and
+    // reward behavior stays unchanged, so a lower girder cannot hit a runner
+    // standing on the upper bridge, or catch a jump on the other route.
+    return !this.routeResolved || !item.route || item.route === this.routeChoice.id;
   }
   step(A, t = false) {
     if (this.dead || this.won) {
@@ -1623,7 +1630,7 @@ var yo = class extends hi {
       l && (g.y = l.y + g.offsetY);
     }
     if (!this.stepFlight(A)) {
-      let g = this.platforms.find((l) => l.id === this.support && l.active && this.x + 8 > l.x && this.x - 8 < l.x + l.w);
+      let g = this.platforms.find((l) => this.onRoute(l) && l.id === this.support && l.active && this.x + 8 > l.x && this.x - 8 < l.x + l.w);
       if (this.grounded && (this.support !== null ? g ? this.y = g.y : (this.grounded = false, this.support = null, this.coyote = 0.1) : this.y = this.floorY), this.grounded ? (this.coyote = 0.1, this.airJumpAvailable = true, this.jumpCount = 0, this.flipAge = -1) : this.coyote = Math.max(0, this.coyote - A), this.buffer = Math.max(0, this.buffer - A), this.sliding = t && this.grounded, this.sliding && this.resetJumpChain(), this.buffer > 0 && (this.grounded || this.coyote > 0)) {
         let l = this.held && g?.bounce ? g.bounce : 0;
         this.launchGroundJump(l), l && this.emit("worldReaction", { kind: "awning", id: g.id, x: this.x, y: this.y });
@@ -1631,7 +1638,7 @@ var yo = class extends hi {
       if (!this.grounded) {
         let l = this.y;
         if (this.vy += 1950 * A, this.y += this.vy * A, this.vy >= 0) {
-          let E = this.platforms.filter((I) => I.active && this.x + 10 > I.x && this.x - 10 < I.x + I.w && l <= I.prevY + 0.5 && this.y >= I.y).sort((I, Q) => I.y - Q.y)[0];
+          let E = this.platforms.filter((I) => this.onRoute(I) && I.active && this.x + 10 > I.x && this.x - 10 < I.x + I.w && l <= I.prevY + 0.5 && this.y >= I.y).sort((I, Q) => I.y - Q.y)[0];
           E ? (this.y = E.y, this.vy = 0, this.grounded = true, this.support = E.id, this.airJumpAvailable = true, this.jumpCount = 0, this.flipAge = -1, E.flex = 1, E.touched || (E.touched = true, this.airLandings++, this.bonus += 25, this.emit("platform", { kind: E.kind, id: E.id, x: this.x, y: this.y })), E.kind === "crumble" && !E.collapseAt && (E.collapseDelay = 1.25, E.collapseAt = this.time + E.collapseDelay, this.emit("worldReaction", { kind: "crack", id: E.id, x: E.x + E.w / 2, y: E.y })), E.kind === "awning" && this.emit("worldReaction", { kind: "awning", id: E.id, x: this.x, y: this.y }), this.landJumpChain(), this.emit("land", { y: this.y, chainStage: this.jumpChain })) : this.y >= this.floorY && (this.resetSurface(true), this.emit("land", { y: this.y, chainStage: this.jumpChain }));
         }
       }
@@ -1639,13 +1646,13 @@ var yo = class extends hi {
     this.resolveRoute(), this.routeResolved && !this.routeRejoined && this.chapterTime >= 30 && (this.routeRejoined = true, this.emit("routeRejoin", { id: this.routeChoice.id, label: this.routeChoice.label })), this.updateSlideRecovery(A, i, t);
     let a = this.bodyBox();
     for (let g of this.obstacles) {
-      if (!this.routeResolved && g.route) continue;
+      if (g.route && (!this.routeResolved || !this.onRoute(g))) continue;
       let l = { x: g.x + 5, y: g.base - (g.type === "high" ? 181 : g.h), w: g.w - 10, h: g.type === "high" ? 85 : g.h - 4 };
       Pe(a, l) && this.hit(g.type === "high" ? "A low clearance. Time to slide." : this.districtId === "park" ? "The park works were more solid than expected." : "A delivery with a firm landing."), !g.passed && g.x + g.w < this.x - 20 && (g.passed = true, this.cleared++, this.flow++, this.bonus += 25);
     }
     if (!this.dead) {
       for (let g of this.pickups) {
-        if (!this.routeResolved && g.route) continue;
+        if (g.route && (!this.routeResolved || !this.onRoute(g))) continue;
         let l = g.kind === "jetpack" ? 30 : this.research > 0 ? 70 : 17;
         if (g.taken || !Pe(a, { x: g.x - l, y: g.y - l, w: l * 2, h: l * 2 })) continue;
         if (g.taken = true, this.collected++, g.kind === "jetpack") {
@@ -22158,6 +22165,7 @@ try {
 var _i = false, b = "home", zA = "chapter", q = null, eA = 1e3, kA = 540, EQ = 1, au = 0, $i = 0, UA = 0, QQ = 0, ir = T, fe = 0, Ar = 1, RQ = false, SA = new ko("assets/original-37.mp3");
 SA.registerClip("laugh", "assets/original-38.mp3");
 SA.registerMusic("contrarian", "assets/original-39.mp3", { gain: 0.79 });
+window.LR_MUSIC?.attach(SA);
 var Kt = 0, hu = 0.62, UD = 0.65, gu = 0, Bu = 0, bt = [], Ht = [], IQ = 0, rr = 1, tr = 1, Xt = 0, _t = -1, ze = [], ni = -1, rg = 0, hQ = -1, Co = 0, Vo = 2.25, $t = /* @__PURE__ */ new Set(), ai = /* @__PURE__ */ new Set(), og = /* @__PURE__ */ new Set(), gg = matchMedia("(pointer:coarse)"), gA = matchMedia("(prefers-reduced-motion: reduce)").matches, lu = { get(e24) {
   try {
     return Number(localStorage.getItem(e24)) || 0;
@@ -22247,6 +22255,8 @@ for (let e24 of document.querySelectorAll("[data-character]")) e24.onclick = () 
   }
 };
 function Eg() {
+  if (zA === "endless" && window.LR_CH && !LR_CH.endlessUnlocked()) zA = "chapter";
+  mt.dataset.playMode = zA;
   window.LR_CH && (LR_CH.unlocked(at) || (at = "opening"), LR_CH.paint());
   LRS();
   let e24 = Ot[at];
@@ -22310,6 +22320,11 @@ function De() {
 function Ko(e24 = zA, A = {}) {
   if (!_i || window.LR_RUN && LR_RUN.previewing()) return;
   if (e24 !== "chapter" && e24 !== "endless") e24 = zA;
+  if (e24 === "endless" && window.LR_CH && !LR_CH.endlessUnlocked()) {
+    LR_CH.locked(m('[data-mode="endless"]')); return;
+  }
+  mt.dataset.playMode = e24;
+  window.LR_MUSIC?.page("run");
   gg.matches && qu(), vD(), De();
   // Story is an authored journey; only Endless offers changeable worlds.
   let t = e24 === "chapter" ? STORY_SEED : A.seed ?? qe, i = { character: PA, procedural: true };
@@ -22319,11 +22334,13 @@ function Ko(e24 = zA, A = {}) {
   m("#district").textContent = Ot[q.districtId || "opening"].place, m("#pause").textContent = "\u2161", m("#pause").setAttribute("aria-label", "Pause"), m("#event").classList.remove("show", "hidden"), m("#next-chapter").classList.add("hidden"), m("#ticker-text").textContent = q.districtId === "park" ? "A long horizon leaves room for a walk in the park." : q.districtId === "midtown" ? "The growth outlook is under construction." : "Markets react to markets reacting.", Vu(), ht.focus({ preventScroll: true }), CA(392, 0.09), setTimeout(() => CA(587, 0.13), 100);
 }
 function qQ() {
+  window.LR_MUSIC?.page("results");
   SA.endMusic({ resume: false }), SA.stopClips(), b = "over", SA.play("results"), De(), mt.classList.remove("playing");
   let e24 = lu.get(Eu()), A = Ot[q.districtId || "opening"], story = q.mode === "chapter";
-  q.score > e24 && lu.set(Eu(), q.score), m("#result-tag").textContent = q.won ? A.name.toUpperCase() + (q.districtId === "park" ? " · FINAL CHAPTER COMPLETE" : " · CHAPTER COMPLETE") : q.score > e24 ? "A NEW PERSONAL BEST" : "QUARTERLY PERFORMANCE REVIEW", m("#result-heading").innerHTML = q.won ? q.districtId === "park" ? "The long<br><span>view.</span>" : q.districtId === "midtown" ? "On the<br><span>rise.</span>" : "Upwards<br><span>and onwards.</span>" : "A challenging<br><span>quarter.</span>", m("#cause").textContent = q.won ? q.districtId === "park" ? "A clear head. A long horizon. All three chapters, complete." : q.districtId === "midtown" ? "A solid foundation. Midtown, complete." : "Hype Machine defeated. A long horizon wins." : q.cause, m("#final-score").textContent = q.score.toLocaleString(), m("#final-time").textContent = cu(q.time);
+  !story && q.score > e24 && lu.set(Eu(), q.score), m("#result-tag").textContent = q.won ? A.name.toUpperCase() + (q.districtId === "park" ? " · FINAL CHAPTER COMPLETE" : " · CHAPTER COMPLETE") : story ? A.name.toUpperCase() + " · THE STORY CONTINUES" : q.score > e24 ? "A NEW PERSONAL BEST" : "QUARTERLY PERFORMANCE REVIEW", m("#result-heading").innerHTML = q.won ? q.districtId === "park" ? "The long<br><span>view.</span>" : q.districtId === "midtown" ? "On the<br><span>rise.</span>" : "Upwards<br><span>and onwards.</span>" : story ? "Another step.<br><span>Ahead.</span>" : "A challenging<br><span>quarter.</span>", m("#cause").textContent = q.won ? q.districtId === "park" ? "A clear head. A long horizon. All three chapters, complete." : q.districtId === "midtown" ? "A solid foundation. Midtown, complete." : "Hype Machine defeated. A long horizon wins." : q.cause, m("#final-score").textContent = story ? "" : q.score.toLocaleString(), m("#final-time").textContent = story ? "" : cu(q.time);
   let t = q.collected >= 85 ? "GOLD RETURN" : q.collected >= 55 ? "SILVER RETURN" : "BRONZE RETURN";
   m("#result-detail").textContent = (q.won ? t + " · " : "") + (q.routeChoice ? q.routeChoice.label + " · " : "") + q.airLandings + " platform landings · " + q.collected + " pickups · best " + Math.max(e24, q.score).toLocaleString();
+  if (story) m("#result-detail").textContent = q.won ? q.districtId === "park" ? "Endless is now open. The city has a few more surprises." : A.next === "park" ? "A change of pace awaits in Central Park." : "Next stop: Midtown." : "The next chapter is still ahead of you.";
   window.LR_ENDLESS && LR_ENDLESS.results(q, m);
   m("#result-seed").textContent = story ? "" : "WORLD · " + or(q.seed);
   m("#result-seed").classList.toggle("hidden", story);
@@ -22333,6 +22350,7 @@ function qQ() {
   for (let r of ["#touch-controls", "#pause", "#event", "#chapter-strip"]) m(r).classList.add("hidden");
   m("#effects").replaceChildren();
   let next = q.won && story ? (window.LR_CH && LR_CH.done(q.districtId || "opening"), q.districtId === "park" && window.LR_RUN && LR_RUN.won(gt.trond.atlas), A.next) : null;
+  if (story && q.won && q.districtId === "park" && window.LR_CH && !LR_CH.endlessUnlocked()) m("#result-detail").textContent = "Finish every Story chapter to open Endless.";
   const results = m("#results"), primaryId = next ? "next-chapter" : q.won && story ? "home" : "restart";
   const primary = document.getElementById(primaryId), actions = results.querySelector(".result-actions");
   results.dataset.primary = primaryId;
@@ -22391,6 +22409,7 @@ m("#seed-form").addEventListener("submit", (e24) => {
   b !== "home" || zA !== "endless" || !A || (qe = dD(A), GQ(), m("#seed-dialog").close());
 });
 for (let e24 of document.querySelectorAll("[data-mode]")) e24.onclick = () => {
+  if (e24.dataset.mode === "endless" && window.LR_CH && !LR_CH.endlessUnlocked()) { LR_CH.locked(e24); return; }
   b === "home" && ["chapter", "endless"].includes(e24.dataset.mode) && (zA = e24.dataset.mode, Eg(), Ei());
 };
 m("#next-chapter").onclick = () => {
@@ -22476,7 +22495,7 @@ function FD() {
       let A = e24.kind === "cruise" || q.flightKind === "cruise";
       Ge(A ? "BACK TO THE LONG RUN" : "FINAL APPROACH", A ? "A soft landing. A longer horizon." : "Bring it home.", 1.5);
     }
-    if (e24.type === "contrarianOffer" && (m("#ticker-text").textContent = "A different perspective is yours to take."), e24.type === "contrarian" && (q.transfer.fromCamera = Kt, Kt = 0, ir = q.y, bt = [], Ht = [], De(), SA.startMusic("contrarian"), SA.clip("laugh"), m("#event").classList.remove("show"), m("#ticker-text").textContent = "Everyone agrees. " + gt[PA].name + " has questions.", m("#district").textContent = "AGAINST THE CONSENSUS"), e24.type === "contrarianEnd" && (q.transfer.fromCamera = Kt, Kt = T - (q.transfer.toY ?? T), ir = q.y, bt = [], Ht = [], De(), SA.endMusic({ fade: true }), SA.clip("laugh"), Ge("IN GOOD COMPANY", "Independent thinking. +500", 3), m("#district").textContent = "LOWER MANHATTAN"), e24.type === "jump") {
+    if (e24.type === "contrarianOffer" && (m("#ticker-text").textContent = "A different perspective is yours to take."), e24.type === "contrarian" && (q.transfer.fromCamera = Kt, Kt = 0, ir = q.y, bt = [], Ht = [], De(), SA.startMusic("contrarian"), SA.clip("laugh"), m("#event").classList.remove("show"), m("#ticker-text").textContent = "Everyone agrees. " + gt[PA].name + " has questions.", m("#district").textContent = "AGAINST THE CONSENSUS"), e24.type === "contrarianEnd" && (q.transfer.fromCamera = Kt, Kt = T - (q.transfer.toY ?? T), ir = q.y, bt = [], Ht = [], De(), SA.endMusic({ fade: true }), SA.clip("laugh"), Ge("IN GOOD COMPANY", q.mode === "chapter" ? "Independent thinking." : "Independent thinking. +500", 3), m("#district").textContent = "LOWER MANHATTAN"), e24.type === "jump") {
       tr = 0;
       let A = e24.chainStage || 1;
       CA(280 + (A - 1) * 100, 0.1, "sine", 0.022, 480 + (A - 1) * 160), Lt(q.x, e24.y ?? T, A === 3 ? "#f6d388" : "#b9d0e0", A === 3 ? 12 : 5);
@@ -22487,8 +22506,9 @@ function FD() {
       CA(A ? 523 : 100, A ? 0.13 : 0.045, A ? "sine" : "triangle", 0.02, A ? 784 : 100), A && CA(1046, 0.16, "sine", 0.013), Lt(q.x, e24.y ?? T, A ? "#ffe3a4" : "#c0c9d4", A ? 12 : 6);
     }
     if (e24.type === "pickup") {
-      e24.kind === "diversification" && (_t = 0, Xt = 0), ze.push({ x: e24.x, y: e24.y, kind: e24.kind, age: 0, life: 0.28 }), Lt(e24.x, e24.y, e24.kind === "dividend" || e24.kind === "opportunity" ? "#ffda73" : "#d9ff74", 12), Ht.push({ x: e24.x, y: e24.y, text: "+" + e24.value, life: 0.7 }), KD(e24.kind);
+      e24.kind === "diversification" && (_t = 0, Xt = 0), ze.push({ x: e24.x, y: e24.y, kind: e24.kind, age: 0, life: 0.28 }), Lt(e24.x, e24.y, e24.kind === "dividend" || e24.kind === "opportunity" ? "#ffda73" : "#d9ff74", 12), q.mode !== "chapter" && Ht.push({ x: e24.x, y: e24.y, text: "+" + e24.value, life: 0.7 }), KD(e24.kind);
       let A = { research: ["RESEARCH", "Opportunity comes closer."], diversification: ["A HEDGE", "Your next loss is covered."], conviction: ["CONVICTION \xB7 2\xD7 POINTS", "Same pace. Twice the return."] };
+      if (q.mode === "chapter") A.conviction = ["CONVICTION", "Keep your eyes on the long run."];
       A[e24.kind] && Ge(...A[e24.kind]);
     }
     if (e24.type === "shield" && (Xt = 1, _t = -1, Lt(q.x, q.y - 55, "#7cc46a", 22), Ht.push({ x: q.x, y: q.y - 135, text: "LOSS ABSORBED", life: 0.85 }), Ge("LOSS ABSORBED", "The hedge took the hit.", 1.8), CA(132, 0.23, "triangle", 0.035, 88), CA(660, 0.28, "sine", 0.025, 990)), e24.type === "theme") {
@@ -22504,7 +22524,7 @@ function Vu() {
   if (!q) return;
   window.LR_ENDLESS && LR_ENDLESS.hud(q, Ge, m, SA);
   let e24 = q.mode === "chapter", A = q.flight && q.flightKind === "cruise";
-  m("#chapter-strip").classList.toggle("hidden", !e24 && !A), m("#run-meta").classList.toggle("hidden", e24 || A), mt.classList.toggle("in-flight", !!q.flight), (e24 || A) && (m("#chapter-name").textContent = q.contrarian ? "THE CONTRARIAN" : A ? "LIQUIDITY LIFT" : q.flight ? "IPO HYPE MACHINE" : q.chapterPhase.name, m("#chapter-detail").textContent = A ? "HOLD TO CLIMB \xB7 " + Math.max(0, Math.ceil(q.flightDuration - q.flightAge)) + "s" : q.flight ? q.boss?.stage === "defeated" ? "HYPE DEFLATED" : (q.boss?.cue || "STAND BY") + " \xB7 " + q.bossProgress + "/3 VENTED" : (q.routeChoice ? q.routeChoice.label.toUpperCase() + " \xB7 " : "") + Math.round(q.chapterProgress * 100) + "%", m("#chapter-progress").style.transform = "scaleX(" + (A ? Math.max(0, 1 - q.flightAge / q.flightDuration) : q.chapterProgress) + ")", mt.dataset.phase = A ? "cruise" : q.chapterPhase.id), m("#jump-caption").textContent = q.flight ? "THRUST" : q.chainReady && q.jumpChain === 2 ? "JUMP \xD73" : "JUMP", m("#touch-jump").setAttribute("aria-label", q.flight ? "Hold to climb; release to descend" : q.chainReady && q.jumpChain === 2 ? "Jump now for the grand somersault" : "Jump; press again in the air to somersault, or time jumps after landing for a triple jump"), m("#slide-caption").textContent = q.flight ? "COAST" : "SLIDE", m("#score").textContent = String(q.score).padStart(5, "0"), m("#time").textContent = cu(q.time), m("#pace").textContent = (q.speed / 315).toFixed(2) + "\xD7", m("#flow").textContent = window.LR_ENDLESS && q.mode !== "chapter" && q.procedural ? LR_ENDLESS.flowLabel(q) : q.flow > 3 ? "FLOW " + q.flow : "MARKET OPEN", m("#multiplier").classList.toggle("hidden", q.conviction <= 0), m("#effects").innerHTML = [q.shield ? "\u2766 HEDGED" : null, q.research > 0 ? "\u2315 RESEARCH " + Math.ceil(q.research) + "s" : null, q.conviction > 0 ? "2\xD7 " + Math.ceil(q.conviction) + "s" : null].filter(Boolean).map((t) => '<span class="effect">' + t + "</span>").join("");
+  m("#chapter-strip").classList.toggle("hidden", !e24 && !A), m("#run-meta").classList.toggle("hidden", e24 || A), mt.classList.toggle("in-flight", !!q.flight), (e24 || A) && (m("#chapter-name").textContent = q.contrarian ? "THE CONTRARIAN" : A ? "LIQUIDITY LIFT" : q.flight ? "IPO HYPE MACHINE" : q.chapterPhase.name, m("#chapter-detail").textContent = A ? "HOLD TO CLIMB \xB7 " + Math.max(0, Math.ceil(q.flightDuration - q.flightAge)) + "s" : q.flight ? q.boss?.stage === "defeated" ? "HYPE DEFLATED" : (q.boss?.cue || "STAND BY") + " \xB7 " + q.bossProgress + "/3 VENTED" : (q.routeChoice ? q.routeChoice.label.toUpperCase() + " \xB7 " : "") + Math.round(q.chapterProgress * 100) + "%", m("#chapter-progress").style.transform = "scaleX(" + (A ? Math.max(0, 1 - q.flightAge / q.flightDuration) : q.chapterProgress) + ")", mt.dataset.phase = A ? "cruise" : q.chapterPhase.id), m("#jump-caption").textContent = q.flight ? "THRUST" : q.chainReady && q.jumpChain === 2 ? "JUMP \xD73" : "JUMP", m("#touch-jump").setAttribute("aria-label", q.flight ? "Hold to climb; release to descend" : q.chainReady && q.jumpChain === 2 ? "Jump now for the grand somersault" : "Jump; press again in the air to somersault, or time jumps after landing for a triple jump"), m("#slide-caption").textContent = q.flight ? "COAST" : "SLIDE", m("#score").textContent = String(q.score).padStart(5, "0"), m("#time").textContent = cu(q.time), m("#pace").textContent = (q.speed / 315).toFixed(2) + "\xD7", m("#flow").textContent = window.LR_ENDLESS && q.mode !== "chapter" && q.procedural ? LR_ENDLESS.flowLabel(q) : q.flow > 3 ? "FLOW " + q.flow : "MARKET OPEN", m("#multiplier").classList.toggle("hidden", q.conviction <= 0), m("#effects").innerHTML = [q.shield ? "\u2766 HEDGED" : null, q.research > 0 ? "\u2315 RESEARCH " + Math.ceil(q.research) + "s" : null, q.conviction > 0 ? (q.mode === "chapter" ? "CONVICTION " : "2\xD7 ") + Math.ceil(q.conviction) + "s" : null].filter(Boolean).map((t) => '<span class="effect">' + t + "</span>").join("");
 }
 function BQ(e24, A, t, i, r, o = 0) {
   d.fillStyle = r, d.beginPath(), d.roundRect(e24, A, t, i, o), d.fill();
@@ -22577,8 +22597,11 @@ function OD(e24, A) {
 function yD(e24) {
   if (q.districtId) {
     window.LR_SHOPS && LR_SHOPS.tick(q, eA, Ge), ut.scenery(q, eA, UA, gA);
-    for (let A of q.platforms) ut.platform(A, q, UA, gA);
-    for (let A of q.obstacles) ut.obstacle(A, q, eA, UA, gA);
+    // The other branch belongs behind the current path, without disappearing.
+    for (const active of [false, true]) {
+      for (let A of q.platforms) if (q.onRoute(A) === active) ut.platform(A, q, UA, gA);
+      for (let A of q.obstacles) if (q.onRoute(A) === active) ut.obstacle(A, q, eA, UA, gA);
+    }
     return;
   }
   window.LR_ENDLESS && LR_ENDLESS.draw(d, q, eA, UA);

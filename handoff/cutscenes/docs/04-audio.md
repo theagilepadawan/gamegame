@@ -37,3 +37,15 @@ For production delivery, 48 kHz WAV stems are a practical default. A review mix 
 The eventual cutscene player needs one explicit audio owner. Snapshot the active music choice and playback position before taking over, stop overlapping playback, and restore the intended track only once after completion or Skip. Honor the existing mute and volume settings. Test user-gesture playback restrictions on real mobile browsers; a rejected `video.play()` promise must lead to a usable poster/Continue path, not a stuck screen.
 
 Keep captions and audio cues in an editable cue sheet. Do not attribute newly written lines to real colleagues. If the user supplies additional recorded lines, retain their original meaning and document the source file and selected time range.
+
+
+## Confirmed display titles (version 1.14)
+
+Use the names supplied by the user, without replacing the recordings:
+- Midtown: **Good Company Never Dies** (original-19.mp3).
+- Central Park: **Diversified Ballad** (original-20.mp3).
+- Contrarian: **Good ol’ Company** (original-39.mp3, the Pixel Adventure source recording).
+- Opening Bell/Endless: **Extended 16-Bit Bitcrushed**, radicalTomography.
+
+The compact in-game now-playing label appears for five seconds on an audible
+run/results page or soundtrack change. Audio settings carry the same titles.

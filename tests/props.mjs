@@ -18,7 +18,7 @@ try {
   await page.waitForFunction(() => window.longRun && window.LR_PROPS?.ready && longRun.environment.ready && !document.querySelector('#start').disabled && !document.querySelector('#splash'));
   await page.evaluate(() => {const next = requestAnimationFrame.bind(window); window.requestAnimationFrame = () => 0; return new Promise(resolve => next(resolve));});
   const report = await page.evaluate(() => {
-    Cu(false); Ko('endless'); b = 'paused'; SA.pause();
+    LR_CH.order.forEach(id => LR_CH.done(id)); Cu(false); Ko('endless'); b = 'paused'; SA.pause();
     const result = {images: LR_PROPS.images.map(image => ({width: image.naturalWidth, height: image.naturalHeight})), outcomes: []};
     const make = () => {const run = new hi(1000, 123456, {mode: 'endless', procedural: false}); run.autoSpawn = false; return run;};
     for (const [type, action] of [['low', 'walk'], ['low', 'jump'], ['high', 'stand'], ['high', 'slide']]) {

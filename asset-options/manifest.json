@@ -1,0 +1,194 @@
+[
+  {
+    "file": "city-b-0.webp",
+    "source": "city-native.png",
+    "bounds": [
+      41,
+      120,
+      411,
+      349
+    ],
+    "width": 370,
+    "height": 229
+  },
+  {
+    "file": "city-b-1.webp",
+    "source": "city-native.png",
+    "bounds": [
+      494,
+      15,
+      1047,
+      349
+    ],
+    "width": 553,
+    "height": 334
+  },
+  {
+    "file": "city-c-0.webp",
+    "source": "city-native.png",
+    "bounds": [
+      66,
+      411,
+      373,
+      708
+    ],
+    "width": 307,
+    "height": 297
+  },
+  {
+    "file": "city-c-1.webp",
+    "source": "city-native.png",
+    "bounds": [
+      460,
+      406,
+      1064,
+      679
+    ],
+    "width": 604,
+    "height": 273
+  },
+  {
+    "file": "city-d-0.webp",
+    "source": "city-native.png",
+    "bounds": [
+      44,
+      767,
+      390,
+      1059
+    ],
+    "width": 346,
+    "height": 292
+  },
+  {
+    "file": "city-d-1.webp",
+    "source": "city-native.png",
+    "bounds": [
+      470,
+      736,
+      1047,
+      1051
+    ],
+    "width": 577,
+    "height": 315
+  },
+  {
+    "file": "city-e-0.webp",
+    "source": "city-native.png",
+    "bounds": [
+      21,
+      1111,
+      396,
+      1424
+    ],
+    "width": 375,
+    "height": 313
+  },
+  {
+    "file": "city-e-1.webp",
+    "source": "city-native.png",
+    "bounds": [
+      436,
+      1127,
+      1066,
+      1414
+    ],
+    "width": 630,
+    "height": 287
+  },
+  {
+    "file": "park-b-0.webp",
+    "source": "park-native.png",
+    "bounds": [
+      10,
+      83,
+      500,
+      358
+    ],
+    "width": 490,
+    "height": 275
+  },
+  {
+    "file": "park-b-1.webp",
+    "source": "park-native.png",
+    "bounds": [
+      500,
+      95,
+      1078,
+      308
+    ],
+    "width": 578,
+    "height": 213
+  },
+  {
+    "file": "park-c-0.webp",
+    "source": "park-native.png",
+    "bounds": [
+      22,
+      427,
+      514,
+      700
+    ],
+    "width": 492,
+    "height": 273
+  },
+  {
+    "file": "park-c-1.webp",
+    "source": "park-native.png",
+    "bounds": [
+      518,
+      425,
+      1078,
+      666
+    ],
+    "width": 560,
+    "height": 241
+  },
+  {
+    "file": "park-d-0.webp",
+    "source": "park-native.png",
+    "bounds": [
+      11,
+      759,
+      510,
+      1057
+    ],
+    "width": 499,
+    "height": 298
+  },
+  {
+    "file": "park-d-1.webp",
+    "source": "park-native.png",
+    "bounds": [
+      522,
+      758,
+      1078,
+      1006
+    ],
+    "width": 556,
+    "height": 248
+  },
+  {
+    "file": "park-e-0.webp",
+    "source": "park-native.png",
+    "bounds": [
+      12,
+      1121,
+      517,
+      1406
+    ],
+    "width": 505,
+    "height": 285
+  },
+  {
+    "file": "park-e-1.webp",
+    "source": "park-native.png",
+    "bounds": [
+      529,
+      1113,
+      1081,
+      1350
+    ],
+    "width": 552,
+    "height": 237
+  }
+]

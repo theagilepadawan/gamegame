@@ -2,7 +2,7 @@
    while terrain, section layout, rewards and rare events use separate streams. */
 (function () {
   "use strict";
-  var VERSION = 2, GROUND = 422;
+  var VERSION = 3, GROUND = 422;
   var FAMILIES = [
     { id: 20, name: "MARKET RHYTHM", kind: "rhythm", unlock: 0 },
     { id: 21, name: "ROOFTOP DIVIDENDS", kind: "roofs", unlock: 0 },
@@ -15,7 +15,9 @@
     { id: 28, name: "UPPER MARKET", kind: "upper", unlock: 20 },
     { id: 29, name: "BREATHING ROOM", kind: "recovery", unlock: 0 },
     { id: 30, name: "DIVIDEND LADDER", kind: "ladder", unlock: 15 },
-    { id: 31, name: "VOLATILITY RUN", kind: "volatility", unlock: 65 }
+    { id: 31, name: "VOLATILITY RUN", kind: "volatility", unlock: 65 },
+    { id: 34, name: "STEPPING STONES", kind: "islands", unlock: 25 },
+    { id: 35, name: "THE WIDE SPREAD", kind: "ravine", unlock: 50 }
   ];
   var clamp = function (x, lo, hi) { return Math.max(lo, Math.min(hi, x)); };
   var mix = function (x) { x >>>= 0; x = Math.imul(x ^ x >>> 16, 2146121005); x = Math.imul(x ^ x >>> 15, 2221713035); return (x ^ x >>> 16) >>> 0; };
@@ -41,8 +43,8 @@
   function difficulty(time) {
     var pressure = 1 - Math.exp(-Math.max(0, time) / 170);
     return { pressure: pressure, tier: Math.min(6, Math.floor(Math.max(0, time) / 45)),
-      actionGap: 1.45 - .38 * pressure, rest: 1.05 - .30 * pressure,
-      gapTime: .25 + .07 * pressure, actions: Math.min(6, 3 + Math.floor(Math.max(0, time) / 75)),
+      actionGap: 1.65 - .28 * pressure, rest: 1.30 - .25 * pressure,
+      gapTime: .48 + .18 * pressure, actions: Math.min(5, 3 + Math.floor(Math.max(0, time) / 100)),
       movingAmplitude: 12 + 12 * pressure, movingFrequency: 1.0 + .45 * pressure };
   }
   function state(q) {
@@ -55,9 +57,9 @@
   function terrain(seed, ground) {
     ground = Number.isFinite(ground) ? ground : GROUND;
     var r = stream(seed, 0, 0x54455252), scales = [
-      { period: between(r, 3600, 6600), budget: .04, salt: 0x4c4f4e47 },
-      { period: between(r, 1100, 1900), budget: .04, salt: 0x4d454449 },
-      { period: between(r, 500, 900), budget: .015, salt: 0x53484f52 }
+      { period: between(r, 3800, 6200), budget: .070, salt: 0x4c4f4e47 },
+      { period: between(r, 1200, 2400), budget: .055, salt: 0x4d454449 },
+      { period: between(r, 520, 980), budget: .020, salt: 0x53484f52 }
     ];
     scales.forEach(function (s) { s.amplitude = s.period * s.budget / 3; s.phase = between(r, 0, s.period); });
     function noise(x, derivative) {
@@ -78,7 +80,7 @@
       return derivative ? noise(x, true) * fade + value * 6 * t * (1 - t) / 6000 : ground + value * fade;
     }
     return Object.freeze({ version: VERSION, districtId: "endless", seed: seed >>> 0, ground: ground,
-      signature: "endless-v2-" + mix(seed ^ 0x54455252).toString(16).padStart(8, "0"), maxSlope: .16,
+      signature: "endless-v3-" + mix(seed ^ 0x54455252).toString(16).padStart(8, "0"), maxSlope: .24,
       knots: Object.freeze([Object.freeze({ x: 0, y: ground }), Object.freeze({ x: 900, y: ground })]),
       at: function (x) { return at(x, false); }, slopeAt: function (x) { return at(x, true); },
       knotsIn: function (start, end) {
@@ -148,18 +150,19 @@
       endTime = Math.max(endTime, t + width / v + .8);
       return object;
     }
-    function gap(t, time) {
+    function gap(t, time, stepping) {
       var x = xAt(t), width = v * time, slope = (q.floorAt(x + width + 40) - q.floorAt(x - 40)) / (width + 80);
       // A rise shortens a ground jump's landing window. Reserve extra margin.
       width *= slope < 0 ? clamp(1 + slope * 1.5, .76, 1) : 1;
       q.hazard("gap", x, width, q.floorAt(x));
       gapRanges.push([x, x + width]);
       actions.push({ type: "gap", t: t, widthTime: width / v, x: x, width: width });
-      for (var n = 0; n < 4; n++) {
+      for (var n = 0; !stepping && n < 4; n++) {
         var px = x - v * .12 + (width + v * .24) * n / 3;
         pickup(px, Math.min(q.floorAt(x), q.floorAt(x + width)) - 115 - Math.sin(n / 3 * Math.PI) * 40, "opportunity");
       }
       endTime = Math.max(endTime, t + width / v + 1);
+      return {x: x, width: width, duration: width / v};
     }
     function platform(t, duration, height, kind, premium) {
       var x = xAt(t), width = duration * v, floor = floorRange(x, width), amp = kind === "crane" ? between(layout, 10, d.movingAmplitude) : 0;
@@ -178,8 +181,10 @@
     function groundSequence(types, start) {
       var t = start;
       types.forEach(function (kind) {
-        if (kind === "gap") gap(t, between(layout, .23, d.gapTime)); else hurdle(t, kind);
-        t += d.actionGap + between(layout, .02, .28);
+        if (kind === "gap") {
+          const opening = gap(t, between(layout, .27, d.gapTime));
+          t += opening.duration + between(layout, 1.05, 1.55);
+        } else { hurdle(t, kind); t += d.actionGap + between(layout, .05, .55); }
       });
       return t;
     }
@@ -219,15 +224,38 @@
           groundSequence(Array.from({ length: count }, function () { return layout() < .7 ? "low" : "gap"; }), lead); break;
         case "gaps":
           t = lead;
-          for (var i = 0, n = integer(layout, 1, Math.min(3, count)); i < n; i++) { gap(t, between(layout, .24, d.gapTime)); t += d.actionGap + between(layout, .25, .5); }
+          for (var i = 0, n = integer(layout, 1, Math.min(3, count)); i < n; i++) {
+            // Each opening gets a width and an independent landing bank, never
+            // a fixed beat. Later runs admit full double-jump stretches.
+            var opening = gap(t, between(layout, .26, d.gapTime));
+            t += opening.duration + between(layout, 1.05, 1.85);
+          }
+          break;
+        case "islands":
+          t = lead;
+          for (var i = 0, n = integer(layout, 2, 4); i < n; i++) {
+            var opening = gap(t, between(layout, .28, Math.min(.54, d.gapTime)));
+            t += opening.duration + between(layout, .80, 1.25);
+          }
+          break;
+        case "ravine":
+          // A genuinely wide opening, crossed on a variable number of broad
+          // stepping platforms. No required power-up or perfect triple jump.
+          var stones = integer(layout, 2, 4), stride = between(layout, .78, 1.02);
+          var hole = gap(lead, stones * stride + .36, true);
+          var spacing = hole.duration / (stones + 1);
+          for (var i = 0; i < stones; i++) {
+            platform(lead + spacing * (i + 1) - .18, between(layout, .38, .50),
+              between(layout, 22, 44), "roof", false);
+          }
           break;
         case "spring":
-          spring(lead); gap(lead + .55, between(layout, .25, .32));
-          platform(lead + .85, between(layout, .55, .8), between(layout, 72, 100), choose(layout, ["billboard", "roof"]));
-          hurdle(lead + 3.0 + between(layout, 0, .4), "low"); break;
+          spring(lead); gap(lead + .55, between(layout, .42, .64));
+          platform(lead + .95, between(layout, .65, .95), between(layout, 72, 100), choose(layout, ["billboard", "roof"]));
+          hurdle(lead + 3.6 + between(layout, 0, .6), "low"); break;
         case "express":
           var dur = between(layout, 1.65, 2.3), train = platform(lead, dur, between(layout, 56, 78), "train");
-          gap(lead + .7, between(layout, .24, .30));
+          gap(lead + .7, between(layout, .34, .60));
           pickup(train.x + train.w * .68, train.y - 43, "conviction", train);
           hurdle(lead + dur + 1.5, "low"); break;
         case "recovery":
@@ -236,23 +264,23 @@
           if (layout() < .65) platform(.8, between(layout, .55, .9), 58, "awning");
           endTime = Math.max(endTime, between(layout, 3.0, 3.7)); break;
         default:
-          var number = integer(layout, 2, Math.min(5, count + 1)), cursor = lead;
+          var number = integer(layout, 2, Math.min(4, count)), cursor = lead;
           var ascending = layout() < .5, high = between(layout, 54, 74);
           for (var i = 0; i < number; i++) {
             var height = high + (ascending ? i : number - 1 - i) * between(layout, 14, 24);
             height = Math.min(height, 128);
             var kind = family.kind === "cranes" ? "crane" : family.kind === "crumble" ? "crumble" : choose(layout, ["awning", "roof", "billboard"]);
             if (family.kind === "ladder" && i === 0) spring(Math.max(.35, cursor - .35));
-            var p = platform(cursor, between(layout, .60, .88), height, kind);
+            var duration = between(layout, .65, 1.12), p = platform(cursor, duration, height, kind);
             if (family.kind === "upper" && i === 1) {
-              var upper = platform(cursor + .18, between(layout, .48, .66), Math.min(height + 90, 205), "bull", true);
+              var upper = platform(cursor + .20, between(layout, .48, .66), height + 168, "bull", true);
               pickup(upper.x + upper.w * .5, upper.y - 42, "conviction", upper);
             }
-            cursor += between(layout, .98, 1.24);
+            cursor += duration + between(layout, .50, .95);
           }
-          // Optional roofs vary freely; the street retains a clearly jumpable path.
-          hurdle(lead + .65, "low");
-          if (d.pressure > .3 && layout() < .65) hurdle(cursor + .5, "low");
+          // Ground obstacles follow the roof sequence, with landing space.
+          // Never hide a mandatory hurdle beneath a low overhanging platform.
+          if (layout() < .8) hurdle(cursor + .65, "low");
           break;
       }
       if (family.id !== 29 && index >= s.nextRecovery + 2) s.nextRecovery = index + integer(events, 3, 5);

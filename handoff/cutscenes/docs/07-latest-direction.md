@@ -48,3 +48,17 @@ Version 1.13 extends the same complete-painting approach to Midtown. Park retain
 The chapter map now uses miniature Nicolai and Trond cropped from the approved playable atlases. They run briefly between course markers and then settle into a still pose; reduced motion uses a static change. This does not change the character art direction. Endless has a new seeded route director, continuous terrain and progressive combinations. These are gameplay changes, not newly commissioned cutscene beats.
 
 Use `references/locations/INDEX.md` and `location-manifest.json` to open the exact native source files in `game/assets/`; large city artwork is stored once, without downsampling. Current runtime manifests and gameplay captures define final composition. The four pickups in `assets/props-v18/`, Central Park, existing runner sheets, audio and game systems remain. New obstacle sources are in `assets/props-v113/`. Previous scenery versions are historical references, not current production authority. Test completion and user acceptance must be stated separately.
+
+
+## Version 1.14: Story and asset review
+
+Story is now a score-free chapter journey. Endless unlocks only after all three
+chapters are complete and has varied seeded terrain, gaps and platform routes.
+The five-second track-title card follows actual music. Route scenery remains
+visible after an upper/lower choice, with the authored collision rules kept.
+
+The user disliked the newest city obstacles and requested five choices including
+the actual older designs, plus Park bench/branch alternatives. Those choices
+are in the separate The-Long-Run-Asset-Choices.zip; none has been selected or
+integrated. Do not treat the new concept atlases as approved runtime art.
+The game's backdrop, venues and default obstacles remain the v1.13 source.

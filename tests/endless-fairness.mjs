@@ -45,7 +45,7 @@ function stateKey(q) {
     q.jumpChain, q.chainWindow > 0, q.jumpCount, q.forcedBounce > 0, q.sliding, q.flight, q.flightLanding > 0,
     q.platforms.map(p => p.collapseAt ? Math.round((p.collapseAt - q.time) * 10) : '').join(',')].join('|');
 }
-function controlSearch(context, initial, target) {
+export function controlSearch(context, initial, target) {
   // The test explores player inputs every100ms, while the real engine simulates
   // at120Hz. It neither moves geometry nor grants invincibility. A successful
   // path is a concrete witness; failure means this bounded search found none.
@@ -101,9 +101,9 @@ async function main() {
   // After unrelated presentation/copy edits, replay previously discovered
   // witnesses through the current real engine instead of repeating the search.
   const replay = process.env.ENDLESS_REPLAY_REPORT ? JSON.parse(await fs.readFile(process.env.ENDLESS_REPLAY_REPORT, 'utf8')) : null;
-  assert.equal(G.version, 2);
+  assert.equal(G.version, 3);
   const sample = new c.hi(540, 42, {mode: 'endless', procedural: true});
-  assert.equal(sample.terrainProfile.version, 2, 'Constructor uses the new terrain in real Endless');
+  assert.equal(sample.terrainProfile.version, 3, 'Constructor uses the new terrain in real Endless');
   sample.spawn(20);
   assert.equal(G.inspect(sample).history.at(-1).route, 20, 'Real engine spawn delegates to the new generator');
   const report = {sourceSha256: {engine: createHash('sha256').update(engine).digest('hex'), endless: createHash('sha256').update(endless).digest('hex'), generator: createHash('sha256').update(generator).digest('hex')}, storyReference: baseline.reference, storyChecks: [], compactReaction: [], physics: [], bars: 0, events: []};

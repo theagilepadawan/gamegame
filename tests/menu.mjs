@@ -115,6 +115,7 @@ try {
   assert.equal(await page.locator('#chapter-browser').isVisible(), true);
   assert.equal(await page.locator('.world-picker').isVisible(), false);
   assert.equal(await page.locator('#new-world').isDisabled(), true);
+  await page.evaluate(() => { LR_CH.order.forEach(id => LR_CH.done(id)); LR_CH.paint(); });
   await page.locator('[data-mode="endless"]').click();
   await page.waitForFunction(() => LR_MENU.state.mode === 'endless');
   assert.equal(await page.locator('#chapter-browser').isVisible(), false);
@@ -161,6 +162,7 @@ try {
   const pin = await mobile.locator('.map-player').boundingBox();
   const destination = await mobile.locator('[data-district="midtown"]').boundingBox();
   assert(Math.abs(pin.x + pin.width / 2 - destination.x - destination.width / 2) < 2, 'Player pin follows the selected destination');
+  await mobile.evaluate(() => { LR_CH.order.forEach(id => LR_CH.done(id)); LR_CH.paint(); });
   await mobile.locator('[data-mode="endless"]').click();
   await mobile.waitForFunction(() => LR_MENU.state.mode === 'endless');
   const start = await mobile.locator('#start').boundingBox();

@@ -828,3 +828,19 @@ input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text;-webk
 @media(min-aspect-ratio:8/3){
  .stage,.stage:fullscreen{max-width:calc(100dvh * 8 / 3);margin-inline:auto}
 }
+
+/* Story is a journey; competitive numbers belong to the unlocked Endless mode. */
+[data-play-mode="chapter"] #home-hi,
+[data-play-mode="chapter"] #live-hud,
+[data-play-mode="chapter"] .report-numbers,
+[data-play-mode="chapter"] #board-strip {display:none!important}
+.mode-switch button.is-locked{opacity:.55}
+.mode-switch button.is-locked::after{content:" · LOCKED";font-size:.56em;letter-spacing:.08em}
+.mode-switch button.is-locked:focus-visible{opacity:1;outline:2px solid var(--sea);outline-offset:4px}
+.now-playing{position:absolute;right:20px;bottom:43px;z-index:35;display:flex;gap:9px;align-items:center;max-width:calc(100% - 40px);padding:8px 12px;border:1px solid #d2ddd12e;border-radius:5px;background:#082b3ce8;color:#f4e8d1;font:500 11px/1.3 Arial,sans-serif;letter-spacing:.02em;pointer-events:none;animation:music-arrive .28s ease-out}
+.now-playing[hidden]{display:none}
+.music-note{color:#b8dcd2;font-size:15px}
+#now-playing-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@keyframes music-arrive{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+@media(pointer:coarse){.now-playing{bottom:118px;right:14px;padding:6px 9px;font-size:10px}}
+@media(prefers-reduced-motion:reduce){.now-playing{animation:none}}

@@ -23,7 +23,7 @@ async function open(viewport,fallback=false){
 }
 async function capture(page,name,fixture){
   const state=await page.evaluate(({fixture,name})=>{
-    Cu(false);Ko('endless');b='paused';SA.pause();
+    LR_CH.order.forEach(id => LR_CH.done(id));Cu(false);Ko('endless');b='paused';SA.pause();
     q.seed=fixture.seed;q.terrainProfile=Yo(fixture.seed,{districtId:'endless',ground:T});
     q.distance=fixture.distance;q.time=20;q.autoSpawn=false;q.pickups=[];q.platforms=[];q.markers=[];q.springs=[];
     q.obstacles=(fixture.gaps||[{x:495,w:260}]).map(gap=>({...gap,type:'gap',base:q.floorAt(gap.x),h:85,theme:0,passed:false}));

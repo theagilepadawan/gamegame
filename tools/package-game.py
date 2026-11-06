@@ -108,7 +108,8 @@ or build step is needed to play it. For an intranet or website, upload the
 HTML as a normal static page.
 
 Story follows Opening Bell, Midtown and Central Park. Endless offers seeded
-courses. Chapter progress and local scores are saved by the browser.
+courses and unlocks after finishing all three Story chapters. Story has no
+scoreboard. Chapter progress and Endless scores are saved by the browser.
 
 Source and maintenance instructions:
 https://github.com/theagilepadawan/gamegame
@@ -181,6 +182,8 @@ def current_handoff(version, html_hash):
 
 def write_checksums(version, html_hash):
     files = [HTML, ARCHIVE]
+    files.extend(path for name in ["The-Long-Run-Asset-Choices.zip", "City-Asset-Choices.png", "Park-Asset-Choices.png"]
+                 if (path := RELEASE / name).is_file())
     omitted = []
     if current_handoff(version, html_hash):
         files.append(HANDOFF)

@@ -8,7 +8,7 @@
      GET  {endpoint}/boards/{board}/rank?score=1234    -> { rank: number, total: number }
      POST {endpoint}/boards/{board}/entries   body: Entry   -> { rank: number, total: number, entry: Entry }
    Entry = { id, name, score, runner, world, won, seconds, at }   (at = ISO timestamp)
-   Boards: "opening" | "midtown" | "park" | "endless".
+   Active board: "endless". Legacy Story records remain in storage only.
    If the service cannot be reached, the board quietly falls back to this device.
    ========================================================================== */
 (function () {
@@ -17,12 +17,9 @@
   var CONFIG = window.LONG_RUN_LEADERBOARD || {};
   var KEY = "longrun.leaderboard.v1", NAME_KEY = "longrun.player", MAX = 100;
   var BOARDS = [
-    { id: "opening", label: "Opening Bell" },
-    { id: "midtown", label: "Midtown" },
-    { id: "park", label: "Central Park" },
     { id: "endless", label: "Endless" }
   ];
-  var resolve = function (id) { return BOARDS.some(function (b) { return b.id === id; }) ? id : "opening"; };
+  var resolve = function (id) { return BOARDS.some(function (b) { return b.id === id; }) ? id : "endless"; };
   var tabOf = resolve;
   var byScore = function (a, b) { return b.score - a.score || (a.at < b.at ? -1 : 1); };
   var clean = function (n) { return String(n || "").replace(/[\u0000-\u001f<>]/g, "").replace(/\s+/g, " ").trim().slice(0, 16); };
@@ -63,7 +60,7 @@
   };
 
   /* ---- dialog ---------------------------------------------------------- */
-  var dlg, list, tabs, note, current = "opening", highlight = null;
+  var dlg, list, tabs, note, current = "endless", highlight = null;
   function build() {
     dlg = document.createElement("dialog");
     dlg.id = "board-dialog"; dlg.className = "board-dialog"; dlg.setAttribute("aria-labelledby", "board-title");
@@ -125,6 +122,7 @@
     });
   }
   function open(tab, hl) {
+    if (window.LR_CH && !LR_CH.endlessUnlocked()) return;
     if (!dlg) build();
     highlight = hl || null;
     show(tab || current);
@@ -168,20 +166,22 @@
   }
   function boardFor(s) {
     if (!s) return null;
-    if (s.mode === "chapter") return resolve(s.districtId || "opening");
+    if (s.mode === "chapter") return null;
     if (s.mode === "endless" && s.procedural) return "endless";
     return null;
   }
   function onResults(s) {
-    if (!strip) buildStrip();
     var board = boardFor(s), score = s ? Math.floor(s.score || 0) : 0;
     posted = false; pending = board && score > 0 ? { board: board, score: score, snap: s } : null;
-    if (!pending) { strip.hidden = true; return; }
+    if (!pending) { if (strip) strip.hidden = true; return; }
+    if (!strip) buildStrip();
+    var entry = pending;
     var input = $(".bs-name", strip), btn = $(".bs-post", strip), tag = $(".bs-tag", strip);
     try { input.value = localStorage.getItem(NAME_KEY) || ""; } catch (e) { input.value = ""; }
     input.disabled = btn.disabled = false; btn.textContent = "Post score";
     strip.classList.remove("is-posted", "is-entry");
     store.rank(board, score).then(function (r) {
+      if (pending !== entry) return;
       var top = r.rank <= 10;
       strip.classList.toggle("is-entry", top);
       tag.textContent = (top ? "NEW ENTRY · #" : "BOARD · #") + r.rank;

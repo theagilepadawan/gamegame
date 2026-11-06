@@ -1,0 +1,12 @@
+THE LONG RUN — ASSET CHOICES
+
+Open index.html in your browser. It works offline.
+A is the actual older artwork. B–E are new alternatives.
+Choose one city direction and one park direction, or describe a mix.
+Use Copy my choices and paste the result into the chat; selections do not
+change the playable game. All proposed art is outside the runtime.
+
+The PNG contact sheets show the same comparison without opening a webpage.
+Native PNG atlases and lossless sprite crops are in art/. These are proposals,
+not final collision registrations; the gameplay previews illustrate scale.
+Only benches and branches are proposed for Park. Its scenery is untouched.

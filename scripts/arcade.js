@@ -6,9 +6,6 @@
 
   /* ---- HI-SCORE: read the same best-score keys the game writes --------- */
   function bestKey() {
-    var m = document.querySelector("[data-mode].selected"), d = document.querySelector("[data-district].selected");
-    var mode = m ? m.dataset.mode : "chapter", dist = d ? d.dataset.district : "opening";
-    if (mode === "chapter") return dist === "opening" ? "nyc.opening-bell.best" : "nyc.district." + dist + ".best";
     return "nyc.chapter-build.best";
   }
   var hiQueued = false;
@@ -67,7 +64,7 @@
       if (rev && rev.history) results.classList.add("is-replay");
       var primary = document.getElementById(results.dataset.primary || "restart");
       if (primary && !primary.hidden && !primary.disabled) primary.focus({ preventScroll: true });
-      runTally();
+      if (snap && snap.mode === "endless") runTally();
       window.LongRunBoard && window.LongRunBoard.onResults(snap);
     };
     if (rev && rev.history && rev.won && window.LongRunReveal) {

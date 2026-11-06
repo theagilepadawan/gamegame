@@ -1,5 +1,10 @@
 # Finance props — version 1.13 implementation
 
+Version 1.14 note: the user requested alternatives to these designs. They remain
+in the runtime temporarily while five city and five Park options are reviewed
+in the separate asset-choices ZIP. Do not treat this existing style as the
+approved direction for further replacement artwork.
+
 The five small asset suggestions are implemented without changing terrain,
 physical collision sizes, player timing or the accepted city paintings.
 `assets/props-v113/atlas-native.png` is the transparent 1536×1024 source atlas;

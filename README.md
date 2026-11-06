@@ -4,28 +4,47 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
-## Version 1.13 — warm Midtown and finance obstacles
+## Version 1.14 — Story, Endless and asset choices
 
-Midtown returns to the original complete golden skyline, Bryant Park and Fifth
-Avenue paintings. A matching ordinary restaurant block spaces the current venue
-details along the course. The city has one slow horizontal scroll: jumping and
-jetpacks no longer lift the buildings or move a separate skyline. The lossless
-original masters recover detail, and the venue composites render at 2090×1176.
-The blue 505 glass, revolving doors, host and other native venue crops are retained.
+Story now focuses on the three chapters: no score HUD, result grades, high-score
+records or leaderboard entry. Finish Opening Bell, Midtown and Central Park to
+unlock Endless; existing completed profiles retain access. The next chapter
+remains the default after a win. Old saved Story scores are left untouched.
 
-Fine Print book stacks, Fee Drag cases, Red Tape portfolios and Moving Guidance
-boards replace generic city barriers. Their solid faces match the existing
-collision rectangles. Two late Midtown boards retain their slow, predictable
-vertical cycle. Park keeps its original bench and adds a small Benchmark plaque.
+Endless uses a stronger continuous terrain profile and fourteen seeded section
+families. Unequal landing banks, continuously varied gap widths, stepping islands
+and wide chasms replace the short uniform gaps. Broad platforms span the longer
+chasms. Roofs are spaced farther apart, with mandatory ground hurdles placed
+after them instead of beneath low platforms. Speed and combinations increase
+with distance while recovery space remains. The seed still reproduces a route
+independently of screen size, collection decisions and frame timing.
 
-The accepted Downtown restoration, Park scenery, runners, gameplay, Endless
-variation and chapter-map miniatures remain. [Verification](docs/verification.md)
-records the actual checks and limitations. The earlier repository snapshot
-`a551054` is not the user's supplied warm painted backdrop; do not restore it.
+Choosing an upper Story route no longer deletes the scenery underneath it.
+The unchosen branch remains visible behind the active route while preserving
+the previous collision and reward rules. Downtown, Midtown and Park paintings,
+venue detail, warm lighting, camera motion, runners and default obstacle art
+are unchanged from version 1.13.
 
-The current Nicolai and Trond sprite sheets are unchanged. The rejected cartoon runner study and alternate Park artwork are not part of gameplay.
+A minimal now-playing card appears for five seconds on each run/results page
+and soundtrack change. It follows actual playback, including exclusive
+Contrarian music, and hides when muted or paused. Track titles are editable in
+`scripts/now-playing.js`: Midtown is “Good Company Never Dies”, Central Park is
+“Diversified Ballad”, and Contrarian is “Good ol’ Company”, as supplied by the user.
 
-[Cutscene production handoff](release/The-Long-Run-Cutscene-Handoff.zip?raw=1) contains the complete editable game, native references, audio, a proposed shot slate, Runway prompts and browser integration notes. Start with `START-HERE.md` inside the ZIP. Its location index links to exact native files in the editable game's asset tree. If duplicating the compiled HTML would exceed 100 MiB, the handoff includes verified build instructions and the expected HTML hash instead; every native asset is retained. The separate playable ZIP remains ready to open. Cutscenes are a separate production task; this release does not add video interruptions.
+[Review five city and five park art directions](release/The-Long-Run-Asset-Choices.zip?raw=1).
+Unzip and open `index.html`: A is the actual old art, B–E are new proposals.
+Each appears in detail and at gameplay size. The selector only copies choices
+for discussion; none of the alternatives replaces runtime art yet. The Park
+proposals cover benches and branches only. The separate `asset-options/`
+folder contains the native concept atlases, lossless crops and review page.
+
+[Cutscene production handoff](release/The-Long-Run-Cutscene-Handoff.zip?raw=1)
+contains the current editable game, native references, audio, proposed shot
+slate, Runway prompts and integration notes. Start with `START-HERE.md` inside.
+The source rebuild is verified against the playable download. If including
+both source and compiled HTML exceeds 100 MiB, the duplicate HTML is omitted
+with exact rebuild instructions; the ready-to-play ZIP remains separate.
+Unselected asset proposals are provided in the separate art review ZIP.
 
 ## Story and Endless
 
@@ -35,7 +54,7 @@ The current Nicolai and Trond sprite sheets are unchanged. The rejected cartoon 
 - **Story courses:** fixed chapter terrain; seed and New world controls belong to Endless. Switching modes preserves the chosen Endless seed.
 - **Landmark continuity:** Story follows a finite route without mirroring or repeating its landmarks. Endless continues through the original anonymous street tail without returning to WTC, Brooklyn Bridge or named venues; the current gameplay generator varies independently of that scenery loop.
 
-The NBIM branding, music, both runners and their animations, unlocks, fund-history reveal, pickups, jetpack, boss, local leaderboards and environmental effects remain from the supplied build. Leaderboards remain local unless a remote service is explicitly configured.
+The NBIM branding, music, both runners and their animations, unlocks, fund-history reveal, pickups, jetpack, boss, Endless leaderboard and environmental effects remain from the supplied build. Leaderboards remain local unless a remote service is explicitly configured.
 
 ## Play the download
 

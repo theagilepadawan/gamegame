@@ -1,105 +1,81 @@
-# Release verification — warm Midtown and finance props, version 1.13
+# Release verification — Story and Endless polish, version 1.14
 
-Midtown now uses complete warm paintings rather than separate architecture,
-skyline and atmosphere layers. Its original golden skyline, Bryant Park/library
-and Fifth Avenue scenes were recovered from lossless 1672×941 PNG masters.
-A matching ordinary restaurant street is the only new background painting.
-Current native Joju, Omar's, Gussy's and complete blue/cyan 505 fronts are
-integrated into those streets. The office host keeps her original native art.
-Downtown's accepted v1.12 restoration is unchanged.
+This release keeps the accepted v1.13 city and Park art/cameras unchanged.
+All new asset directions are confined to asset-options/ and the separate
+review download. A is the actual previous artwork in both comparison sets.
+The current game art is deliberately not replaced pending the user's choice.
 
-The city has one slow horizontal camera, an opening hold/ease and a fixed y=-8.
-Double jumps, the grand jump, slopes and jetpacks never lift or scale the
-painted background. A longer opening hold on wide displays prevents early
-venue reveals; narrow portrait displays receive enough horizontal travel to
-reach the office before completion. This restores the original warm composition
-and calm movement, with an added ordinary block for venue spacing. It is not
-an assertion of pixel-identical timing to an inferred repository version.
+## Changes and regression coverage
 
-The supplied earlier HTML identified in v1.12 has SHA-256
-`9fd060927fc13512f82b18c86e9edc8cf19de59357f5874169d9e8644b263488`.
-Repository commit `a551054` was incorrectly associated with that reference in
-an earlier pass. Its separate city layers are not the current visual authority.
+Story has no competitive HUD, grades, tally, record writes, points popups or
+score submission. Internal pickup mechanics remain intact. The local board
+has one tab, Endless; old Story saves are retained without being displayed.
+Endless is guarded at selection and run start and requires all three completed
+chapters, including with the old chapter-demo query. Fresh, partial, malformed
+and completed saves are exercised. Normal story wins, default next-chapter
+focus, the history reveal, both controller and keyboard progression, retries,
+seed preservation and persistent final unlock are checked through the real UI.
 
-The cached 2090×1176 Midtown composites preserve more native venue detail.
-Lossless encodings recover fidelity from the original background masters;
-this is not newly invented high-resolution detail in those old paintings.
-All six current venue source files and all forty baseline assets remain
-byte-identical. Park paintings, runner atlases, audio, curbs, physics, Endless
-variation and the chapter map retain their existing behavior.
+An unchosen Story route is retained as visible scenery behind the chosen path.
+Its previous non-interaction rules remain: it cannot catch a jump or hit the
+runner on the other route. Thirty-two actual physics probes cover both routes,
+runners and districts, paired with browser checks that no entities disappear
+when the upper route is chosen. A caught camera/landing regression was fixed
+by separating route visibility from collision eligibility.
 
-## Finance assets
+The now-playing label lasts five seconds for an audible run/results page or
+track change. Browser checks cover expiry, actual audio playback, chapter
+changes, exclusive Contrarian playback/return, mute and results. The user supplied the display titles: Midtown “Good Company Never Dies”,
+Central Park “Diversified Ballad”, Contrarian “Good ol’ Company”. They are
+configurable in scripts/now-playing.js. The widget owns no audio playback.
 
-Fine Print, Fee Drag, Red Tape and Moving Guidance use a new transparent native
-1536×1024 atlas, with lossless crops at least 675 pixels wide. Handles, the bow,
-asterisk and suspension eyes are registered separately from the solid body.
-The body aligns to the existing obstacle face; the engine retains its forgiving
-collision insets. The two late Midtown hoists use their existing 3.8-second
-physical cycle and the same simulation position for collision and rendering.
-A small Benchmark plaque is added to the original Park bench. No other Park
-bench, branch, tree or paving pixels are changed by this prop pass.
+## Endless
 
-The office greeting now uses the same body clipping path for its still and
-waving poses. This prevents tiny shoe-edge changes at its smaller background
-scale; the same original source pixels and restrained wrist animation remain.
+Version 3 of the director retains a deterministic, aperiodic spatial terrain
+field and independent geometry/reward/event random streams. Larger terrain
+amplitudes add more pronounced hills and valleys without periodic resets.
+Fourteen section families include uneven landing banks and broad platform
+crossings over long chasms. Ground hurdles no longer overlap low platform
+sequences. Optional upper routes have standing headroom. Speed still caps at
+700 world units/second and later runs increase combination complexity and gap
+width rather than remove all recovery time.
 
-## Executed checks
+Executed model checks:
 
-The full default browser suite passed against the built standalone HTML:
+- Same seed produces identical course geometry/rewards across viewport sizes,
+  collection decisions and different frame/spawn clocks. Different seeds differ.
+- 42 family/time cases × 64 seeds have parameterized layouts. All families,
+  powerups, event types and platform types occur through normal scheduling.
+- 45,824 terrain samples cover 128 seeds, distant coordinates, continuity and
+  derivative bounds. Terrain does not reset to a fixed course packet.
+- 1,600 real-model sections across 32 seeds: no ground hurdle hidden under a
+  low platform, readable obstacle approach distances, at most 34 entities per
+  generated section. 968 gaps include 859 distinct widths to 0.1 ms precision;
+  four width bands contain 216 / 482 / 205 / 65 openings. Largest holes have
+  physical stepping platforms, not a required temporary powerup.
+- 28 section traversals (14 families at early and later speeds) use searched
+  actual inputs through 120 Hz engine physics, with no damage, shield credit,
+  invulnerability or required triple jump. Another eight varied-seed traversals
+  test compact screens and both runners, including ten-minute difficulty.
+  No-input counterexamples fall into the tested holes.
+- Twelve original Story snapshots retain identical authored movement states.
 
-- 2,376 Midtown layout/camera comparisons across chapter/Endless, distances and
-  viewport sizes; 79,992 opaque-coverage samples across seams; pinned lossless
-  originals, six native venue hashes and unchanged engine camera/curb functions.
-- Real chapter reveal times on desktop and wide phone: Joju around 13 seconds,
-  Omar's 24.5, Gussy's 42.5 and 505 at 55. The full office entrance is visible
-  around 57.8 seconds. Portrait also shows all four before the 60-second finish.
-- 33 actual Midtown frames: desktop, phone DPR2 and forced Canvas, with double
-  jumps, timed grand jumps, landing and jetpack rise/coast. Background and
-  storefront y positions remain fixed while the player's camera moves.
-- 264 Downtown comparisons against the actual supplied reference and 18 actual
-  gameplay frames across desktop, phone DPR2 and Canvas, both runners, real
-  double jumps and jetpack. Its non-venue street pixels and camera stay intact.
-- Office greeting on all three renderer/layout profiles: full grounded figure,
-  stable head/body/shoes, once-only wrist gesture, pause and reduced motion.
-- New prop readiness, all four solid faces, stable variant selection, actual
-  jump/slide collision outcomes, unchanged rewards and springs, original Park
-  geometry with the plaque disabled, reduced-motion pickup behavior.
-- 144 collision-enabled moving-board slide traversals across both runners,
-  three seeds and twelve phases; standing probes hit lowered boards and clear
-  fully raised boards. Park groves keep obstacle silhouettes unobscured.
-- Story/Endless controls, fixed Story seed, history reveal, keyboard/controller
-  next-chapter defaults, retries/unlocks, map miniatures and native runner frames.
-- Park water animates only in its approved lake, with stable banks and frozen
-  pause/reduced motion. Real joined-gap physics and full-depth gap rendering pass.
-- Standalone fonts, scripts, audio, native scenery and added props load with no
-  external requests. Offline course/runner switching and Contrarian entry/return
-  pass. No browser exceptions or failed assets were reported.
+Reports: docs/verification/v114-endless-*.json. Commands:
+node tests/endless-generation.mjs; node tests/endless-spacing.mjs;
+node tests/endless-fairness.mjs; node tests/endless-traversal.mjs;
+node tests/story-route-physics.mjs.
 
-Command: `TEST_URL=http://127.0.0.1:4181/release/The-Long-Run-NBIM.html npm test`.
-The tested standalone is 48,789,803 bytes, SHA-256
-`577ffc8b70e4a0dce1db8aea91cff9f7ff218552ea446035301bc0afd0b6abf3`.
-Representative actual game captures are retained under `release/`. Captures
-and automated checks are evidence for visual review, not user acceptance.
+## Presentation and release
 
-## Performance and packaging
+The existing city reference checks, seams/coverage, venue grounding, office
+host, gap rendering, original runner atlases, props, 144 moving-board slide
+traversals, Park lake, map controls and offline standalone checks remain part
+of release validation. Midtown's real double/triple jumps and jetpack frames
+passed on desktop, phone DPR2 and Canvas after the route regression fix.
+The final standalone is rebuilt from the exact editable source; packaging
+verifies ZIP CRC, embedded HTML and the cutscene handoff's source rebuild.
+release/SHA256SUMS.txt records the delivered files. The art chooser is tested
+on desktop and mobile with working selections and no horizontal overflow.
 
-The active scenery images drop from 28 / 142,243,272 decoded RGBA bytes in
-v1.12 to 19 / 85,627,976 bytes. This measures source images only; it excludes
-prepared canvases, GPU textures, sprites and other memory. More source detail
-in the lossless backgrounds increases the compressed standalone file size.
-
-Two sequential software-WebGL comparisons used 100 warm-up frames and 240
-measured actual game frames per version at 960×540 DPR1, with synchronous GPU
-completion and the same 960×540 raster. In the first order, v1.12 median/p95 was
-14.4/39.5 ms; v1.13 was 11.4/37.5 ms. In reversed order, v1.13 was 9.7/31.7 ms;
-v1.12 was 13.6/50.1 ms. Both comparisons favor the simpler warm composition,
-but cloud timing does not establish guaranteed hardware FPS. Raw results are
-in `docs/verification/v113-performance*.json`. No other browser test was running
-during those measurements.
-
-The game packaging verifies ZIP CRC and identical HTML. The source handoff
-is independently rebuilt and compared byte for byte with the tested standalone.
-Public ZIP downloads are verified against the immutable release commit before
-delivery. Emulated phone layouts do not replace physical-device or Safari
-testing. Exact deliverable sizes and hashes are in
-`release/release-metadata.json` and `release/SHA256SUMS.txt`.
+These sampled checks do not prove every possible endless seed is solvable,
+and cloud software rendering is not a guarantee of performance on all devices.
