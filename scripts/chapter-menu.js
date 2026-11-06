@@ -1,5 +1,5 @@
 /* The chapter overworld keeps the existing progression and game controls.
-   Its player pin travels along the same path that joins the destinations. */
+   The selected runner travels along the path that joins the destinations. */
 (function () {
   "use strict";
   function init() {
@@ -9,6 +9,7 @@
     if (!browser || !rail || !intro) return;
     var cards = Array.from(rail.querySelectorAll("[data-district]"));
     var modes = Array.from(document.querySelectorAll("[data-mode]"));
+    var characters = Array.from(document.querySelectorAll("[data-character]"));
     var previous = document.getElementById("chapter-prev");
     var next = document.getElementById("chapter-next");
     var progress = document.getElementById("journey-progress");
@@ -16,12 +17,50 @@
     var route = document.getElementById("map-route");
     var marker = browser.querySelector(".map-player");
     var legs = Array.from(browser.querySelectorAll("[data-leg]"));
-    var markerLength = 0, markerFrame = 0;
+    var markerLength = 0, markerFrame = 0, markerTarget = 0, runner = "";
     var stops = [0, legs[0].getTotalLength(), route.getTotalLength()];
     var names = { opening: "Opening Bell", midtown: "Midtown", park: "Central Park" };
     var reduce = matchMedia("(prefers-reduced-motion: reduce)");
     var browsing = 0, selected = "", scheduled = false, drag = null;
     var suppressClickUntil = 0, programmatic = false, wheelAt = 0, wheelAmount = 0;
+    // Native crops retain the approved runners, including their registered feet.
+    // One idle and six running frames; preload both so switching never flashes.
+    var avatarSources = {
+      nicolai: "assets/map-characters-v20/nicolai.webp",
+      trond: "assets/map-characters-v20/trond.webp"
+    };
+    var avatarImages = Object.create(null);
+    Object.keys(avatarSources).forEach(function (id) {
+      var image = new Image(); image.src = avatarSources[id]; avatarImages[id] = image;
+    });
+    var figure = document.createElement("div");
+    figure.className = "map-player-figure";
+    var shadow = document.createElement("div");
+    shadow.className = "map-player-shadow";
+    marker.replaceChildren(shadow, figure);
+    marker.dataset.motion = "idle";
+    marker.dataset.facing = "right";
+    function syncRunner() {
+      var button = characters.find(function (b) { return b.classList.contains("selected"); });
+      // A locked runner can be previewed in the picker. Keep the map on the
+      // actual playable selection until that runner has been earned.
+      var chosen = window.longRun ? longRun.character : button && button.dataset.character;
+      var id = chosen === "trond" ? "trond" : "nicolai";
+      if (runner === id) return;
+      runner = id;
+      marker.dataset.runner = id;
+      figure.style.backgroundImage = 'url("' + avatarImages[id].src + '")';
+    }
+    function pose(frame) {
+      figure.style.backgroundPositionX = (frame / 6 * 100) + "%";
+    }
+    function settleMarker() {
+      cancelAnimationFrame(markerFrame);
+      markerFrame = 0;
+      placeMarker(stops[markerTarget]);
+      marker.dataset.motion = "idle";
+      pose(0);
+    }
     function isStory() { var b = document.querySelector("[data-mode].selected"); return !b || b.dataset.mode === "chapter"; }
     function selectedCard() { return cards.find(function (b) { return b.classList.contains("selected"); }) || cards[0]; }
     function clamp(i) { return Math.max(0, Math.min(cards.length - 1, i)); }
@@ -35,18 +74,23 @@
       markerLength = length;
       var point = route.getPointAtLength(length);
       marker.style.left = (point.x / 860 * 100) + "%";
-      marker.style.top = ((point.y - 26) / 240 * 100) + "%";
+      marker.style.top = (point.y / 240 * 100) + "%";
     }
     function moveMarker(index, instant) {
       cancelAnimationFrame(markerFrame);
+      markerTarget = index;
       var from = markerLength, to = stops[index];
-      if (instant || reduce.matches || Math.abs(to - from) < 1) { placeMarker(to); return; }
-      var began = performance.now(), duration = Math.min(680, 340 + Math.abs(to - from) * .45);
+      if (instant || reduce.matches || Math.abs(to - from) < 1) { settleMarker(); return; }
+      marker.dataset.facing = to < from ? "left" : "right";
+      marker.dataset.motion = "running";
+      pose(1);
+      var began = performance.now(), duration = Math.min(620, 320 + Math.abs(to - from) * .4);
       function step(now) {
         var t = Math.min(1, (now - began) / duration);
         var eased = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
         placeMarker(from + (to - from) * eased);
-        if (t < 1) markerFrame = requestAnimationFrame(step);
+        pose(1 + Math.floor((now - began) / 70) % 6);
+        if (t < 1) markerFrame = requestAnimationFrame(step); else settleMarker();
       }
       markerFrame = requestAnimationFrame(step);
     }
@@ -87,6 +131,8 @@
       var story = isStory(), wasHidden = browser.hidden, chosen = selectedCard();
       browser.hidden = !story;
       intro.classList.toggle("is-endless", !story);
+      syncRunner();
+      if (!story && markerFrame) settleMarker();
       var completed = 0;
       cards.forEach(function (card, i) {
         var id = card.dataset.district;
@@ -117,7 +163,7 @@
     }
     function queueRefresh() { if (!scheduled) { scheduled = true; requestAnimationFrame(refresh); } }
     var observer = new MutationObserver(queueRefresh);
-    cards.concat(modes).forEach(function (button) {
+    cards.concat(modes, characters).forEach(function (button) {
       observer.observe(button, { attributes: true, attributeFilter: ["class", "aria-pressed", "aria-disabled"] });
     });
     previous.addEventListener("click", function () { activate(browsing - 1, false); });
@@ -196,6 +242,7 @@
     if (resize) resize.observe(rail);
     window.addEventListener("resize", function () { if (!drag) scrollToCard(browsing, true); });
     window.addEventListener("storage", queueRefresh);
+    reduce.addEventListener("change", function () { if (reduce.matches) settleMarker(); });
     // Horizontal pad input belongs to the map; A / jump and result defaults
     // stay in the existing gameplay controller handler.
     var padPolling = false, lastPadDirection = 0;
@@ -220,7 +267,7 @@
     window.LR_MENU = {
       refresh: queueRefresh,
       focusChapter: function (id) { var i = cards.findIndex(function (card) { return card.dataset.district === id; }); if (i >= 0) activate(i, true); },
-      get state() { return { mode: isStory() ? "story" : "endless", selected: selectedCard().dataset.district, browsing: cards[browsing].dataset.district }; }
+      get state() { return { mode: isStory() ? "story" : "endless", selected: selectedCard().dataset.district, browsing: cards[browsing].dataset.district, runner: runner, moving: marker.dataset.motion === "running" }; }
     };
     refresh();
   }

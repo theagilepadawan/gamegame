@@ -13,6 +13,7 @@ Begin with `references/production-character-board.jpg` for orientation, then use
 | Trond run/idle/jump | `game/assets/original-29.webp` | 2048×1536, 512×512 cells. |
 | Trond original flip sheet | `game/assets/original-30.webp` | 2048×1024, 512×512 cells; retain alongside current signature motion. |
 | Trond belly slide / ball | `game/assets/original-31.webp` | 2560×1024, 4 columns × 2 rows of 640×512 cells. |
+| Chapter-map Nicolai and Trond | `game/assets/map-characters-v20/` | Lossless 7-frame strips cropped from the approved run/idle atlases. The adjacent README records exact cells and foot registration; these are UI miniatures, not replacement playable sprites. |
 | Nicolai Park footwear variant | `game/assets/original-17.webp`, `original-18.webp` | Loaded by `game/scripts/park-shoes.js`; check `references/gameplay/central-park-gameplay.png` for the trainers' rendered silhouette/colors. These are LR-SH-01's shoe authority; the generic extracted run frame has formal shoes. |
 | Office host | `references/office-host/` and `game/assets/office-host-v14/` | Final art; provenance and placement metadata are in `game/docs/office-host-v14.md`. Use the packaged result, not earlier generation candidates. |
 
@@ -32,16 +33,18 @@ Start with `references/locations/INDEX.md`. It links directly to the exact nativ
 | Approved Central Park Ramble | `game/assets/scenery/park-1.webp` |
 | Approved Central Park Bethesda | `game/assets/scenery/park-2.webp` |
 | Detailed Downtown route and anonymous Endless continuation | Current `downtown-*.webp` files indexed under `game/assets/scenery-v19/` |
-| Detailed Midtown route | Current `midtown-*.webp` files indexed under `game/assets/scenery-v19/` |
+| Detailed Midtown route | Retained plates 04–15 and adjacent joins under `game/assets/scenery-v19/`; loaded base plates 00–03 are superseded in the opening composition by `city-vistas.js` |
+| Restored Midtown opening vista | `game/assets/city-vistas-v20/`: native v1.6 dry atmosphere, unique landmark panorama, glass frontage, library and transition tree |
+| City stone foundation | `game/assets/street-foundation-v20/stone-foundation.webp`: exact native v1.6 material, clipped to the actual ground and gaps |
 | Complete 505 blue/cyan glass frontage | The current Midtown office tile, identified by `midtown-storefronts.js` and the native-art manifests |
 
-The current opaque tiles are the backdrop authority. Their JSON manifests record native dimensions, generation provenance and alignment. `game/scripts/midtown-scenery.js` supplies the shared native-tile renderer; `scenery.js` configures Downtown and the anonymous Endless continuation. `park-scenery.js` keeps the original Park composition. Use the native painting, not a reduced screenshot or renderer-added ground padding, as the detailed architectural source.
+The current composition and indexed native sources are the backdrop authority. Their JSON manifests record native dimensions, generation provenance and alignment. `game/scripts/midtown-scenery.js` supplies the shared native-tile renderer; `city-vistas.js` restores the layered v1.6 Midtown opening before the retained venue street. `scenery.js` configures Downtown and the anonymous Endless continuation. `street-foundation.js` and `street-life.js` add the grounded stone and traffic. `park-scenery.js` keeps the original Park composition. Use the native painting, not a reduced screenshot or renderer-added ground padding, as the detailed architectural source.
 
 The 28 v1.9 base paintings are 1024×1536 native pixels, replacing the previous 724-pixel-tall city artwork, with 29 additional authored seam repairs. The renderer retains native density through its prepared canvases and texture upload. Inspect the final metadata and verification record for actual dimensions; a larger file or enlarged raster alone is not evidence of additional detail.
 
 Venue frontages occupy separate blocks within the continuous streets. `opening-storefronts.js` and `midtown-storefronts.js` identify their native rectangles and course placement. Full ordinary street sections between the venues are part of the art direction. Preserve 505's complete blue/cyan glazing and revolving doors; `office-host.js` attaches the retained host to that entrance. Do not recreate cutout-building islands, import their old separate parallax, or pack multiple venue references into one crowded cinematic background.
 
-`references/gameplay/downtown-gameplay.png`, `midtown-gameplay.png`, `central-park-gameplay.png` and `office-gameplay.png` show current rendering and scale. These contain gameplay/UI context; prepare clean picture frames before video generation. If an isolated native tile differs from the live composition, inspect the renderer/camera rather than stretching the painting.
+`references/gameplay/downtown-gameplay.png`, `midtown-gameplay.png`, `central-park-gameplay.png` and `office-gameplay.png` show current rendering and scale. `chapter-map-characters.png` shows the miniature runner treatment. These contain gameplay/UI context; prepare clean picture frames before video generation. If an isolated native tile differs from the live composition, inspect the renderer/camera rather than stretching the painting.
 
 Retired scenery and venue-island artwork are omitted from active location references. All 40 original source files remain in `game/assets/` for provenance and regression checks, so **presence alone does not mean an asset is currently rendered**. The earlier HTML is a visual guide, not authority to replace the current game. Original Park plate `original-33` remains active; the v1.8 city sheets are historical beside the detailed current tiles.
 

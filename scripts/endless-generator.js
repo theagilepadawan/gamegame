@@ -1,0 +1,288 @@
+/* Seeded Endless course director. Distances are generated from time budgets,
+   while terrain, section layout, rewards and rare events use separate streams. */
+(function () {
+  "use strict";
+  var VERSION = 2, GROUND = 422;
+  var FAMILIES = [
+    { id: 20, name: "MARKET RHYTHM", kind: "rhythm", unlock: 0 },
+    { id: 21, name: "ROOFTOP DIVIDENDS", kind: "roofs", unlock: 0 },
+    { id: 22, name: "BREAKOUT SPRINGS", kind: "spring", unlock: 0 },
+    { id: 23, name: "LIQUIDITY GAPS", kind: "gaps", unlock: 0 },
+    { id: 24, name: "FLOATING AVERAGES", kind: "cranes", unlock: 25 },
+    { id: 25, name: "SELL-OFF STEPS", kind: "crumble", unlock: 45 },
+    { id: 26, name: "MOMENTUM EXPRESS", kind: "express", unlock: 15 },
+    { id: 27, name: "MIXED SIGNALS", kind: "mixed", unlock: 35 },
+    { id: 28, name: "UPPER MARKET", kind: "upper", unlock: 20 },
+    { id: 29, name: "BREATHING ROOM", kind: "recovery", unlock: 0 },
+    { id: 30, name: "DIVIDEND LADDER", kind: "ladder", unlock: 15 },
+    { id: 31, name: "VOLATILITY RUN", kind: "volatility", unlock: 65 }
+  ];
+  var clamp = function (x, lo, hi) { return Math.max(lo, Math.min(hi, x)); };
+  var mix = function (x) { x >>>= 0; x = Math.imul(x ^ x >>> 16, 2146121005); x = Math.imul(x ^ x >>> 15, 2221713035); return (x ^ x >>> 16) >>> 0; };
+  function stream(seed, index, salt) {
+    var state = mix((seed >>> 0) ^ Math.imul(index + 1, 2654435761) ^ salt);
+    return function () { state = state + 1831565813 >>> 0; var t = state; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  }
+  var between = function (r, a, b) { return a + (b - a) * r(); };
+  var choose = function (r, list) { return list[Math.floor(r() * list.length)]; };
+  var integer = function (r, a, b) { return a + Math.floor(r() * (b - a + 1)); };
+  var active = function (q) { return !!q && q.mode === "endless" && q.procedural === true; };
+  var speed = function (time) { return 340 + 360 * (1 - Math.exp(-Math.max(0, time) / 150)); };
+  function distanceAtTime(time) {
+    time = Math.max(0, Number(time) || 0);
+    return 700 * time - 54000 * (1 - Math.exp(-time / 150));
+  }
+  function timeAtDistance(distance) {
+    distance = Math.max(0, distance);
+    var low = 0, high = distance / 340 + 1;
+    for (var n = 0; n < 28; n++) { var mid = (low + high) / 2; if (distanceAtTime(mid) < distance) low = mid; else high = mid; }
+    return (low + high) / 2;
+  }
+  function difficulty(time) {
+    var pressure = 1 - Math.exp(-Math.max(0, time) / 170);
+    return { pressure: pressure, tier: Math.min(6, Math.floor(Math.max(0, time) / 45)),
+      actionGap: 1.45 - .38 * pressure, rest: 1.05 - .30 * pressure,
+      gapTime: .25 + .07 * pressure, actions: Math.min(6, 3 + Math.floor(Math.max(0, time) / 75)),
+      movingAmplitude: 12 + 12 * pressure, movingFrequency: 1.0 + .45 * pressure };
+  }
+  function state(q) {
+    if (q.__endlessDirector) return q.__endlessDirector;
+    var r = stream(q.seed, 0, 0x4556454e);
+    return q.__endlessDirector = { version: VERSION, section: 0, recent: [], history: [],
+      nextFlight: between(r, 28, 42), nextContrarian: between(r, 48, 66), nextRecovery: integer(r, 4, 7),
+      lastEventAt: -100, lastPowerAt: -100, eventCounts: { jetpack: 0, contrarian: 0, recovery: 0 } };
+  }
+  function terrain(seed, ground) {
+    ground = Number.isFinite(ground) ? ground : GROUND;
+    var r = stream(seed, 0, 0x54455252), scales = [
+      { period: between(r, 3600, 6600), budget: .04, salt: 0x4c4f4e47 },
+      { period: between(r, 1100, 1900), budget: .04, salt: 0x4d454449 },
+      { period: between(r, 500, 900), budget: .015, salt: 0x53484f52 }
+    ];
+    scales.forEach(function (s) { s.amplitude = s.period * s.budget / 3; s.phase = between(r, 0, s.period); });
+    function noise(x, derivative) {
+      var sum = 0;
+      scales.forEach(function (s) {
+        var u = (x + s.phase) / s.period, cell = Math.floor(u), t = u - cell;
+        var a = mix((seed >>> 0) ^ Math.imul(cell, 2246822519) ^ s.salt) / 4294967296 * 2 - 1;
+        var b = mix((seed >>> 0) ^ Math.imul(cell + 1, 2246822519) ^ s.salt) / 4294967296 * 2 - 1;
+        sum += derivative ? (b - a) * 6 * t * (1 - t) / s.period * s.amplitude : (a + (b - a) * t * t * (3 - 2 * t)) * s.amplitude;
+      });
+      return sum;
+    }
+    var origin = noise(900, false);
+    function at(x, derivative) {
+      x = Number.isFinite(x) ? x : 0;
+      if (x <= 900) return derivative ? 0 : ground;
+      var t = clamp((x - 900) / 6000, 0, 1), fade = t * t * (3 - 2 * t), value = noise(x, false) - origin;
+      return derivative ? noise(x, true) * fade + value * 6 * t * (1 - t) / 6000 : ground + value * fade;
+    }
+    return Object.freeze({ version: VERSION, districtId: "endless", seed: seed >>> 0, ground: ground,
+      signature: "endless-v2-" + mix(seed ^ 0x54455252).toString(16).padStart(8, "0"), maxSlope: .16,
+      knots: Object.freeze([Object.freeze({ x: 0, y: ground }), Object.freeze({ x: 900, y: ground })]),
+      at: function (x) { return at(x, false); }, slopeAt: function (x) { return at(x, true); },
+      knotsIn: function (start, end) {
+        if (!Number.isFinite(start) || !Number.isFinite(end) || end < start) return [];
+        var points = [], step = Math.max(240, Math.ceil((end - start) / 512));
+        for (var x = start; x <= end; x += step) points.push({ x: x, y: at(x, false) });
+        if (!points.length || points[points.length - 1].x !== end) points.push({ x: end, y: at(end, false) });
+        return points;
+      } });
+  }
+  function generate(q, forcedRoute) {
+    if (!active(q)) return false;
+    var s = state(q), index = s.section++, layout = stream(q.seed, index, 0x4c41594f), reward = stream(q.seed, index, 0x52455741), events = stream(q.seed, index, 0x4556454e);
+    // Planning uses a spatial clock, so frame rate, viewport width and collecting
+    // ordinary rewards cannot reshuffle the course for an existing world seed.
+    var worldStart = Math.round((q.distance + q.nextX - q.x) * 1000) / 1000;
+    var planTime = timeAtDistance(worldStart), d = difficulty(planTime), v = speed(planTime + 2.5), o = q.x + worldStart - q.distance;
+    var counts = { obstacles: q.obstacles.length, platforms: q.platforms.length, pickups: q.pickups.length, springs: q.springs.length };
+    var family, event = null, recent = s.recent.slice(-4), forced = Number.isInteger(forcedRoute);
+    if (forced) family = FAMILIES.find(function (f) { return f.id === forcedRoute; });
+    if (!family && !forced && !q.flight && !q.flightLanding && !q.transfer && !q.contrarian && planTime - s.lastEventAt > 20) {
+      if (q.ambientJetpacks && planTime >= s.nextFlight) event = "jetpack";
+      else if (planTime >= s.nextContrarian) event = "contrarian";
+    }
+    if (!family && !event) {
+      if (!forced && index >= s.nextRecovery && recent.indexOf(29) < 0) family = FAMILIES[9];
+      else {
+        var available = FAMILIES.filter(function (f) { return f.unlock <= planTime && f.id !== 29 && recent.indexOf(f.id) < 0; });
+        if (!available.length) available = FAMILIES.filter(function (f) { return f.unlock <= planTime && f.id !== 29; });
+        family = choose(layout, available);
+      }
+    }
+    q.spawnCount++;
+    var id = event === "jetpack" ? 32 : event === "contrarian" ? 33 : family.id;
+    q.recent.push(id); if (q.recent.length > 8) q.recent.shift();
+    s.recent.push(id); if (s.recent.length > 8) s.recent.shift();
+    q.markers.push({ x: o - 50, w: 0, route: id, announced: false });
+    var actions = [], endTime = 0, platforms = [], gapRanges = [];
+    var xAt = function (t) { return o + t * v; };
+    function floorRange(x, width) {
+      var min = Infinity, max = -Infinity;
+      for (var n = 0, steps = Math.max(2, Math.ceil(width / 20)); n <= steps; n++) {
+        var y = q.floorAt(x + width * n / steps); min = Math.min(min, y); max = Math.max(max, y);
+      }
+      return { min: min, max: max };
+    }
+    function pickup(x, y, kind, platform, extra) {
+      var item = Object.assign({ x: x, y: y, kind: kind, taken: false }, extra || {});
+      if (platform) { item.platformId = platform.id; item.offsetY = y - platform.y; }
+      q.pickups.push(item); return item;
+    }
+    function coins(t, span, height, kind, amount) {
+      for (var n = 0; n < amount; n++) {
+        var x = xAt(t + span * n / Math.max(1, amount - 1));
+        pickup(x, q.floorAt(x) - height, kind || "dividend");
+      }
+    }
+    function hurdle(t, kind) {
+      var width = v * between(layout, kind === "high" ? .18 : .12, kind === "high" ? .24 : .16);
+      var x = xAt(t), floor = floorRange(x, width);
+      // Keep a bar's entire slide envelope clear on crests and sloping ground.
+      // Steeper spans become a readable jump rather than an ambiguous ceiling.
+      if (kind === "high" && floor.max - floor.min > 24) kind = "low";
+      var object = q.hazard(kind, x, width, kind === "high" ? floor.min : q.floorAt(x + width / 2));
+      actions.push({ type: kind, t: t, widthTime: width / v, x: x, width: width });
+      coins(t - .16, .32, kind === "high" ? 35 : 140, "opportunity", 3);
+      endTime = Math.max(endTime, t + width / v + .8);
+      return object;
+    }
+    function gap(t, time) {
+      var x = xAt(t), width = v * time, slope = (q.floorAt(x + width + 40) - q.floorAt(x - 40)) / (width + 80);
+      // A rise shortens a ground jump's landing window. Reserve extra margin.
+      width *= slope < 0 ? clamp(1 + slope * 1.5, .76, 1) : 1;
+      q.hazard("gap", x, width, q.floorAt(x));
+      gapRanges.push([x, x + width]);
+      actions.push({ type: "gap", t: t, widthTime: width / v, x: x, width: width });
+      for (var n = 0; n < 4; n++) {
+        var px = x - v * .12 + (width + v * .24) * n / 3;
+        pickup(px, Math.min(q.floorAt(x), q.floorAt(x + width)) - 115 - Math.sin(n / 3 * Math.PI) * 40, "opportunity");
+      }
+      endTime = Math.max(endTime, t + width / v + 1);
+    }
+    function platform(t, duration, height, kind, premium) {
+      var x = xAt(t), width = duration * v, floor = floorRange(x, width), amp = kind === "crane" ? between(layout, 10, d.movingAmplitude) : 0;
+      var p = q.platform(x, floor.min - height - amp, width, kind, { premium: !!premium,
+        amp: amp, frequency: between(layout, 1.0, d.movingFrequency), phase: between(layout, 0, Math.PI * 2) });
+      platforms.push(p);
+      var n = integer(reward, 3, 5);
+      for (var i = 0; i < n; i++) pickup(x + width * (.15 + .7 * i / Math.max(1, n - 1)), p.y - 40, premium ? "opportunity" : "dividend", p);
+      endTime = Math.max(endTime, t + duration + .5);
+      return p;
+    }
+    function spring(t) {
+      var x = xAt(t); q.springs.push({ x: x, w: between(layout, 48, 70), y: q.floorAt(x), used: false });
+      endTime = Math.max(endTime, t + 1.2);
+    }
+    function groundSequence(types, start) {
+      var t = start;
+      types.forEach(function (kind) {
+        if (kind === "gap") gap(t, between(layout, .23, d.gapTime)); else hurdle(t, kind);
+        t += d.actionGap + between(layout, .02, .28);
+      });
+      return t;
+    }
+    if (event) {
+      s.lastEventAt = planTime; s.eventCounts[event]++;
+      if (event === "jetpack") {
+        s.nextFlight = planTime + between(events, 38, 63); q.lastCruiseSection = q.spawnCount - 1;
+        var launch = between(layout, .7, 1.1);
+        pickup(xAt(launch), q.floorAt(xAt(launch)) - 160, "jetpack", null, { flightKind: "cruise" });
+        var phase = between(layout, 0, Math.PI * 2), waves = choose(layout, [1, 1.5, 2]);
+        for (var i = 0; i < 15; i++) {
+          var t = launch + .6 + i * .30, px = xAt(t);
+          pickup(px, q.floorAt(px) - (165 + Math.sin(phase + i / 14 * Math.PI * 2 * waves) * 52), "opportunity", null, { aerial: true });
+        }
+        coins(launch + .8, 5.2, 34, "dividend", 9);
+        endTime = launch + 8.2; // Flight, landing blend and visible recovery all fit.
+      } else {
+        s.nextContrarian = planTime + between(events, 58, 87); q.contrarianDone = false;
+        q.contrarianOffers++; q.lastOfferSection = q.spawnCount;
+        var offer = between(layout, 1.0, 1.7);
+        pickup(xAt(offer), q.floorAt(xAt(offer)) - 170, "contrarian");
+        coins(.4, offer + 1.8, 34, "dividend", 7);
+        endTime = offer + 3.0; // Skipping the voluntary pickup leaves a safe street.
+      }
+    } else {
+      var count = integer(layout, Math.max(2, d.actions - 1), d.actions), lead = between(layout, .65, 1.0), t;
+      switch (family.kind) {
+        case "rhythm":
+          var pattern = [], last = null;
+          for (var i = 0; i < count; i++) { var kind = layout() < .53 ? "low" : "high"; if (i > 1 && kind === last && pattern[i - 2] === kind) kind = kind === "low" ? "high" : "low"; pattern.push(kind); last = kind; }
+          groundSequence(pattern, lead); break;
+        case "mixed":
+          var kinds = ["low", "high", "gap"], sequence = [];
+          for (var i = 0; i < count; i++) sequence.push(choose(layout, kinds.filter(function (k) { return k !== sequence[sequence.length - 1]; })));
+          groundSequence(sequence, lead); break;
+        case "volatility":
+          groundSequence(Array.from({ length: count }, function () { return layout() < .7 ? "low" : "gap"; }), lead); break;
+        case "gaps":
+          t = lead;
+          for (var i = 0, n = integer(layout, 1, Math.min(3, count)); i < n; i++) { gap(t, between(layout, .24, d.gapTime)); t += d.actionGap + between(layout, .25, .5); }
+          break;
+        case "spring":
+          spring(lead); gap(lead + .55, between(layout, .25, .32));
+          platform(lead + .85, between(layout, .55, .8), between(layout, 72, 100), choose(layout, ["billboard", "roof"]));
+          hurdle(lead + 3.0 + between(layout, 0, .4), "low"); break;
+        case "express":
+          var dur = between(layout, 1.65, 2.3), train = platform(lead, dur, between(layout, 56, 78), "train");
+          gap(lead + .7, between(layout, .24, .30));
+          pickup(train.x + train.w * .68, train.y - 43, "conviction", train);
+          hurdle(lead + dur + 1.5, "low"); break;
+        case "recovery":
+          s.eventCounts.recovery++; s.nextRecovery = index + integer(events, 5, 8);
+          coins(.4, between(layout, 2.0, 3.0), 35, "dividend", integer(reward, 7, 10));
+          if (layout() < .65) platform(.8, between(layout, .55, .9), 58, "awning");
+          endTime = Math.max(endTime, between(layout, 3.0, 3.7)); break;
+        default:
+          var number = integer(layout, 2, Math.min(5, count + 1)), cursor = lead;
+          var ascending = layout() < .5, high = between(layout, 54, 74);
+          for (var i = 0; i < number; i++) {
+            var height = high + (ascending ? i : number - 1 - i) * between(layout, 14, 24);
+            height = Math.min(height, 128);
+            var kind = family.kind === "cranes" ? "crane" : family.kind === "crumble" ? "crumble" : choose(layout, ["awning", "roof", "billboard"]);
+            if (family.kind === "ladder" && i === 0) spring(Math.max(.35, cursor - .35));
+            var p = platform(cursor, between(layout, .60, .88), height, kind);
+            if (family.kind === "upper" && i === 1) {
+              var upper = platform(cursor + .18, between(layout, .48, .66), Math.min(height + 90, 205), "bull", true);
+              pickup(upper.x + upper.w * .5, upper.y - 42, "conviction", upper);
+            }
+            cursor += between(layout, .98, 1.24);
+          }
+          // Optional roofs vary freely; the street retains a clearly jumpable path.
+          hurdle(lead + .65, "low");
+          if (d.pressure > .3 && layout() < .65) hurdle(cursor + .5, "low");
+          break;
+      }
+      if (family.id !== 29 && index >= s.nextRecovery + 2) s.nextRecovery = index + integer(events, 3, 5);
+      // A separate reward stream cannot alter any platform, hazard or event.
+      if (planTime - s.lastPowerAt >= 12 && reward() < .52) {
+        var power = choose(reward, ["research", "diversification", "conviction"]);
+        if (platforms.length && reward() < .72) {
+          var p = choose(reward, platforms); pickup(p.x + p.w * .7, p.y - 42, power, p);
+        } else {
+          var tx = xAt(Math.max(.25, endTime + .25)); pickup(tx, q.floorAt(tx) - 40, power);
+          endTime += .65;
+        }
+        s.lastPowerAt = planTime;
+      }
+    }
+    endTime = Math.max(2.0, endTime);
+    var rest = d.rest + between(layout, .12, .65);
+    var worldEnd = Math.round((worldStart + (endTime + rest) * v) * 1000) / 1000;
+    q.nextX = q.x + worldEnd - q.distance;
+    var record = { index: index, route: id, family: event || family.kind, start: worldStart,
+      end: worldEnd, time: planTime, speed: v, pressure: d.pressure, tier: d.tier,
+      actions: actions.map(function (a) { return { type: a.type, offset: Math.round((a.x - o) * 100) / 100, width: Math.round(a.width * 100) / 100, time: a.t }; }),
+      components: { obstacles: q.obstacles.length - counts.obstacles, platforms: q.platforms.length - counts.platforms, pickups: q.pickups.length - counts.pickups, springs: q.springs.length - counts.springs },
+      recoverySeconds: rest, event: event };
+    s.history.push(record); if (s.history.length > 64) s.history.shift();
+    return true;
+  }
+  window.LR_ENDLESS_GENERATOR = { version: VERSION, active: active, generate: generate, terrain: terrain, speed: speed, difficulty: difficulty, distanceAtTime: distanceAtTime,
+    families: FAMILIES.map(function (f) { return Object.freeze(Object.assign({}, f)); }),
+    routeName: function (id) { return id === 32 ? "IPO AIRSPACE" : id === 33 ? "AGAINST THE CONSENSUS" : (FAMILIES.find(function (f) { return f.id === id; }) || {}).name || ""; },
+    inspect: function (q) { if (!active(q)) return null; var s = state(q); return { version: VERSION, section: s.section, nextFlight: s.nextFlight,
+      nextContrarian: s.nextContrarian, recent: s.recent.slice(), events: Object.assign({}, s.eventCounts), history: s.history.slice() }; } };
+})();

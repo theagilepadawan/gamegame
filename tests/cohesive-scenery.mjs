@@ -3,21 +3,36 @@ import {createHash} from 'node:crypto';
 import {mkdir, readFile, writeFile} from 'node:fs/promises';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import path from 'node:path';
+import {model, storyState} from './endless-fairness.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = process.env.COHESIVE_OUTPUT || path.join(root, 'review/v19-qa');
 const url = new URL(process.env.TEST_URL || 'http://127.0.0.1:4181/'); url.searchParams.set('unlock', 'all');
 const fixture = JSON.parse(await readFile(path.join(root, 'tests/fixtures/v18-baseline.json'), 'utf8'));
 const retained = JSON.parse(await readFile(path.join(root, 'tests/fixtures/v19-preservation.json'), 'utf8'));
+const storyBaseline = JSON.parse(await readFile(path.join(root, 'tests/fixtures/endless-story-preservation-v19.json'), 'utf8'));
 const hash = data => createHash('sha256').update(data).digest('hex');
-for (const [file, expected] of Object.entries({...fixture.assets, ...fixture.modules, ...retained.unchangedProps})) {
+// The Endless director intentionally changes its wrapper and three dispatch
+// points in the model. Keep all other module/asset guards and pin unchanged
+// physics/audio ranges separately from the renderer and Endless integration.
+const unchangedModules = Object.fromEntries(Object.entries(fixture.modules).filter(([file]) => file !== 'scripts/endless.js'));
+for (const [file, expected] of Object.entries({...fixture.assets, ...unchangedModules, ...retained.unchangedProps})) {
   assert.equal(hash(await readFile(path.join(root, file))), expected, `${file}: unaffected production source is preserved`);
 }
 const engine = await readFile(path.join(root, 'scripts/engine.js'), 'utf8');
-for (const segment of fixture.engineSegments) {
-  assert.equal(hash(engine.slice(engine.indexOf(segment.start), engine.indexOf(segment.end))), segment.sha256,
-    `${segment.name}: original player/boss/terrain simulation and audio behavior are unchanged`);
+for (const segment of storyBaseline.sourceRanges) {
+  const from = engine.indexOf(segment.start), to = engine.indexOf(segment.end, from + segment.start.length);
+  assert.ok(from >= 0 && to > from, `${segment.name}: preserved source boundaries exist`);
+  assert.equal(hash(engine.slice(from, to)), segment.sha256, `${segment.name}: original v19 implementation is unchanged`);
 }
+const storyModel = model(engine, await readFile(path.join(root, 'scripts/endless.js'), 'utf8'),
+  await readFile(path.join(root, 'scripts/endless-generator.js'), 'utf8'));
+for (const sample of storyBaseline.cases) {
+  assert.equal(storyState(storyModel, sample.seed, sample.width, sample.character), sample.sha256,
+    `Story model remains unchanged for ${sample.character}, width ${sample.width}, seed ${sample.seed}`);
+}
+console.log(`PASS preservation: ${Object.keys(fixture.assets).length} original assets, ${Object.keys(unchangedModules).length} modules, ${storyBaseline.sourceRanges.length} physics/audio ranges and ${storyBaseline.cases.length} Story snapshots.`);
+if (process.env.COHESIVE_PRESERVATION_ONLY === '1') process.exit(0);
 const moduleName = process.env.PLAYWRIGHT_MODULE || 'playwright';
 const {chromium} = await import(moduleName.startsWith('/') ? pathToFileURL(moduleName).href : moduleName);
 const selection = process.env.COHESIVE_VIEW;
@@ -51,7 +66,7 @@ async function open(name, viewport, fallback, dpr) {
         const input = args.length === 6 ? args[5] : null;
         const width = input?.naturalWidth || input?.width || (args.length >= 9 ? args[3] : 0);
         const height = input?.naturalHeight || input?.height || (args.length >= 9 ? args[4] : 0);
-        if (width >= 1000 && height >= 1500) window.qaTextureUploads.push({context: this.canvas?.id || '', width, height});
+        if (width >= 1000 && height >= 1000) window.qaTextureUploads.push({context: this.canvas?.id || '', width, height});
         return original.apply(this, args);
       };
     }
@@ -92,7 +107,16 @@ async function geometry(test) {
       for (const value of ctx.getImageData(0, 0, W, 540).data) {hashA = Math.imul(hashA ^ value, 16777619); hashB = Math.imul(hashB, 33) ^ value;}
       park.push({id: 'park', W, distance, hashA: hashA >>> 0, hashB: hashB >>> 0});
     }
-    return {rows, opaque, park};
+    const starts = ['opening', 'midtown'].flatMap(id => [540, 864, 1440].map(W => {
+      const first = LR_SCENERY.layout(id, 0, W, 540, 'chapter');
+      const next = LR_SCENERY.layout(id, 1, W, 540, 'chapter');
+      return {id, W, first: first.scroll, next: next.scroll};
+    }));
+    const venueAnchors = [0, 4000, 9000, 16000].map(distance => {
+      const scene = LR_SCENERY.layout('midtown', distance, 864, 540, 'chapter');
+      return {distance, anchors: scene.blocks.filter(block => [5,8,11,14].includes(block.sourceIndex))};
+    });
+    return {rows, opaque, park, starts, venueAnchors};
   });
   const nativeAnchors = new Map();
   for (const scene of result.rows) {
@@ -103,19 +127,39 @@ async function geometry(test) {
     assert.ok(scene.panels.length > 0 && scene.panels.length <= 18, 'Visible paintings fit the renderer pool');
     assert.ok(scene.cachedSourceCount <= scene.sourceCacheLimit && scene.sourceCacheLimit <= 12, 'Native bitmap cache stays bounded');
     const paintings = scene.panels.filter(panel => panel.kind === 'painting');
-    assert.ok(paintings[0].x <= .001 && paintings.at(-1).x + paintings.at(-1).width >= scene.W - .001,
+    const atmosphere = scene.panels.find(panel => panel.vistaSource === 'atmosphere');
+    assert.ok(atmosphere ? atmosphere.x <= .001 && atmosphere.x + atmosphere.width >= scene.W - .001 :
+      paintings.length && paintings[0].x <= .001 && paintings.at(-1).x + paintings.at(-1).width >= scene.W - .001,
       'All viewport widths and full-course camera positions are covered');
+    if (scene.id === 'midtown') {
+      assert.equal(scene.cityVistas, true, 'The actual v1.6 spatial composition is integrated');
+      assert.deepEqual(scene.retainedVenueSources, [5,8,11,14]);
+      assert.ok(scene.panels.filter(panel => panel.vistaSource === 'landmarks').length <= 1, 'The landmark panorama occurs once');
+      assert.ok(paintings.every(panel => panel.sourceIndex >= 4), 'The former Empire/Chrysler panels never duplicate the restored landmarks');
+    }
     if (scene.id === 'opening' && scene.mode === 'endless') {
       assert.deepEqual(scene.repeatSourceIndices, [4, 6, 7, 8, 9, 10], 'Endless uses six ordinary blocks, never venues or hero landmarks');
       assert.equal(new Set(paintings.map(panel => panel.sourceIndex)).size, paintings.length, 'One viewport never repeats the same background building');
     }
     for (const panel of scene.panels) {
-      assert.ok(['painting', 'join'].includes(panel.kind)); assert.equal(panel.mirrored, false);
+      assert.ok(['painting', 'join', 'city-vista'].includes(panel.kind)); assert.equal(panel.mirrored, false);
       const anchorKey = `${scene.id}:${panel.kind}:${panel.sourceFilename}`;
       if (!nativeAnchors.has(anchorKey)) nativeAnchors.set(anchorKey, panel.y);
       assert.equal(panel.y, nativeAnchors.get(anchorKey), 'Native curb registration is fixed across camera positions and viewport widths');
+      if (panel.kind === 'city-vista') {
+        assert.equal(scene.id, 'midtown');
+        assert.ok(['atmosphere','landmarks','glass','library','tree'].includes(panel.vistaSource));
+        assert.ok(panel.sourceWidth >= 1024 && panel.paintedHeight >= 1024, 'Restored art retains its real original resolution');
+        assert.equal(panel.sourceOffsetY, 0);
+        if (!panel.viewportAtmosphere) assert.ok(Math.abs(panel.width / panel.height - panel.sourceWidth / panel.sourceHeight) < 1e-9,
+          'Foreground architecture and landmarks retain their native proportions');
+        if (panel.vistaSource === 'landmarks') assert.ok(Math.abs(panel.x - (panel.worldX - scene.scroll * .82)) < 1e-9,
+          'The one distant landmark panorama moves at its authored depth');
+        if (panel.viewportAtmosphere) assert.ok(panel.y + panel.height >= 540, 'Dry atmosphere covers the whole frame, including the lower road pad');
+        continue;
+      }
       assert.ok(Math.abs(panel.width / panel.height - panel.sourceWidth / panel.sourceHeight) < 1e-9, 'Native artwork is never stretched');
-      assert.ok(Math.abs(panel.x - (panel.worldX - scene.scroll)) < 1e-9, 'Every part of the city shares one camera');
+      assert.ok(Math.abs(panel.x - (panel.worldX - scene.scroll)) < 1e-9, 'Every part of the near city shares one camera');
       if (panel.kind === 'painting') assert.equal(panel.nativeWidth, 1024);
       assert.ok(panel.nativeHeight >= 1680);
       assert.ok(panel.sourceOffsetY >= 0 && panel.sourceOffsetY + panel.paintedHeight <= panel.nativeHeight,
@@ -135,14 +179,18 @@ async function geometry(test) {
     }
   }
   assert.ok(result.opaque.every(row => row.gaps === 0), `Paintings contain no see-through areas or exposed underlay: ${JSON.stringify(result.opaque.filter(row => row.gaps))}`);
+  for (const start of result.starts) assert.ok(start.next > start.first, `${start.id}/${start.W}: the camera moves from the first running step`);
+  const fixedVenues = result.venueAnchors[0].anchors;
+  assert.deepEqual(fixedVenues.map(block => block.sourceIndex), [5,8,11,14]);
+  for (const sample of result.venueAnchors) assert.deepEqual(sample.anchors, fixedVenues, 'Current venue frontages keep their native anchor metadata through the restored vistas');
   assert.deepEqual(result.park, fixture.parkPixels, 'Central Park keeps all six exact original backdrop pixel checks');
   report.geometry = result.rows; report.opacity = result.opaque; report.parkPixels = result.park;
   console.log('PASS: coherent opaque panoramas, finite landmarks, calm camera, anonymous Endless tail and unchanged Park pixels.');
 }
 async function nativeResolution(test) {
   const rows = [];
-  for (const district of ['opening', 'midtown']) {
-    await seek(test, district, district === 'opening' ? 30 : 35);
+  for (const [district, time] of [['opening', 30], ['midtown', 8], ['midtown', 35]]) {
+    await seek(test, district, time);
     const result = await test.page.evaluate(({district, fallback}) => {
       const stage = document.querySelector('#stage').getBoundingClientRect();
       const distance = Math.max(0, q.distance - q.speed / 120);
@@ -153,10 +201,14 @@ async function nativeResolution(test) {
       const sourceRows = [];
       for (const panel of scene.panels) {
         const bitmap = LR_SCENERY.source(district, panel);
-        const original = panel.kind === 'join' ? allOriginals[scene.sourceCount + panel.joinIndex] : originals[panel.sourceIndex];
+        const original = panel.kind === 'city-vista' ? LR_CITY_VISTAS.sourceImage(panel.vistaSource) : panel.kind === 'join' ? allOriginals[scene.sourceCount + panel.joinIndex] : originals[panel.sourceIndex];
         const reference = document.createElement('canvas'); reference.width = original.naturalWidth; reference.height = original.naturalHeight;
         const ctx = reference.getContext('2d', {willReadFrequently: true}); ctx.drawImage(original, 0, 0);
-        const actual = bitmap.getContext('2d', {willReadFrequently: true}); let mismatches = 0, compared = 0;
+        let actual;
+        if (bitmap.getContext) actual = bitmap.getContext('2d', {willReadFrequently: true});
+        else { const native = document.createElement('canvas'); native.width = bitmap.naturalWidth; native.height = bitmap.naturalHeight;
+          actual = native.getContext('2d', {willReadFrequently:true}); actual.drawImage(bitmap, 0, 0); }
+        let mismatches = 0, compared = 0;
         // Three detailed interior patches avoid the intentional64px edge feather.
         // Exact pixels catch a hidden resize even if a later canvas is enlarged.
         for (const [x, y] of [[96, 160], [Math.floor(original.naturalWidth / 2) - 64, Math.floor(original.naturalHeight / 2) - 64], [original.naturalWidth - 224, original.naturalHeight - 376]]) {
@@ -166,7 +218,7 @@ async function nativeResolution(test) {
         }
         const physicalScale = stage.height / kA * EQ;
         const physicalPixelsPerSourcePixel = panel.width / bitmap.width * physicalScale;
-        sourceRows.push({kind: panel.kind, sourceIndex: panel.sourceIndex, filename: panel.sourceFilename,
+        sourceRows.push({kind: panel.kind, vistaSource: panel.vistaSource, sourceIndex: panel.sourceIndex, filename: panel.sourceFilename,
           decoded: {width: original.naturalWidth, height: original.naturalHeight},
           cached: {width: bitmap.width, height: bitmap.height}, expectedCache: {width: panel.sourceWidth, height: panel.nativeHeight},
           sourceOffsetY: panel.sourceOffsetY, mismatches, compared,
@@ -183,6 +235,7 @@ async function nativeResolution(test) {
         devicePixelRatio, EQ, canvas: {width: ht.width, height: ht.height},
         rendererCanvas: fallback ? null : {width: $A.renderer.canvas.width, height: $A.renderer.canvas.height},
         uploads: (window.qaTextureUploads || []).filter(upload => upload.width === 1024 && upload.height >= 1680),
+        nativeUploads: window.qaTextureUploads || [],
         maximumTexture: fallback ? null : $A.renderer.gl.getParameter($A.renderer.gl.MAX_TEXTURE_SIZE)};
     }, {district, fallback: test.fallback});
     assert.ok(result.decoded.length >= (district === 'midtown' ? 16 : 12));
@@ -190,16 +243,25 @@ async function nativeResolution(test) {
     assert.ok(result.sourceRows.length > 0);
     for (const image of result.sourceRows) {
       assert.deepEqual(image.cached, image.expectedCache, 'The renderer keeps native bitmap dimensions through alignment');
-      assert.equal(image.cached.width, image.decoded.width); assert.ok(image.cached.height >= 1680);
+      assert.equal(image.cached.width, image.decoded.width);
+      assert.ok(image.cached.height >= (image.kind === 'city-vista' ? image.decoded.height : 1680));
       if (image.kind === 'painting') assert.equal(image.cached.width, 1024);
       assert.ok(image.sourceOffsetY + image.decoded.height <= image.cached.height, 'All original rows survive registration');
       assert.equal(image.mismatches, 0, `${image.filename}: native detail must survive caching without resampling`);
-      assert.ok(image.improvementOverV18 >= 2.05, 'Real sampling density improves by more than2× in each direction');
+      if (image.kind !== 'city-vista') assert.ok(image.improvementOverV18 >= 2.05, 'Current native plates retain their more-than2× sampling improvement');
+      else if (image.vistaSource === 'landmarks') {
+        assert.deepEqual(image.decoded, {width:1536,height:1024}, 'The approved wide landmark source reaches the renderer at its full original resolution');
+        assert.ok(image.improvementOverV18 >= 1.45, 'The broad original vista retains its measured native sampling density');
+      } else if (image.vistaSource !== 'atmosphere') assert.ok(image.improvementOverV18 >= 2.05,
+        'Restored native foreground cutouts retain the same dense sampling as current venue fronts');
     }
     for (const texture of result.gpu) {
       assert.equal(texture.visible, true);
       assert.deepEqual([texture.width, texture.height, texture.sourceWidth, texture.sourceHeight],
         [texture.expectedWidth, texture.expectedHeight, texture.expectedWidth, texture.expectedHeight], 'Pixi uploads native art, not a logical-sized thumbnail');
+      if (texture.kind === 'city-vista') assert.ok(result.nativeUploads.some(upload =>
+        upload.width === texture.expectedWidth && upload.height === texture.expectedHeight),
+      'Instrumented WebGL calls upload the restored vista at its complete native dimensions');
     }
     if (!test.fallback) {
       assert.deepEqual(result.rendererCanvas, result.canvas);

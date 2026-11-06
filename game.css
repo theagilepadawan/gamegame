@@ -723,9 +723,11 @@ input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text;-webk
 #district-picker .map-node.is-shake{animation:none}
 .map-node.is-shake .map-disc,.map-node.is-shake .chapter-copy{animation:map-lock-nudge .28s ease-out}
 @keyframes map-lock-nudge{0%,100%{transform:translateX(0)}25%{transform:translateX(-2px)}60%{transform:translateX(2px)}}
-.map-player{position:absolute;z-index:4;left:16.27907%;top:46%;width:32px;transform:translate(-50%,-100%);pointer-events:none;filter:drop-shadow(0 3px 2px #00153855)}
-.map-player span{display:grid;place-items:center;height:23px;padding:2px 7px;border:1.5px solid #f5f2eb;border-radius:7px;background:var(--accent);font-size:10px;line-height:1;color:#fff;font-weight:800;letter-spacing:.3px}
-.map-player i{display:block;width:7px;height:7px;margin:-4px auto 0;background:var(--accent);border-right:1.5px solid #f5f2eb;border-bottom:1.5px solid #f5f2eb;transform:rotate(45deg)}
+/* Map-only native sprites: feet stay registered to the route, without an idle bob. */
+.map-player{position:absolute;z-index:4;left:16.27907%;top:59.58333%;width:calc(var(--map-height)*.32);aspect-ratio:384/420;transform:translate(-50%,-100%) translateY(-5px);pointer-events:none}
+.map-player-figure{position:absolute;inset:0;background-repeat:no-repeat;background-size:700% 100%;background-position:0 0;filter:drop-shadow(0 1px 1px #00153899);transform-origin:50% 100%}
+.map-player[data-facing="left"] .map-player-figure{transform:scaleX(-1)}
+.map-player-shadow{position:absolute;bottom:-1px;left:32%;width:36%;height:5%;border-radius:50%;background:#00153866;filter:blur(.6px)}
 .map-footer{display:flex;justify-content:space-between;gap:10px;margin:9px 3px 0;color:#c3e9eeb0;font-size:6px;line-height:1;letter-spacing:1.2px;font-weight:500}
 .map-gesture{white-space:nowrap;color:var(--polar)}
 .map-gesture b{margin-left:4px;color:var(--sea);font-size:11px;vertical-align:middle;line-height:.5}
@@ -771,9 +773,7 @@ input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text;-webk
  .chapter-copy strong{font-size:10px}
  .chapter-status{font-size:6.5px;margin-top:3px}
  #district-picker .map-node .lock{top:9px;transform:scale(.85)}
- .map-player{width:27px}
- .map-player span{height:19px;font-size:8px;border-radius:6px}
- .map-player i{width:6px;height:6px;margin-top:-3px}
+ .map-player{transform:translate(-50%,-100%) translateY(-4px)}
  .map-footer{margin-top:6px;font-size:5px;letter-spacing:.9px}
  #intro #start{width:255px;min-height:36px;padding:9px 17px;margin-top:5px;font-size:12px;box-shadow:4px 5px 0 var(--sand)}
  #intro #start .keycap{font-size:7px;padding:3px 5px}
@@ -812,7 +812,7 @@ input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text;-webk
  .chapter-copy strong{font-size:9px}
  .chapter-status{font-size:5.5px;margin-top:2px}
  #district-picker .map-node .lock{top:7px;transform:scale(.75)}
- .map-player span{height:17px;font-size:7px}
+ .map-player{transform:translate(-50%,-100%) translateY(-3px)}
  .map-footer{font-size:4px;letter-spacing:.6px;margin-top:5px}
  #intro #start{min-height:30px;font-size:10px}
  #intro .start-note{margin-top:5px}

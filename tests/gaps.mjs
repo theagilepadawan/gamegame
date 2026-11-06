@@ -38,23 +38,31 @@ async function capture(page,name,fixture){
 try{
   const desktop=await open({width:1440,height:900});
   const {page}=desktop;
-  const cases=await page.evaluate(()=>{
-    const out={};
+  const {cases,wideCases}=await page.evaluate(()=>{
+    const out={},wide={};
     for(const seed of [0x12345678,0x0badf00d,42,105,0xdeadbeef]){
       const profile=Yo(seed,{districtId:'endless',ground:T});
-      for(let center=1700;center<60000;center+=40){
-        const l=profile.at(center-130),c=profile.at(center),r=profile.at(center+130);
-        const name=r-l < -32?'uphill':r-l>32?'downhill':c<Math.min(l,r)-1.5?'crest':c>Math.max(l,r)+1.5?'valley':null;
-        if(name&&!out[name])out[name]={seed,center,distance:center-375};
+      for(let center=1700;center<60000;center+=20){
+        // Select the strongest examples from the actual continuous terrain.
+        // Old abrupt-chunk thresholds omitted every new smoother profile.
+        for(const radius of [130,600]){
+          const l=profile.at(center-radius),c=profile.at(center),r=profile.at(center+radius);
+          const scores={uphill:l-r,downhill:r-l,crest:Math.min(l,r)-c,valley:c-Math.max(l,r)};
+          const target=radius===130?out:wide;
+          for(const [name,score] of Object.entries(scores)){
+            if(radius===600&&!['crest','valley'].includes(name))continue;
+            if(score>0&&(!target[name]||score>target[name].coverage))target[name]={seed,center,coverage:score,distance:center-(radius===130?375:640)};
+          }
+        }
       }
     }
-    return out;
+    return {cases:out,wideCases:Object.fromEntries(Object.entries(wide).map(([name,fixture])=>[`wide-${name}`,{...fixture,gaps:[{x:290,w:1200}]}]))};
   });
   assert.deepEqual(Object.keys(cases).sort(),['crest','downhill','uphill','valley']);
-  const wideCases={
-    'wide-crest':{...cases.crest,distance:cases.crest.center-640,gaps:[{x:290,w:1200}]},
-    'wide-valley':{...cases.valley,distance:cases.valley.center-640,gaps:[{x:290,w:1200}]},
-  };
+  for(const name of ['uphill','downhill'])assert.ok(cases[name].coverage>=8,`${name}: bank heights differ by at least eight pixels`);
+  for(const name of ['crest','valley'])assert.ok(cases[name].coverage>=.5,`${name}: actual curved ground is exercised`);
+  assert.deepEqual(Object.keys(wideCases).sort(),['wide-crest','wide-valley']);
+  for(const fixture of Object.values(wideCases))assert.ok(fixture.coverage>=8,'Wide gaps remove a substantial interior hill or valley');
 
   const physics=await page.evaluate(cases=>{
     const fresh=(seed=0x12345678)=>{
@@ -149,6 +157,6 @@ try{
   const fallback=await open({width:1440,height:900},true);
   captures.push(await capture(fallback.page,'downhill-canvas',cases.downhill));
   assert.deepEqual(fallback.errors,[]);await fallback.context.close();
-  await writeFile(`${output}/report.json`,JSON.stringify({cases,physics,pixels,captures},null,2));
+  await writeFile(`${output}/report.json`,JSON.stringify({cases,wideCases,physics,pixels,captures},null,2));
   console.log('PASS: full-depth gap captures on desktop/mobile and Canvas fallback, with no browser exceptions.');
 }finally{await browser.close();}

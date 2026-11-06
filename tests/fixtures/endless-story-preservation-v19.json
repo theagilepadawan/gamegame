@@ -1,0 +1,134 @@
+{
+  "reference": "37b73ab36a04531f6e5221c0168ab5c30c9a828e",
+  "scope": "Actual procedural Story model, matching the UI, at frames 0, 120 and 300 with jump, air-jump, release and slide inputs. Source ranges pin unaffected controls, collision, every chapter, boss, flight and audio against v19; only Endless dispatch/scheduling and renderers are outside these ranges.",
+  "cases": [
+    {
+      "seed": 1,
+      "width": 540,
+      "character": "nicolai",
+      "sha256": "0fab7b1b45e808c2219d5a09ac3c737d1fa8def616d3ebfb77b3a2625d769826"
+    },
+    {
+      "seed": 1,
+      "width": 540,
+      "character": "trond",
+      "sha256": "0fab7b1b45e808c2219d5a09ac3c737d1fa8def616d3ebfb77b3a2625d769826"
+    },
+    {
+      "seed": 1,
+      "width": 864,
+      "character": "nicolai",
+      "sha256": "5851f10be6460e661868fc78a97f48d8ea5108e964355b93e244ac784c10343f"
+    },
+    {
+      "seed": 1,
+      "width": 864,
+      "character": "trond",
+      "sha256": "5851f10be6460e661868fc78a97f48d8ea5108e964355b93e244ac784c10343f"
+    },
+    {
+      "seed": 42,
+      "width": 540,
+      "character": "nicolai",
+      "sha256": "98fa6230ea10c398a1b13fe4ffcdb40587d58b4c769062754e9ae47058975c6c"
+    },
+    {
+      "seed": 42,
+      "width": 540,
+      "character": "trond",
+      "sha256": "98fa6230ea10c398a1b13fe4ffcdb40587d58b4c769062754e9ae47058975c6c"
+    },
+    {
+      "seed": 42,
+      "width": 864,
+      "character": "nicolai",
+      "sha256": "6e2a078748dfe726435c153a66f33ff0c91f43d67792fe7da2d93e16523b9f50"
+    },
+    {
+      "seed": 42,
+      "width": 864,
+      "character": "trond",
+      "sha256": "6e2a078748dfe726435c153a66f33ff0c91f43d67792fe7da2d93e16523b9f50"
+    },
+    {
+      "seed": 3735928559,
+      "width": 540,
+      "character": "nicolai",
+      "sha256": "a23d90b2e0e66befbbd36e779a67443677328b0edff282a7a8b7121f22785fe0"
+    },
+    {
+      "seed": 3735928559,
+      "width": 540,
+      "character": "trond",
+      "sha256": "a23d90b2e0e66befbbd36e779a67443677328b0edff282a7a8b7121f22785fe0"
+    },
+    {
+      "seed": 3735928559,
+      "width": 864,
+      "character": "nicolai",
+      "sha256": "610aed5717b1edcbda596a47df7faa8af3392f2e95fa193ae98abfeff2d103f3"
+    },
+    {
+      "seed": 3735928559,
+      "width": 864,
+      "character": "trond",
+      "sha256": "610aed5717b1edcbda596a47df7faa8af3392f2e95fa193ae98abfeff2d103f3"
+    }
+  ],
+  "sourceRanges": [
+    {
+      "name": "Story terrain and complete gap geometry",
+      "start": "var Qi = Object.freeze",
+      "end": "function Wu(",
+      "sha256": "1d900d36ceee2f50ee0ef2ac98e335f84d01360abe7c0b4abd5d69f55b130424"
+    },
+    {
+      "name": "Physics constants, Opening chapter definitions and boss trajectories",
+      "start": "var T = 422",
+      "end": "var hi = class",
+      "sha256": "2bc304de4ff886d83af5102117f491fb4dcf18c80d351097f2f41caef9eef6ea"
+    },
+    {
+      "name": "Player state, controls, jump chain, slide recovery and collision boxes",
+      "start": "var hi = class",
+      "end": "  spawn(A) {",
+      "sha256": "d24c41f6031aa7972b4b1b13213d302eb25890f6427049a6eaf8fd5ff1bd3cf6"
+    },
+    {
+      "name": "Existing authored section generator",
+      "start": "    let t = this.spawnCount++",
+      "end": "  offerContrarian(",
+      "sha256": "a8316b4552ea6bfcef246fd891ff3ac6a4d30bc33ec21cf14bd6bb1fc5a3d4ac"
+    },
+    {
+      "name": "Contrarian, authored Opening course, flight, boss and chapter physics",
+      "start": "  offerContrarian(",
+      "end": "  step(A, t = false) {",
+      "sha256": "b3525b5a65e567cff0161296a6c3655fab2e01dd1222b869c0541da55af4b80c"
+    },
+    {
+      "name": "Simulation integration before the Endless scheduling hook",
+      "start": "  step(A, t = false) {",
+      "end": "    this.autoSpawn && this.nextX <",
+      "sha256": "2d12133e9e26fb62df6a35b2a7db08fe93b9ac8b29c0b0ce004f76d577b4ba0a"
+    },
+    {
+      "name": "Simulation collision, platform landing and pickup resolution",
+      "start": "    for (let I of this.markers) !I.announced",
+      "end": "var Wo = class",
+      "sha256": "aa0e9be69b0516c3ec50b2d9b178225c9a0d015dca9703869b7ee6c671c269c7"
+    },
+    {
+      "name": "Complete audio implementation",
+      "start": "var ko = class",
+      "end": "var Po = class",
+      "sha256": "b64c882fe72f6f295309a375d0b2f937b42948617322bb6f3e456106c0db8510"
+    },
+    {
+      "name": "Complete Midtown and Central Park chapter simulation",
+      "start": "var ye = 320",
+      "end": "var wo = class",
+      "sha256": "6763eda0565b97ccb681ce784a75342148651781cd5d35ca9394ae757a84c40c"
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "version": "1.10.0",
+  "reference": "a551054 / v1.6.0",
+  "baseline": "37b73ab / v1.9.0",
+  "html": {
+    "bytes": 81676440,
+    "sha256": "8ed306517a2eae45874f45b7b93201ba8610412f3e9949863bfd63f4fed41379",
+    "embeddedResources": 107
+  },
+  "profiles": [
+    {
+      "profile": "desktop",
+      "counts": {
+        "geometry": 216,
+        "opacity": 66,
+        "motion": 5,
+        "nativeDetail": 1,
+        "cacheReuse": 1
+      },
+      "runs": [
+        {
+          "name": "desktop",
+          "renderer": "pixi",
+          "dpr": 1
+        }
+      ]
+    },
+    {
+      "profile": "compact",
+      "counts": {
+        "geometry": 216,
+        "opacity": 66,
+        "motion": 5,
+        "nativeDetail": 1,
+        "cacheReuse": 1
+      },
+      "runs": [
+        {
+          "name": "compact",
+          "renderer": "pixi",
+          "dpr": 1
+        }
+      ]
+    },
+    {
+      "profile": "canvas",
+      "counts": {
+        "geometry": 216,
+        "opacity": 66,
+        "motion": 5,
+        "nativeDetail": 1,
+        "cacheReuse": 1
+      },
+      "runs": [
+        {
+          "name": "canvas",
+          "renderer": "canvas",
+          "dpr": 1
+        }
+      ]
+    },
+    {
+      "profile": "mobile",
+      "counts": {
+        "geometry": 216,
+        "opacity": 66,
+        "motion": 5,
+        "nativeDetail": 1,
+        "cacheReuse": 1
+      },
+      "runs": [
+        {
+          "name": "mobile-dpr2",
+          "renderer": "pixi",
+          "dpr": 2
+        }
+      ]
+    }
+  ],
+  "preserved": {
+    "baselineAssets": 40,
+    "modules": 7,
+    "physicsAudioRanges": 9,
+    "storySnapshots": 12
+  },
+  "endless": {
+    "familyTimeGroups": 36,
+    "distinctLayoutsPer64Seeds": 64,
+    "terrainSamples": 45824,
+    "physicsTraversalWitnesses": 24,
+    "damageAbsorptionAllowed": false,
+    "mandatoryTripleJumpAllowed": false
+  },
+  "venueWidths": [
+    540,
+    600,
+    640,
+    680,
+    720,
+    760,
+    800,
+    864,
+    960,
+    1168,
+    1440
+  ],
+  "minimumRecognitionSeconds": {
+    "kabin": 3.15,
+    "lei": 3.35,
+    "midtown": 3.35
+  },
+  "wideFirstAppearanceSeconds": {
+    "kabin": 15.9,
+    "joju": 9.5
+  },
+  "offline": {
+    "mapCharacters": true,
+    "courseSwitch": true,
+    "contrarian": true,
+    "externalRequests": 0,
+    "browserErrors": 0
+  },
+  "limits": [
+    "Headless Chromium/software WebGL",
+    "Mobile emulation, no physical phone or Safari certification",
+    "Direct file navigation blocked by managed browser; local HTTP then offline used"
+  ]
+}

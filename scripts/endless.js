@@ -1,21 +1,15 @@
-/* Endless, as a skills game.
-   - The pace climbs fast: about 2x by the first minute, 2.5x by two, near 3.5x later on.
-   - Every 32 seconds the market changes regime (the same clock as the street themes). Each regime
-     tightens the breaks between sections, cuts the jetpack breathers and the hedges, and unlocks
-     harder sections: stacked hurdles, double dips, bear traps, flash crashes and whipsaws.
-   - From Black Swan on, flash crashes arrive without asking, with a short warning.
-   - Skill pays: a streak multiplier (x1 to x5) on everything you clear and collect, close calls for
-     clearing a hurdle or a bar by a hair, and your personal best is a flag in the street.
-   Exposed as window.LR_ENDLESS; the game calls in at a handful of points (see build.py). */
+/* Endless presentation, scoring and controls. The seeded course director in
+   endless-generator.js owns route composition, terrain and event scheduling.
+   Existing music, streak rewards, close calls and gamepad behavior remain here. */
 (function () {
   "use strict";
   var GROUND = 422;
   var REGIMES = [
     { name: "CALM MARKETS", title: "Calm markets. Find your rhythm.", sub: "Find your rhythm.", routes: [1, 2, 3, 4, 5, 6, 7], gap: 1, cruise: 5, hedge: 1, crane: 1 },
-    { name: "TURBULENCE", title: "Turbulence. Hurdles come in pairs.", sub: "Faster. The hurdles come in pairs.", routes: [1, 2, 3, 4, 5, 6, 7, 8, 9], gap: 0.8, cruise: 5, hedge: 1, crane: 1.15 },
+    { name: "TURBULENCE", title: "Turbulence. Mix up your moves.", sub: "Jump, slide and choose your line.", routes: [1, 2, 3, 4, 5, 6, 7, 8, 9], gap: 0.8, cruise: 5, hedge: 1, crane: 1.15 },
     { name: "BEAR MARKET", title: "Bear market. Floors give way.", sub: "Floors give way. Look before you leap.", routes: [1, 2, 3, 5, 6, 7, 8, 9, 10, 11], gap: 0.66, cruise: 6, hedge: 0.7, crane: 1.3 },
-    { name: "BUBBLE", title: "Bubble. Even the cranes move.", sub: "Everything moves. Even the cranes.", routes: [2, 3, 5, 6, 7, 8, 9, 10, 11, 12], gap: 0.56, cruise: 7, hedge: 0.5, crane: 1.5 },
-    { name: "BLACK SWAN", title: "Black swan. Expect the unexpected.", sub: "Flash crashes arrive without asking.", routes: [3, 5, 6, 8, 9, 10, 11, 12], gap: 0.46, cruise: 9, hedge: 0.35, crane: 1.7, swan: 5 },
+    { name: "BUBBLE", title: "Bubble. Ride the moving averages.", sub: "Watch the platforms. Time your landing.", routes: [2, 3, 5, 6, 7, 8, 9, 10, 11, 12], gap: 0.56, cruise: 7, hedge: 0.5, crane: 1.5 },
+    { name: "BLACK SWAN", title: "Black swan. Read the next move.", sub: "New combinations. Less room for hesitation.", routes: [3, 5, 6, 8, 9, 10, 11, 12], gap: 0.46, cruise: 9, hedge: 0.35, crane: 1.7, swan: 5 },
     { name: "THE LONG RUN", title: "The long run. Only skill compounds.", sub: "Only skill compounds now.", routes: [3, 5, 6, 8, 9, 10, 11, 12], gap: 0.4, cruise: 0, hedge: 0.25, crane: 1.85, swan: 4 }
   ];
   var ROMAN = ["", "", " II", " III", " IV", " V", " VI", " VII", " VIII", " IX", " X"];
@@ -90,8 +84,10 @@
   window.LR_MUSIC = MUSIC;
   window.LR_ENDLESS = {
     on: on,
-    // pace: 340 -> about 1160 units/s, two-thirds of the way there by three minutes
-    speed: function (t) { return 340 + 820 * (1 - Math.exp(-t / 150)); },
+    usesDirector: function (q) { return !!window.LR_ENDLESS_GENERATOR && LR_ENDLESS_GENERATOR.active(q); },
+    generate: function (q, forcedRoute) { return !!window.LR_ENDLESS_GENERATOR && LR_ENDLESS_GENERATOR.generate(q, forcedRoute); },
+    // A readable pace ceiling leaves room for increasingly varied combinations.
+    speed: function (t) { return window.LR_ENDLESS_GENERATOR ? LR_ENDLESS_GENERATOR.speed(t) : 340 + 820 * (1 - Math.exp(-t / 150)); },
     speedAt: function (q, t) { return on(q) ? this.speed(t) : null; },
     // which sections the spawner may pick next (never empty, never the last three)
     routes: function (q) {
@@ -105,7 +101,7 @@
     },
     cruise: function (q, t) { var c = regime(q).cruise; return c > 0 && t > 0 && t % c === 3; },
     gap: function (q) { return regime(q).gap; },
-    routeName: function (r) { return NAMES[r] || ""; },
+    routeName: function (r) { return (window.LR_ENDLESS_GENERATOR && LR_ENDLESS_GENERATOR.routeName(r)) || NAMES[r] || ""; },
     // the new sections; g(x) hurdle, l(x) bar, E(x, w) gap, all in section units scaled by r
     spawn: function (q, a, o, r, g, l, E, I) {
       var T = GROUND;
@@ -187,7 +183,7 @@
     routeToast: function (route, cg, Ge, m) {
       var q = window.__lrq;
       if (on(q) && q.time - stats(q).toastAt < 2.4) return;
-      var name = cg[route] || NAMES[route] || "";
+      var name = cg[route] || this.routeName(route);
       Ge("NEXT SECTION", name, 1.8);
       m("#route-name").textContent = on(q) ? "L" + (level(q) + 1) + " · " + regimeName(q) : name;
     },

@@ -239,7 +239,7 @@ function Wu(e24, A) {
 }
 function Yo(e24, { districtId: A = "opening", ground: t = 422 } = {}) {
   let i = Object.hasOwn(Qi, A) ? A : "opening", r = Number.isFinite(t) ? t : 422, o = Number(e24) >>> 0;
-  return i === "endless" ? Wu(o, r) : xu(o, i, r);
+  return i === "endless" ? window.LR_ENDLESS_GENERATOR ? LR_ENDLESS_GENERATOR.terrain(o, r) : Wu(o, r) : xu(o, i, r);
 }
 var T = 422, Rr = 0.4, wt = 0.28, Do = 0.3;
 var hr = 0.88, Qr = [{ name: "WALL STREET", place: "LOWER MANHATTAN", title: "The opening bell.", caption: "New York moves fast. Keep your cool.", low: "DEBT", high: "RED TAPE", cause: "An unexpectedly solid pile of debt.", joke: "Markets react to markets reacting." }, { name: "EARNINGS SEASON", place: "EARNINGS SEASON", title: "Record results. Shares fall.", caption: "Please duck the revised forecasts.", low: "Q4", high: "FORECAST", cause: "A quarterly report with considerable weight.", joke: "Analyst raises probability of something happening." }, { name: "MIDTOWN", place: "MIDTOWN MANHATTAN", title: "Just one final question.", caption: "The next panel is somewhere on Fifth Avenue.", low: "PANEL", high: "ON AIR", cause: "An unscheduled appearance on a panel.", joke: "Brief panel discussion enters its third hour." }, { name: "TIMES SQUARE", place: "TIMES SQUARE", title: "Your calendar has been updated.", caption: "The city never sleeps. Neither does your inbox.", low: "INBOX", high: "QUICK SYNC", cause: "A quick sync with no end in sight.", joke: "Extraordinary meeting scheduled to discuss fewer meetings." }, { name: "CORPORATE DRAMA", place: "CORPORATE DRAMA", title: "Perfectly aligned incentives.", caption: "Executive bonuses have become an obstacle.", low: "BONUS", high: "PAY RISE", cause: "A compensation package of unusual size.", joke: "Compensation committee sees no issue." }];
@@ -432,6 +432,7 @@ var hi = class {
     for (let n = 0; n < r; n++) this.pickups.push({ x: A + i * (n / Math.max(1, r - 1)), y: t, kind: o, taken: false, platformId: s?.id, offsetY: s ? t - s.y : 0 });
   }
   spawn(A) {
+    if (window.LR_ENDLESS && LR_ENDLESS.generate(this, A)) return;
     let t = this.spawnCount++, i = window.LR_ENDLESS && this.mode !== "chapter" && this.procedural ? LR_ENDLESS.speed(this.time + 2) : Ir(this.time + 2), r = i / 315, o = this.nextX, s = Math.floor(this.time / 25);
     if (this.ambientJetpacks && (window.LR_ENDLESS && this.mode !== "chapter" && this.procedural ? LR_ENDLESS.cruise(this, t) : t > 0 && t % 5 === 3)) {
       this.spawnCruiseSection(o, r);
@@ -750,7 +751,7 @@ var hi = class {
       let Q = this.platforms.find((R) => R.id === I.platformId);
       Q && (I.y = Q.y + I.offsetY);
     }
-    this.autoSpawn && this.nextX < (this.procedural ? this.x + 1100 : this.width + 260) && (!this.contrarianDone && this.spawnCount >= 2 && this.spawnCount % 5 === 2 && this.lastOfferSection !== this.spawnCount ? this.offerContrarian() : this.spawn());
+    this.autoSpawn && this.nextX < (this.procedural ? this.x + 1100 : this.width + 260) && (!(window.LR_ENDLESS && LR_ENDLESS.usesDirector(this)) && !this.contrarianDone && this.spawnCount >= 2 && this.spawnCount % 5 === 2 && this.lastOfferSection !== this.spawnCount ? this.offerContrarian() : this.spawn());
     for (let I of this.markers) !I.announced && I.x < this.x + 110 && (I.announced = true, this.route = I.route, this.routeCount++, this.emit("route", { route: I.route }));
     let s = this.stepFlight(A), n = LR_GAPS.find(this.obstacles, this.x), a = !n || this.invincible > 0;
     if (!s) {
@@ -1408,17 +1409,26 @@ var Po = class {
     }
     let Q = s.createLinearGradient(0, Math.min(...E.map((B) => B[1])), 0, I);
     Q.addColorStop(0, a ? "#25313c" : "#243b43"), Q.addColorStop(0.2, "#0a1b2b"), Q.addColorStop(1, "#06121e"), s.fillStyle = Q, s.fill();
+    window.LR_STREET_FOUNDATION?.draw2d(s, {district: "opening", W: A, floorAt: t, distance: i, banks, solids: cuts.solids, bottom: I});
     const contour = (dy, color, width) => {
       s.beginPath();
       for (const bank of banks) bank.forEach(([x, y], index) => index ? s.lineTo(x, y + dy) : s.moveTo(x, y + dy));
       s.strokeStyle = color; s.lineWidth = width; s.stroke();
     };
-    contour(0, "#071622", 9); contour(7, "#526a6f", 3); contour(0, l, 2);
-    let R = 120, h = (i % R + R) % R;
+    let R = 112, h = (i % R + R) % R;
     for (let B = -h; B < A + R; B += R) {
-      let c = t(B);
-      this.line(B, c + 14, B, c + 108, "#7d929723", 1), this.line(B + 10, c + 26, B + 100, t(B + 100) + 26, "#91a9a923", 1), this.rect(B + 9, c + 14, 4, 4, "#b2b8a34d", 1);
+      let c = t(B), end = t(B + R);
+      s.beginPath(); s.moveTo(B + 1, c + 4); s.lineTo(B + R - 2, end + 4);
+      s.lineTo(B + R - 2, end + 19); s.lineTo(B + 1, c + 19); s.closePath();
+      s.fillStyle = "#a4aaa1"; s.fill();
+      this.line(B + 1, c + 5, B + R - 2, end + 5, "#d2d4ba", 1.3);
+      this.line(B, c + 4, B, c + 33, "#3a4c53", 1.5);
+      if (Math.round((B + i) / R) % 3 === 0) {
+        this.rect(B + 42, t(B + 42) + 12, 40, 8, "#393a35", 2);
+        for (let slot = 0; slot < 6; slot++) this.line(B + 47 + slot * 5, t(B + 42) + 13, B + 47 + slot * 5, t(B + 42) + 18, "#85877a", 1);
+      }
     }
+    contour(0, "#152e39", 5); contour(0, l, 1.8);
     s.restore(); LR_GAPS.edges(s, cuts.openings, t, I); s.restore();
   }
   listingBell(A, t, i, r = false) {
@@ -1761,6 +1771,7 @@ var wo = class {
     o.lineTo(n.at(-1)[0], a), o.closePath();
     let l = o.createLinearGradient(0, g, 0, g + 300);
     l.addColorStop(0, s ? "#86754f" : "#788281"), l.addColorStop(0.08, s ? "#55563b" : "#50646b"), l.addColorStop(0.5, s ? "#2d483c" : "#2a4657"), l.addColorStop(1, s ? "#1d3533" : "#183544"), o.fillStyle = l, o.fill(), o.save(), o.clip();
+    window.LR_STREET_FOUNDATION?.draw2d(o, {district: A.districtId, W: t, floorAt: x => A.floorAt(x), distance: A.chapterDistance ?? A.distance, banks: [n], bottom: a});
     let E = A.chapterDistance ?? A.distance, I = s ? 92 : 112, Q = (E % I + I) % I;
     for (let R = -Q - I; R < t + I; R += I) {
       let h = A.floorAt(R), B = A.floorAt(R + I);
@@ -22182,7 +22193,7 @@ function pD() {
   return zA === "chapter" ? Ot[at].name.toUpperCase() + " \xB7 " + Ot[at].note : "ONE CITY. AN UNREASONABLY LONG HORIZON.";
 }
 function Mu() {
-  return [si, ng, gt[PA].motion, At.shieldImage, At.reserveImage, Fe, po, zA === "chapter" ? gi[at] : null, zA === "chapter" && at !== "opening" ? er : null, ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || []), ...(window.LR_SHOPS?.images || []), ...(window.LR_PROPS?.images || []), ...(window.LR_OFFICE_HOST?.images || [])].filter(Boolean);
+  return [si, ng, gt[PA].motion, At.shieldImage, At.reserveImage, Fe, po, zA === "chapter" ? gi[at] : null, zA === "chapter" && at !== "opening" ? er : null, ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || []), ...(window.LR_SHOPS?.images || []), ...(window.LR_PROPS?.images || []), ...(window.LR_OFFICE_HOST?.images || []), ...(window.LR_STREET_FOUNDATION?.images || [])].filter(Boolean);
 }
 function SD() {
   nu || ![Fe, er, po, ...Object.values(gi)].every((e24) => e24.complete && e24.naturalWidth) || (nu = true, $A.init({ canvas: m("#environment"), gameplayCanvas: ht, openingCanvas: bA, backgrounds: gi, propsImage: er, ambienceImage: po, ambienceFrames: su }).then(() => $A.resize(eA, kA, ht.width, ht.height)).catch((e24) => console.warn("Using the Canvas renderer:", e24.message)));
@@ -22237,7 +22248,7 @@ function Eg() {
     let t = A.dataset.mode === zA;
     A.classList.toggle("selected", t), A.setAttribute("aria-pressed", String(t));
   }
-  m("#district-picker").classList.toggle("hidden", zA !== "chapter"), m("#chapter-description").innerHTML = zA === "chapter" ? e24.copy : "The pace doubles in a minute.<br>Every 32 seconds, the market turns.", m("#start-label").textContent = zA === "chapter" ? "Play " + e24.name : "Start endless", b === "home" && (m("#district").textContent = "NEW YORK"), GQ();
+  m("#district-picker").classList.toggle("hidden", zA !== "chapter"), m("#chapter-description").innerHTML = zA === "chapter" ? e24.copy : "A fresh route from every seed.<br>Rising terrain. Tougher combinations. Room to recover.", m("#start-label").textContent = zA === "chapter" ? "Play " + e24.name : "Start endless", b === "home" && (m("#district").textContent = "NEW YORK"), GQ();
 }
 function fu(e24) {
   if (Object.hasOwn(Ot, e24)) {
@@ -22252,7 +22263,7 @@ function fu(e24) {
 for (let e24 of document.querySelectorAll("[data-district]")) e24.onclick = () => {
   b === "home" && (!window.LR_CH || LR_CH.unlocked(e24.dataset.district) ? fu(e24.dataset.district) : LR_CH.locked(e24));
 };
-for (let e24 of [...Object.values(gt).flatMap((A) => [A.atlas, A.flip, A.motion]), At.shieldImage, At.reserveImage, Fe, er, po, ...Object.values(gi), ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || []), ...(window.LR_SHOPS?.images || []), ...(window.LR_PROPS?.images || []), ...(window.LR_OFFICE_HOST?.images || [])].filter(Boolean)) e24.onload = Ei, e24.onerror = () => {
+for (let e24 of [...Object.values(gt).flatMap((A) => [A.atlas, A.flip, A.motion]), At.shieldImage, At.reserveImage, Fe, er, po, ...Object.values(gi), ...(window.LR_SCENERY?.images || []), ...(window.LR_KABIN?.images || []), ...(window.LR_SHOPS?.images || []), ...(window.LR_PROPS?.images || []), ...(window.LR_OFFICE_HOST?.images || []), ...(window.LR_STREET_FOUNDATION?.images || [])].filter(Boolean)) e24.onload = Ei, e24.onerror = () => {
   Mu().includes(e24) && (Ei(), m("#load-status").textContent = "Artwork could not load. Choose another chapter or refresh to retry.");
 };
 Gu();
@@ -22794,7 +22805,7 @@ function dQ() {
 function vu(e24 = false) {
   $D(), Ax();
   let A = b !== "home", t = b === "playing" ? $i / (1 / 120) : 1, i = A && q ? q.speed * (1 - t) / 120 : 0, r = A ? Math.max(0, (q?.distance || 0) - i) : 0, o = q?.transfer, s = o ? Math.min(1, o.age / o.duration) : 1, n = o ? s < 0.5 ? !o.toContrarian : o.toContrarian : !!q?.contrarian, a = A ? q?.districtId || "opening" : "opening", g = a !== "opening", l = !e24 && $A.ready && !$A.lost;
-  if (ut.environment = l && g ? $A : null, At.environment = l ? $A : null, tx(), bA.style.transform = n ? "scaleY(-1)" : "none", bA.style.visibility = g || l ? "hidden" : "visible", mt.dataset.location = a, g || (nt && !nt.lost ? nt.render(r, UA, eA, kA) : ag && xD(r)), d.setTransform(ht.width / eA, 0, 0, ht.height / kA, 0, 0), d.clearRect(0, 0, eA, kA), g && !l && ut.background(a, gi[a], eA, kA, r, UA, gA), n && (d.translate(0, kA), d.scale(1, -1)), d.translate(0, o && (o.toContrarian || s < 0.5) ? 0 : Kt), g || WD(r), g ? ut.terrain(q || { districtId: a, floorAt: () => T, distance: r, chapterDistance: r, worldItems: [], setPiece: null }, eA, UA, gA) : A && (q?.mode === "chapter" || q?.procedural) && !q.contrarian && (!o || s >= 0.5) ? At.terrain(eA, (E) => q.floorAt(E - i), q.mode === "chapter" ? q.chapterDistance : r, UA, q.chapterPhase?.id, q.obstacles, i) : At.grid(eA, T, r, UA, A ? q?.obstacles : [], i), A) {
+  if (ut.environment = l && g ? $A : null, At.environment = l ? $A : null, tx(), bA.style.transform = n ? "scaleY(-1)" : "none", bA.style.visibility = g || l ? "hidden" : "visible", mt.dataset.location = a, g || (nt && !nt.lost ? nt.render(r, UA, eA, kA) : ag && xD(r)), d.setTransform(ht.width / eA, 0, 0, ht.height / kA, 0, 0), d.clearRect(0, 0, eA, kA), g && !l && ut.background(a, gi[a], eA, kA, r, UA, gA), n && (d.translate(0, kA), d.scale(1, -1)), window.LR_STREET_LIFE?.draw2d(d, {district: a, W: eA, H: kA, distance: r, time: UA, seed: q?.seed || 0, reduced: gA, rearCurb: -8 + 1304 * (kA + 16) / 1750, frontCurb: T}), d.translate(0, o && (o.toContrarian || s < 0.5) ? 0 : Kt), g || WD(r), g ? ut.terrain(q || { districtId: a, floorAt: () => T, distance: r, chapterDistance: r, worldItems: [], setPiece: null }, eA, UA, gA) : A && (q?.mode === "chapter" || q?.procedural) && !q.contrarian && (!o || s >= 0.5) ? At.terrain(eA, (E) => q.floorAt(E - i), q.mode === "chapter" ? q.chapterDistance : r, UA, q.chapterPhase?.id, q.obstacles, i) : At.grid(eA, T, r, UA, A ? q?.obstacles : [], i), A) {
     if (q) {
       wD(), yD(i);
       for (let I of q.pickups) kD(I, i);

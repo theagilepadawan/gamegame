@@ -4,14 +4,15 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
-## Detailed New York streets — 1.9
+## Living New York streets and varied Endless — 1.10
 
-- **Native detail:** Downtown and Midtown use 28 native 1024×1536 street paintings and 29 authored seam repairs under `assets/scenery-v19/`, replacing the 724-pixel-tall city sheets. Native pixels survive the prepared canvases and texture upload. At matched framing, source sampling is about 2.10× higher in Midtown and 2.18× higher Downtown; fine masonry, windows and venue fronts have substantially more original detail.
-- **Separated local discoveries:** full stretches of ordinary city architecture separate Kabin, LEI, JOJU, Omar's, Uncle Gussy's and 505. Downtown has 12 base paintings and Midtown 16. Venue fronts remain part of a continuous opaque street, with complete blue/cyan 505 glass and its host. The longer painted route shares one horizontal camera, with no jump-driven vertical shift or independent venue islands.
-- **Warmth and continuity:** the previous release's warm palette, dry streets, bounded Downtown harbor, polished `props-v18` pickups and smaller signs remain. Native landmark detail and scene joins are checked at gameplay size; Lower Manhattan and Midtown keep their own landmark identities.
-- **Central Park and gameplay:** the original Park scenery, current runners, animations, audio, progression and game mechanics are retained. Endless cycles through six anonymous ordinary-street paintings, without replaying named landmarks or Easter eggs.
+- **The earlier Midtown atmosphere returns:** native v1.6 glass-canyon, library, dry-city atmosphere and unique-landmark artwork replace the opening stretch corresponding to v1.9 segments 0–3. From segment 4 onward, the detailed v1.9 street and its separated venue discoveries remain. This combines the earlier opening composition with the current complete blue/cyan 505 entrance, office host and other venue fronts.
+- **A city that moves with the run:** Downtown and Midtown begin scrolling horizontally immediately, with a gentle increase in travel. Near-road taxis and sedans add activity behind the playable terrain. The approved v1.6 stone material returns at its native 1254×1254 resolution, clipped to the solid ground so gaps stay open. Architecture has no jump-driven vertical shift.
+- **Detail and placement retained:** the v1.9 native 1024×1536 paintings and authored joins remain for Downtown and the later Midtown street, including the spacing between Kabin, LEI, JOJU, Omar's, Uncle Gussy's and 505. Venue fronts retain their native pixels and belong to their surrounding buildings. Central Park, the approved runner sheets, warm props, branding and audio remain unchanged.
+- **Playable characters on the map:** a miniature Nicolai or Trond follows the chapter path using native crops of the approved sprites. Chapter changes use a brief run of about half a second, then a stable idle pose. Reduced motion places the character directly at the destination.
+- **A more varied Endless course:** 12 parameterized route families combine seeded terrain, jump/slide sequences, optional upper routes, moving and crumbling platforms, springs and rewards. Longer combinations, wider gaps and shorter recovery gradually raise the challenge within a readable speed ceiling. Jetpack and Contrarian pickups return with cooldowns and safe recovery sections; replaying a seed preserves the course.
 
-The earlier HTML remains a visual guide, not a replacement codebase. The user rejected v1.8's loss of detail and clustered venues while asking to retain its other improvements. The current change addresses those two issues. Actual validation is recorded in `docs/verification.md`; v1.8's historical results are preserved separately and do not certify v1.9.
+[Version 1.10 design and validation notes](docs/living-city-endless-v110.md) describe the exact scope, completed Endless checks and three proposed future challenges. The earlier HTML remains a visual reference; this is not a full rollback. Release-wide verification belongs in `docs/verification.md`; historical results only apply to the versions they identify.
 
 The current Nicolai and Trond sprite sheets are unchanged. The rejected cartoon runner study and alternate Park artwork are not part of gameplay.
 
@@ -20,10 +21,10 @@ The current Nicolai and Trond sprite sheets are unchanged. The rejected cartoon 
 ## Story and Endless
 
 - **Story and Endless:** Daily Challenge and the separate Contrarian practice option are removed. The existing Contrarian pickup/event remains in gameplay.
-- **Chapter journey:** a scrollable world map, touch dragging, mouse wheel, arrows and keyboard navigation, with clear progress and locked chapters.
+- **Chapter journey:** a scrollable world map, touch dragging, mouse wheel, arrows and keyboard navigation, with clear progress, locked chapters and a miniature of the selected playable runner.
 - **Progression:** wins in Opening Bell and Midtown default to Next chapter, including after the fund-history reveal and when using a controller. The Central Park finale defaults to Main menu. Losing a chapter defaults to Retry chapter.
 - **Story courses:** fixed chapter terrain; seed and New world controls belong to Endless. Switching modes preserves the chosen Endless seed.
-- **Landmark continuity:** Story follows a finite route without mirroring or repeating its landmarks. Endless continues through six anonymous ordinary-street paintings without returning to WTC, Brooklyn Bridge or named venues.
+- **Landmark continuity:** Story follows a finite route without mirroring or repeating its landmarks. Endless continues through six anonymous ordinary-street paintings without returning to WTC, Brooklyn Bridge or named venues; gameplay layouts vary independently of that scenery loop.
 
 The NBIM branding, music, both runners and their animations, unlocks, fund-history reveal, pickups, jetpack, boss, local leaderboards and environmental effects remain from the supplied build. Leaderboards remain local unless a remote service is explicitly configured.
 
@@ -39,7 +40,7 @@ Requires Node.js 20 or newer. The build and local server have no dependencies.
 npm start
 ```
 
-Open the URL printed by the server. `index.html`, `game.css`, `scripts/` and `assets/` are the editable source. `scripts/engine.js` contains the original bundled game and Pixi runtime, formatted for maintenance. `scripts/scenery.js` and `scripts/midtown-scenery.js` compose the native city tiles and shared venue camera; `scripts/park-scenery.js` preserves the original Park composition; `scripts/chapter-menu.js` controls the chapter map.
+Open the URL printed by the server. `index.html`, `game.css`, `scripts/` and `assets/` are the editable source. `scripts/engine.js` contains the original bundled game and Pixi runtime, formatted for maintenance. `scripts/scenery.js` and `scripts/midtown-scenery.js` compose the native city tiles and shared venue camera; `scripts/city-vistas.js` restores the earlier Midtown opening; `scripts/street-life.js` and `scripts/street-foundation.js` supply traffic and the stone ground material. `scripts/park-scenery.js` preserves the original Park composition, `scripts/chapter-menu.js` controls the chapter map, and `scripts/endless-generator.js` owns seeded Endless generation.
 
 ```sh
 npm run build
@@ -57,6 +58,13 @@ npx playwright install chromium
 npm test
 ```
 
-The browser tests cover mode/progression, map, artwork, scenery, venue placement, gaps and offline packaging. `tests/cohesive-scenery.mjs` checks the current panorama, shared-camera venue and anonymous Endless-tail contracts. The release verification records which suites actually ran. Earlier restoration/layered-city tests remain historical and are superseded where they describe artwork no longer used. It uses `/usr/bin/chromium` when present, otherwise Playwright's installed Chromium. `CHROMIUM_PATH` can select another executable. `PLAYWRIGHT_MODULE` can point at an existing Playwright module. `TEST_URL` can select an already hosted standalone build.
+The browser tests cover mode/progression, map, artwork, scenery, venue placement, gaps and offline packaging. `tests/cohesive-scenery.mjs` checks the current panorama, shared-camera venue and anonymous Endless-tail contracts. `tests/map-avatars.mjs` and `tests/street-life.mjs` cover the added map characters and traffic. The release verification records which suites actually ran. Earlier restoration/layered-city tests remain historical and are superseded where they describe artwork no longer used. Browser tests use `/usr/bin/chromium` when present, otherwise Playwright's installed Chromium. `CHROMIUM_PATH` can select another executable. `PLAYWRIGHT_MODULE` can point at an existing Playwright module. `TEST_URL` can select an already hosted standalone build.
+
+The Endless generation and independent collision-enabled fairness checks run directly in Node:
+
+```sh
+node tests/endless-generation.mjs
+node tests/endless-fairness.mjs
+```
 
 Progress and local scores use the browser's local storage. The original `?unlock=all` URL option remains available for demonstrations; ordinary play retains chapter and runner unlocks.

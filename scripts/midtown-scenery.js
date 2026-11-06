@@ -52,8 +52,18 @@
         ease += (compact.ease - ease) * compactBlend;
         maxRate += (compact.maxRate - maxRate) * compactBlend;
       }
-      var afterHold = Math.max(0, runDistance - hold);
-      var easedDistance = ease && afterHold < ease ? afterHold * afterHold / (2 * ease) : afterHold - ease / 2;
+      // Ultra-wide views reveal more street at once. Give their opening a
+      // gentler approach so a venue still arrives as a discovery, then spend
+      // the remaining course distance traversing the complete native strip.
+      var wideBlend = Math.max(0, Math.min(1, (W - 1168) / (1440 - 1168)));
+      if (!repeatsTail) hold += 2000 * wideBlend;
+      // Start moving with the runner immediately. Integrating a gentle rise
+      // from half to full parallax retains the late-course venue timings.
+      var initialVelocity = repeatsTail ? .5 : .5 - .45 * wideBlend;
+      var cameraDebt = hold + ease / 2, ramp = 2 * cameraDebt / (1 - initialVelocity);
+      var easedDistance = ramp && runDistance < ramp
+        ? runDistance * initialVelocity + (1 - initialVelocity) * runDistance * runDistance / (2 * ramp)
+        : runDistance - cameraDebt;
       var initialOffset = 0;
       if (Number.isFinite(config.heroX)) {
         var heroFraction = window.innerWidth <= 650 ? .24 : .35;
@@ -275,7 +285,7 @@
     };
   }
   window.NBIMFlatScenery = { create: create };
-  window.NBIMMidtownScenery = create({ id: "midtown", width: 1024, height: 1680, paintedHeight: 1536, overlap: 64, edgeBlend: 16,
+  window.NBIMMidtownScenery = create({ id: "midtown", width: 1024, height: 1750, paintedHeight: 1536, overlap: 64, edgeBlend: 16,
     finishDistance: 19200, maxRate: .25, hold: 1000, ease: 1000, curbTarget: 1304,
     joins: [
       {"after": 0, "leftSource": 0, "rightSource": 1, "x": 704, "width": 640, "feather": 32, "filename": "midtown-00.webp", "file": "assets/scenery-v19/joins/midtown-00.webp"},

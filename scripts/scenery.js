@@ -2,7 +2,7 @@
    frontages share a single calm camera; the original Park remains untouched. */
 (function () {
   "use strict";
-  var opening = NBIMFlatScenery.create({ id: "opening", width: 1024, height: 1680, paintedHeight: 1536, overlap: 64, edgeBlend: 16,
+  var opening = NBIMFlatScenery.create({ id: "opening", width: 1024, height: 1750, paintedHeight: 1536, overlap: 64, edgeBlend: 16,
     // The IPO advances the chapter clock, so frame the final frontage before
     // the earliest regular story finish rather than the nominal75-second run.
     finishDistance: 24000, maxRate: .15, endlessRate: .105, hold: 1500, ease: 2400, curbTarget: 1304,

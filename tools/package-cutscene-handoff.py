@@ -209,6 +209,11 @@ for relative_folder in active_folders:
     atlas = folder_root / 'atlas-native.png'
     if atlas.is_file():
         copy(atlas, game / relative_folder / atlas.name)
+    # The chapter-map strips have native crop/frame registration notes. Keep
+    # the active asset's authoring notes with its bytes for the next agent.
+    notes = folder_root / 'README.md'
+    if notes.is_file():
+        copy(notes, game / relative_folder / notes.name)
 
 playable = ROOT / 'release' / 'The-Long-Run-NBIM.html'
 assert playable.is_file(), 'Build the release HTML first'
@@ -274,9 +279,15 @@ location_labels = {
     'midtown-08.webp': "Midtown — Omar's",
     'midtown-11.webp': "Midtown — Uncle Gussy's",
     'midtown-14.webp': 'Midtown — complete 505 Fifth glass entrance',
+    'dry-city-atmosphere.webp': 'Midtown — restored v1.6 dry skyline atmosphere',
+    'landmark-panorama.webp': 'Midtown — unique Empire State / Chrysler vista',
+    'glass-canyon.webp': 'Midtown — restored v1.6 glass-office frontage',
+    'library-frontage.webp': 'Midtown — restored v1.6 library frontage',
+    'city-plane-tree.webp': 'Midtown — native street-tree transition',
+    'stone-foundation.webp': 'City terrain — native v1.6 stone foundation',
 }
 for relative in sorted(runtime_used):
-    if relative.startswith('assets/scenery-v19/'):
+    if relative.startswith(('assets/scenery-v19/', 'assets/city-vistas-v20/', 'assets/street-foundation-v20/')):
         location_sources[relative] = location_labels.get(Path(relative).name, Path(relative).stem)
 assert any(path.startswith('assets/scenery-v19/') for path in location_sources), 'Current city art is not referenced by the runtime'
 locations = refs / 'locations'
@@ -286,6 +297,7 @@ location_index = [
     '# Native location references', '',
     'Open these exact files in the editable game tree. Each native image is stored once; no reduced substitute is used here.', '',
     'The runtime manifests and storefront metadata define course order, alignment and venue spacing. Gameplay captures show their final composition.', '',
+    'Midtown base plates 00–03 remain in the loaded native set, but `city-vistas.js` replaces their opening composition with the indexed v1.6 vista sources. Use the current gameplay frame and renderer before selecting a cinematic location.', '',
     '| Location | Native pixels | Source |', '|---|---:|---|',
 ]
 for relative, label in location_sources.items():
@@ -308,10 +320,11 @@ if host_master.exists():
 # Use current Downtown/Midtown release captures. Park retains its unchanged art.
 # All required files must exist; do not silently substitute a previous city view.
 captures = {
-    'downtown-gameplay.png': 'release/Opening-v19-detail.png',
+    'downtown-gameplay.png': 'release/Opening-v110-detail.png',
     'central-park-gameplay.png': 'review/art-direction/park-start.png',
-    'midtown-gameplay.png': 'release/Midtown-v19-detail.png',
-    'office-gameplay.png': 'release/Midtown-v19-office.png',
+    'midtown-gameplay.png': 'release/Midtown-v110-detail.png',
+    'office-gameplay.png': 'release/Midtown-v110-office.png',
+    'chapter-map-characters.png': 'release/Map-v110-characters.png',
 }
 for name, relative in captures.items():
     p = ROOT / relative
@@ -342,6 +355,7 @@ metadata = {
     'runtimeAssetCount': len(runtime_used),
     'packagedAssetCountIncludingBaseline': len(used),
     'included': ['Current editable game source', 'Self-contained playable HTML', 'Native production sprites, detailed city tiles and current prop atlas',
+                 'Restored v1.6 Midtown vista sources, native stone material, chapter-map runner strips and authoring notes',
                  'Location index linking to exact native game assets without duplicate city-art copies',
                  'Five game audio sources', 'Cutscene production brief, shot slate, prompts and integration notes'],
     'notIncluded': ['No generated cutscene videos', 'No Runway credentials or plugin installation',

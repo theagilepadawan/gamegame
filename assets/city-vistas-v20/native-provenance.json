@@ -1,0 +1,109 @@
+{
+  "sourceCommit": "a551054",
+  "originalBytesUnmodified": true,
+  "files": [
+    {
+      "path": "assets/city-vistas-v20/dry-city-atmosphere.webp",
+      "sourcePath": "assets/midtown-v16/dry-city-atmosphere.webp",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "bytes": 600118,
+      "sha256": "88a66d07771bce5f5de212b92f22606d29a6e3cde8335e8c08c19067cb6754f5"
+    },
+    {
+      "path": "assets/city-vistas-v20/landmark-panorama.webp",
+      "sourcePath": "assets/midtown-v16/landmark-panorama.webp",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "bytes": 352766,
+      "sha256": "d992726911c8ffff4d79685678964bce7d59747734d5205cd5d598fa9358c3cf",
+      "alphaExtrema": [
+        0,
+        254
+      ],
+      "transparentPixels": 1094603,
+      "alphaBounds": [
+        0,
+        31,
+        1525,
+        976
+      ],
+      "nearOpaquePixels": 441228
+    },
+    {
+      "path": "assets/city-vistas-v20/library-frontage.webp",
+      "sourcePath": "assets/midtown-v16/library-frontage.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "bytes": 350624,
+      "sha256": "6ebd5e6c23664bc9983d100d24c4990cdaf0e998042772a206fe794c157acf4d",
+      "alphaExtrema": [
+        0,
+        254
+      ],
+      "transparentPixels": 974779,
+      "alphaBounds": [
+        0,
+        17,
+        1024,
+        1534
+      ],
+      "nearOpaquePixels": 576385
+    },
+    {
+      "path": "assets/city-vistas-v20/glass-canyon.webp",
+      "sourcePath": "assets/midtown-v15/glass-canyon.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "bytes": 425098,
+      "sha256": "60b3c2ab896342e65b735937034b93c376642db15da6ad9a6b134fd05826e778",
+      "alphaExtrema": [
+        0,
+        254
+      ],
+      "transparentPixels": 512963,
+      "alphaBounds": [
+        0,
+        0,
+        1006,
+        1464
+      ],
+      "nearOpaquePixels": 1035553
+    },
+    {
+      "path": "assets/city-vistas-v20/city-plane-tree.webp",
+      "sourcePath": "assets/art-v2/city-plane-tree.webp",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "bytes": 723224,
+      "sha256": "99ca4905d772e91932dd06117e6de021617a1a37290505ce3c5260e199517639",
+      "alphaExtrema": [
+        0,
+        254
+      ],
+      "transparentPixels": 794820,
+      "alphaBounds": [
+        0,
+        0,
+        1024,
+        1536
+      ],
+      "nearOpaquePixels": 607080
+    }
+  ]
+}
