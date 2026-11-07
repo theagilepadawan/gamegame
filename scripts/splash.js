@@ -16,7 +16,7 @@
   function hide() {
     if (done) return; done = true; clearInterval(poll);
     s.classList.add("is-done");
-    setTimeout(function () { try { logo && logo.destroy(); } catch (e) {} s.remove(); }, 650);
+    setTimeout(function () { try { logo && logo.destroy(); } catch (e) {} s.remove(); window.dispatchEvent(new Event("lr:splash-ended")); }, 650);
   }
   function tick() {
     if (done || window.__LR_SPLASH_HOLD) return;

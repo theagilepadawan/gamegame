@@ -1,6 +1,6 @@
 {
   "name": "nbim-the-long-run",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "private": true,
   "type": "module",
   "description": "NBIM Arcade: Story and Endless, based entirely on the supplied branded game.",

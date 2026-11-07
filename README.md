@@ -4,6 +4,20 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
+## Version 1.17 — Ready to run
+
+Both map figures are 12.5% larger. Browsing keeps the familiar run between
+destinations. Confirming **Play** gives a small thumbs-up, held for two seconds,
+then starts the chapter automatically. There is no lowering animation. The
+gesture uses new registered frames matching each approved runner; reduced
+motion starts directly. Escape or a changed selection cancels the launch.
+
+The title screen plays the supplied **Why talking to people is a superpower x
+Mellow Lounge**, with a gentle fade-in and slightly softer volume. Its full
+name appears in the five-second Now playing card. The recording loops, respects
+mute and music volume, and stops when chapter music begins. Browsers that block
+audible autoplay begin it on the first menu interaction.
+
 ## Version 1.16 — A little Manhattan and Trond's reveal
 
 The chapter map now uses a crisp illustrated Manhattan, with Liberty Island,

@@ -1,21 +1,22 @@
 {
-  "version": "1.13.0",
+  "version": "1.17.0",
   "archive": "/workspace/nbim-arcade/release/The-Long-Run-NBIM.zip",
-  "bytes": 36123281,
-  "sha256": "29d8ad69fbb9fd49d679157932f99581ae7a1d10b408e6f7c577418106e49bfe",
-  "htmlBytes": 48789803,
-  "htmlSha256": "577ffc8b70e4a0dce1db8aea91cff9f7ff218552ea446035301bc0afd0b6abf3",
+  "bytes": 36881875,
+  "sha256": "b0cbee1d6ef1205ba53c5d9a3fa8db41031ff10d44f8b9c19c937e3090ab0856",
+  "htmlBytes": 49831814,
+  "htmlSha256": "e30bfd73426a1d0288046f581197f198a23a548feeb9313a360ad470180e7259",
   "crcVerified": true,
   "htmlByteIdentical": true,
   "checksums": [
     "The-Long-Run-NBIM.html",
     "The-Long-Run-NBIM.zip",
+    "The-Long-Run-Asset-Choices.zip",
+    "City-Asset-Choices.png",
+    "Park-Asset-Choices.png",
     "The-Long-Run-Cutscene-Handoff.zip",
-    "Midtown-v113-guidance.png",
-    "Midtown-v113-office.png",
-    "Midtown-v113-skyline.png",
-    "Midtown-v113-street.png",
-    "Park-v113-benchmark.png"
+    "Map-v117-mobile.png",
+    "Map-v117-nicolai.png",
+    "Map-v117-trond.png"
   ],
   "omitted": []
 }

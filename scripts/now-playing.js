@@ -3,7 +3,8 @@
 (function () {
   "use strict";
   // Display titles supplied by the user. Audio files and playback stay intact.
-  const titles = {main: "Downtown Good Company", midtown: "Good Company Never Dies",
+  const titles = {title: "Why talking to people is a superpower x Mellow Lounge",
+    main: "Downtown Good Company", midtown: "Good Company Never Dies",
     park: "Diversified Ballad", contrarian: "Good ol’ Company"};
   let mixer, timer, revision = 0, shown = "", current = "";
   const card = document.createElement("div");
@@ -46,7 +47,7 @@
       }
       // The WebAudio gain changes do not fire HTMLMediaElement volume events.
       // Observe the mixer once at its API, never in the animation loop.
-      for (const method of ["play", "pause", "stop", "toggle", "volumes"]) {
+      for (const method of ["play", "pause", "stop", "toggle", "volumes", "home"]) {
         const original = owner[method];
         owner[method] = function (...args) { const value = original.apply(this, args); queueMicrotask(update); return value; };
       }

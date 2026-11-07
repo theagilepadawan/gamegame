@@ -999,7 +999,7 @@ var ko = class {
     }
   }
   get playing() {
-    return this.scene === "playing" || this.scene === "results";
+    return this.scene === "playing" || this.scene === "results" || (this.scene === "home" && this.activeMusic === "title" && !document.hidden);
   }
   wantedMusic(A) {
     return this.enabled && this.playing && (this.activeMusic ? !this.musicEnded && A === this.musicTracks[this.activeMusic] : A === this.track);
@@ -1029,10 +1029,10 @@ var ko = class {
       this.requestPlay(A, () => this.wantedMusic(A));
     }
   }
-  registerMusic(A, t, { gain: i = 1 } = {}) {
+  registerMusic(A, t, { gain: i = 1, loop = false } = {}) {
     this.musicLevels[A] = Math.min(1, Math.max(0, i));
     let r = new Audio(t);
-    r.preload = "auto", r.loop = false, r.playbackRate = 1, this.musicTracks[A] = r, r.addEventListener("ended", () => {
+    r.preload = "auto", r.loop = loop, r.playbackRate = 1, this.musicTracks[A] = r, r.addEventListener("ended", () => {
       this.activeMusic === A && (this.musicEnded = true, r.pause());
     }), r.addEventListener("error", () => {
       this.activeMusic === A && (this.musicEnded = true, r.pause(), this.error = "The event recording could not be decoded.");
@@ -1109,6 +1109,26 @@ var ko = class {
   }
   stop() {
     this.pause(), this.scene = "home", this.endMusic({ resume: false });
+  }
+  home() {
+    if (!this.enabled || document.hidden) return;
+    this.scene = "home";
+    if (this.activeMusic === "title") {
+      if (this.musicTracks.title.paused || this.ctx?.state === "suspended") {
+        this.init(); this.apply(); this.syncMusic();
+      }
+      return;
+    }
+    this.stopClips();
+    this.startMusic("title");
+    // A gentle entrance, with the user's music slider still in control.
+    const fader = this.musicFaders.title;
+    if (fader) {
+      const now = this.ctx.currentTime;
+      fader.gain.cancelScheduledValues(now);
+      fader.gain.setValueAtTime(0, now);
+      fader.gain.linearRampToValueAtTime(this.musicLevels.title, now + .5);
+    }
   }
   tone(A = 440, t = 0.08, i = "sine", r = 0.035, o = 0) {
     if (!this.enabled || !this.ctx || !this.fx) return;
@@ -22168,6 +22188,7 @@ try {
 var _i = false, b = "home", zA = "chapter", q = null, eA = 1e3, kA = 540, EQ = 1, au = 0, $i = 0, UA = 0, QQ = 0, ir = T, fe = 0, Ar = 1, RQ = false, SA = new ko("assets/original-37.mp3");
 SA.registerClip("laugh", "assets/original-38.mp3");
 SA.registerMusic("contrarian", "assets/original-39.mp3", { gain: 0.79 });
+SA.registerMusic("title", "assets/audio/title-mellow-lounge.mp3", { gain: 0.72, loop: true });
 window.LR_MUSIC?.attach(SA);
 var Kt = 0, hu = 0.62, UD = 0.65, gu = 0, Bu = 0, bt = [], Ht = [], IQ = 0, rr = 1, tr = 1, Xt = 0, _t = -1, ze = [], ni = -1, rg = 0, hQ = -1, Co = 0, Vo = 2.25, $t = /* @__PURE__ */ new Set(), ai = /* @__PURE__ */ new Set(), og = /* @__PURE__ */ new Set(), gg = matchMedia("(pointer:coarse)"), gA = matchMedia("(prefers-reduced-motion: reduce)").matches, lu = { get(e24) {
   try {
@@ -22323,6 +22344,18 @@ function Ge(e24, A, t = 2.4) {
 function De() {
   $t.clear(), ai.clear(), og.clear(), document.querySelectorAll(".pressed").forEach((e24) => e24.classList.remove("pressed")), q?.release();
 }
+function confirmMenuRun() {
+  if (b !== "home" || !_i || window.LR_RUN && LR_RUN.previewing()) return;
+  const mode = zA;
+  if (mode === "chapter" && window.LR_MENU?.launch(() => Ko(mode))) {
+    // Keep fullscreen / audio permission inside the initiating user gesture;
+    // the actual run begins after the map runner's brief thumbs-up.
+    gg.matches && qu();
+    vD();
+    return;
+  }
+  Ko(mode);
+}
 function Ko(e24 = zA, A = {}) {
   if (!_i || window.LR_RUN && LR_RUN.previewing()) return;
   if (e24 !== "chapter" && e24 !== "endless") e24 = zA;
@@ -22385,12 +22418,14 @@ function CQ() {
 }
 function Cu(e24 = true) {
   e24 && zA === "endless" && (qe = vo()), ze = [], Xt = 0, _t = -1, ni = -1, b = "home", SA.stop(), Kt = 0, q = null, De(), ut.reset(), $A.reset(), mt.classList.remove("playing");
+  window.LR_MUSIC?.page("home");
+  SA.home();
   fQ();
   for (let A of ["#intro", "#home-caption"]) m(A).classList.remove("hidden");
   for (let A of ["#results", "#pause-screen", "#live-hud", "#pause", "#touch-controls", "#chapter-strip", "#next-chapter"]) m(A).classList.add("hidden");
   m("#event").classList.remove("show"), m("#effects").replaceChildren(), Eg(), Gu(), Ei(), m("#start").focus({ preventScroll: true });
 }
-m("#start").onclick = Ko;
+m("#start").onclick = confirmMenuRun;
 m("#restart").onclick = () => Ko(q.mode, { seed: q.seed });
 m("#home").onclick = () => Cu();
 m("#resume").onclick = CQ;
@@ -22429,7 +22464,7 @@ function uQ() {
   m("#sound-state").textContent = SA.enabled ? "ON" : "OFF", m("#sound").setAttribute("aria-label", SA.enabled ? "Mute all audio" : "Enable audio"), m("#music-volume").value = Math.round(SA.musicVolume * 100), m("#fx-volume").value = Math.round(SA.fxVolume * 100), m("#music-value").textContent = Math.round(SA.musicVolume * 100) + "%", m("#fx-value").textContent = Math.round(SA.fxVolume * 100) + "%";
 }
 m("#sound").onclick = () => {
-  SA.toggle(), uQ();
+  SA.toggle(), b === "home" && SA.enabled && SA.home(), uQ();
 };
 m("#mix").onclick = () => {
   sr(), m("#audio-dialog").showModal();
@@ -22439,6 +22474,17 @@ for (let e24 of ["#music-volume", "#fx-volume"]) m(e24).addEventListener("input"
   SA.volumes(Number(m("#music-volume").value) / 100, Number(m("#fx-volume").value) / 100), uQ();
 });
 uQ();
+// Autoplay where the browser permits it; otherwise the first menu interaction
+// resumes the same track. Course/runner changes never restart the recording.
+function beginTitleMusic() { if (b === "home") SA.home(); }
+window.addEventListener("load", () => { if (!m("#splash")) beginTitleMusic(); }, { once: true });
+window.addEventListener("lr:splash-ended", () => { window.LR_MUSIC?.page("home"); beginTitleMusic(); }, { once: true });
+document.addEventListener("pointerdown", (event) => {
+  if (!event.target.closest("#sound")) beginTitleMusic();
+}, { passive: true });
+document.addEventListener("keydown", (event) => {
+  if (!event.repeat && !event.altKey && !event.ctrlKey && !event.metaKey && event.key !== "Escape" && !event.target.closest("#sound")) beginTitleMusic();
+}, { capture: true });
 m("#fullscreen").onclick = () => {
   document.fullscreenElement ? document.exitFullscreen().catch(() => {
   }) : qu();
@@ -22446,6 +22492,7 @@ m("#fullscreen").onclick = () => {
 window.addEventListener("blur", sr);
 document.addEventListener("visibilitychange", () => {
   document.hidden && sr();
+  if (b === "home") document.hidden ? SA.syncMusic() : SA.home();
 });
 window.addEventListener("keydown", (e24) => {
   if (m("#audio-dialog").open || m("#seed-dialog").open) return;

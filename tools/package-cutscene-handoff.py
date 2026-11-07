@@ -346,6 +346,7 @@ for name, relative in captures.items():
 
 audio = {
     '01-opening-theme.mp3': 'original-37.mp3',
+    '06-title-mellow-lounge.mp3': 'audio/title-mellow-lounge.mp3',
     '02-midtown-theme.mp3': 'original-19.mp3',
     '03-central-park-theme.mp3': 'original-20.mp3',
     '04-nicolai-laugh.mp3': 'original-38.mp3',
@@ -370,7 +371,7 @@ metadata = {
     'included': ['Current editable game source', 'Self-contained playable HTML', 'Native production sprites, detailed city tiles and current prop atlas',
                  'Restored warm Midtown lossless paintings, native finance-obstacle atlas, stone material, chapter-map runner strips and authoring notes',
                  'Location index linking to exact native game assets without duplicate city-art copies',
-                 'Five game audio sources', 'Cutscene production brief, shot slate, prompts and integration notes'],
+                 'Six game audio sources', 'Cutscene production brief, shot slate, prompts and integration notes'],
     'notIncluded': ['No generated cutscene videos', 'No Runway credentials or plugin installation',
                     'Original inline office/host reference photographs were not exposed as downloadable local files',
                     'No rejected cartoon runner study, alternate Park artwork, retired city-block/venue-island art, low-detail v1.8 city sheets or superseded prop variants'],

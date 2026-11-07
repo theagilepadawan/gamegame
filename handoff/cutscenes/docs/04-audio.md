@@ -9,6 +9,7 @@ The reference audio is copied byte for byte from the current game. The following
 | `references/audio/03-central-park-theme.mp3` | `game/assets/original-20.mp3` | 162.720 s | Stereo / 48 kHz | Central Park chapter music |
 | `references/audio/04-nicolai-laugh.mp3` | `game/assets/original-38.mp3` | 1.176 s | Mono / 48 kHz | User-supplied Nicolai laugh |
 | `references/audio/05-contrarian-pixel-adventure.mp3` | `game/assets/original-39.mp3` | 64.848 s | Stereo / 48 kHz | Exclusive Contrarian event music |
+| `references/audio/06-title-mellow-lounge.mp3` | `game/assets/audio/title-mellow-lounge.mp3` | 72.912 s | Stereo / 48 kHz | Title screen: Why talking to people is a superpower x Mellow Lounge |
 
 The main soundtrack is displayed as **Downtown Good Company**, with the original composer credit **radicalTomography** retained (source recording: **Extended 16-Bit Bitcrushed**). The Contrarian display title is **Good ol’ Company** (source recording: **Pixel Adventure**). The user earlier supplied a legacy In Good Company tune, but the latest game uses the files above. A separate clean legacy recording is not included in this handoff; do not substitute an assumed version.
 
@@ -48,4 +49,8 @@ Use the names supplied by the user, without replacing the recordings:
 - Opening Bell/Endless: **Downtown Good Company**, radicalTomography (original source: Extended 16-Bit Bitcrushed).
 
 The compact in-game now-playing label appears for five seconds on an audible
-run/results page or soundtrack change. Audio settings carry the same titles.
+title/run/results page or soundtrack change. The title-screen song is displayed
+as **Why talking to people is a superpower x Mellow Lounge** (version 1.17),
+with the full name wrapping on phones. The title recording loops at 0.72 gain
+relative to the chapter music and enters over 500 ms. It stops before a run;
+the normal chapter and exclusive Contrarian soundtrack logic still applies.

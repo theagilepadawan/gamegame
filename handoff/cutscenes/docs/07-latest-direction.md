@@ -82,3 +82,15 @@ cinematic location art still comes from the approved gameplay backgrounds.
 Both approved map miniatures now have a short preparation and soft arrival.
 Trond's first unlock reveals him on results and refreshes his menu slot
 immediately; his current gameplay identity and move set are unchanged.
+
+## Version 1.17 menu launch and title music
+
+Map miniatures are 12.5% larger. Browsing uses the existing run; confirming Play
+raises a thumb for two seconds, then launches the chapter automatically. No
+arm-lowering animation, dialogue or text is wanted. The native new keyframes
+are in `game/assets/map-gestures-v117/`; gameplay runners remain unchanged.
+
+The newly supplied title-screen recording is **Why talking to people is a
+superpower x Mellow Lounge**, in `game/assets/audio/title-mellow-lounge.mp3`.
+Keep its complete name. It loops gently at 0.72 relative gain, with the existing
+music slider and mute preference. It must stop before chapter music starts.
