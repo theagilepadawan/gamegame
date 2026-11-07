@@ -1,4 +1,49 @@
-# Release verification — Kabin and classic assets, version 1.15.1
+# Release verification — Manhattan map and runner reveal, version 1.16
+
+## Chapter map and movement
+
+The new stationary SVG illustration supplies recognisable New York landmarks
+and rounded, warm map scenery. It retains the existing three destination
+coordinates and accessible chapter controls. The drawn harbour, two rivers,
+Liberty Island, Brooklyn shore and south-to-north district order give the map
+geographical context. This is a schematic journey, not a street-level map.
+
+Both approved runner strips are unchanged. Travel now has an 80 ms preparation,
+a distance-dependent run capped at 1,250 ms, and a 150 ms arrival. Native stride
+frames follow travelled distance. A small lean, foot lift and one settling pose
+make the movement softer; idle has no repeated motion. Quick retargeting starts
+from the current point. Reduced motion settles immediately and suppresses the
+arrival ring. Keyboard, arrows, touch scrolling and chapter locks are retained.
+
+## Trond unlock
+
+The unlock wrote the saved flag without repainting the hidden picker, and the
+Main menu path did not refresh the runner caption. Unlock now refreshes the
+picker immediately; returning home refreshes the selected runner and caption.
+Trond fades out of his silhouette in a brief warm result card, followed by a
+single highlight of his new menu slot. The NEW badge is steady until selection.
+Reduced motion shows the reveal directly. Selecting Trond still uses the normal
+picker and save path; unlocking him does not silently switch runners.
+
+## Checks for this release
+
+Browser checks cover both map runners at every destination, actual run frames
+and route travel, facing direction, stable idle, live reduced-motion changes,
+compact touch layout, locked previews, keyboard and swipe navigation. The unlock
+regression uses the real final-chapter results and menu handlers on desktop and
+568 × 320 touch: immediate label update, reveal, Main menu, selection, reload,
+play as Trond, and no repeated first-unlock card on replay. Standalone checks
+verify the embedded SVG, approved map strips, fonts, audio and offline play.
+The existing 40 baseline assets remain byte-identical.
+
+Gameplay terrain, course scenery, Kabin placement/detail, obstacle artwork,
+physics, music recordings, progression requirements and Story/Endless rules
+are retained from 1.15.1. The mobile layout and music-widget checks are rerun.
+
+## Retained 1.15.1 verification
+
+The evidence below belongs to the previous release, whose gameplay changes
+are retained here.
 
 Patch 1.15.1 restores the earlier striped barrier and copper market-board art
 (option A), with current hitboxes, widths, slope alignment and hoist mechanics.

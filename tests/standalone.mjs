@@ -29,6 +29,12 @@ try{
   assert.equal(await page.locator('script[src],link[rel="stylesheet"][href]').count(),0,'Release must embed scripts/styles');
   const scenery=await page.evaluate(()=>LR_SCENERY.images.map(image=>({embedded:image.src.startsWith('data:'),ready:image.complete&&image.naturalWidth>0})));
   assert.ok(scenery.every(image=>image.embedded&&image.ready),'Every referenced scenery layer is embedded and decoded');
+  const mapArt=await page.evaluate(async()=>{
+    const source=document.querySelector('.map-art image').getAttribute('href');
+    const image=new Image();image.src=source;await image.decode();
+    return {embedded:source.startsWith('data:image/svg+xml;'),width:image.naturalWidth,height:image.naturalHeight};
+  });
+  assert.ok(mapArt.embedded&&mapArt.width>0&&mapArt.height>0,'Illustrated Manhattan decodes from the embedded SVG');
   const artContract = await page.evaluate(() => ({
     park: NBIMParkScenery.images.length,
     opening: LR_SCENERY.inspect('opening',0,864,540,'chapter').sourceCount,

@@ -8,7 +8,8 @@
   var KEY = "lr.runner.trond", SEEN = "lr.runner.trond.seen";
   var demo = /[?&]unlock=all\b/.test(location.search);
   var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
-  var previewing = false, sil = null;
+  var previewing = false, sil = null, sessionUnlocked = false, revealPending = false;
+  var reduced = matchMedia("(prefers-reduced-motion: reduce)");
   var SEA = "#4ec2e2", INK = "#061024";
 
   // the silhouette: the sheet filled with deep navy, a cool rim of light on its top-left edges
@@ -30,7 +31,7 @@
   }
 
   var R = window.LR_RUN = {
-    unlocked: function () { return demo || store.get(KEY) === "1"; },
+    unlocked: function () { return demo || sessionUnlocked || store.get(KEY) === "1"; },
     previewing: function () { return previewing && !R.unlocked(); },
     preview: function (on) { previewing = !!on; },
     silhouette: silhouette,
@@ -44,10 +45,18 @@
       if (!open) {
         if (!b.querySelector(".qm")) b.innerHTML = '<span class="qm" aria-hidden="true"><i>?</i><i>?</i><i>?</i></span><span class="visually-hidden">Locked runner</span>';
         b.title = R.hint(); b.setAttribute("aria-label", "Locked runner. " + R.hint());
-      } else if (b.querySelector(".qm") || !b.textContent.trim()) {
+      } else if (b.textContent.trim() !== "Trond") {
         b.textContent = "Trond"; b.title = ""; b.removeAttribute("aria-label");
       }
       b.classList.toggle("is-new", open && store.get(SEEN) !== "1" && !demo);
+      if (open && revealPending && window.longRun?.state === "home") {
+        revealPending = false;
+        if (!reduced.matches) b.animate([
+          {boxShadow:"0 0 0 0 #f4cea400", transform:"scale(.96)"},
+          {boxShadow:"0 0 0 6px #f4cea455", transform:"scale(1.035)", offset:.4},
+          {boxShadow:"0 0 0 12px #f4cea400", transform:"scale(1)"}
+        ], {duration:700, easing:"cubic-bezier(.2,.7,.3,1)"});
+      }
       if (R.previewing()) {
         b.classList.add("selected"); b.setAttribute("aria-pressed", "true");
         if (nb) { nb.classList.remove("selected"); nb.setAttribute("aria-pressed", "false"); }
@@ -61,11 +70,16 @@
     // Central Park won: the first time, Trond steps out of the shadow on the results screen
     won: function (atlas) {
       if (R.unlocked()) return false;
+      sessionUnlocked = true; revealPending = true; previewing = false;
       store.set(KEY, "1");
+      // The unlock happens on results, before the picker is visible again.
+      // Update its actual label now; returning home also refreshes the caption.
+      R.paint();
       var panel = document.querySelector("#results .results-panel"), anchor = document.getElementById("result-seed");
       if (!panel || !anchor) return true;
       var old = panel.querySelector(".lr-unlock"); old && old.remove();
       var card = document.createElement("div"); card.className = "lr-unlock";
+      card.setAttribute("role", "status"); card.setAttribute("aria-live", "polite");
       card.innerHTML = '<canvas width="168" height="216" aria-hidden="true"></canvas><div><span class="lr-unlock-tag">NEW RUNNER UNLOCKED</span>' +
         '<strong>Trond</strong><small>Belly glide · Triple spin</small><button type="button" class="lr-unlock-go">Run as Trond <span aria-hidden="true">→</span></button></div>';
       anchor.insertAdjacentElement("afterend", card);
@@ -74,13 +88,12 @@
       // idle frame 6 of the run sheet, cropped to the figure
       var sx = 2 * 512 + 96, sy = 512 + 40, sw = 320, sh2 = 420;
       var draw = function () {
-        var u = Math.min(1, Math.max(0, (performance.now() - t0 - 500) / 900));
+        var u = reduced.matches ? 1 : Math.min(1, Math.max(0, (performance.now() - t0 - 100) / 650));
         g.clearRect(0, 0, cv.width, cv.height);
         g.save(); g.globalAlpha = 0.35; g.fillStyle = "#000"; g.beginPath(); g.ellipse(84, 206, 46, 6, 0, 0, Math.PI * 2); g.fill(); g.restore();
         if (atlas && atlas.naturalWidth) {
           if (sh && u < 1) { g.globalAlpha = 1 - u; g.drawImage(sh, sx, sy, sw, sh2, 4, 0, 160, 210); }
           g.globalAlpha = u; g.drawImage(atlas, sx, sy, sw, sh2, 4, 0, 160, 210); g.globalAlpha = 1;
-          if (u > 0 && u < 1) { var y = 210 * (1 - u); g.fillStyle = "rgba(78,194,226,.55)"; g.fillRect(8, y, 152, 2); }
         }
         if (u < 1 && document.body.contains(cv)) requestAnimationFrame(draw);
       };

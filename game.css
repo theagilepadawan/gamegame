@@ -646,13 +646,13 @@ button.home-hi:active{transform:translateX(-50%) translate(3px,4px);box-shadow:0
 .character-options button.is-locked.selected{background:#0b1c3a;color:var(--sand);box-shadow:3px 4px 0 var(--edge),inset 0 0 0 1px #f4cea455}
 @keyframes lr-qm{0%,60%,100%{transform:none}30%{transform:translateY(-3px) rotate(-6deg)}}
 @media(prefers-reduced-motion:reduce){.character-options button.is-locked .qm i{animation:none}}
-.character-options button.is-new::before{content:"NEW";position:absolute;top:-7px;right:-4px;padding:2px 6px 1px;border-radius:999px;background:var(--sea);color:var(--ink);font-size:8px;font-weight:800;letter-spacing:1px;box-shadow:2px 2px 0 var(--edge);animation:best-blink 1s steps(1) infinite}
+.character-options button.is-new::before{content:"NEW";position:absolute;top:-7px;right:-4px;left:auto;padding:2px 6px 1px;border-radius:999px;background:var(--sand);color:var(--ink);font-size:8px;font-weight:800;letter-spacing:1px;box-shadow:1px 2px 0 #a27850;animation:none}
 #stage[data-runner=locked] #character-name{letter-spacing:.18em;color:var(--sand)}
 /* the reveal card on the Central Park results */
-.lr-unlock{display:flex;align-items:center;gap:16px;margin:10px 0 14px;padding:10px 16px 10px 8px;border-radius:12px;background:linear-gradient(120deg,#0b1c3a,#0026ff33);box-shadow:4px 5px 0 var(--edge),inset 0 0 0 1px #4ec2e255;animation:lr-unlock-in .5s cubic-bezier(.33,0,.2,1) both}
+.lr-unlock{display:flex;align-items:center;gap:16px;margin:10px 0 14px;padding:10px 16px 10px 8px;border-radius:14px;background:radial-gradient(ellipse at 16% 55%,#f4cea42b,transparent 46%),linear-gradient(120deg,#153548,#0b213b);box-shadow:0 3px 0 #00153888,inset 0 0 0 1px #f4cea466;animation:lr-unlock-in .5s cubic-bezier(.33,0,.2,1) both}
 .lr-unlock{position:relative}.lr-unlock canvas{position:static!important;inset:auto!important;display:block;width:84px!important;height:108px!important;flex:none;pointer-events:none}
 .lr-unlock>div{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
-.lr-unlock-tag{padding:3px 9px 2px;border-radius:999px;background:var(--sea);color:var(--ink);font-size:8px;font-weight:800;letter-spacing:1.6px;transform:rotate(-2deg);box-shadow:2px 3px 0 var(--edge)}
+.lr-unlock-tag{padding:3px 9px 2px;border-radius:999px;background:var(--sand);color:var(--ink);font-size:8px;font-weight:800;letter-spacing:1.3px;box-shadow:0 2px 0 #a27850}
 .lr-unlock strong{font-size:26px;line-height:1.05;color:var(--sky)}
 .lr-unlock small{font-size:10px;letter-spacing:1px;color:var(--polar);text-transform:uppercase}
 .lr-unlock-go{margin-top:4px;padding:6px 12px;border:1px solid #f4cea488;border-radius:999px;background:transparent;color:var(--sand);font-size:11px;font-weight:700;letter-spacing:.5px}
@@ -699,7 +699,7 @@ input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text;-webk
 .map-art [data-leg].is-open{opacity:1}
 #district-picker .map-node{position:absolute;z-index:2;left:var(--node-x);top:var(--node-y);display:block;flex:none;transform:translate(-50%,-18px);width:150px;height:75px;min-height:0;margin:0;padding:0;border:0;border-radius:0;background:transparent!important;box-shadow:none!important;text-align:center;white-space:normal;letter-spacing:0;color:var(--sky);overflow:visible;cursor:pointer;transition:none}
 #district-picker .map-node:hover{transform:translate(-50%,-18px)}
-.map-disc{position:relative;display:grid;place-items:center;width:35px;height:30px;margin:0 auto 7px;border:2px solid #f5f2eb;border-radius:50%;background:#4ec2e2;box-shadow:0 4px 0 #176183,0 7px 0 #00153824;color:#001538;transition:background .2s,border-color .2s,box-shadow .2s}
+.map-disc{position:relative;display:grid;place-items:center;width:35px;height:30px;margin:0 auto 7px;border:2px solid #f8f1d4;border-radius:50%;background:linear-gradient(#8bd8d9,#4ec2c9);box-shadow:0 4px 0 #337b85,0 7px 0 #00153824;color:#173849;transition:background .2s,border-color .2s,box-shadow .2s}
 .chapter-stamp{font-size:13px;font-weight:800;line-height:1}
 .map-node.selected .map-disc{background:var(--sand);border-color:#fff5df;box-shadow:0 4px 0 #b89169,0 0 0 5px #f4cea42b,0 8px 0 #00153824}
 .map-node:hover .map-disc{border-color:#fff;box-shadow:0 4px 0 #176183,0 0 0 5px #c3e9ee33}
@@ -719,14 +719,16 @@ input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text;-webk
 #district-picker .map-node .lock::before{border-color:#e0eeee}
 .map-node.is-complete .map-disc{background:var(--sand);border-color:#fff1d6;box-shadow:0 4px 0 #b89169,0 7px 0 #00153824}
 .map-node.is-complete .chapter-status{color:var(--sand)}
+.map-node.is-arriving .map-disc::after{content:"";position:absolute;inset:-4px;border:2px solid #ffe9b5;border-radius:50%;pointer-events:none;animation:map-arrival .55s ease-out both}
+@keyframes map-arrival{0%{opacity:.85;transform:scale(.85)}100%{opacity:0;transform:scale(1.65)}}
 /* Keep the destination anchored while its lock gives a small refusal cue. */
 #district-picker .map-node.is-shake{animation:none}
 .map-node.is-shake .map-disc,.map-node.is-shake .chapter-copy{animation:map-lock-nudge .28s ease-out}
 @keyframes map-lock-nudge{0%,100%{transform:translateX(0)}25%{transform:translateX(-2px)}60%{transform:translateX(2px)}}
 /* Map-only native sprites: feet stay registered to the route, without an idle bob. */
-.map-player{position:absolute;z-index:4;left:16.27907%;top:59.58333%;width:calc(var(--map-height)*.32);aspect-ratio:384/420;transform:translate(-50%,-100%) translateY(-5px);pointer-events:none}
-.map-player-figure{position:absolute;inset:0;background-repeat:no-repeat;background-size:700% 100%;background-position:0 0;filter:drop-shadow(0 1px 1px #00153899);transform-origin:50% 100%}
-.map-player[data-facing="left"] .map-player-figure{transform:scaleX(-1)}
+.map-player{--map-facing:1;--map-hop:0px;--map-lean:0deg;--map-sx:1;--map-sy:1;position:absolute;z-index:4;left:16.27907%;top:59.58333%;width:calc(var(--map-height)*.32);aspect-ratio:384/420;transform:translate(-50%,-100%) translateY(-5px);pointer-events:none}
+.map-player-figure{position:absolute;inset:0;background-repeat:no-repeat;background-size:700% 100%;background-position:0 0;filter:drop-shadow(0 1px 1px #00153899);transform-origin:50% 100%;transform:translateY(var(--map-hop)) rotate(var(--map-lean)) scaleX(var(--map-facing)) scale(var(--map-sx),var(--map-sy))}
+.map-player[data-facing="left"]{--map-facing:-1}
 .map-player-shadow{position:absolute;bottom:-1px;left:32%;width:36%;height:5%;border-radius:50%;background:#00153866;filter:blur(.6px)}
 .map-footer{display:flex;justify-content:space-between;gap:10px;margin:9px 3px 0;color:#c3e9eeb0;font-size:6px;line-height:1;letter-spacing:1.2px;font-weight:500}
 .map-gesture{white-space:nowrap;color:var(--polar)}
@@ -822,6 +824,8 @@ input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text;-webk
  #district-picker.chapter-map{scroll-behavior:auto}
  .map-disc,.chapter-copy,.map-art [data-leg],.journey-arrows button{transition:none}
  .map-node.is-shake .map-disc,.map-node.is-shake .chapter-copy{animation:none}
+ .lr-unlock,.map-node.is-arriving .map-disc::after{animation:none}
+ .map-node.is-arriving .map-disc::after{display:none}
 }
 /* Keep the authored street and gradual venue reveals intact in very wide
    windows. Centering uses margins so the game's shake animation still works. */

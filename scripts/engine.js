@@ -22388,7 +22388,7 @@ function Cu(e24 = true) {
   fQ();
   for (let A of ["#intro", "#home-caption"]) m(A).classList.remove("hidden");
   for (let A of ["#results", "#pause-screen", "#live-hud", "#pause", "#touch-controls", "#chapter-strip", "#next-chapter"]) m(A).classList.add("hidden");
-  m("#event").classList.remove("show"), m("#effects").replaceChildren(), Eg(), Ei(), m("#start").focus({ preventScroll: true });
+  m("#event").classList.remove("show"), m("#effects").replaceChildren(), Eg(), Gu(), Ei(), m("#start").focus({ preventScroll: true });
 }
 m("#start").onclick = Ko;
 m("#restart").onclick = () => Ko(q.mode, { seed: q.seed });

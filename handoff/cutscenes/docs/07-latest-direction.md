@@ -72,3 +72,13 @@ and the five-second Now playing card uses a small vector record illustration.
 No new scenery, runner art or pending asset direction was selected in this pass.
 The runtime performance API reports display-driven render FPS and fixed 120 Hz
 physics. Do not treat cloud browser timings as measurements of a real phone.
+
+
+## Version 1.16 menu polish
+
+The chapter picker uses the illustrated vector Manhattan in
+`game/assets/map-v116/manhattan.svg`. Treat it as a schematic journey map;
+cinematic location art still comes from the approved gameplay backgrounds.
+Both approved map miniatures now have a short preparation and soft arrival.
+Trond's first unlock reveals him on results and refreshes his menu slot
+immediately; his current gameplay identity and move set are unchanged.

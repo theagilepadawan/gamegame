@@ -87,12 +87,12 @@ try {
   assert(travel.some(f => f.moving), 'course change uses the run animation');
   assert(new Set(travel.filter(f => f.moving).map(f => f.pose)).size > 1, 'travel advances native run frames');
   assert(travel.some(f => f.left > 49 && f.left < 83), 'runner visibly travels between destinations');
-  await p.clock.runFor(700);
+  await p.clock.runFor(1600);
   await settled(p, 'park', 'trond');
   await snap(p, 'desktop-trond-park');
   await p.locator('[data-district="park"]').focus();
   await p.keyboard.press('ArrowLeft');
-  await p.clock.runFor(700);
+  await p.clock.runFor(1600);
   await settled(p, 'midtown', 'trond');
   assert.equal(await p.locator('.map-player').getAttribute('data-facing'), 'left', 'return trip faces the direction of travel');
   const stable = await p.locator('.map-player').boundingBox();

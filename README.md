@@ -4,6 +4,20 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
+## Version 1.16 — A little Manhattan and Trond's reveal
+
+The chapter map now uses a crisp illustrated Manhattan, with Liberty Island,
+One World Trade Center, Wall Street and the Brooklyn Bridge in Downtown;
+Empire State, Chrysler and Grand Central in Midtown; and Central Park's lake,
+Bow Bridge and Belvedere Castle. It is a schematic journey map, drawn as SVG
+so the landmarks stay sharp on high-density screens.
+
+Both map runners prepare briefly, follow the route with strides tied to distance,
+and settle gently at their destination. Idle stays still. Reduced motion skips
+the trip. Trond's first unlock immediately replaces the question marks, shows a
+short warm reveal on results, and introduces his slot on the main menu. Selecting
+him persists across reloads. Gameplay art, scenery and physics are retained.
+
 ## Version 1.15.1 — Kabin detail and classic obstacles
 
 Kabin retains its accepted entrance placement and now includes the original

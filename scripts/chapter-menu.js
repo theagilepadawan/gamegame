@@ -54,12 +54,20 @@
     function pose(frame) {
       figure.style.backgroundPositionX = (frame / 6 * 100) + "%";
     }
+    function expression(hop, lean, squash) {
+      marker.style.setProperty("--map-hop", hop + "px");
+      marker.style.setProperty("--map-lean", lean + "deg");
+      marker.style.setProperty("--map-sx", 1 + squash);
+      marker.style.setProperty("--map-sy", 1 - squash);
+      shadow.style.transform = "scaleX(" + (1 + hop * .035) + ")";
+    }
     function settleMarker() {
       cancelAnimationFrame(markerFrame);
       markerFrame = 0;
       placeMarker(stops[markerTarget]);
       marker.dataset.motion = "idle";
       pose(0);
+      expression(0, 0, 0);
     }
     function isStory() { var b = document.querySelector("[data-mode].selected"); return !b || b.dataset.mode === "chapter"; }
     function selectedCard() { return cards.find(function (b) { return b.classList.contains("selected"); }) || cards[0]; }
@@ -81,16 +89,38 @@
       markerTarget = index;
       var from = markerLength, to = stops[index];
       if (instant || reduce.matches || Math.abs(to - from) < 1) { settleMarker(); return; }
-      marker.dataset.facing = to < from ? "left" : "right";
-      marker.dataset.motion = "running";
-      pose(1);
-      var began = performance.now(), duration = Math.min(620, 320 + Math.abs(to - from) * .4);
+      var direction = to < from ? -1 : 1, distance = Math.abs(to - from);
+      marker.dataset.facing = direction < 0 ? "left" : "right";
+      marker.dataset.motion = "anticipating";
+      cards.forEach(function (card) { card.classList.remove("is-arriving"); });
+      pose(0);
+      // A short preparation, a readable run, then one soft landing. Strides
+      // follow distance rather than a timer, so the feet slow with the runner.
+      var began = performance.now(), lead = 80, landing = 150;
+      var duration = Math.min(1250, 500 + distance * 1.15);
       function step(now) {
-        var t = Math.min(1, (now - began) / duration);
-        var eased = t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-        placeMarker(from + (to - from) * eased);
-        pose(1 + Math.floor((now - began) / 70) % 6);
-        if (t < 1) markerFrame = requestAnimationFrame(step); else settleMarker();
+        var age = now - began;
+        if (age < lead) {
+          expression(0, direction * 2 * age / lead, Math.sin(age / lead * Math.PI) * .035);
+        } else if (age < lead + duration) {
+          var t = (age - lead) / duration;
+          // Sine easing avoids an abrupt change in acceleration halfway along.
+          var eased = (1 - Math.cos(t * Math.PI)) / 2, travelled = distance * eased;
+          marker.dataset.motion = "running";
+          placeMarker(from + (to - from) * eased);
+          pose(1 + Math.floor(travelled / 22) % 6);
+          var hop = -Math.abs(Math.sin(travelled / 44 * Math.PI)) * 1.25;
+          if (t > .86) hop -= Math.sin((t - .86) / .14 * Math.PI) * 2.5;
+          expression(hop, direction * Math.sin(t * Math.PI) * 3, 0);
+        } else {
+          var arrival = Math.min(1, (age - lead - duration) / landing);
+          if (marker.dataset.motion !== "arriving") cards[index].classList.add("is-arriving");
+          marker.dataset.motion = "arriving";
+          placeMarker(to); pose(0);
+          expression(0, 0, Math.sin(arrival * Math.PI) * .055);
+          if (arrival >= 1) { settleMarker(); return; }
+        }
+        markerFrame = requestAnimationFrame(step);
       }
       markerFrame = requestAnimationFrame(step);
     }
@@ -267,7 +297,7 @@
     window.LR_MENU = {
       refresh: queueRefresh,
       focusChapter: function (id) { var i = cards.findIndex(function (card) { return card.dataset.district === id; }); if (i >= 0) activate(i, true); },
-      get state() { return { mode: isStory() ? "story" : "endless", selected: selectedCard().dataset.district, browsing: cards[browsing].dataset.district, runner: runner, moving: marker.dataset.motion === "running" }; }
+      get state() { return { mode: isStory() ? "story" : "endless", selected: selectedCard().dataset.district, browsing: cards[browsing].dataset.district, runner: runner, moving: marker.dataset.motion !== "idle" }; }
     };
     refresh();
   }

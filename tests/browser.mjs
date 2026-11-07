@@ -38,7 +38,7 @@ try{
   console.log(`Testing ${env.TEST_URL}`);
   // Both cities use complete warm paintings; protect fixed background motion,
   // native venue detail and actual jump/slide collision behavior.
-  const selected = (env.BROWSER_TESTS || 'modes,story-polish,story-route-physics,endless-generation,endless-spacing,menu,mobile-polish,downtown-reference,downtown-rendering,city-regressions,midtown-grounding,office-host,props,guidance-obstacles,water,gaps,map-avatars,standalone').split(',');
+  const selected = (env.BROWSER_TESTS || 'modes,runner-unlock,story-polish,story-route-physics,endless-generation,endless-spacing,menu,mobile-polish,downtown-reference,downtown-rendering,city-regressions,midtown-grounding,office-host,props,guidance-obstacles,water,gaps,map-avatars,standalone').split(',');
   for(const test of selected) await run(`tests/${test}.mjs`);
   console.log('All release browser checks passed.');
 }finally{

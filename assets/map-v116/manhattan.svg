@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1720" height="480" viewBox="0 0 860 240">
+  <title>A little Manhattan</title>
+  <desc>A playful south-to-north map: Liberty Island, One World Trade Center and Brooklyn Bridge, then the Empire State and Chrysler buildings, and Central Park with its lake, Bow Bridge and Belvedere Castle.</desc>
+  <defs>
+    <linearGradient id="water" x2="0" y2="1"><stop stop-color="#315f72"/><stop offset="1" stop-color="#173e57"/></linearGradient>
+    <linearGradient id="land" x2="0" y2="1"><stop stop-color="#f7e6b6"/><stop offset="1" stop-color="#d5d9a4"/></linearGradient>
+    <linearGradient id="park" x2="0" y2="1"><stop stop-color="#a9d18f"/><stop offset="1" stop-color="#75aa82"/></linearGradient>
+    <linearGradient id="glass" x2="1" y2="1"><stop stop-color="#d7f5ee"/><stop offset=".55" stop-color="#8bc9ce"/><stop offset="1" stop-color="#5191ae"/></linearGradient>
+    <pattern id="ripples" width="64" height="34" patternUnits="userSpaceOnUse"><path d="M5 23q6 3 12 0m24-13q7 3 13 0" fill="none" stroke="#a3d9d4" stroke-width="1.5" stroke-linecap="round" opacity=".18"/></pattern>
+    <symbol id="tree" viewBox="0 0 28 36"><ellipse cx="15" cy="32" rx="10" ry="3" fill="#345652" opacity=".18"/><path d="M14 20v11" stroke="#7a6850" stroke-width="3" stroke-linecap="round"/><path d="M7 24C-1 22 1 12 6 11 3 2 18-1 21 7c8 1 9 12 3 15-4 7-13 5-17 2Z" fill="#589177" stroke="#376557" stroke-width="1.4"/><path d="M6 12C6 5 17 2 20 10c-5-2-8 0-10 4" fill="#abd295"/><path d="M18 24c4-1 6-3 6-6" fill="none" stroke="#78b788" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="townhouse" viewBox="0 0 34 43"><path d="m3 32 19-5 12 7-21 8Z" fill="#3b5d60" opacity=".2"/><path d="M3 10 23 6l7 5v23l-20 5-7-5Z" fill="#b47861" stroke="#70564c" stroke-width="1.3" stroke-linejoin="round"/><path d="m10 15 20-4v23l-20 5Z" fill="#d8a57b"/><path d="m3 10 20-4 7 5-20 5Z" fill="#f6d3a0"/><path d="M14 20v3m10-5v3m-10 6v3m10-5v3" stroke="#fff0b8" stroke-width="3"/><path d="m18 38-.2-6 5-1v6" fill="#736b5c"/><path d="m2 9 8 5 21-4" fill="none" stroke="#805b4e" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="office" viewBox="0 0 35 52"><path d="m1 43 21-7 12 7-21 8Z" fill="#31545b" opacity=".18"/><path d="m4 9 17-6 10 6v34l-18 6-9-6Z" fill="#4e8791" stroke="#365e6d" stroke-width="1.4" stroke-linejoin="round"/><path d="m13 15 18-6v34l-18 6Z" fill="#83b9bb"/><path d="m4 9 17-6 10 6-18 6Z" fill="#e9edcb"/><path d="m17 20 9-3m-9 10 9-3m-9 10 9-3m-9 10 9-3" stroke="#e5efce" stroke-width="2"/><path d="m7 18 3 2m-3 5 3 2m-3 5 3 2m-3 5 3 2" stroke="#a5d7cd" stroke-width="1.5"/></symbol>
+  </defs>
+  <rect width="860" height="240" fill="url(#water)"/>
+  <rect width="860" height="240" fill="url(#ripples)"/>
+  <!-- A glimpse of Brooklyn gives the bridge a real far-bank landing. -->
+  <path d="M340 240q24-23 48-33 36-6 67 7l57 26Z" fill="#b49d75" stroke="#214d5a" stroke-width="3" transform="translate(0 4)"/>
+  <path d="M340 240q24-23 48-33 36-6 67 7l57 26Z" fill="url(#land)" stroke="#f7e5b7" stroke-width="2.5" stroke-linejoin="round"/>
+  <use href="#tree" x="405" y="211" width="18" height="23"/>
+  <use href="#townhouse" x="434" y="210" width="22" height="28"/>
+  <text x="459" y="236" fill="#596e62" font-family="Arial,sans-serif" font-size="5.5" letter-spacing="1">BROOKLYN</text>
+  <!-- Manhattan points southwest on the left; north runs toward the Park. -->
+  <path d="M75 162q1-22 27-34l75-26 63-29 86-1 96-20 94 2 92-23 99 8 75 32 38 35-16 39-84 25-91 11-81 20-103-13-101 20-89-13-70 10-71-19Z" fill="#102f43" opacity=".35" transform="translate(0 9)"/>
+  <path d="M75 162q1-22 27-34l75-26 63-29 86-1 96-20 94 2 92-23 99 8 75 32 38 35-16 39-84 25-91 11-81 20-103-13-101 20-89-13-70 10-71-19Z" fill="#b39d72" stroke="#214d5a" stroke-width="3" stroke-linejoin="round" transform="translate(0 5)"/>
+  <path d="M75 162q1-22 27-34l75-26 63-29 86-1 96-20 94 2 92-23 99 8 75 32 38 35-16 39-84 25-91 11-81 20-103-13-101 20-89-13-70 10-71-19Z" fill="url(#land)" stroke="#fff0ca" stroke-width="3.5" stroke-linejoin="round"/>
+  <!-- Small avenues and cross streets, with room for the playable route. -->
+  <g fill="none" stroke-linecap="round">
+    <path d="m104 158 145-50 126-10 148-21 127-10 111 38M203 98l31 77m47-91 29 92m33-98 32 91m26-104 35 105m29-112 38 108m20-105 30 102m35-106 24 96" stroke="#bfb489" stroke-width="10" opacity=".6"/>
+    <path d="m104 156 145-50 126-10 148-21 127-10 111 38M203 96l31 77m47-91 29 92m33-98 32 91m26-104 35 105m29-112 38 108m20-105 30 102m35-106 24 96" stroke="#fff1cd" stroke-width="7"/>
+    <path d="m290 85 170-15m-147 48 173-25m-155 59 185-34" stroke="#fff0cd" stroke-width="4" opacity=".8"/>
+  </g>
+  <!-- Downtown: its own distinctive skyline, not Midtown's towers. -->
+  <g id="one-world-trade" transform="translate(179 31)">
+    <ellipse cx="22" cy="86" rx="24" ry="7" fill="#3b6468" opacity=".2"/>
+    <path d="m5 80 8-61 13-4 12 64-16 9Z" fill="url(#glass)" stroke="#356574" stroke-width="1.7" stroke-linejoin="round"/>
+    <path d="m13 19 9 69 4-73 12 64" fill="#6da9bc" opacity=".7"/>
+    <path d="m13 19 13-4 3 12-18 5M10 42l21-7M8 56l25-8M7 70l28-8" fill="none" stroke="#e4f5e6" stroke-width="1.3"/>
+    <path d="M22 15V2" stroke="#edf4d5" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M22 2v-6" stroke="#365f72" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="m8 80 14 8 16-9" fill="none" stroke="#f7ebc6" stroke-width="2"/>
+  </g>
+  <use href="#office" x="122" y="75" width="31" height="46"/>
+  <use href="#townhouse" x="236" y="91" width="32" height="40"/>
+  <use href="#townhouse" x="272" y="86" width="28" height="35"/>
+  <use href="#tree" x="97" y="139" width="25" height="32"/>
+  <use href="#tree" x="216" y="126" width="22" height="28"/>
+  <g id="wall-street" transform="translate(245 117)" stroke="#80644d" stroke-width="1.2" stroke-linejoin="round">
+    <path d="m0 11 17-10 21 9-18 7Z" fill="#f5d89c"/>
+    <path d="m3 13 17 6 16-8v22l-16 7-17-6Z" fill="#dfbd84"/>
+    <path d="M8 16v16m7-13v16m11-19v16m6-19v16" stroke="#fff0c3" stroke-width="3"/>
+    <path d="m1 34 19 7 18-8v4l-18 8-19-7Z" fill="#eecb93"/>
+  </g>
+  <!-- Liberty Island remains in the harbour, southwest of the tip. -->
+  <g id="statue-of-liberty" transform="translate(27 132)" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="18" cy="48" rx="22" ry="8" fill="#0b3146" opacity=".35"/>
+    <path d="m-2 41 12-7 24 2 9 8-20 9-25-6Z" fill="#a9c59a" stroke="#f4dfb3" stroke-width="2"/>
+    <path d="M10 30h15v13H10Z" fill="#d4b88a" stroke="#6e7160" stroke-width="1.3"/>
+    <path d="m8 43 20 1v4H8Z" fill="#f2d6a3"/>
+    <path d="m12 29 4-16-6-8-3-11 4-1 4 10 5 6 5 20Z" fill="#7eb39b" stroke="#345e5e" stroke-width="1.4"/>
+    <path d="m15 28 4-13m1 12 2-9" stroke="#c8dfb0" stroke-width="1.3"/>
+    <circle cx="19" cy="8" r="4" fill="#9bc7ac" stroke="#345e5e" stroke-width="1.2"/>
+    <path d="m14 6-2-3m5 1-1-4m4 4 1-4m2 5 3-3" stroke="#90bea1" stroke-width="1.5"/>
+    <path d="m23 13 5 1-1 10-5-1Z" fill="#b4d2b4" stroke="#345e5e" stroke-width="1"/>
+    <path d="M6-8h7L11-3H8Z" fill="#b99d68"/>
+    <path d="M9-15c-8 7 5 12 3 3-1 2-2 0-3-3Z" fill="#f9cf70"/>
+  </g>
+  <!-- The Brooklyn Bridge crosses the East River, with two complete towers. -->
+  <g id="brooklyn-bridge" transform="translate(275 184) rotate(12)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M-18 17h131" stroke="#143b4c" stroke-width="9" opacity=".3"/>
+    <path d="M-18 8h129v7H-18Z" fill="#d1a478" stroke="#775e4d" stroke-width="1.3"/>
+    <path d="M10 8v-38h18V8m49 0v-38h18V8" fill="#e4c393" stroke="#876c55" stroke-width="1.4"/>
+    <path d="M14 5v-18q0-10 5-12 5 2 5 12V5M81 5v-18q0-10 5-12 5 2 5 12V5" fill="#376676" stroke="#b99c74" stroke-width="1.1"/>
+    <path d="M-18 5Q5-1 19-27 52 17 86-27q14 25 25 30" fill="none" stroke="#f7dfae" stroke-width="2"/>
+    <path d="M-6 1v7m13-18V8m26-20V8m13-7v7m13-7v7m13-19V8m28-20V8" stroke="#b58b65" stroke-width="1"/>
+    <path d="M8-30h22m45 0h22M-18 8h129" stroke="#f4d6a7" stroke-width="2.4"/>
+  </g>
+  <!-- Midtown has two recognisable crowns and a little Grand Central. -->
+  <use href="#townhouse" x="329" y="79" width="29" height="37"/>
+  <use href="#office" x="365" y="44" width="28" height="42"/>
+  <g id="empire-state" transform="translate(448 15)" stroke="#80694f" stroke-width="1.4" stroke-linejoin="round">
+    <ellipse cx="21" cy="80" rx="24" ry="6" fill="#34565d" opacity=".18" stroke="none"/>
+    <path d="M1 77V41h6V29h7V17h5V7h5v10h5v12h7v12h6v36l-21 8Z" fill="#e6bb7d"/>
+    <path d="M21 7h3v10h5v12h7v12h6v36l-21 8Z" fill="#b99267" stroke="none"/>
+    <path d="M21 7V-7" fill="none" stroke="#f8e7bf" stroke-width="2" stroke-linecap="round"/>
+    <path d="M10 44v28m6-39v41m11-39v37m7-28v25" stroke="#fbebbc" stroke-width="2"/>
+    <path d="M2 76 21 83l20-7M8 40h26M15 28h12" fill="none" stroke="#f7dda6"/>
+  </g>
+  <g id="chrysler-building" transform="translate(514 27)" stroke="#4f777b" stroke-width="1.3" stroke-linejoin="round">
+    <ellipse cx="16" cy="67" rx="21" ry="5" fill="#34565d" opacity=".18" stroke="none"/>
+    <path d="M0 63V29h5V21q1-5 5-8l6-10 6 10q4 3 5 8v8h5v34l-16 7Z" fill="#9ac9c2"/>
+    <path d="m16 3 6 10q4 3 5 8v8h5v34l-16 7Z" fill="#5f9ca9" stroke="none"/>
+    <path d="M16 3v-14" stroke="#e6f0d9" stroke-width="1.7" stroke-linecap="round"/>
+    <path d="M6 29q10-15 20 0M8 22q8-12 16 0M11 15q5-7 10 0" fill="none" stroke="#eff0d3" stroke-width="2.2"/>
+    <path d="M6 36v22m6-22v25m8-25v25m6-25v22" stroke="#d0e7d0" stroke-width="1.5"/>
+    <path d="m2 63 14 6 14-6" fill="none" stroke="#d6e7ce" stroke-width="1.8"/>
+  </g>
+  <g id="grand-central" transform="translate(545 99)" stroke="#7c765a" stroke-width="1.2" stroke-linejoin="round">
+    <path d="m0 14 22-11 24 9v28l-23 8L0 39Z" fill="#d6c59a"/>
+    <path d="m-3 14 25-14 27 12-26 10Z" fill="#87b0a0"/>
+    <path d="M7 37V24m8 16V27m16-3v15m8-18v15" stroke="#f9e8b9" stroke-width="3"/>
+    <path d="M20 43V31q3-8 7-2v12" fill="#546f70"/>
+    <circle cx="23" cy="16" r="6" fill="#fae9bc"/><path d="M23 12v4l3 1" fill="none" stroke-width="1.3"/>
+  </g>
+  <use href="#tree" x="340" y="144" width="23" height="30"/>
+  <use href="#tree" x="395" y="55" width="20" height="26"/>
+  <use href="#tree" x="493" y="143" width="24" height="31"/>
+  <!-- Central Park: a leafy rectangle within the city, not another island. -->
+  <path d="m616 46 83-7 77 33 10 61-62 28-94-8-38-35Z" fill="url(#park)" stroke="#5e8d72" stroke-width="2" stroke-linejoin="round"/>
+  <path d="m618 62 72-7 65 26 10 43-48 21-77-9-26-27Z" fill="none" stroke="#e6deb0" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M633 68c17-11 24 0 27 12s31 5 29 21-28 28-48 15-28-32-8-48Z" fill="#73b9bb" stroke="#f6e5b7" stroke-width="2.3"/>
+  <path d="M636 80q9-6 15-2m9 27q8 3 16-2" fill="none" stroke="#d7f0d5" stroke-width="1.8" stroke-linecap="round"/>
+  <g id="bow-bridge" transform="translate(637 100) rotate(20)" fill="none" stroke-linecap="round">
+    <path d="M0 4q14-13 29-2" stroke="#466f68" stroke-width="5"/>
+    <path d="M0 1q14-13 29-2M0 5q14-13 29-2" stroke="#ffedbf" stroke-width="2.3"/>
+    <path d="M5-3v5m6-7v5m6-5v5m6-3v5" stroke="#f7dca6" stroke-width="1.5"/>
+  </g>
+  <g id="belvedere-castle" transform="translate(733 47)" stroke="#776e54" stroke-width="1.2" stroke-linejoin="round">
+    <path d="M0 38V18h17V8h18v30l-17 6Z" fill="#c8b58c"/>
+    <path d="m18 44 17-6V8H18Z" fill="#a79272" stroke="none"/>
+    <path d="M15 9 25-4 38 8Z" fill="#527b76"/>
+    <path d="M-2 18v-5h5v4h5v-4h5v5m6-11h15" fill="#e8d6a9"/>
+    <path d="M7 35v-9q3-5 6 0v11m10-20v5m7-6v5" fill="#456b68"/>
+    <path d="M25-5v-8m0 1 10 3-10 3" fill="#eccd8d" stroke="#d3b783"/>
+  </g>
+  <g>
+    <use href="#tree" x="591" y="37" width="28" height="36"/><use href="#tree" x="618" y="30" width="25" height="32"/>
+    <use href="#tree" x="663" y="28" width="27" height="35"/><use href="#tree" x="697" y="39" width="25" height="32"/>
+    <use href="#tree" x="770" y="87" width="28" height="36"/><use href="#tree" x="754" y="122" width="24" height="31"/>
+    <use href="#tree" x="606" y="123" width="25" height="32"/><use href="#tree" x="664" y="127" width="24" height="31"/>
+  </g>
+  <!-- Quiet harbour details; all map scenery is stationary. -->
+  <g transform="translate(771 199) rotate(-12)" stroke-linejoin="round"><path d="M-22 3h-13m14 5h-10" stroke="#a6d6cc" stroke-width="1.5" opacity=".5" stroke-linecap="round"/><path d="M-15 0h33l-7 8h-19Z" fill="#ecd9aa" stroke="#173f52" stroke-width="1.4"/><path d="M-8-8H8v8H-8Z" fill="#f4ebcf"/><path d="M-5-6H5v3H-5Z" fill="#73afb3"/><path d="M-1-8v-5h4v5" fill="#d49f70"/></g>
+  <g fill="#c2ded5" font-family="Arial,sans-serif" font-size="7" letter-spacing="2.2" opacity=".8"><text x="62" y="42">HUDSON RIVER</text><text x="536" y="222">EAST RIVER</text></g>
+  <g transform="translate(35 215)" stroke="#c5dbcf" stroke-linecap="round"><path d="M-8 0H8M3-4l5 4-5 4" fill="none" stroke-width="1.4"/><text x="14" y="3" fill="#c5dbcf" stroke="none" font-size="8" font-family="Arial,sans-serif">N</text></g>
+</svg>
