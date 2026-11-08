@@ -1,10 +1,10 @@
 {
-  "version": "1.19.1",
+  "version": "1.19.2",
   "archive": "/workspace/nbim-arcade/release/The-Long-Run-NBIM.zip",
-  "bytes": 46494958,
-  "sha256": "df989f5480ebc97e999e81d08c3b03c28883a11c7ddd70d8e95300bfde42c833",
-  "htmlBytes": 62555905,
-  "htmlSha256": "a6da46925b3bbc79dfdacfcb475ca4b353696829a41cfd878958d7ffb69a1bb4",
+  "bytes": 46494434,
+  "sha256": "245bcea3bbe4e925d9a89e647b822bab228cd12d4ca2da2f1aab9cf599e2dad0",
+  "htmlBytes": 62553715,
+  "htmlSha256": "eefe30771373a1bf64d10165c34d127e1642762157fc66b00a38c1ca754d5a88",
   "crcVerified": true,
   "htmlByteIdentical": true,
   "checksums": [

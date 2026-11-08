@@ -27,11 +27,23 @@ for(const policy of ['no-user-gesture-required','user-gesture-required']) {
       assert.ok(await page.evaluate(()=>SA.musicTracks.title.currentTime)>=time,'Gesture upgrade keeps the original playhead');
     } else {
       await wait('SA.autoplayBlocked');
-      assert.equal(await page.locator('#sound-state').textContent(),'TAP');
-      assert.equal(await page.locator('#sound').getAttribute('aria-label'),'Start music');
-      await page.locator('#sound').click();
+      // A page-generated keypress is untrusted. It cannot unlock the browser's
+      // audio permission, even when dispatched after the game finishes loading.
+      const trusted = await read(`(() => {
+        const event = new KeyboardEvent('keydown', {key:'h', code:'KeyH', bubbles:true});
+        document.body.dispatchEvent(event);
+        document.body.dispatchEvent(new KeyboardEvent('keyup', {key:'h', code:'KeyH', bubbles:true}));
+        return event.isTrusted;
+      })()`);
+      await new Promise(resolve => setTimeout(resolve, 250));
+      assert.equal(trusted, false);
+      assert.equal(await read('navigator.userActivation.hasBeenActive'), false);
+      assert.equal(await read('SA.musicTracks.title.paused && SA.autoplayBlocked'), true,
+        'Simulated keypress cannot bypass audible-autoplay policy');
+      assert.equal(await read("document.querySelector('#sound-state').textContent"),'TAP');
+      await page.keyboard.press('h');
       await page.waitForFunction(()=>!SA.musicTracks.title.paused && SA.ctx?.state==='running' && !SA.autoplayBlocked);
-      assert.equal(await page.evaluate(()=>SA.enabled),true,'First sound click starts playback instead of muting it');
+      assert.equal(await page.evaluate(()=>SA.enabled),true,'First real keypress starts playback');
     }
     assert.equal(await page.evaluate(()=>SA.musicTracks.title.volume),1,'Web Audio upgrade does not double-attenuate the media');
     assert.equal(await page.locator('#sound-state').textContent(),'ON');

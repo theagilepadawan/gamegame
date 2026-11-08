@@ -7,7 +7,7 @@ const browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH
   args: ['--no-sandbox', '--enable-unsafe-swiftshader', '--autoplay-policy=user-gesture-required']});
 const errors = [];
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-await mkdir('review/v1191', {recursive: true});
+await mkdir('review/v1192', {recursive: true});
 
 async function open(settings, viewport = {width: 568, height: 320}) {
   const touch = viewport.width < 1000;
@@ -41,9 +41,10 @@ async function open(settings, viewport = {width: 568, height: 320}) {
     const {data} = await cdp.send('Page.captureScreenshot', {format: 'png'});
     await writeFile(file, Buffer.from(data, 'base64'));
   };
-  await wait("!!window.longRun && !document.querySelector('#splash') && !document.querySelector('#start-music').hidden");
+  await wait("!!window.longRun && !document.querySelector('#splash') && (!SA.enabled || SA.activeMusic === 'title' && (SA.autoplayBlocked || SA.musicVolume === 0))");
   assert.equal(await read('navigator.userActivation.hasBeenActive'), false, 'Fresh page has no synthetic user activation');
   assert.equal(await read('SA.musicTracks.title.paused'), true);
+  assert.equal(await read("document.querySelector('#start-music')"), null, 'No dedicated music-start button');
   return {context, page, read, wait, box, tap, screenshot};
 }
 
@@ -64,32 +65,26 @@ async function audible({read, wait}) {
     } finally { SA.limiter.disconnect(analyser); analyser.disconnect(); }
   })()`);
   assert.ok(peakRms > .001, `Music signal reaches the output graph (RMS ${peakRms})`);
-  assert.equal(await read("document.querySelector('#start-music').hidden"), true);
   assert.equal(await read("document.querySelector('#sound-state').textContent"), 'ON');
   assert.equal(await read('SA.track.paused && SA.musicTracks.contrarian.paused'), true);
 }
 
 try {
-  for (const target of ['background', 'prompt', 'sound', 'map']) {
-    const session = await open(), {context, page, read, wait, box, tap, screenshot} = session;
+  for (const target of ['background', 'sound', 'map']) {
+    const session = await open(), {context, page, read, wait, tap, screenshot} = session;
     assert.equal(await read("document.querySelector('#sound-state').textContent"), 'TAP');
     if (target === 'background') {
-      const card = await box('#start-music');
-      const play = await box('#start');
-      assert.ok(card.x >= 0 && card.y >= 0 && card.x + card.width <= 568 && card.y + card.height <= 320);
-      assert.ok(card.x >= play.x + play.width || card.y + card.height <= play.y || card.y >= play.y + play.height,
-        'Audio action clears the chapter Play button on a compact phone');
-      await screenshot('review/v1191/music-prompt-mobile.png');
+      await screenshot('review/v1192/title-mobile.png');
       assert.equal(await read('navigator.userActivation.hasBeenActive'), false, 'Layout inspection did not activate audio');
       await page.touchscreen.tap(280, 80);
     } else {
-      await tap(target === 'prompt' ? '#start-music' : target === 'sound' ? '#sound' : '[data-district="opening"]');
+      await tap(target === 'sound' ? '#sound' : '[data-district="opening"]');
     }
     await audible(session);
     if (target === 'background') {
       const before = await read('SA.musicTracks.title.currentTime');
       await read('SA.ctx.suspend()');
-      await wait("SA.autoplayBlocked && !document.querySelector('#start-music').hidden");
+      await wait('SA.autoplayBlocked');
       assert.equal(await read('SA.musicAudible'), false, 'Suspended audio is never reported as audible');
       assert.equal(await read("document.querySelector('#now-playing').hidden"), true);
       await page.touchscreen.tap(280, 80);
@@ -106,13 +101,15 @@ try {
     assert.equal(await read('SA.musicAudible'), false, 'Ordinary touch respects saved mute/zero volume');
     assert.equal(await read('SA.enabled'), settings.enabled);
     assert.equal(await read('SA.musicVolume'), settings.music);
-    await tap('#start-music');
-    await audible(session);
-    assert.equal(await read("JSON.parse(localStorage.getItem('nyc.audio')).enabled"), true);
+    if (!settings.enabled) {
+      await tap('#sound');
+      await audible(session);
+      assert.equal(await read("JSON.parse(localStorage.getItem('nyc.audio')).enabled"), true);
+    }
     await context.close();
   }
   const desktop = await open(undefined, {width: 1280, height: 720});
-  await desktop.screenshot('review/v1191/music-prompt-desktop.png');
+  await desktop.screenshot('review/v1192/title-desktop.png');
   assert.equal(await desktop.read('navigator.userActivation.hasBeenActive'), false);
   await desktop.page.mouse.click(680, 100);
   await audible(desktop);
@@ -125,5 +122,5 @@ try {
   await audible(desktop);
   await desktop.context.close();
   assert.deepEqual(errors, []);
-  console.log('PASS saved mute, zero volume, explicit music opt-in, compact layout, desktop first click and automatic return from a level.');
+  console.log('PASS saved mute, zero volume, no extra music button, desktop first click and automatic return from a level.');
 } finally { await browser.close(); }

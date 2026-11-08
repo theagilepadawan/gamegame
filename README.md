@@ -4,6 +4,16 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
+## Version 1.19.2 — Clean title screen
+
+Removed the separate **Play opening music** button. Music still attempts
+autoplay on load and resumes on the first real click, touch or keypress when
+the browser requires it. Automatic playback on return from a level, the
+existing sound controls, and saved mute/volume are retained. Page-generated
+keypresses do not unlock browser audio permission.
+
+[Verification](docs/verification-v1192.md).
+
 ## Version 1.19.1 — Opening music on the first touch
 
 Title music starts automatically where the browser allows audible autoplay.

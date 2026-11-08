@@ -22538,14 +22538,14 @@ function beginTitleMusic() { if (b === "home") SA.home(); }
 window.addEventListener("load", () => { if (!m("#splash")) beginTitleMusic(); }, { once: true });
 window.addEventListener("lr:splash-ended", () => { window.LR_MUSIC?.page("home"); beginTitleMusic(); }, { once: true });
 function titleMusicGesture(event) {
-  if (!event.target.closest("#sound, #start-music")) beginTitleMusic();
+  if (!event.target.closest("#sound")) beginTitleMusic();
 }
 // A touch pointerdown is not an activation gesture. Touch release/click must
 // reach the mixer synchronously, even when a map or dialog consumes the event.
 for (const type of ["pointerup", "touchend", "click"])
   document.addEventListener(type, titleMusicGesture, {capture: true, passive: true});
 document.addEventListener("keydown", (event) => {
-  if (!event.repeat && !event.altKey && !event.ctrlKey && !event.metaKey && event.key !== "Escape" && !event.target.closest("#sound, #start-music")) beginTitleMusic();
+  if (!event.repeat && !event.altKey && !event.ctrlKey && !event.metaKey && event.key !== "Escape" && !event.target.closest("#sound")) beginTitleMusic();
 }, { capture: true });
 m("#fullscreen").onclick = () => {
   document.fullscreenElement ? document.exitFullscreen().catch(() => {
