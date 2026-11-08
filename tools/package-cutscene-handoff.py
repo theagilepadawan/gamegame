@@ -174,8 +174,12 @@ copy(ROOT / 'tools' / 'package-game.py', game / 'tools' / 'package-game.py')
 # The rejected alternate Park and discarded sprite experiments are not shipped.
 active_scripts = [ROOT / path for path in re.findall(
     r'<script\b[^>]*\bsrc="(scripts/[^"]+)"', (ROOT / 'index.html').read_text())]
-source_text = '\n'.join(p.read_text() for p in [ROOT / 'index.html', ROOT / 'game.css', *active_scripts])
-runtime_used = set(re.findall(r'assets/[A-Za-z0-9_./-]+\.(?:webp|png|svg|avif|mp3|m4a|webm|woff2?)', source_text))
+active_styles = [ROOT / path for path in re.findall(
+    r'<link\b[^>]*rel="stylesheet"[^>]*href="([^"]+)"', (ROOT / 'index.html').read_text())]
+for style in active_styles:
+    copy(style, game / style.relative_to(ROOT))
+source_text = '\n'.join(p.read_text() for p in [ROOT / 'index.html', *active_styles, *active_scripts])
+runtime_used = set(re.findall(r'assets/[A-Za-z0-9_./-]+\.(?:webp|png|svg|avif|mp3|m4a|mp4|webm|woff2?)', source_text))
 used = runtime_used.copy()
 baseline = json.loads((ROOT / 'assets-manifest.json').read_text())
 used.update(a['path'] for a in baseline)
@@ -200,7 +204,8 @@ for relative_folder in active_folders:
                     isinstance(item, dict) and isinstance(item.get('path'), str)
                     and item['path'].startswith('assets/') for item in rows
                 ):
-                    data[field] = [item for item in rows if item['path'] in runtime_used]
+                    data[field] = [item for item in rows if item['path'] in runtime_used
+                                   or item['path'].endswith(('-native.png', '-native.mp4'))]
             if any(isinstance(data.get(field), list) and not data[field] for field in ['files', 'assets']):
                 continue
         target = game / relative_folder / p.name
@@ -208,7 +213,7 @@ for relative_folder in active_folders:
         target.write_text(json.dumps(data, indent=2) + '\n')
     # Native atlas accompanies extracted runtime cells for art production. It is
     # source material, not another runtime asset or a claim of higher resolution.
-    for native in folder_root.glob('*-native.png'):
+    for native in [*folder_root.glob('*-native.png'), *folder_root.glob('*-native.mp4')]:
         copy(native, game / relative_folder / native.name)
     # The chapter-map strips have native crop/frame registration notes. Keep
     # the active asset's authoring notes with its bytes for the next agent.
@@ -308,7 +313,7 @@ location_index = [
     '# Native location references', '',
     'Open these exact files in the editable game tree. Each native image is stored once; no reduced substitute is used here.', '',
     'The runtime manifests and storefront metadata define course order, alignment and venue spacing. Gameplay captures show their final composition.', '',
-    'Downtown uses the complete warm paintings and camera from the actual supplied HTML; its former global river/cutout composition is removed. Midtown restores its original complete warm paintings with fixed vertical framing. Six native venue-detail crops belong inside their street façades with no independent camera.', '',
+    'Downtown uses the complete warm paintings and camera from the actual supplied HTML; its former global river/cutout composition is removed. Midtown restores its original complete warm paintings with fixed vertical framing. Five native venue-detail crops belong inside their street façades with no independent camera. The full 505 office and host belong exclusively to the foreground finish.', '',
     '| Location | Native pixels | Source |', '|---|---:|---|',
 ]
 for relative, label in location_sources.items():
@@ -334,13 +339,14 @@ captures = {
     'downtown-gameplay.png': 'release/Opening-v112-street.png',
     'central-park-gameplay.png': 'release/Park-v113-benchmark.png',
     'midtown-gameplay.png': 'release/Midtown-v113-street.png',
-    'office-gameplay.png': 'release/Midtown-v113-office.png',
+    'opening-call.png': 'release/Opening-v119-briefing.png',
+    'midtown-gift-film.png': 'release/Midtown-v119-gift.png',
     'finance-guidance-gameplay.png': 'release/Midtown-v113-guidance.png',
     'chapter-map-and-title-sendoff.png': 'release/Nicolai-v118-title-sendoff.png',
-    'opening-finish-entrance.png': 'release/Opening-v118-entrance.png',
-    'midtown-finish-entrance.png': 'release/Midtown-v118-entrance.png',
+    'opening-finish-entrance.png': 'release/Opening-v119-subway.png',
+    'midtown-finish-entrance.png': 'release/Midtown-v119-entrance.png',
     'park-finish-entrance.png': 'release/Park-v118-entrance.png',
-    'midtown-finish-mobile.png': 'release/Midtown-v118-mobile-entrance.png',
+    'midtown-finish-mobile.png': 'release/Midtown-v119-mobile-entrance.png',
 }
 for name, relative in captures.items():
     p = ROOT / relative
@@ -355,8 +361,14 @@ audio = {
     '04-nicolai-laugh.mp3': 'original-38.mp3',
     '05-contrarian-pixel-adventure.mp3': 'original-39.mp3',
 }
+audio_index = ['# Native audio sources', '',
+    'Each original is stored once in game/assets, byte-for-byte. Open the linked source; no recompression or removal.', '',
+    '| Track reference | Source | SHA-256 |', '|---|---|---|']
 for name, original in audio.items():
-    copy(ROOT / 'assets' / original, refs / 'audio' / name)
+    original_path = ROOT / 'assets' / original
+    audio_index.append(f'| {name} | [{original}](../../game/assets/{original}) | `{sha(original_path)}` |')
+(refs / 'audio').mkdir(parents=True, exist_ok=True)
+(refs / 'audio' / 'INDEX.md').write_text('\n'.join(audio_index) + '\n')
 
 (refs / 'extraction-manifest.json').write_text(json.dumps(frames, indent=2) + '\n')
 metadata = {
@@ -374,8 +386,11 @@ metadata = {
     'included': ['Current editable game source', 'Self-contained playable HTML', 'Native production sprites, detailed city tiles and current prop atlas',
                  'Restored warm Midtown lossless paintings, native finance-obstacle atlas, stone material, chapter-map runner strips and authoring notes',
                  'Location index linking to exact native game assets without duplicate city-art copies',
-                 'Six game audio sources', 'Cutscene production brief, shot slate, prompts and integration notes'],
-    'notIncluded': ['No generated cutscene videos', 'No Runway credentials or plugin installation',
+                 'Six game audio sources, indexed without duplicate files',
+                 'User-supplied cropped Midtown gift MP4 plus unmodified native source and provenance',
+                 'Grete/Nicolai opening communication, native portrait atlas and revised 6-train portal',
+                 'Cutscene production brief, shot slate, prompts and integration notes'],
+    'notIncluded': ['No separate intro-reference video supplied yet', 'No Runway credentials or plugin installation',
                     'Original inline office/host reference photographs were not exposed as downloadable local files',
                     'No rejected cartoon runner study, alternate Park artwork, retired city-block/venue-island art, low-detail v1.8 city sheets or superseded prop variants'],
 }

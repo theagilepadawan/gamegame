@@ -1,5 +1,5 @@
 /* Midtown venues belong to complete authored city blocks. This module describes
-   their positions and keeps the 505 greeting in sync with the scenery camera. */
+   their positions. The 505 office is exclusively the foreground chapter exit. */
 (function () {
   "use strict";
   var SOURCE_W=1672,SOURCE_H=941,NATIVE_H=941;
@@ -16,8 +16,7 @@
         kind:fixture.key==="gussy"?"integrated vehicle":"integrated frontage",depth:"original painted street",
         x:left+(r[0]+r[2]/2)*scale,worldX:worldLeft+(r[0]+r[2]/2)*scale,width:r[2]*scale,height:r[3]*scale,
         quad:points,sourceQuad:source,sourceCrop:r.slice(),cropTop:0,renderMode:"painted",fullArchitecture:true,
-        fullGlassEntrance:fixture.key==="fifth",
-        host:fixture.key==="fifth"?{x:left+657*scale,y:-8+711*scale,height:70*scale}:null,
+        fullGlassEntrance:false, host:null,
         contactY:fixture.key==="gussy"?-8+(r[1]+r[3])*scale:null,
         wheelX:fixture.key==="gussy"?[130,581].map(x=>left+(r[0]+x/680*r[2])*scale):null,
         visible:points[1][0]>0&&points[0][0]<W};
@@ -37,14 +36,9 @@
     draw2d: function (ctx, id, distance, W, img, tileW, tileH, view) { remember(id, distance, W, tileH - 16, view); },
     tick: function (q, W, toast) {
       if (!q || q.districtId !== "midtown" || !last.on || q.__told505 || (q.chapterTime || 0) < 2) return;
-      // A retry or exact camera seek can precede the next renderer update.
-      // Use the current run distance so cached late-course metadata cannot
-      // announce the office during a fresh Midtown opening.
-      var items = placements(q.distance || 0, last.W, last.H).items;
-      var office = items.find(function (item) { return item.key === "fifth"; });
-      // Announce once the full entrance is visible. On wide displays the finite
-      // course can stop before the entrance center reaches the middle of view.
-      if (office && office.quad[0][0] >= 20 && office.quad[1][0] <= last.W - 20) {
+      var office = window.LR_FINISH?.inspect(q);
+      // Only greet at the actual office entrance at the end of the course.
+      if (office?.ready && office.hostX > 45 && office.hostX < W - 40) {
         q.__told505 = true;
         if (toast) toast("505 FIFTH AVENUE", "Our New York office. 20th floor.", 2.6);
       }

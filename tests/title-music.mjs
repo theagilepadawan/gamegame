@@ -1,3 +1,4 @@
+import {skipOpeningCall} from './helpers/launch.mjs';
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
 
@@ -40,7 +41,7 @@ try {
   await page.locator('#sound').tap(); await titleAudible(page);
   await page.evaluate(() => SA.volumes(.55, .75));
   await page.waitForFunction(() => Math.abs(SA.music.gain.value - .55) < .01);
-  await page.locator('#start').tap();
+  await page.locator('#start').tap(); await skipOpeningCall(page);
   try {
     await page.waitForFunction(() => longRun.state === 'playing' && !SA.track.paused);
   } catch (error) {

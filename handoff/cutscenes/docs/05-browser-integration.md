@@ -1,6 +1,15 @@
 # Delivery and eventual integration
 
-This is an implementation brief for the later integration phase. **No new video cutscene player is implemented by this handoff.** The existing fund-history reveal is already part of the game.
+Version 1.19 implements `game/scripts/chapter-cinematics.js`: a modal silent
+1280 × 530 / 30 fps / 121-frame film after the Midtown entrance and before
+`qQ()` results. `completeRunPresentation()` sets `b = "cutscene"`, clears input
+and freezes covered game rendering. The actual video end (or Skip / failure)
+opens results. Music is softly ducked, visibility pauses both clocks, and
+`Cu` / `Ko` cancel stale callbacks. `story-briefing.js` supplies a player-paced
+opening communication call before the existing title thumbs-up. Native files,
+crop provenance and live tests are in the game source. These behaviors are
+implemented; the remainder of this document is guidance for further films.
+The existing Opening Bell fund-history reveal is retained.
 
 ## Delivery contract
 

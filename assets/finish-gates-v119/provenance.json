@@ -1,0 +1,55 @@
+{
+  "tool": "image_gen",
+  "source": "exec-55723fcd-b3d6-498e-bc79-38f29de8348a.png",
+  "nativeSize": [
+    1536,
+    1024
+  ],
+  "nativeSha256": "f03959051a9168efe4d1373bf39f84c2880efe527de2945fb19b38f456ebe857",
+  "runtime": "subway.webp",
+  "encoding": "Lossless WebP, native dimensions, transparent surround",
+  "runtimeSha256": "be0588243a2edf7bf56cd47447d165eff6e868e963675c173e46194cc5eb2821",
+  "registration": {
+    "streetY": 750,
+    "doorSillY": 807,
+    "doorX": 1185,
+    "nearJambX": 1425,
+    "scale": 0.48,
+    "interiorDrop": 27.36,
+    "approach": [
+      [
+        0,
+        750
+      ],
+      [
+        310,
+        750
+      ],
+      [
+        460,
+        749
+      ],
+      [
+        620,
+        765
+      ],
+      [
+        780,
+        786
+      ],
+      [
+        940,
+        802
+      ],
+      [
+        1185,
+        807
+      ],
+      [
+        1605,
+        807
+      ]
+    ]
+  },
+  "direction": "Revised asymmetric 3/4 station portal; tapered sidewalk, stone cheek-wall and shallow descent, green railings and canopy, recessed silver 6 train, warm open door. Transparent surround and contact shadow; no rectangular brick backdrop or exposed rail block."
+}

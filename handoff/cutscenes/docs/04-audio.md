@@ -1,15 +1,15 @@
 # Sound and edit notes
 
-The reference audio is copied byte for byte from the current game. The following durations were measured with `ffprobe`; they are source-file durations, not proposed cutscene edit lengths.
+The audio sources are stored byte for byte in `game/assets/` and linked from `references/audio/INDEX.md`, without duplicate MP3 copies. The following durations were measured with `ffprobe`; they are source-file durations, not proposed cutscene edit lengths.
 
-| Handoff reference | Runtime source | Duration | Channels / rate | Current role |
+| Track reference (audio index) | Runtime source | Duration | Channels / rate | Current role |
 |---|---|---:|---|---|
-| `references/audio/01-opening-theme.mp3` | `game/assets/original-37.mp3` | 156.360 s | Stereo / 48 kHz | Opening/main music |
-| `references/audio/02-midtown-theme.mp3` | `game/assets/original-19.mp3` | 169.200 s | Stereo / 48 kHz | Midtown chapter music |
-| `references/audio/03-central-park-theme.mp3` | `game/assets/original-20.mp3` | 162.720 s | Stereo / 48 kHz | Central Park chapter music |
-| `references/audio/04-nicolai-laugh.mp3` | `game/assets/original-38.mp3` | 1.176 s | Mono / 48 kHz | User-supplied Nicolai laugh |
-| `references/audio/05-contrarian-pixel-adventure.mp3` | `game/assets/original-39.mp3` | 64.848 s | Stereo / 48 kHz | Exclusive Contrarian event music |
-| `references/audio/06-title-mellow-lounge.mp3` | `game/assets/audio/title-mellow-lounge.mp3` | 72.912 s | Stereo / 48 kHz | Title screen: Why talking to people is a superpower x Mellow Lounge |
+| `01-opening-theme.mp3` | `game/assets/original-37.mp3` | 156.360 s | Stereo / 48 kHz | Opening/main music |
+| `02-midtown-theme.mp3` | `game/assets/original-19.mp3` | 169.200 s | Stereo / 48 kHz | Midtown chapter music |
+| `03-central-park-theme.mp3` | `game/assets/original-20.mp3` | 162.720 s | Stereo / 48 kHz | Central Park chapter music |
+| `04-nicolai-laugh.mp3` | `game/assets/original-38.mp3` | 1.176 s | Mono / 48 kHz | User-supplied Nicolai laugh |
+| `05-contrarian-pixel-adventure.mp3` | `game/assets/original-39.mp3` | 64.848 s | Stereo / 48 kHz | Exclusive Contrarian event music |
+| `06-title-mellow-lounge.mp3` | `game/assets/audio/title-mellow-lounge.mp3` | 72.912 s | Stereo / 48 kHz | Title screen: Why talking to people is a superpower x Mellow Lounge |
 
 The main soundtrack is displayed as **Downtown Good Company**, with the original composer credit **radicalTomography** retained (source recording: **Extended 16-Bit Bitcrushed**). The Contrarian display title is **Good ol’ Company** (source recording: **Pixel Adventure**). The user earlier supplied a legacy In Good Company tune, but the latest game uses the files above. A separate clean legacy recording is not included in this handoff; do not substitute an assumed version.
 

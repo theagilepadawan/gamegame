@@ -22,7 +22,7 @@ for(const [name,item] of Object.entries(pinned)) {
 const manifest=JSON.parse(await readFile(new URL('../assets/venue-details-v111/manifest.json',import.meta.url)));
 for(const item of manifest)assert.equal(sha(await readFile(new URL('../'+item.path,import.meta.url))),item.sha256);
 const browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox','--disable-dev-shm-usage','--enable-unsafe-swiftshader']});
-const report={reference:'Original warm Midtown lossless paintings / current six native venue crops',profiles:[]};
+const report={reference:'Original warm Midtown lossless paintings / five active native venue crops; historical sixth retained as source',profiles:[]};
 try {
  for(const viewport of [{width:1440,height:900},{width:844,height:390},{width:390,height:844}]) {
   const page=await browser.newPage({viewport,reducedMotion:'reduce'}),errors=[];
@@ -63,16 +63,17 @@ try {
       if(item.quad[0][0]>=10&&item.quad[1][0]<=eA-10&&centers[item.key]===undefined)centers[item.key]=q.chapterTime;
     }
    }
-   for(const key of ['joju','omars','gussy','fifth'])if(reveals[key]===undefined||centers[key]===undefined)fail(`Venue missing before chapter finish: ${key}`);
+   for(const key of ['joju','omars','gussy'])if(reveals[key]===undefined||centers[key]===undefined)fail(`Venue missing before chapter finish: ${key}`);
    const items=LR_SHOPS.inspect(q.distance,eA,kA).items;
    for(let i=1;i<items.length;i++)if(items[i].worldX-items[i-1].worldX<450)fail('Venues crowded together');
    if(reveals.joju<12)fail('Restaurant arrives too early');
-   const office=items.find(i=>i.key==='fifth');if(!office.fullGlassEntrance)fail('Full 505 glazing missing');
+   if(items.some(i=>i.key==='fifth'))fail('Duplicate 505 returned to the background');
+   if(!LR_FINISH.inspect(q)?.ready)fail('Foreground 505 is missing');
    const assets=LR_SCENERY.images.map(i=>({w:i.naturalWidth,h:i.naturalHeight}));
    return {layouts,coverageSamples,reveals,fullyVisible:centers,assets:assets.length,decodedBytes:assets.reduce((n,i)=>n+i.w*i.h*4,0),retired:!!(window.LR_CITY_VISTAS||window.LR_STREET_LIFE||window.LR_STREET_FOUNDATION)};
   });
   assert.equal(result.retired,false);assert.deepEqual(errors,[]);report.profiles.push({viewport,...result});await page.close();
  }
  await mkdir('review/v113-qa',{recursive:true});await writeFile('review/v113-qa/reference.json',JSON.stringify(report,null,2));
- console.log(`PASS warm Midtown: ${report.profiles.reduce((n,p)=>n+p.layouts,0)} fixed-camera layouts, opaque seams, late/spaced venues, full 505, original lossless paintings and unchanged curb/physics.`);
+ console.log(`PASS warm Midtown: ${report.profiles.reduce((n,p)=>n+p.layouts,0)} fixed-camera layouts, opaque seams, late/spaced venues, 505 exclusively at the finish, original lossless paintings and unchanged curb/physics.`);
 }finally{await browser.close();}

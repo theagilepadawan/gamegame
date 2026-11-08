@@ -27,13 +27,14 @@
     "class": "",
     "start": "function vu(",
     "end": "function Ku(",
-    "sha256": "8894b6a89f82c9746e3b90befc82ae0ff5e8ef9f92816f882c1801016c3a2e3f"
+    "sha256": "63cf09290916fa1ba34c3cd31f157bc819bfec5341ada0b075039be1f8472dcb",
+    "revision": "1.18: title thumbs-up and chapter entrance back/runner/front layering; reviewed v1.18 frame composition retained byte-for-byte in 1.19."
   },
   "cameraAndSimulation": {
     "class": "",
     "start": "function Ku(",
     "end": "window.longRun =",
-    "sha256": "4074d9b89d03c95b3b77404518c47dafe3de0ceb294ff2792a363cd80f2558a7",
-    "revision": "1.15: added measured FPS and Endless-only downhill look-ahead; Story camera expression and fixed-step simulation retained."
+    "sha256": "2dd6a204d75fa3b3157c16a22336145d6e7a229752bd0dc33d7832f9e84444be",
+    "revision": "1.18: airborne finish camera follows the exit actor. 1.19: after run-in call completeRunPresentation so Midtown film precedes summary. Active physics, fixed step and Story backdrop camera remain unchanged. Skip covered game rendering during the opening dialog and film; keep its RAF clock current."
   }
 }

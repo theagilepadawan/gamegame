@@ -1,3 +1,4 @@
+import {skipOpeningCall} from './helpers/launch.mjs';
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
 import {mkdir} from 'node:fs/promises';
@@ -15,7 +16,7 @@ try{
   return values.map(value=>{localStorage.setItem('lr.chapters.done',value);return LR_CH.endlessUnlocked()});
  });assert.deepEqual(saves,[false,false,false,false,false]);
  await page.evaluate(()=>{localStorage.removeItem('lr.chapters.done');localStorage.setItem('nyc.opening-bell.best','1234')});
- await page.locator('#start').click();
+ await page.locator('#start').click(); await skipOpeningCall(page);
  await page.waitForFunction(()=>longRun.state==='playing');
  // Stop the visual clock while exercising the real soundtrack and DOM events.
  await page.evaluate(()=>{const next=requestAnimationFrame.bind(window);window.requestAnimationFrame=()=>0;return new Promise(next)});

@@ -40,16 +40,18 @@ def source_input_manifest(source_root):
     # Match build.mjs: archived experiments are not runtime dependencies.
     scripts = [source_root / path for path in re.findall(
         r'<script\b[^>]*\bsrc="(scripts/[^"]+)"', (source_root / "index.html").read_text())]
-    documents = [source_root / "index.html", source_root / "game.css", *scripts]
+    styles = [source_root / path for path in re.findall(
+        r'<link\b[^>]*rel="stylesheet"[^>]*href="([^"]+)"', (source_root / "index.html").read_text())]
+    documents = [source_root / "index.html", *styles, *scripts]
     source_text = "\n".join(path.read_text() for path in documents)
-    runtime = set(re.findall(r"assets/[A-Za-z0-9_./-]+\.(?:webp|png|svg|avif|mp3|m4a|webm|woff2?)", source_text))
+    runtime = set(re.findall(r"assets/[A-Za-z0-9_./-]+\.(?:webp|png|svg|avif|mp3|m4a|mp4|webm|woff2?)", source_text))
     assets = runtime | {item["path"] for item in json.loads((source_root / "assets-manifest.json").read_text())}
     # The source atlas accompanies the runtime sprites in the editable handoff.
     for folder in {Path(relative).parent for relative in runtime}:
-        for native in (source_root / folder).glob("*-native.png"):
+        for native in [*(source_root / folder).glob("*-native.png"), *(source_root / folder).glob("*-native.mp4")]:
             assets.add(native.relative_to(source_root).as_posix())
     paths = {"build.mjs", "index.html", "game.css", "assets-manifest.json", *assets,
-             *(path.relative_to(source_root).as_posix() for path in scripts)}
+             *(path.relative_to(source_root).as_posix() for path in [*scripts, *styles])}
     return [{"path": relative, "bytes": (source_root / relative).stat().st_size,
              "sha256": file_digest(source_root / relative)} for relative in sorted(paths)]
 

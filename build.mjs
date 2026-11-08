@@ -13,7 +13,7 @@ for(const match of [...html.matchAll(/<link\b[^>]*rel="stylesheet"[^>]*href="([^
 }
 const original=JSON.parse(await fs.readFile(path.join(root,'assets-manifest.json'),'utf8'));
 const mimeByPath=new Map(original.map(a=>[a.path,a.mime]));
-const types={'.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.jpeg':'image/jpeg','.svg':'image/svg+xml','.woff':'font/woff','.woff2':'font/woff2','.ttf':'font/ttf','.mp3':'audio/mpeg','.m4a':'audio/mp4','.wav':'audio/wav','.ogg':'audio/ogg'};
+const types={'.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.jpeg':'image/jpeg','.svg':'image/svg+xml','.woff':'font/woff','.woff2':'font/woff2','.ttf':'font/ttf','.mp3':'audio/mpeg','.m4a':'audio/mp4','.mp4':'video/mp4','.wav':'audio/wav','.ogg':'audio/ogg'};
 let embedded=0;
 for(const file of await fs.readdir(path.join(root,'assets'),{recursive:true})){
  const relative='assets/'+file.replaceAll(path.sep,'/');

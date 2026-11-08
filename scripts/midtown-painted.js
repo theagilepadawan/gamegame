@@ -15,11 +15,11 @@
     const height=H+16,width=height*WIDTH/HEIGHT,overlap=height*FEATHER/HEIGHT,stride=width-overlap;
     const endless=(mode||window.longRun?.course?.mode)==="endless";
     // Keep the opening clear on wide phones. A narrow portrait viewport needs
-    // a little more horizontal travel to reach 505 before the chapter ends.
+    // a little more horizontal travel to reach the final painted block.
     // There is still only one slow camera plane, never jump-follow or zoom.
     const hold=1200+Math.max(0,W-864)/.14,ease=800;
-    const officeRight=3*stride+614*height/HEIGHT;
-    const rate=endless?.14:Math.max(.14,(officeRight+64-W)/(18880-hold-ease/2));
+    const finalFacadeRight=3*stride+614*height/HEIGHT;
+    const rate=endless?.14:Math.max(.14,(finalFacadeRight+64-W)/(18880-hold-ease/2));
     const after=Math.max(0,(Number(distance)||0)-hold);
     const eased=after<ease?after*after/(2*ease):after-ease/2,travel=eased*rate;
     const stripWidth=width+stride*3,scroll=endless?travel:Math.min(travel,Math.max(0,stripWidth-W));
@@ -50,7 +50,7 @@
       polygon(ctx,[[0,63],[63,63],[66,10],[69,3],[502,3],[508,8],[510,60],[586,62],[598,71],[622,108],[647,178],[653,190],[668,199],[674,224],[677,280],[668,303],[621,309],[606,330],[588,338],[565,337],[543,328],[532,306],[181,307],[168,328],[145,338],[120,337],[96,328],[85,309],[7,306],[0,297]]);
       ctx.clip();ctx.drawImage(entry.image,0,0);ctx.restore();return;
     }
-    ctx.filter=entry.key==="fifth"?"brightness(.94)":"brightness(.96) saturate(.94)";
+    ctx.filter="brightness(.96) saturate(.94)";
     ctx.drawImage(entry.image,x,y,w,h);ctx.restore();
     // A shallow reveal belongs to the host façade; it is not a separate plinth.
     ctx.save();ctx.strokeStyle="rgba(29,26,21,.55)";ctx.lineWidth=1.2;ctx.strokeRect(x-.5,y-.5,w+1,h+1);ctx.restore();

@@ -1,0 +1,81 @@
+{
+  "version": "1.19.0",
+  "kind": "colour dialogue portrait atlas",
+  "nativeDimensions": [
+    1536,
+    1024
+  ],
+  "grid": {
+    "columns": 3,
+    "rows": 2,
+    "cell": [
+      512,
+      512
+    ]
+  },
+  "rows": [
+    "grete",
+    "nicolai"
+  ],
+  "columns": [
+    "listening",
+    "speaking",
+    "blink"
+  ],
+  "style": "Painterly cartoon matching the approved blue-jacket Nicolai game sprites",
+  "references": [
+    "User-supplied Grete photographs, 2026-11-08: brown bob, glasses, lavender jacket and patterned scarf",
+    "Approved Nicolai title gesture sprite atlas",
+    "Existing painterly game character style"
+  ],
+  "generation": {
+    "tool": "image_gen",
+    "source": "/workspace/generated_images/exec-a2049b88-631c-46ce-bbb3-966466b9c3ca.png",
+    "notes": "A colour dual portrait interpretation. No copyrighted game UI or logo copied. No synthetic voice."
+  },
+  "registration": {
+    "grete": {
+      "row": 0,
+      "mouthEllipse": [
+        329,
+        275,
+        55,
+        25
+      ],
+      "eyesEllipse": [
+        323,
+        187,
+        83,
+        34
+      ]
+    },
+    "nicolai": {
+      "row": 1,
+      "mouthEllipse": [
+        339,
+        260,
+        51,
+        27
+      ],
+      "eyesEllipse": [
+        333,
+        171,
+        72,
+        31
+      ],
+      "displayMirrored": true
+    }
+  },
+  "files": [
+    {
+      "path": "assets/briefing-v119/portraits-native.png",
+      "bytes": 2277459,
+      "sha256": "c2d39aaa5888b0f9e06e04b7a24eee67bb0ef67c7557155dc542a4641b59366e"
+    },
+    {
+      "path": "assets/briefing-v119/portraits.webp",
+      "bytes": 1572744,
+      "sha256": "e0c9bc45ade62833ab28bcbf9a30c93d1703bccbf9f319a7041d4df36250bde1"
+    }
+  ]
+}

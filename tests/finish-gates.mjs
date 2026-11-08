@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {chromium} from 'playwright';
 
-const proof=process.env.FINISH_PROOF_DIR || 'review/v118/finish';
+const proof=process.env.FINISH_PROOF_DIR || 'review/v119/finish';
 await mkdir(proof,{recursive:true});
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH || '/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});
 const errors=[];
@@ -73,7 +73,12 @@ try {
     await page.evaluate(()=>{ni=.5;sr();}); await page.clock.fastForward(1200);
     assert.equal(await page.evaluate(()=>ni),.5,'Pausing freezes the finish sequence');
     await page.evaluate(()=>{CQ();ni=LR_FINISH.duration(q)-.01;}); await page.clock.runFor(48);
-    assert.equal(await page.evaluate(()=>longRun.state),'over','Results follow the run-in');
+    if(id==='midtown') {
+      assert.equal(await page.evaluate(()=>longRun.state),'cutscene','Gift scene follows the office entrance');
+      assert.equal(await page.locator('#results').isVisible(),false);
+      await page.locator('.film-skip').click();
+    }
+    assert.equal(await page.evaluate(()=>longRun.state),'over','Results follow the run-in and any chapter film');
     assert.equal(await page.evaluate(id=>LR_CH.completed(id),id),true,'Chapter completion remains persistent');
     if(id!=='park') assert.equal(await page.locator('#results').getAttribute('data-primary'),'next-chapter','Next chapter remains the default action');
   }

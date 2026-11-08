@@ -1,3 +1,4 @@
+import {skipOpeningCall} from './helpers/launch.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {createHash} from 'node:crypto';
@@ -44,10 +45,11 @@ try{
     stone: [LR_SCENERY.foundationImage.naturalWidth,LR_SCENERY.foundationImage.naturalHeight]
   }));
   assert.deepEqual(artContract,{park:2,opening:5,midtown:4,
-    details:['kabin','lei','joju','omars','gussy','fifth'],retired:false,stone:[1254,1254]},
-    'Complete Downtown paintings and warm complete Midtown paintings with six current native frontage crops');
+    details:['kabin','lei','joju','omars','gussy'],retired:false,stone:[1254,1254]},
+    'Complete Downtown paintings and warm complete Midtown paintings with five current native frontage crops');
   const addedArt=await page.evaluate(()=>[...LR_VENUE_DETAILS.images,...LR_PROPS.images,...LR_OFFICE_HOST.images].map(image=>({embedded:image.src.startsWith('data:'),ready:image.complete&&image.naturalWidth>0})));
-  assert.ok(addedArt.length>=13&&addedArt.every(image=>image.embedded&&image.ready),'Venue, prop and host artwork is decoded and embedded');
+  assert.equal(addedArt.length,12,'Five active venue fronts, six prop images and the office host');
+  assert.ok(addedArt.every(image=>image.embedded&&image.ready),'Venue, prop and host artwork is decoded and embedded');
   // Continue through the real Contrarian event after loading with no network.
   await page.context().setOffline(true);
   for(const [runner,chapter] of [['trond','midtown'],['nicolai','opening']]){
@@ -61,12 +63,19 @@ try{
     });
     assert.deepEqual(avatar,{embedded:true,width:2688,height:420},`${runner}: complete native map strip works offline`);
   }
-  await page.locator('#start').click();
+  await page.locator('#start').click(); await skipOpeningCall(page);
   await page.waitForFunction(()=>longRun.state==='playing');
   await page.evaluate(()=>{q.invincible=1000;q.beginContrarian();});
   await page.waitForFunction(()=>longRun.snapshot.contrarian);
   await page.evaluate(()=>{q.endContrarian();});
   await page.waitForFunction(()=>!longRun.snapshot.contrarian);
+  // The film and briefing remain usable from the single HTML with no network.
+  await page.evaluate(()=>{Cu(false);fu('midtown');Ko('chapter');});
+  await page.waitForFunction(()=>document.querySelector('#chapter-video')?.readyState>=2);
+  assert.deepEqual(await page.evaluate(()=>{const v=document.querySelector('#chapter-video');return {embedded:v.currentSrc.startsWith('data:video/mp4;base64,'),w:v.videoWidth,h:v.videoHeight,portraits:LR_BRIEFING.inspect().portraitsReady};}),{embedded:true,w:1280,h:530,portraits:true});
+  await page.evaluate(()=>{q.won=true;completeRunPresentation();});
+  await page.locator('.film-skip').click();
+  assert.equal(await page.evaluate(()=>longRun.state),'over');
   assert.deepEqual(errors,[]);
   assert.deepEqual(failed,[]);
   assert.deepEqual(external,[],'Standalone game fetched an external resource');

@@ -1,6 +1,29 @@
 # Latest user direction
 
-## Current authority: version 1.18
+## Current authority: version 1.19
+
+The opening Nicolai/Grete conversation gives the journey a purpose: a walking
+investment meeting in Central Park, via 505 to collect running shoes. It is a
+colour portrait dialogue inspired by the user's communication-screen reference,
+with six user-advanced lines, Skip and local mouth/blink animation. The approved
+title thumbs-up follows it. No imitation voices have been created.
+
+Downtown's Listing Bell pavilion is replaced by an angled, recessed 6-train
+station portal. The rejected rectangular station block is not shipped. A tapered
+approach, shallow foot/shadow descent, transparent outer silhouette and ground
+foundation connect it to the original street. Midtown has no duplicate 505 in
+its background; its full blue glass and host remain at the foreground finish.
+
+The supplied gift film is implemented after the Midtown arrival and before
+results: 1280 × 530, 30 fps, 121 frames, silent. The encoded top black band was
+removed by cropping 190 pixels. Heads partly hidden by the source band were
+not reconstructed. Untouched source and cropped runtime are both packaged in
+`game/assets/cutscenes-v119/`. Read `game/docs/verification-v119.md` and
+`game/docs/story-briefing.md`. Browser audio autoplay policy still applies;
+permitted autoplay starts without a suspended Web Audio graph, and blocked
+playback offers a truthful Start music control.
+
+## Retained version 1.18 direction
 
 The large title character gives the launch thumbs-up; the map figure only runs
 between chapters. The title face and body remain from the original sprite.
@@ -40,7 +63,7 @@ The suggested brief provided in chat is an 8–12-second Lower Manhattan opening
 
 ## Running-shoe transition
 
-The user explicitly wants Nicolai to receive the exact trainers used by his Central Park sprites **after completing the second course, Midtown, and before Central Park**. This beat is tracked as **LR-SH-01**. These are running shoes, not replacement trousers. Preserve the existing Park footwear artwork and its appearance in gameplay. The source sheets are `game/assets/original-17.webp` and `original-18.webp`; the runtime already selects them for Park, but no shoe-receiving cinematic exists.
+The user explicitly wants Nicolai to receive the exact trainers used by his Central Park sprites **after completing the second course, Midtown, and before Central Park**. This beat is tracked as **LR-SH-01**. These are running shoes, not replacement trousers. Preserve the existing Park footwear artwork and its appearance in gameplay. The source sheets are `game/assets/original-17.webp` and `original-18.webp`; the runtime already selects them for Park, and the supplied gift film is now installed in version 1.19. The following longer staging is historical proposal only.
 
 Suggested staging from the chat brief: outside 505's blue/cyan lobby, the office host presents a shoebox. Nicolai opens it, smiles, changes out of his formal shoes and tightens the trainers' laces. One light test step leads into his jog toward Central Park. Aim for 6–8 seconds with calm, deliberate motion. The office staging, length and optional caption “Investing in the long run” are proposals, not mandatory details specified by the user.
 

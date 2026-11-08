@@ -1,3 +1,4 @@
+import {skipOpeningCall} from './helpers/launch.mjs';
 import assert from 'node:assert/strict';
 import {pathToFileURL} from 'node:url';
 
@@ -71,7 +72,7 @@ try {
   // Preserve a previous seed independently of the fixed Story journey.
   const endlessSeed = 0x0BADF00D;
   await page.evaluate(seed => {qe = seed;}, endlessSeed);
-  await page.locator('#start').click();
+  await page.locator('#start').click(); await skipOpeningCall(page);
   await waitPlaying('opening');
   const story = await page.evaluate(() => ({seed: q.seed, terrain: longRun.snapshot.terrainSamples, crest: q.pickups.some(p => p.kind === 'contrarian')}));
   assert.equal(story.crest, true);
@@ -132,7 +133,7 @@ try {
   await page.locator('#seed-input').fill('0BADF00D');
   await page.locator('#seed-input').press('Enter');
   assert.equal(await page.locator('#seed-code').innerText(), '0BADF00D');
-  await page.locator('#start').click();
+  await page.locator('#start').click(); await skipOpeningCall(page);
   await waitPlaying();
   assert.equal(await page.evaluate(() => q.mode), 'endless');
   assert.equal(await page.evaluate(() => q.seed), endlessSeed);

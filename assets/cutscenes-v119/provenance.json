@@ -1,0 +1,19 @@
+{
+  "source": "User supplied: A quiet cinematic gift reveal_ ONE continuous 4-second shot_ (1).mp4",
+  "sourceSha256": "e5d9c6885cfadc1394094a8c02f1702536c4122f89a52726e6b8c10df2b06e65",
+  "native": {
+    "width": 1280,
+    "height": 720,
+    "fps": 30,
+    "frames": 121,
+    "audio": false
+  },
+  "crop": {
+    "x": 0,
+    "y": 190,
+    "width": 1280,
+    "height": 530
+  },
+  "processing": "ffmpeg crop=1280:530:0:190; libx264 preset slow CRF 17, yuv420p, faststart. All 121 frames retained.",
+  "runtimeSha256": "17a819e8dd3e5b7709f076e71d37b15e8e2f6a0acdcd18a271e5e2764dec2b3f"
+}

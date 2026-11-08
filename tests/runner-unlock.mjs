@@ -1,3 +1,4 @@
+import {skipOpeningCall} from './helpers/launch.mjs';
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {chromium} from 'playwright';
@@ -48,7 +49,7 @@ try {
   assert.equal(await page.evaluate(()=>longRun.character),'trond');
   assert.equal(await page.locator('[data-character="trond"]').innerText(),'Trond');
   assert.equal(await page.locator('#character-name').innerText(),'Trond');
-  await page.locator('#start').click();
+  await page.locator('#start').click(); await skipOpeningCall(page);
   await page.waitForFunction(()=>longRun.state==='playing');
   assert.equal(await page.evaluate(()=>q.character),'trond');
   await page.evaluate(()=>{q.won=true;q.dead=false;qQ()});

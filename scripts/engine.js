@@ -259,7 +259,7 @@ function xo(e24) {
 function Pe(e24, A) {
   return e24.x < A.x + A.w && e24.x + e24.w > A.x && e24.y < A.y + A.h && e24.y + e24.h > A.y;
 }
-var Ir = (e24) => 315 + 1.65 * e24 + 55 * Math.log1p(e24 / 60), cg = ["OPENING BELL", "BULL RUN", "BREAKOUT", "FLOATING AVERAGE", "MOMENTUM EXPRESS", "SELL-OFF", "VOLATILITY", "ALL-TIME HIGH"], cr = 60, Fo = 11, Oe = cr + Fo, Ri = Oe + 4, xQ = [{ id: "opening", name: "THE OPENING BELL", start: 0, end: 10 }, { id: "bull", name: "BULL RUN", start: 10, end: 27 }, { id: "recovery", name: "A DIFFERENT PERSPECTIVE", start: 27, end: 36 }, { id: "selloff", name: "COMPOUNDING", start: 36, end: 54 }, { id: "launch", name: "THE IPO ROADSHOW", start: 54, end: cr }, { id: "ipo", name: "IPO HYPE MACHINE", start: cr, end: Oe }, { id: "landing", name: "THE LISTING BELL", start: Oe, end: Ri }], zo = (e24) => (e24 = Math.max(0, Math.min(1, e24)), e24 * e24 * (3 - 2 * e24));
+var Ir = (e24) => 315 + 1.65 * e24 + 55 * Math.log1p(e24 / 60), cg = ["OPENING BELL", "BULL RUN", "BREAKOUT", "FLOATING AVERAGE", "MOMENTUM EXPRESS", "SELL-OFF", "VOLATILITY", "ALL-TIME HIGH"], cr = 60, Fo = 11, Oe = cr + Fo, Ri = Oe + 4, xQ = [{ id: "opening", name: "THE OPENING BELL", start: 0, end: 10 }, { id: "bull", name: "BULL RUN", start: 10, end: 27 }, { id: "recovery", name: "A DIFFERENT PERSPECTIVE", start: 27, end: 36 }, { id: "selloff", name: "COMPOUNDING", start: 36, end: 54 }, { id: "launch", name: "THE IPO ROADSHOW", start: 54, end: cr }, { id: "ipo", name: "IPO HYPE MACHINE", start: cr, end: Oe }, { id: "landing", name: "NEXT STOP: UPTOWN", start: Oe, end: Ri }], zo = (e24) => (e24 = Math.max(0, Math.min(1, e24)), e24 * e24 * (3 - 2 * e24));
 function ee(e24) {
   if (e24 <= 36) return e24 * 330;
   if (e24 <= 54) {
@@ -969,6 +969,7 @@ var Wo = class {
 };
 var ko = class {
   constructor(A) {
+    this.autoplayBlocked = false;
     this.enabled = true, this.musicVolume = 0.72, this.fxVolume = 0.75, this.scene = "home", this.clips = {}, this.clipSources = {}, this.musicTracks = {}, this.musicSources = {}, this.musicFaders = {}, this.musicLevels = {}, this.handoffTimer = null, this.handoffGeneration = 0, this.activeMusic = null, this.musicEnded = false, this.activeClip = null, this.ducked = false, this.ctx = null, this.error = null, this.track = new Audio(A), this.track.loop = true, this.track.preload = "metadata", this.track.playbackRate = 1, this.track.addEventListener("error", () => {
       this.error = "The soundtrack could not be decoded by this browser.";
     });
@@ -979,11 +980,16 @@ var ko = class {
     }
   }
   init() {
+    // Let media autoplay use the browser's own permission before creating a
+    // Web Audio graph. A suspended graph would otherwise swallow permitted
+    // HTMLAudio playback on a fresh page. Trusted input upgrades it in place.
+    if (!this.ctx && navigator.userActivation?.hasBeenActive === false) return;
     if (!this.ctx) try {
       this.ctx = new (window.AudioContext || window.webkitAudioContext)(), this.master = this.ctx.createGain(), this.music = this.ctx.createGain(), this.fx = this.ctx.createGain(), this.limiter = this.ctx.createDynamicsCompressor(), this.limiter.threshold.value = -3, this.limiter.knee.value = 3, this.limiter.ratio.value = 4, this.limiter.attack.value = 3e-3, this.limiter.release.value = 0.15, this.master.connect(this.limiter), this.limiter.connect(this.ctx.destination), this.music.connect(this.master), this.fx.connect(this.master), this.source = this.ctx.createMediaElementSource(this.track), this.source.connect(this.music), this.apply(true);
     } catch {
       this.ctx = null;
     }
+    if (this.ctx) this.track.volume = 1;
     this.ctx?.state === "suspended" && this.ctx.resume().catch(() => {
     });
   }
@@ -999,7 +1005,7 @@ var ko = class {
     }
   }
   get playing() {
-    return this.scene === "playing" || this.scene === "results" || (this.scene === "home" && this.activeMusic === "title" && !document.hidden);
+    return this.scene === "playing" || this.scene === "results" || (this.scene === "cutscene" && !document.hidden) || (this.scene === "home" && this.activeMusic === "title" && !document.hidden);
   }
   wantedMusic(A) {
     return this.enabled && this.playing && (this.activeMusic ? !this.musicEnded && A === this.musicTracks[this.activeMusic] : A === this.track);
@@ -1007,9 +1013,14 @@ var ko = class {
   requestPlay(A, t) {
     try {
       Promise.resolve(A.play()).then(() => {
-        t() || A.pause();
-      }).catch(() => {
-        t() && (this.error = "Tap the sound button to enable playback.");
+        if (!t()) { A.pause(); return; }
+        this.autoplayBlocked = false; this.error = null;
+        window.dispatchEvent(new Event("lr:audio-state"));
+      }).catch(error => {
+        if (!t()) return;
+        this.autoplayBlocked = error.name === "NotAllowedError";
+        this.error = this.autoplayBlocked ? "Tap the sound button to start music." : "This recording could not be played.";
+        window.dispatchEvent(new Event("lr:audio-state"));
       });
     } catch {
       t() && (this.error = "This recording could not be played.");
@@ -1021,6 +1032,7 @@ var ko = class {
     if (A && this.wantedMusic(A)) {
       if (this.ctx && this.activeMusic && !this.musicSources[this.activeMusic]) try {
         let t = this.ctx.createMediaElementSource(A), i = this.ctx.createGain();
+        A.volume = 1;
         i.gain.setValueAtTime(this.musicLevels[this.activeMusic] ?? 1, this.ctx.currentTime), t.connect(i), i.connect(this.music), this.musicSources[this.activeMusic] = t, this.musicFaders[this.activeMusic] = i;
       } catch {
         this.error = "This recording could not be connected.";
@@ -1075,7 +1087,7 @@ var ko = class {
     if (!(!t || !this.enabled || !this.playing)) {
       this.stopClips();
       try {
-        this.ctx && !this.clipSources[A] && (this.clipSources[A] = this.ctx.createMediaElementSource(t), this.clipSources[A].connect(this.fx)), t.currentTime = 0, this.activeClip = t, this.ducked = true, this.apply(), Promise.resolve(t.play()).then(() => {
+        this.ctx && !this.clipSources[A] && (this.clipSources[A] = this.ctx.createMediaElementSource(t), t.volume = 1, this.clipSources[A].connect(this.fx)), t.currentTime = 0, this.activeClip = t, this.ducked = true, this.apply(), Promise.resolve(t.play()).then(() => {
           (this.activeClip !== t || !this.enabled || !this.playing) && t.pause();
         }).catch(() => {
           this.activeClip === t && (this.activeClip = null, this.ducked = false, this.apply());
@@ -1114,7 +1126,7 @@ var ko = class {
     if (!this.enabled || document.hidden) return;
     this.scene = "home";
     if (this.activeMusic === "title") {
-      if (this.musicTracks.title.paused || this.ctx?.state === "suspended") {
+      if (this.musicTracks.title.paused || this.ctx?.state === "suspended" || !this.ctx && navigator.userActivation?.hasBeenActive) {
         this.init(); this.apply(); this.syncMusic();
       }
       return;
@@ -22172,7 +22184,7 @@ var er = new Image();
 er.src = "assets/original-35.webp";
 var po = new Image();
 po.src = "assets/original-36.webp";
-var $A = new eg(), nu = false, uo = false, Ot = { opening: { name: "Opening Bell", place: "LOWER MANHATTAN", note: "BULL RUN / SELL-OFF / IPO", copy: "Climb the bull run. Ride the sell-off.<br>Deflate the hype. Ring the listing bell.", next: "midtown" }, park: { name: "Central Park", place: "CENTRAL PARK", note: "LAKESIDE / CANOPY / STEPPING STONES", copy: "Autumn hills. A different path.<br>Follow the lake or take the canopy.", next: null }, midtown: { name: "Midtown", place: "MIDTOWN MANHATTAN", note: "STREET / SCAFFOLDS / CRANE WALK", copy: "Street level or the scaffold route.<br>Ride the cranes. Keep moving.", next: "park" } }, at = "opening";
+var $A = new eg(), nu = false, uo = false, Ot = { opening: { name: "Opening Bell", place: "LOWER MANHATTAN", note: "BULL RUN / SELL-OFF / IPO", copy: "Climb the bull run. Ride the sell-off.<br>Deflate the hype. Catch the 6 uptown.", next: "midtown" }, park: { name: "Central Park", place: "CENTRAL PARK", note: "LAKESIDE / CANOPY / STEPPING STONES", copy: "Autumn hills. A different path.<br>Follow the lake or take the canopy.", next: null }, midtown: { name: "Midtown", place: "MIDTOWN MANHATTAN", note: "STREET / SCAFFOLDS / CRANE WALK", copy: "Street level or the scaffold route.<br>Ride the cranes. Keep moving.", next: "park" } }, at = "opening";
 try {
   let e24 = localStorage.getItem("nyc.district");
   Object.hasOwn(Ot, e24) && (!window.LR_CH || LR_CH.unlocked(e24)) && (at = e24);
@@ -22332,6 +22344,8 @@ function KD(e24) {
 }
 function mD() {
   window.LR_FINISH?.begin(q);
+  window.LR_MUSIC?.page("arrival");
+  m("#touch-controls").classList.add("hidden");
   if (De(), ni = 0, m("#event").classList.remove("show"), m("#ticker-text").textContent = q.districtId === "park" ? "The best returns sometimes come with a view." : q.districtId === "midtown" ? "Built for the long run." : "Hype is temporary. The horizon is long.", CA(523, 0.55, "sine", 0.03), CA(784, 0.7, "sine", 0.02), CA(1046, 0.85, "sine", 0.012), !gA) for (let e24 = 0; e24 < 30; e24++) bt.push({ x: q.x + (Math.random() - 0.5) * 110, y: q.y - 105 - Math.random() * 85, vx: (Math.random() - 0.5) * 120, vy: -45 - Math.random() * 150, life: 0.8 + Math.random() * 0.5, color: ["#eac98a", "#9fdec8", "#fff0c5"][e24 % 3], size: 3 });
 }
 async function qu() {
@@ -22347,16 +22361,19 @@ function De() {
   $t.clear(), ai.clear(), og.clear(), document.querySelectorAll(".pressed").forEach((e24) => e24.classList.remove("pressed")), q?.release();
 }
 function confirmMenuRun() {
-  if (b !== "home" || !_i || window.LR_RUN && LR_RUN.previewing()) return;
-  const mode = zA;
-  if (mode === "chapter" && window.LR_TITLE_LAUNCH?.launch(() => Ko(mode))) {
-    // Keep fullscreen / audio permission inside the initiating user gesture;
-    // the actual run begins after the title character's brief thumbs-up.
-    gg.matches && qu();
-    vD();
-    return;
+  if (b !== "home" || !_i || window.LR_RUN && LR_RUN.previewing() || window.LR_BRIEFING?.inspect().active || window.LR_TITLE_LAUNCH?.state.active) return;
+  const mode = zA, chapter = at, runner = PA;
+  function launch() {
+    if (b !== "home" || document.hidden || zA !== mode || at !== chapter || PA !== runner) return;
+    if (mode === "chapter" && window.LR_TITLE_LAUNCH?.launch(() => Ko(mode))) return;
+    Ko(mode);
   }
-  Ko(mode);
+  // Keep fullscreen/audio activation inside the initial trusted press. The
+  // opening call finishes first; then the approved title character says yes
+  // with the same two-second thumbs-up. Map browsing remains unchanged.
+  gg.matches && qu(); vD();
+  if (mode === "chapter" && chapter === "opening" && window.LR_BRIEFING?.launch({character: runner, onComplete: launch})) return;
+  launch();
 }
 function Ko(e24 = zA, A = {}) {
   if (!_i || window.LR_RUN && LR_RUN.previewing()) return;
@@ -22364,6 +22381,8 @@ function Ko(e24 = zA, A = {}) {
   if (e24 === "endless" && window.LR_CH && !LR_CH.endlessUnlocked()) {
     LR_CH.locked(m('[data-mode="endless"]')); return;
   }
+  window.LR_CINEMA?.cancel();
+  window.LR_BRIEFING?.cancel();
   mt.dataset.playMode = e24;
   window.LR_MUSIC?.page("run");
   gg.matches && qu(), vD(), De();
@@ -22372,8 +22391,17 @@ function Ko(e24 = zA, A = {}) {
   q = e24 === "chapter" && at !== "opening" ? new yo(eA, t, { ...i, districtId: at }) : new hi(eA, t, { ...i, mode: e24 }), b = "playing", ut.reset(), $A.reset(), SA.stopClips(), SA.endMusic({ resume: false }), window.LR_CH && LR_CH.music(SA, q), LRS(), SA.play(), q.grounded && q.floorY != null && (q.y = q.floorY), Kt = T - (q.floorY ?? T), $i = 0, ir = q.y, bt = [], Ht = [], ze = [], rr = 1, tr = 1, ni = -1, rg = 0, hQ = -1, Xt = 0, _t = -1, fe = 0, Ar = 1, RQ = false, mt.classList.add("playing");
   fQ();
   for (let r of ["#intro", "#home-caption", "#results", "#pause-screen"]) m(r).classList.add("hidden");
+  window.LR_CINEMA?.prepare(q);
   for (let r of ["#live-hud", "#pause", "#touch-controls"]) m(r).classList.remove("hidden");
   m("#district").textContent = Ot[q.districtId || "opening"].place, m("#pause").textContent = "\u2161", m("#pause").setAttribute("aria-label", "Pause"), m("#event").classList.remove("show", "hidden"), m("#next-chapter").classList.add("hidden"), m("#ticker-text").textContent = q.districtId === "park" ? "A long horizon leaves room for a walk in the park." : q.districtId === "midtown" ? "The growth outlook is under construction." : "Markets react to markets reacting.", Vu(), ht.focus({ preventScroll: true }), CA(392, 0.09), setTimeout(() => CA(587, 0.13), 100);
+}
+function completeRunPresentation() {
+  const finishedRun = q;
+  if (window.LR_CINEMA?.eligible(q)) {
+    b = "cutscene"; De();
+    for (const id of ["#touch-controls", "#pause", "#event", "#chapter-strip"]) m(id).classList.add("hidden");
+    window.LR_CINEMA.play(q, SA, () => { if (q === finishedRun && b === "cutscene") qQ(); });
+  } else qQ();
 }
 function qQ() {
   window.LR_MUSIC?.page("results");
@@ -22417,8 +22445,11 @@ function sr() {
 }
 function CQ() {
   b !== "paused" || gg.matches && innerHeight > innerWidth || (b = "playing", SA.play(), $i = 0, m("#pause-screen").classList.add("hidden"), m("#touch-controls").classList.remove("hidden"), m("#pause").textContent = "\u2161", m("#pause").setAttribute("aria-label", "Pause"), ht.focus({ preventScroll: true }));
+  if (q?.won) m("#touch-controls").classList.add("hidden");
 }
 function Cu(e24 = true) {
+  window.LR_CINEMA?.cancel();
+  window.LR_BRIEFING?.cancel();
   e24 && zA === "endless" && (qe = vo()), ze = [], Xt = 0, _t = -1, ni = -1, b = "home", SA.stop(), Kt = 0, q = null, De(), ut.reset(), $A.reset(), mt.classList.remove("playing");
   window.LR_MUSIC?.page("home");
   SA.home();
@@ -22463,11 +22494,14 @@ m("#next-chapter").onclick = () => {
   e24 && (Cu(false), zA = "chapter", fu(e24), Ko());
 };
 function uQ() {
-  m("#sound-state").textContent = SA.enabled ? "ON" : "OFF", m("#sound").setAttribute("aria-label", SA.enabled ? "Mute all audio" : "Enable audio"), m("#music-volume").value = Math.round(SA.musicVolume * 100), m("#fx-volume").value = Math.round(SA.fxVolume * 100), m("#music-value").textContent = Math.round(SA.musicVolume * 100) + "%", m("#fx-value").textContent = Math.round(SA.fxVolume * 100) + "%";
+  m("#sound-state").textContent = SA.enabled ? SA.autoplayBlocked ? "TAP" : "ON" : "OFF", m("#sound").setAttribute("aria-label", SA.enabled ? SA.autoplayBlocked ? "Start music" : "Mute all audio" : "Enable audio"), m("#music-volume").value = Math.round(SA.musicVolume * 100), m("#fx-volume").value = Math.round(SA.fxVolume * 100), m("#music-value").textContent = Math.round(SA.musicVolume * 100) + "%", m("#fx-value").textContent = Math.round(SA.fxVolume * 100) + "%";
 }
 m("#sound").onclick = () => {
-  SA.toggle(), b === "home" && SA.enabled && SA.home(), uQ();
+  if (SA.enabled && SA.autoplayBlocked) { SA.init(); SA.apply(true); SA.syncMusic(); }
+  else SA.toggle();
+  b === "home" && SA.enabled && SA.home(); uQ();
 };
+window.addEventListener("lr:audio-state", uQ);
 m("#mix").onclick = () => {
   sr(), m("#audio-dialog").showModal();
 };
@@ -22526,7 +22560,7 @@ function Lt(e24, A, t, i = 9, r = false) {
     bt.push({ x: e24, y: A, vx: r ? -80 - Math.random() * 100 : Math.cos(s) * n, vy: r ? -Math.random() * 25 : Math.sin(s) * n, life: 0.25 + Math.random() * 0.35, color: t, size: r ? 2 : 3 });
   }
 }
-var YD = { opening: ["OPENING BELL", "A long horizon starts with one good step."], bull: ["BULL RUN", "There is room at the top."], recovery: ["THE LONG VIEW", "Not every opportunity needs chasing."], selloff: ["COMPOUNDING", "Growth on growth. Keep your footing."], launch: ["IPO ROADSHOW", "Your next allocation comes with engines."], ipo: ["IPO HYPE MACHINE", "Keep your head. Watch the pressure."], landing: ["THE LISTING BELL", "A controlled landing beats a dramatic exit."] };
+var YD = { opening: ["OPENING BELL", "A long horizon starts with one good step."], bull: ["BULL RUN", "There is room at the top."], recovery: ["THE LONG VIEW", "Not every opportunity needs chasing."], selloff: ["COMPOUNDING", "Growth on growth. Keep your footing."], launch: ["IPO ROADSHOW", "Your next allocation comes with engines."], ipo: ["IPO HYPE MACHINE", "Keep your head. Watch the pressure."], landing: ["NEXT STOP: UPTOWN", "Take the 6. Keep the long view."] };
 function FD() {
   for (let e24 of q.events) {
     if (q.districtId && ut.react(e24, q), $A.react(e24, q), e24.type === "routeChoice" && (Ge("YOUR ROUTE", e24.label, 1.5), m("#ticker-text").textContent = e24.id === "high" ? "Conviction comes with a little more altitude." : "A steady route is still a strategy."), e24.type === "setpiece" && (m("#ticker-text").textContent = q.districtId === "park" ? "One well-placed step at a time." : "Infrastructure requires a hands-on approach."), e24.type === "chapter" && q.districtId && (m("#district").textContent = Ot[q.districtId].place), e24.type === "chapter" && !q.districtId) {
@@ -22581,7 +22615,7 @@ function Vu() {
   if (!q) return;
   window.LR_ENDLESS && LR_ENDLESS.hud(q, Ge, m, SA);
   let e24 = q.mode === "chapter", A = q.flight && q.flightKind === "cruise";
-  m("#chapter-strip").classList.toggle("hidden", !e24 && !A), m("#run-meta").classList.toggle("hidden", e24 || A), mt.classList.toggle("in-flight", !!q.flight), (e24 || A) && (m("#chapter-name").textContent = q.contrarian ? "THE CONTRARIAN" : A ? "LIQUIDITY LIFT" : q.flight ? "IPO HYPE MACHINE" : q.chapterPhase.name, m("#chapter-detail").textContent = A ? "HOLD TO CLIMB \xB7 " + Math.max(0, Math.ceil(q.flightDuration - q.flightAge)) + "s" : q.flight ? q.boss?.stage === "defeated" ? "HYPE DEFLATED" : (q.boss?.cue || "STAND BY") + " \xB7 " + q.bossProgress + "/3 VENTED" : (q.routeChoice ? q.routeChoice.label.toUpperCase() + " \xB7 " : "") + Math.round(q.chapterProgress * 100) + "%", m("#chapter-progress").style.transform = "scaleX(" + (A ? Math.max(0, 1 - q.flightAge / q.flightDuration) : q.chapterProgress) + ")", mt.dataset.phase = A ? "cruise" : q.chapterPhase.id), m("#jump-caption").textContent = q.flight ? "THRUST" : q.chainReady && q.jumpChain === 2 ? "JUMP \xD73" : "JUMP", m("#touch-jump").setAttribute("aria-label", q.flight ? "Hold to climb; release to descend" : q.chainReady && q.jumpChain === 2 ? "Jump now for the grand somersault" : "Jump; press again in the air to somersault, or time jumps after landing for a triple jump"), m("#slide-caption").textContent = q.flight ? "COAST" : "SLIDE", m("#score").textContent = String(q.score).padStart(5, "0"), m("#time").textContent = cu(q.time), m("#pace").textContent = (q.speed / 315).toFixed(2) + "\xD7", m("#flow").textContent = window.LR_ENDLESS && q.mode !== "chapter" && q.procedural ? LR_ENDLESS.flowLabel(q) : q.flow > 3 ? "FLOW " + q.flow : "MARKET OPEN", m("#multiplier").classList.toggle("hidden", q.conviction <= 0), m("#effects").innerHTML = [q.shield ? "\u2766 HEDGED" : null, q.research > 0 ? "\u2315 RESEARCH " + Math.ceil(q.research) + "s" : null, q.conviction > 0 ? (q.mode === "chapter" ? "CONVICTION " : "2\xD7 ") + Math.ceil(q.conviction) + "s" : null].filter(Boolean).map((t) => '<span class="effect">' + t + "</span>").join("");
+  m("#chapter-strip").classList.toggle("hidden", q.won || !e24 && !A), m("#run-meta").classList.toggle("hidden", e24 || A), mt.classList.toggle("in-flight", !!q.flight), (e24 || A) && (m("#chapter-name").textContent = q.contrarian ? "THE CONTRARIAN" : A ? "LIQUIDITY LIFT" : q.flight ? "IPO HYPE MACHINE" : q.chapterPhase.name, m("#chapter-detail").textContent = A ? "HOLD TO CLIMB \xB7 " + Math.max(0, Math.ceil(q.flightDuration - q.flightAge)) + "s" : q.flight ? q.boss?.stage === "defeated" ? "HYPE DEFLATED" : (q.boss?.cue || "STAND BY") + " \xB7 " + q.bossProgress + "/3 VENTED" : (q.routeChoice ? q.routeChoice.label.toUpperCase() + " \xB7 " : "") + Math.round(q.chapterProgress * 100) + "%", m("#chapter-progress").style.transform = "scaleX(" + (A ? Math.max(0, 1 - q.flightAge / q.flightDuration) : q.chapterProgress) + ")", mt.dataset.phase = A ? "cruise" : q.chapterPhase.id), m("#jump-caption").textContent = q.flight ? "THRUST" : q.chainReady && q.jumpChain === 2 ? "JUMP \xD73" : "JUMP", m("#touch-jump").setAttribute("aria-label", q.flight ? "Hold to climb; release to descend" : q.chainReady && q.jumpChain === 2 ? "Jump now for the grand somersault" : "Jump; press again in the air to somersault, or time jumps after landing for a triple jump"), m("#slide-caption").textContent = q.flight ? "COAST" : "SLIDE", m("#score").textContent = String(q.score).padStart(5, "0"), m("#time").textContent = cu(q.time), m("#pace").textContent = (q.speed / 315).toFixed(2) + "\xD7", m("#flow").textContent = window.LR_ENDLESS && q.mode !== "chapter" && q.procedural ? LR_ENDLESS.flowLabel(q) : q.flow > 3 ? "FLOW " + q.flow : "MARKET OPEN", m("#multiplier").classList.toggle("hidden", q.conviction <= 0), m("#effects").innerHTML = [q.shield ? "\u2766 HEDGED" : null, q.research > 0 ? "\u2315 RESEARCH " + Math.ceil(q.research) + "s" : null, q.conviction > 0 ? (q.mode === "chapter" ? "CONVICTION " : "2\xD7 ") + Math.ceil(q.conviction) + "s" : null].filter(Boolean).map((t) => '<span class="effect">' + t + "</span>").join("");
 }
 function BQ(e24, A, t, i, r, o = 0) {
   d.fillStyle = r, d.beginPath(), d.roundRect(e24, A, t, i, o), d.fill();
@@ -22926,13 +22960,18 @@ function vu(e24 = false) {
 }
 function Ku(e24) {
   const frameStart = performance.now();
+  // The film / opening call covers the game. Keep its clock aligned without
+  // drawing a full Pixi world behind an opaque presentation every frame.
+  if (b === "cutscene" || b === "home" && window.LR_BRIEFING?.inspect().active) {
+    au = e24; frameMeter.visible = false; requestAnimationFrame(Ku); return;
+  }
   let A = (e24 - au) / 1e3 || 0, t = Math.min(0.05, A);
   if (au = e24, QQ += t, (b === "playing" || b === "home") && (UA += t), b === "playing") {
     for (q.districtId && ut.update(t, q, gA), $i += t * (window.LR_FX ? LR_FX.ts(t) : 1); $i >= 1 / 120 && b === "playing"; ) ir = q.y, q.step(1 / 120, og.size > 0 || $t.has("ArrowDown") || $t.has("KeyS")), FD(), $i -= 1 / 120;
     q.sliding && !q.won ? (fe += t, Ar = 0, IQ += t, IQ > 0.045 && (Lt(q.x - 17, q.y - 3, "#b8ccd7", 2, true), IQ = 0)) : (RQ && (Ar = 0), Ar += t, fe = 0), RQ = q.sliding, e24 - gu > 100 && (Vu(), gu = e24);
   }
   if (b === "playing" || b === "home") {
-    rr += t, tr += t, ni >= 0 && b === "playing" && (ni += t, ni >= (window.LR_FINISH?.duration(q) ?? .95) && qQ()), Xt = Math.max(0, Xt - t / UD), _t >= 0 && (_t = q?.shield ? Math.min(hu, _t + t) : -1);
+    rr += t, tr += t, ni >= 0 && b === "playing" && (ni += t, ni >= (window.LR_FINISH?.duration(q) ?? .95) && completeRunPresentation()), Xt = Math.max(0, Xt - t / UD), _t >= 0 && (_t = q?.shield ? Math.min(hu, _t + t) : -1);
     for (let i of ze) i.age += t;
     ze = ze.filter((i) => i.age < i.life);
     for (let i of bt) i.x += i.vx * t, i.y += i.vy * t, i.vy += 160 * t, i.life -= t;

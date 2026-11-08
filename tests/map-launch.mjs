@@ -1,3 +1,4 @@
+import {skipOpeningCall} from './helpers/launch.mjs';
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {chromium} from 'playwright';
@@ -22,7 +23,7 @@ try {
     assert.equal(await page.evaluate(() => longRun.state), 'home', 'Browsing never launches a course');
     assert.equal(await page.locator('.map-player').getAttribute('data-motion'), 'idle', 'Browsing never gives a thumbs-up');
     const before = await page.locator('.map-player').boundingBox();
-    await page.locator('#start').click();
+    await page.locator('#start').click(); await skipOpeningCall(page);
     assert.equal(await page.evaluate(() => LR_TITLE_LAUNCH.state.active), true);
     await page.clock.runFor(700);
     assert.equal(await page.locator('.map-player').getAttribute('data-motion'), 'idle', 'Map keeps its normal idle during the title gesture');
@@ -53,31 +54,31 @@ try {
     await page.evaluate(() => Cu(false)); await page.clock.runFor(32);
   }
 
-  await page.locator('#start').click(); await page.clock.runFor(350);
+  await page.locator('#start').click(); await skipOpeningCall(page); await page.clock.runFor(350);
   await page.keyboard.press('Escape'); await page.clock.fastForward(2400);
   assert.equal(await page.evaluate(() => longRun.state), 'home', 'Escape cancels a pending launch');
   assert.equal(await page.evaluate(() => LR_TITLE_LAUNCH.state.active), false);
 
-  await page.locator('#start').click(); await page.clock.runFor(350);
+  await page.locator('#start').click(); await skipOpeningCall(page); await page.clock.runFor(350);
   await page.evaluate(() => LR_MENU.focusChapter('opening'));
   await page.clock.runFor(32); await page.clock.fastForward(3000);
   assert.equal(await page.evaluate(() => longRun.state), 'home', 'Retargeting cancels the previous launch');
   assert.equal(await page.evaluate(() => LR_MENU.state.selected), 'opening');
 
-  await page.locator('#start').click(); await page.clock.runFor(350);
+  await page.locator('#start').click(); await skipOpeningCall(page); await page.clock.runFor(350);
   await page.locator('[data-character="nicolai"]').click();
   await page.clock.runFor(32); await page.clock.fastForward(2400);
   assert.equal(await page.evaluate(() => longRun.state), 'home', 'Switching runner cancels the pending launch');
   assert.equal(await page.evaluate(() => LR_MENU.state.runner), 'nicolai');
 
-  await page.locator('#start').click(); await page.clock.runFor(100);
+  await page.locator('#start').click(); await skipOpeningCall(page); await page.clock.runFor(100);
   await page.locator('#mix').click(); await page.clock.runFor(32);
   await page.clock.fastForward(2400);
   assert.equal(await page.evaluate(() => longRun.state), 'home', 'Opening the mixer cancels the countdown');
   assert.equal(await page.evaluate(() => LR_TITLE_LAUNCH.state.active), false);
   await page.locator('#audio-done').click();
 
-  await page.locator('#start').click(); await page.clock.runFor(100);
+  await page.locator('#start').click(); await skipOpeningCall(page); await page.clock.runFor(100);
   await page.evaluate(() => {
     Object.defineProperty(document, 'hidden', {configurable: true, value: true});
     document.dispatchEvent(new Event('visibilitychange'));
@@ -88,20 +89,20 @@ try {
   await page.evaluate(() => {delete document.hidden; document.dispatchEvent(new Event('visibilitychange'));});
 
   await page.evaluate(() => {LR_CH.order.forEach(id => LR_CH.done(id)); LR_CH.paint();});
-  await page.locator('#start').click(); await page.clock.runFor(100);
+  await page.locator('#start').click(); await skipOpeningCall(page); await page.clock.runFor(100);
   await page.locator('[data-mode="endless"]').click(); await page.clock.runFor(32);
   await page.clock.fastForward(2400);
   assert.equal(await page.evaluate(() => longRun.state), 'home', 'Changing mode cancels the Story launch');
-  await page.locator('#start').click();
+  await page.locator('#start').click(); await skipOpeningCall(page);
   assert.equal(await page.evaluate(() => longRun.state), 'playing', 'Endless starts directly without the chapter gesture');
   await page.evaluate(() => Cu(false));
   await page.locator('[data-mode="chapter"]').click(); await page.clock.runFor(32);
 
-  await page.locator('#start').click(); await page.clock.runFor(100);
+  await page.locator('#start').click(); await skipOpeningCall(page); await page.clock.runFor(100);
   await page.emulateMedia({reducedMotion: 'reduce'}); await page.clock.runFor(32);
   assert.equal(await page.evaluate(() => longRun.state), 'playing', 'Live reduced motion completes the confirmed launch without delay');
   await page.evaluate(() => Cu(false)); await page.clock.runFor(32);
-  await page.locator('#start').click();
+  await page.locator('#start').click(); await skipOpeningCall(page);
   assert.equal(await page.evaluate(() => longRun.state), 'playing', 'Reduced motion starts directly');
   await page.close();
 
@@ -114,7 +115,7 @@ try {
   await mobile.waitForFunction(() => LR_MENU.state.selected === 'park' && !LR_MENU.state.moving);
   await mobile.emulateMedia({reducedMotion: 'no-preference'});
   await mobile.clock.install(); await mobile.clock.pauseAt(new Date(Date.now() + 100));
-  await mobile.locator('#start').tap(); await mobile.clock.runFor(700);
+  await mobile.locator('#start').tap(); await skipOpeningCall(mobile); await mobile.clock.runFor(700);
   assert.equal(await mobile.locator('.map-player').getAttribute('data-motion'), 'idle');
   assert.equal(await mobile.evaluate(() => LR_TITLE_LAUNCH.state.active),true);
   const marker = await mobile.locator('.map-player').boundingBox(), rail = await mobile.locator('#district-picker').boundingBox();

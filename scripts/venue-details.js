@@ -9,8 +9,7 @@
     {id:"opening", panel:4, key:"lei", rect:[440,622,168,108], path:"assets/venue-details-v111/lei.webp"},
     {id:"midtown", panel:1, key:"joju", rect:[454,596,203,126], path:"assets/venue-details-v111/joju.webp"},
     {id:"midtown", panel:1, key:"omars", rect:[1327,610,210,106], path:"assets/venue-details-v111/omars.webp"},
-    {id:"midtown", panel:2, key:"gussy", rect:[1075,607,232,115], path:"assets/venue-details-v111/gussy.webp"},
-    {id:"midtown", panel:3, key:"fifth", rect:[430,556,184,140], path:"assets/venue-details-v111/fifth.webp"}
+    {id:"midtown", panel:2, key:"gussy", rect:[1075,607,232,115], path:"assets/venue-details-v111/gussy.webp"}
   ];
   definitions.forEach(entry => { entry.image = new Image(); entry.image.src = entry.path; });
   const find = (id, panel) => definitions.find(entry => entry.id === id && entry.panel === panel);

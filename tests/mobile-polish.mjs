@@ -1,3 +1,4 @@
+import {skipOpeningCall} from './helpers/launch.mjs';
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
 import {mkdir,writeFile} from 'node:fs/promises';
@@ -26,7 +27,7 @@ try{
   }
   await page.screenshot({path:`${output}/story-${width}.png`});
   assert.equal(await page.evaluate(()=>longRun.performance.worldHeight),540,'Home framing stays unchanged');
-  await page.locator('#start').click();
+  await page.locator('#start').click(); await skipOpeningCall(page);
   await page.waitForFunction(()=>longRun.state==='playing');
   await page.evaluate(()=>{const next=requestAnimationFrame.bind(window);window.requestAnimationFrame=()=>0;return new Promise(next)});
   // Layout checks deliberately refresh the real mixer-owned page card after

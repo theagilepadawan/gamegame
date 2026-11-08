@@ -4,6 +4,33 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
+## Version 1.19 — A call, a commute and a change of shoes
+
+Nicolai's opening Story chapter begins with a short, colour conversation with
+Grete: the investment meeting has moved to a walk in Central Park. Players
+advance six lines or skip; the approved large title thumbs-up follows the call.
+Stationary painted portraits use small mouth and blink patches. Trond's launch,
+chapter browsing and Endless remain as before.
+
+Downtown now ends at a recessed green 6 train, reached through an angled iron
+station portal and a shallow stone approach. Feet and shadow follow the steps;
+foreground architecture hides the runner as he boards. A blended stone
+foundation connects the station to the existing street. Midtown has one 505
+entrance, exclusively at the finish, with its host at the right. Its background
+paintings and the other venues retain their placement and native assets.
+
+After the Midtown arrival, the supplied four-second running-shoe gift video
+plays before results. The encoded black top band is cropped out; all 121 frames
+remain. The silent film uses softly ducked Midtown music, with Skip, hidden-tab
+pause/resume and failure recovery. Both film and portraits are embedded offline.
+
+Title music now attempts direct media autoplay before creating a Web Audio
+graph. Where audible autoplay is permitted it begins without input. Where the
+browser blocks it, the sound control reads **TAP / Start music**; the first tap
+starts playback rather than muting. Saved mute and the user's volume persist.
+
+[Verification and implementation notes](docs/verification-v119.md).
+
 ## Version 1.18 — A personal send-off and a proper destination
 
 Confirming **Play** now gives the large title-screen character a relaxed
