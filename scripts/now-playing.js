@@ -1,5 +1,5 @@
-/* One title card per page / soundtrack change. Playback remains owned by the
-   existing mixer: this widget never starts, pauses or duplicates an audio track. */
+/* One title card per page / soundtrack change. A blocked title track gets an
+   explicit play button; the existing mixer still owns every media element. */
 (function () {
   "use strict";
   // Display titles supplied by the user. Audio files and playback stay intact.
@@ -19,12 +19,25 @@
   label.textContent = "Now playing"; title.id = "now-playing-title";
   copy.append(label, title); card.append(record, copy);
   document.querySelector("main").appendChild(card);
+  const start = document.createElement("button");
+  start.id = "start-music"; start.type = "button";
+  start.className = "now-playing music-start"; start.dataset.track = "title"; start.hidden = true;
+  start.setAttribute("aria-label", "Play opening music");
+  start.innerHTML = '<span class="music-record" aria-hidden="true"><svg viewBox="0 0 56 56" focusable="false"><circle cx="28" cy="28" r="23" fill="#163e55" stroke="#88bec4" stroke-width="1"/><circle cx="28" cy="28" r="18" fill="none" stroke="#bdd7cf" stroke-opacity=".22"/><path d="m23 18 15 10-15 10Z" fill="#f1d09a"/></svg></span><span class="music-copy"><span class="music-label">The soundtrack</span><strong>Play opening music</strong></span>';
+  start.onclick = () => {
+    if (!mixer || window.longRun?.state !== "home") return;
+    mixer.enabled = true;
+    if (mixer.musicVolume === 0) mixer.volumes(.72, mixer.fxVolume);
+    mixer.save(); revision++; hide(); mixer.init(); mixer.home(); mixer.reportPlayback();
+  };
+  document.querySelector("main").appendChild(start);
   function hide() { clearTimeout(timer); card.hidden = true; }
   function update() {
     if (!mixer) return;
+    start.hidden = window.longRun?.state !== "home" || !!document.querySelector("#splash") ||
+      !(mixer.autoplayBlocked || !mixer.enabled || mixer.musicVolume === 0);
     const key = mixer.activeMusic || mixer.track.__lrKey || "main";
-    const audio = mixer.activeMusic ? mixer.musicTracks[mixer.activeMusic] : mixer.track;
-    if (!mixer.enabled || mixer.musicVolume <= 0 || !mixer.playing || !audio || audio.paused || audio.ended) { hide(); return; }
+    if (!mixer.musicAudible) { hide(); return; }
     // Return from the Contrarian track merits another title for the main track.
     if (key !== current) { current = key; revision++; }
     const token = revision + ":" + key;
@@ -37,7 +50,7 @@
   }
   window.LR_MUSIC = {
     titles,
-    page: function () { revision++; hide(); },
+    page: function () { revision++; hide(); start.hidden = true; },
     attach: function (owner) {
       mixer = owner;
       for (const audio of [owner.track, ...Object.values(owner.musicTracks)]) {
@@ -53,4 +66,6 @@
       }
     }
   };
+  window.addEventListener("lr:audio-state", update);
+  window.addEventListener("lr:splash-ended", update);
 })();

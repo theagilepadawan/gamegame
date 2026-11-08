@@ -985,24 +985,29 @@ var ko = class {
     // HTMLAudio playback on a fresh page. Trusted input upgrades it in place.
     if (!this.ctx && navigator.userActivation?.hasBeenActive === false) return;
     if (!this.ctx) try {
-      this.ctx = new (window.AudioContext || window.webkitAudioContext)(), this.master = this.ctx.createGain(), this.music = this.ctx.createGain(), this.fx = this.ctx.createGain(), this.limiter = this.ctx.createDynamicsCompressor(), this.limiter.threshold.value = -3, this.limiter.knee.value = 3, this.limiter.ratio.value = 4, this.limiter.attack.value = 3e-3, this.limiter.release.value = 0.15, this.master.connect(this.limiter), this.limiter.connect(this.ctx.destination), this.music.connect(this.master), this.fx.connect(this.master), this.source = this.ctx.createMediaElementSource(this.track), this.source.connect(this.music), this.apply(true);
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)(), this.master = this.ctx.createGain(), this.music = this.ctx.createGain(), this.fx = this.ctx.createGain(), this.limiter = this.ctx.createDynamicsCompressor(), this.limiter.threshold.value = -3, this.limiter.knee.value = 3, this.limiter.ratio.value = 4, this.limiter.attack.value = 3e-3, this.limiter.release.value = 0.15, this.master.connect(this.limiter), this.limiter.connect(this.ctx.destination), this.music.connect(this.master), this.fx.connect(this.master), this.apply(true);
+      this.ctx.addEventListener("statechange", () => {
+        if (this.ctx.state === "running") { this.apply(true); this.syncMusic(); }
+        this.reportPlayback();
+      });
     } catch {
       this.ctx = null;
     }
-    if (this.ctx) this.track.volume = 1;
-    this.ctx?.state === "suspended" && this.ctx.resume().catch(() => {
-    });
+    // Mobile browsers can report "interrupted" after a phone/OS interruption.
+    if (this.ctx && this.ctx.state !== "running" && this.ctx.state !== "closed")
+      this.ctx.resume().then(() => this.reportPlayback()).catch(() => this.reportPlayback());
   }
   apply(A = false) {
     let t = this.scene === "results" ? 0.32 : 1, i = this.musicVolume * t * (this.ducked ? 0.22 : 1);
     if (this.ctx) {
       let r = this.ctx.currentTime;
       for (let [o, s] of [[this.master, this.enabled ? 1 : 0], [this.music, i], [this.fx, this.fxVolume]]) o.gain.cancelScheduledValues(r), A ? o.gain.setValueAtTime(s, r) : o.gain.setTargetAtTime(s, r, 0.09);
-    } else {
-      this.track.volume = this.enabled ? i : 0;
-      for (let [r, o] of Object.entries(this.musicTracks)) o.volume = this.enabled ? i * (this.musicLevels[r] ?? 1) : 0;
-      for (let r of Object.values(this.clips)) r.volume = this.enabled ? this.fxVolume : 0;
     }
+    // Direct media remains audible until the Web Audio context actually runs.
+    // Once routed, volume belongs to the graph; never attenuate it twice.
+    this.track.volume = this.source ? 1 : this.enabled ? i : 0;
+    for (let [r, o] of Object.entries(this.musicTracks)) o.volume = this.musicSources[r] ? 1 : this.enabled ? i * (this.musicLevels[r] ?? 1) : 0;
+    for (let [r, o] of Object.entries(this.clips)) o.volume = this.clipSources[r] ? 1 : this.enabled ? this.fxVolume : 0;
   }
   get playing() {
     return this.scene === "playing" || this.scene === "results" || (this.scene === "cutscene" && !document.hidden) || (this.scene === "home" && this.activeMusic === "title" && !document.hidden);
@@ -1010,12 +1015,26 @@ var ko = class {
   wantedMusic(A) {
     return this.enabled && this.playing && (this.activeMusic ? !this.musicEnded && A === this.musicTracks[this.activeMusic] : A === this.track);
   }
+  routed(A) {
+    return A === this.track ? !!this.source : Object.entries(this.musicTracks).some(([id, track]) => track === A && !!this.musicSources[id]);
+  }
+  get musicAudible() {
+    const track = this.activeMusic ? this.musicTracks[this.activeMusic] : this.track;
+    return !!(track && this.wantedMusic(track) && this.musicVolume > 0 && !track.paused && !track.ended && !track.muted && (!this.routed(track) || this.ctx?.state === "running"));
+  }
+  reportPlayback() {
+    const track = this.activeMusic ? this.musicTracks[this.activeMusic] : this.track;
+    if (track && this.wantedMusic(track) && !track.paused) {
+      this.autoplayBlocked = this.routed(track) && this.ctx?.state !== "running";
+      this.error = this.autoplayBlocked ? "Tap to resume music." : null;
+    }
+    window.dispatchEvent(new Event("lr:audio-state"));
+  }
   requestPlay(A, t) {
     try {
       Promise.resolve(A.play()).then(() => {
         if (!t()) { A.pause(); return; }
-        this.autoplayBlocked = false; this.error = null;
-        window.dispatchEvent(new Event("lr:audio-state"));
+        this.reportPlayback();
       }).catch(error => {
         if (!t()) return;
         this.autoplayBlocked = error.name === "NotAllowedError";
@@ -1030,7 +1049,10 @@ var ko = class {
     let A = this.activeMusic ? this.musicTracks[this.activeMusic] : this.track;
     for (let t of [this.track, ...Object.values(this.musicTracks)]) (t !== A || !this.wantedMusic(t)) && t.pause();
     if (A && this.wantedMusic(A)) {
-      if (this.ctx && this.activeMusic && !this.musicSources[this.activeMusic]) try {
+      if (this.ctx?.state === "running" && A === this.track && !this.source) {
+        this.source = this.ctx.createMediaElementSource(A); this.source.connect(this.music); A.volume = 1;
+      }
+      if (this.ctx?.state === "running" && this.activeMusic && !this.musicSources[this.activeMusic]) try {
         let t = this.ctx.createMediaElementSource(A), i = this.ctx.createGain();
         A.volume = 1;
         i.gain.setValueAtTime(this.musicLevels[this.activeMusic] ?? 1, this.ctx.currentTime), t.connect(i), i.connect(this.music), this.musicSources[this.activeMusic] = t, this.musicFaders[this.activeMusic] = i;
@@ -1087,7 +1109,7 @@ var ko = class {
     if (!(!t || !this.enabled || !this.playing)) {
       this.stopClips();
       try {
-        this.ctx && !this.clipSources[A] && (this.clipSources[A] = this.ctx.createMediaElementSource(t), t.volume = 1, this.clipSources[A].connect(this.fx)), t.currentTime = 0, this.activeClip = t, this.ducked = true, this.apply(), Promise.resolve(t.play()).then(() => {
+        this.ctx?.state === "running" && !this.clipSources[A] && (this.clipSources[A] = this.ctx.createMediaElementSource(t), t.volume = 1, this.clipSources[A].connect(this.fx)), t.currentTime = 0, this.activeClip = t, this.ducked = true, this.apply(), Promise.resolve(t.play()).then(() => {
           (this.activeClip !== t || !this.enabled || !this.playing) && t.pause();
         }).catch(() => {
           this.activeClip === t && (this.activeClip = null, this.ducked = false, this.apply());
@@ -1126,7 +1148,7 @@ var ko = class {
     if (!this.enabled || document.hidden) return;
     this.scene = "home";
     if (this.activeMusic === "title") {
-      if (this.musicTracks.title.paused || this.ctx?.state === "suspended" || !this.ctx && navigator.userActivation?.hasBeenActive) {
+      if (this.musicTracks.title.paused || this.ctx && this.ctx.state !== "running" || !this.ctx && navigator.userActivation?.hasBeenActive) {
         this.init(); this.apply(); this.syncMusic();
       }
       return;
@@ -22515,11 +22537,15 @@ uQ();
 function beginTitleMusic() { if (b === "home") SA.home(); }
 window.addEventListener("load", () => { if (!m("#splash")) beginTitleMusic(); }, { once: true });
 window.addEventListener("lr:splash-ended", () => { window.LR_MUSIC?.page("home"); beginTitleMusic(); }, { once: true });
-document.addEventListener("pointerdown", (event) => {
-  if (!event.target.closest("#sound")) beginTitleMusic();
-}, { passive: true });
+function titleMusicGesture(event) {
+  if (!event.target.closest("#sound, #start-music")) beginTitleMusic();
+}
+// A touch pointerdown is not an activation gesture. Touch release/click must
+// reach the mixer synchronously, even when a map or dialog consumes the event.
+for (const type of ["pointerup", "touchend", "click"])
+  document.addEventListener(type, titleMusicGesture, {capture: true, passive: true});
 document.addEventListener("keydown", (event) => {
-  if (!event.repeat && !event.altKey && !event.ctrlKey && !event.metaKey && event.key !== "Escape" && !event.target.closest("#sound")) beginTitleMusic();
+  if (!event.repeat && !event.altKey && !event.ctrlKey && !event.metaKey && event.key !== "Escape" && !event.target.closest("#sound, #start-music")) beginTitleMusic();
 }, { capture: true });
 m("#fullscreen").onclick = () => {
   document.fullscreenElement ? document.exitFullscreen().catch(() => {

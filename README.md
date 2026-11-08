@@ -4,6 +4,18 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
+## Version 1.19.1 — Opening music on the first touch
+
+Title music starts automatically where the browser allows audible autoplay.
+Otherwise a clear **Play opening music** control appears, and the first ordinary
+title-screen touch or key starts the track. Touch release is now handled, fixing
+the case where a second tap was needed. A suspended audio context no longer
+silences direct media or reports playback as audible. Saved mute and volume
+remain in effect until the player explicitly enables music.
+
+Fresh browser profiles can still require a real user gesture; the game cannot
+override that policy. [Audio verification](docs/verification-v1191.md).
+
 ## Version 1.19 — A call, a commute and a change of shoes
 
 Nicolai's opening Story chapter begins with a short, colour conversation with

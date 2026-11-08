@@ -4,6 +4,10 @@ This folder is a working brief for a fresh ChatGPT agent using the user's Runway
 
 Start with the packaged game and its current art. The user has invested heavily in character likeness, natural scenery placement and animation quality. Preserve those decisions while adding a small number of short, polished cinematic moments.
 
+The included 1.19.1 patch improves first-touch title music and makes blocked
+autoplay visible. See `game/docs/verification-v1191.md`; do not remove the
+browser-gesture fallback or route media through a suspended audio context.
+
 ## Open these first
 
 1. `HANDOFF-METADATA.json` — check `playableIncluded`. If true, open `playable/The-Long-Run-NBIM.html`. If false, follow `playable/BUILD-AND-PLAY.md` to recreate the exact verified HTML, or run the editable game locally.

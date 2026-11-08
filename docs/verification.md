@@ -1,13 +1,15 @@
-# Version 1.19 — Story call, gift film and subway finish
+# Version 1.19.1 — Opening music startup
 
-See [the current verification record](verification-v119.md) for behavior,
-art/video provenance, browser checks and delivery checks.
+See [the audio verification record](verification-v1191.md) for this patch.
+The [version 1.19 record](verification-v119.md) covers the retained artwork,
+film, story sequence and finish structures.
 
 The opening Grete/Nicolai call leads into the approved title thumbs-up. Downtown
 ends at a recessed 6 train with a grounded approach. Midtown has one 505 entrance
 at its finish, followed by the cropped user-supplied gift film before results.
-Title music attempts autoplay directly and reports the browser's first-tap
-requirement truthfully when applicable.
+Title music attempts autoplay directly. When the browser requires a gesture,
+the first ordinary touch release starts it and a clear optional play control
+appears. Suspended audio is not reported as audible.
 
 The current city paintings, camera, remaining Easter-egg positions, gameplay
 sprites, Story/Endless progression and original source assets are retained.

@@ -34,7 +34,7 @@ try{
   // freezing rendering; five-second expiry is exercised in story-polish.mjs.
   await page.evaluate(()=>{LR_MUSIC.page('layout-check');SA.play()});
   await page.locator('#now-playing').waitFor({state:'visible'});
-  assert.equal(await page.locator('.music-label').innerText(),'NOW PLAYING');
+  assert.equal(await page.locator('#now-playing .music-label').innerText(),'NOW PLAYING');
   assert.equal(await page.locator('#now-playing-title').innerText(),'Diversified Ballad');
   item.performance=await page.evaluate(()=>longRun.performance);
   assert.equal(item.performance.worldHeight,504);assert.equal(item.performance.mobileZoom,1.071);
@@ -44,7 +44,7 @@ try{
   for(const selector of ['.hud','#touch-jump','#touch-slide','#chapter-strip']){
    const box=await page.locator(selector).boundingBox();assert.ok(!overlap(card,box),`Music card clears ${selector}`);
   }
-  assert.ok(await page.locator('.music-record svg').isVisible(),'Crisp record illustration is present');
+  assert.ok(await page.locator('#now-playing .music-record svg').isVisible(),'Crisp record illustration is present');
   assert.ok(await page.locator('#now-playing-title').evaluate(n=>parseFloat(getComputedStyle(n).fontSize))>=12,'Song remains legible');
   await page.evaluate(()=>{vu();});await page.waitForTimeout(450);
   await page.screenshot({path:`${output}/park-music-${width}.png`});

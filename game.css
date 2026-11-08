@@ -907,6 +907,20 @@ input,textarea,[contenteditable]{-webkit-user-select:text;user-select:text;-webk
 }
 @media(prefers-reduced-motion:reduce){.now-playing,.record-disc,.now-playing::after{animation:none}.now-playing::after{display:none}}
 
+/* Autoplay-denied music remains a clear, optional action on the title page. */
+.now-playing.music-start{animation:none;pointer-events:auto;cursor:pointer;text-align:left;opacity:1;transform:none;min-height:56px}
+.music-start::after{display:none}
+.music-start strong{font-size:13px;line-height:1.35;font-weight:600;white-space:normal}
+.music-start:hover{border-color:#e4cb9c;background:linear-gradient(120deg,#194358f5,#082345f5)}
+.music-start:focus-visible{outline:2px solid #f1d09a;outline-offset:4px}
+@media(pointer:coarse){.music-start strong{font-size:12px}}
+@media(max-height:420px) and (orientation:landscape){
+ .stage:not(.playing) .music-start{top:auto;bottom:max(1px,env(safe-area-inset-bottom));min-height:30px;padding:3px 9px;gap:6px}
+ .music-start .music-record{flex-basis:22px;width:22px;height:22px}
+ .music-start .music-label{display:none}
+ .music-start strong{font-size:11px}
+}
+
 /* The original film is cropped in the asset; show its entire remaining frame. */
 .chapter-film{position:fixed;inset:0;max-width:none;max-height:none;width:100%;height:100%;margin:0;padding:0;border:0;border-radius:0;overflow:hidden;background:#061c30;color:#f5f2eb;font-family:var(--sans)}
 .chapter-film[open]{display:grid;place-items:center}
