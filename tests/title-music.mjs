@@ -44,7 +44,7 @@ try {
   try {
     await page.waitForFunction(() => longRun.state === 'playing' && !SA.track.paused);
   } catch (error) {
-    console.error('Chapter audio state', await page.evaluate(() => ({state: longRun.state, scene: SA.scene, active: SA.activeMusic, key: SA.track.__lrKey, paused: SA.track.paused, ready: SA.track.readyState, error: SA.error, context: SA.ctx?.state, hidden: document.hidden, launch: LR_MENU.state.launching})));
+    console.error('Chapter audio state', await page.evaluate(() => ({state: longRun.state, scene: SA.scene, active: SA.activeMusic, key: SA.track.__lrKey, paused: SA.track.paused, ready: SA.track.readyState, error: SA.error, context: SA.ctx?.state, hidden: document.hidden, launch: LR_TITLE_LAUNCH.state.active})));
     throw error;
   }
   assert.equal(await page.evaluate(() => SA.musicTracks.title.paused && SA.activeMusic === null && SA.track.__lrKey === 'midtown'), true, 'Chapter soundtrack replaces title music');

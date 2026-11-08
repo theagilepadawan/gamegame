@@ -46,9 +46,8 @@ def source_input_manifest(source_root):
     assets = runtime | {item["path"] for item in json.loads((source_root / "assets-manifest.json").read_text())}
     # The source atlas accompanies the runtime sprites in the editable handoff.
     for folder in {Path(relative).parent for relative in runtime}:
-        atlas = folder / "atlas-native.png"
-        if (source_root / atlas).is_file():
-            assets.add(atlas.as_posix())
+        for native in (source_root / folder).glob("*-native.png"):
+            assets.add(native.relative_to(source_root).as_posix())
     paths = {"build.mjs", "index.html", "game.css", "assets-manifest.json", *assets,
              *(path.relative_to(source_root).as_posix() for path in scripts)}
     return [{"path": relative, "bytes": (source_root / relative).stat().st_size,

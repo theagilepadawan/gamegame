@@ -1,6 +1,15 @@
 # Latest user direction
 
-## Current authority: version 1.15 (art continues from 1.13)
+## Current authority: version 1.18
+
+The large title character gives the launch thumbs-up; the map figure only runs
+between chapters. The title face and body remain from the original sprite.
+The user will provide a voice clip later. `longrun:launch-cue` is the hook; do
+not fabricate a recording. All three chapters now end inside painted entrances.
+Read `game/docs/finish-and-launch-v118.md` for the arrival sequence and sources.
+Preserve these timings when integrating external cinematics and the shoe scene.
+
+## Retained city direction (art continues from 1.13)
 
 Downtown keeps the accepted v1.12 warm street restoration. Midtown now also
 uses the original complete warm skyline, Bryant Park/library and Fifth Avenue

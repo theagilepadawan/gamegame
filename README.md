@@ -4,6 +4,22 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
+## Version 1.18 — A personal send-off and a proper destination
+
+Confirming **Play** now gives the large title-screen character a relaxed
+thumbs-up, held for two seconds before departure. Their original face, outfit,
+body and shoes are preserved. The map keeps its familiar travel animation.
+A voice-cue hook is ready for the user's forthcoming recording.
+
+Three new detailed entrances complete the chapters: the Listing Bell pavilion,
+Midtown's blue-lit 505 FIFTH entrance with its welcoming host, and Central Park's
+Long View arcade. Each stands at the far right of the course.
+The runner enters the structure and passes behind its stonework before results.
+Mid-air arrivals land naturally. Reduced motion skips the decorative movement.
+The warm scenery, venue placement, soundtrack and existing progression remain.
+
+[Research, art direction and integration notes](docs/finish-and-launch-v118.md).
+
 ## Version 1.17 — Ready to run
 
 Both map figures are 12.5% larger. Browsing keeps the familiar run between

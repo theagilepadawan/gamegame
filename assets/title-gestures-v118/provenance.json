@@ -1,0 +1,39 @@
+{
+  "version": "1.18.0",
+  "created": "2026-11-08",
+  "method": "image_gen; lossless format conversion only",
+  "images": [
+    {
+      "filename": "nicolai-native.png",
+      "bytes": 1681627,
+      "sha256": "07fd1651bf76d9ab3c8cd75214f1622d5999e8c63cc900482df5d48f2c5242b0",
+      "width": 1536,
+      "height": 1024,
+      "role": "original generated master"
+    },
+    {
+      "filename": "nicolai.webp",
+      "bytes": 564424,
+      "sha256": "89b6a89ba90fe135d1e0b43d7226e97e12e499d30ef6a10a0185479c04a11291",
+      "width": 1536,
+      "height": 1024,
+      "role": "lossless native-resolution runtime image"
+    },
+    {
+      "filename": "trond-native.png",
+      "bytes": 1547208,
+      "sha256": "a909f0f9710732837385a4b17639800bcb46e1d67c1d77b42c606328d82e2a4f",
+      "width": 1536,
+      "height": 1024,
+      "role": "original generated master"
+    },
+    {
+      "filename": "trond.webp",
+      "bytes": 504468,
+      "sha256": "3030631c07ea644195e12940c879b8be5df2dff208057395abb8df303ebddf2f",
+      "width": 1536,
+      "height": 1024,
+      "role": "lossless native-resolution runtime image"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "version": "1.18.0",
+  "created": "2026-11-08",
+  "method": "image_gen; lossless format conversion only",
+  "images": [
+    {
+      "filename": "midtown-native.png",
+      "bytes": 2323153,
+      "sha256": "32fc013c439f5ad40aec4be9402605f9c8410bcc327632534e48d77fa092fd9f",
+      "width": 1536,
+      "height": 1024,
+      "role": "original generated master"
+    },
+    {
+      "filename": "midtown.webp",
+      "bytes": 1555436,
+      "sha256": "59737e0710a29dc14f9f93edc3272614ebf90a0ceacc99d3e256f208fb294f22",
+      "width": 1536,
+      "height": 1024,
+      "role": "lossless native-resolution runtime image"
+    },
+    {
+      "filename": "opening-native.png",
+      "bytes": 2416103,
+      "sha256": "b119a4a89822f26f3ba0a5fe49b56c3bf188f47bc8c41093dc8f50b22247cd10",
+      "width": 1536,
+      "height": 1024,
+      "role": "original generated master"
+    },
+    {
+      "filename": "opening.webp",
+      "bytes": 1401208,
+      "sha256": "a303387d0c6f49e47835abbbcb0447f1751527667f2edeb21ae35dcccf387bcb",
+      "width": 1536,
+      "height": 1024,
+      "role": "lossless native-resolution runtime image"
+    },
+    {
+      "filename": "park-native.png",
+      "bytes": 2956607,
+      "sha256": "8308f310e6b9270a7b624e718f8a697d0bedfe275bbec5e62a6cd3d8ce77db2d",
+      "width": 1536,
+      "height": 1024,
+      "role": "original generated master"
+    },
+    {
+      "filename": "park.webp",
+      "bytes": 1953840,
+      "sha256": "4928e7961d87ac0e55e5af0cc463b91804bb289da31e0bbc9580a70b97f30f3e",
+      "width": 1536,
+      "height": 1024,
+      "role": "lossless native-resolution runtime image"
+    }
+  ],
+  "midtownReference": "Existing approved 505 FIFTH blue/cyan glass entrance in assets/venue-details-v111/fifth.webp; user requested an angled office entrance with the existing woman at the far right."
+}

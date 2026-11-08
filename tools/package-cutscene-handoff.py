@@ -208,9 +208,8 @@ for relative_folder in active_folders:
         target.write_text(json.dumps(data, indent=2) + '\n')
     # Native atlas accompanies extracted runtime cells for art production. It is
     # source material, not another runtime asset or a claim of higher resolution.
-    atlas = folder_root / 'atlas-native.png'
-    if atlas.is_file():
-        copy(atlas, game / relative_folder / atlas.name)
+    for native in folder_root.glob('*-native.png'):
+        copy(native, game / relative_folder / native.name)
     # The chapter-map strips have native crop/frame registration notes. Keep
     # the active asset's authoring notes with its bytes for the next agent.
     notes = folder_root / 'README.md'
@@ -337,7 +336,11 @@ captures = {
     'midtown-gameplay.png': 'release/Midtown-v113-street.png',
     'office-gameplay.png': 'release/Midtown-v113-office.png',
     'finance-guidance-gameplay.png': 'release/Midtown-v113-guidance.png',
-    'chapter-map-characters.png': 'release/Map-v111-characters.png',
+    'chapter-map-and-title-sendoff.png': 'release/Nicolai-v118-title-sendoff.png',
+    'opening-finish-entrance.png': 'release/Opening-v118-entrance.png',
+    'midtown-finish-entrance.png': 'release/Midtown-v118-entrance.png',
+    'park-finish-entrance.png': 'release/Park-v118-entrance.png',
+    'midtown-finish-mobile.png': 'release/Midtown-v118-mobile-entrance.png',
 }
 for name, relative in captures.items():
     p = ROOT / relative

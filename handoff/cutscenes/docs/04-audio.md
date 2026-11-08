@@ -54,3 +54,11 @@ as **Why talking to people is a superpower x Mellow Lounge** (version 1.17),
 with the full name wrapping on phones. The title recording loops at 0.72 gain
 relative to the chapter music and enters over 500 ms. It stops before a run;
 the normal chapter and exclusive Contrarian soundtrack logic still applies.
+
+## Title send-off cue (version 1.18)
+
+The user plans to supply a short voice clip for the title character's launch
+gesture. No such clip has been added yet. `longrun:launch-cue` dispatches
+`{runner, duration:2000}` on confirmation. Add the eventual recording through the
+existing mixer, preserving mute, cancellation and exclusive scene playback.
+The title song continues during the gesture and switches when the chapter starts.

@@ -1,39 +1,43 @@
-# Release verification — Map launch and title music, version 1.17
+# Release verification — Title send-off and chapter entrances, version 1.18
 
 ## Current changes
 
-Map miniatures are 12.5% larger (`.32` to `.36` of map height). Their existing
-idle/run strips and the illustrated Manhattan are unchanged. New three-frame
-gesture strips match both approved runners and share a common scale/origin
-within each row. Confirming Play finishes an in-progress trip, raises the thumb
-over 250 ms, holds it until two seconds, then starts the chapter. There is no
-lowering frame, extra text, voice or repeated gesture during browsing.
+The two-second thumbs-up belongs to the large title-screen character. The
+original title face, legs, outfit and chapter footwear are retained; a small
+registered arm region supplies the gesture. The map retains its existing larger
+figure and travel behavior. The current title soundtrack and Now playing card
+are unchanged. No voice clip has been supplied for the gesture yet.
 
-Repeated confirmation cannot queue duplicate runs. Escape, a different course,
-runner or mode, opening a dialog, or hiding the tab cancels the pending launch.
-Reduced motion starts directly, including when enabled during the gesture.
-Unavailable gesture art also falls back to starting directly. Mobile fullscreen
-and AudioContext activation remain inside the original user input handler.
+All three exits sit at the far right. Midtown uses the full blue/cyan 505 FIFTH
+frontage, both revolving doors and the existing woman on the right pavement.
+Three new 1536 × 1024 transparent entrance paintings use native-resolution
+lossless WebPs. The title character and gameplay runner retain their original
+scale. Existing backgrounds, cameras, venue placement and obstacle art remain.
+The actual finish event starts a short run through the entrance. An airborne
+arrival lands before disappearing behind its near pier. Results preserve the
+history reveal, chapter progression, character unlock and Next chapter default.
+Reduced motion skips the run-in. Endless receives no chapter exit.
 
-The title screen uses the user's byte-identical MP3, **Why talking to people is
-a superpower x Mellow Lounge** (72.912 seconds, stereo, 48 kHz). It loops through
-the existing mixer at 0.72 relative gain, with a 500 ms fade-in. Autoplay is
-attempted after the splash; browsers requiring interaction resume on the first
-menu input. Course/runner changes do not restart it. Mute/volume settings apply,
-hidden tabs pause it, and level/Contrarian music have exclusive playback.
-The five-second title card wraps the full name and clears Play on small screens.
+## Verification for this release
 
-## Current verification
+- `map-launch`: both title gestures, pixel-identical original heads and legs,
+  unchanged map registration, two-second timing, no lowering, duplicate presses,
+  Escape, selection changes, dialog/tab cancellation, reduced motion and touch.
+- `finish-gates`: actual final-second model completion in all three chapters
+  with both runners; airborne arrivals, monotonic entry, exact floor baseline,
+  foreground occlusion, pause/resume, boss requirement and chapter progression.
+- `finish-mobile`: all three gates in a 568 × 320 touch viewport at DPR2,
+  doorway fit and grounding, both Pixi compositing and Canvas fallback.
+- Original source integrity: all 40 baseline SHA-256 values remain unchanged.
 
-The standalone release is tested with `map-avatars`, `map-launch`, `menu`,
-`title-music`, `story-polish`, `runner-unlock` and `standalone`. Checks cover
-both runners, actual gesture frames, planted marker bounds, the timed launch,
-cancellation and repeat input, reduced motion, compact touch fit, navigation,
-existing unlock behavior, strict autoplay-policy recovery, saved mute, volume,
-track changes, and offline playback. No gameplay camera, terrain, obstacle art,
-or progression rules change in this release. All 40 baseline assets retain
-their original SHA-256 checksums. Browser tests do not substitute for real-device
-audio/autoplay and performance review.
+The wider standalone regression results are recorded in
+`docs/verification-v118.md`. Browser checks and inspected captures cover the
+rendered output; physical-device performance and subjective animation approval
+remain separate from those checks.
+
+The research, source links, asset registrations and voice hook are documented
+in `docs/finish-and-launch-v118.md`. Native masters are included in the source
+handoff. The self-contained playable HTML embeds all required runtime assets.
 
 ## Retained version 1.16 evidence
 

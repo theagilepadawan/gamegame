@@ -6,7 +6,7 @@
   image.src = "assets/office-host-v14/host.webp";
   var NATIVE_W = 1024, NATIVE_H = 1536, BODY_H = 1500;
   var FOOT_X = 450, FOOT_Y = 1517;
-  var states = new WeakMap(), fallback = { start: null };
+  var states = new WeakMap(), entranceStates = new WeakMap(), fallback = { start: null };
   var last = { visible: false, angle: 0 };
 
   function ready() { return image.complete && image.naturalWidth > 0; }
@@ -19,11 +19,12 @@
       visible: host.x > -host.height * .4 && host.x < width + host.height * .4,
       fullyVisible: host.x > host.height * .4 && host.x < width - host.height * .4 };
   }
-  function pose(run, time, host, reduced) {
+  function pose(run, time, host, reduced, pool) {
+    pool = pool || states;
     var state = fallback;
     if (run && typeof run === "object") {
-      state = states.get(run);
-      if (!state) { state = { start: null }; states.set(run, state); }
+      state = pool.get(run);
+      if (!state) { state = { start: null }; pool.set(run, state); }
     }
     // One small, eased wrist greeting. Head, torso and both feet never shift.
     // The run clock stops with pause; reduced motion holds the original pose.
@@ -76,6 +77,10 @@
   window.LR_OFFICE_HOST = {
     images: [image],
     get ready() { return ready(); },
+    drawEntrance: function (ctx, host, time, reduced, run) {
+      if (!ready() || !host.visible) return;
+      paint(ctx, host, pose(run, time, host, reduced, entranceStates));
+    },
     draw2d: function (ctx, id, distance, width, height, time, reduced, run, cameraY, view) {
       var clock = run && typeof run.chapterTime === "number" ? run.chapterTime : time;
       var current = frame(id, distance, width, height, clock, reduced, run, cameraY, view);

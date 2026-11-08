@@ -720,7 +720,7 @@ var hi = class {
       this.beginFlight({ kind: "cruise" });
       return;
     }
-    this.flight && this.flightKind === "ipo" && this.bossProgress === 3 && this.chapterTime >= Oe && this.endFlight(), this.chapterTime >= Ri && this.bossProgress === 3 && !this.flight && !this.flightLanding && this.grounded && (this.won = true, this.slideRecoverAge = -1, this.resetJumpChain(), this.bonus += 1e3, this.emit("won"));
+    this.flight && this.flightKind === "ipo" && this.bossProgress === 3 && this.chapterTime >= Oe && this.endFlight(), this.chapterTime >= Ri && this.bossProgress === 3 && !this.flight && !this.flightLanding && (this.grounded || window.LR_FINISH?.ready(this)) && (this.won = true, this.slideRecoverAge = -1, this.resetJumpChain(), this.bonus += 1e3, this.emit("won"));
   }
   step(A, t = false) {
     if (this.mode === "chapter" && !this.contrarian && !this.transfer) {
@@ -1693,7 +1693,7 @@ var yo = class extends hi {
         let l = Math.abs(g.x - this.x) < (g.kind === "birds" ? 135 : 55), E = this.grounded && this.support === null, I = g.kind === "puddle" && E && this.x >= g.x && this.x <= g.x + g.w;
         (I || l && (g.kind === "birds" || g.kind === "sign")) && (g.triggered = true, g.age = 0, this.emit("worldReaction", { kind: g.kind, id: g.id, x: I ? this.x : g.x, y: I ? this.y : g.y }));
       }
-      this.obstacles = this.obstacles.filter((g) => g.x + g.w > -120), this.pickups = this.pickups.filter((g) => g.x > -120 && !g.taken), this.platforms = this.platforms.filter((g) => g.x + g.w > -160), this.worldItems = this.worldItems.filter((g) => g.x + (g.w || 100) > -200), this.chapterTime >= this.district.duration && this.grounded && !this.flight && !this.flightLanding && (this.won = true, this.slideRecoverAge = -1, this.resetJumpChain(), this.bonus += 1e3, this.emit("won", { districtId: this.districtId }));
+      this.obstacles = this.obstacles.filter((g) => g.x + g.w > -120), this.pickups = this.pickups.filter((g) => g.x > -120 && !g.taken), this.platforms = this.platforms.filter((g) => g.x + g.w > -160), this.worldItems = this.worldItems.filter((g) => g.x + (g.w || 100) > -200), this.chapterTime >= this.district.duration && !this.flight && !this.flightLanding && (this.grounded || window.LR_FINISH?.ready(this)) && (this.won = true, this.slideRecoverAge = -1, this.resetJumpChain(), this.bonus += 1e3, this.emit("won", { districtId: this.districtId }));
     }
   }
 };
@@ -2033,6 +2033,7 @@ var wo = class {
     o.restore();
   }
   finish(A, t, i, r, o) {
+    if (window.LR_FINISH?.ready(i)) return;
     let s = this.c, n = i.districtId === "park";
     if (s.save(), s.translate(A, t), n) {
       for (let l of [-91, 75]) {
@@ -22330,6 +22331,7 @@ function KD(e24) {
   } else e24 === "diversification" ? (CA(330, 0.24, "triangle", 0.022, 660), CA(990, 0.16, "sine", 0.012)) : e24 === "research" ? (CA(620, 0.2, "sine", 0.024, 1240), CA(930, 0.12, "sine", 0.013)) : e24 === "conviction" && (CA(196, 0.25, "triangle", 0.023, 294), CA(392, 0.22, "sine", 0.016));
 }
 function mD() {
+  window.LR_FINISH?.begin(q);
   if (De(), ni = 0, m("#event").classList.remove("show"), m("#ticker-text").textContent = q.districtId === "park" ? "The best returns sometimes come with a view." : q.districtId === "midtown" ? "Built for the long run." : "Hype is temporary. The horizon is long.", CA(523, 0.55, "sine", 0.03), CA(784, 0.7, "sine", 0.02), CA(1046, 0.85, "sine", 0.012), !gA) for (let e24 = 0; e24 < 30; e24++) bt.push({ x: q.x + (Math.random() - 0.5) * 110, y: q.y - 105 - Math.random() * 85, vx: (Math.random() - 0.5) * 120, vy: -45 - Math.random() * 150, life: 0.8 + Math.random() * 0.5, color: ["#eac98a", "#9fdec8", "#fff0c5"][e24 % 3], size: 3 });
 }
 async function qu() {
@@ -22347,9 +22349,9 @@ function De() {
 function confirmMenuRun() {
   if (b !== "home" || !_i || window.LR_RUN && LR_RUN.previewing()) return;
   const mode = zA;
-  if (mode === "chapter" && window.LR_MENU?.launch(() => Ko(mode))) {
+  if (mode === "chapter" && window.LR_TITLE_LAUNCH?.launch(() => Ko(mode))) {
     // Keep fullscreen / audio permission inside the initiating user gesture;
-    // the actual run begins after the map runner's brief thumbs-up.
+    // the actual run begins after the title character's brief thumbs-up.
     gg.matches && qu();
     vD();
     return;
@@ -22666,7 +22668,7 @@ function yD(e24) {
   for (let A of q.springs) OD(A, e24);
   for (let A of q.obstacles) A.type !== "gap" && Qu(A, e24);
   for (let A of q.priceWaves || []) At.priceTree(A, UA, gA);
-  if (q.mode === "chapter" && q.chapterPhase.id === "landing") {
+  if (q.mode === "chapter" && q.chapterPhase.id === "landing" && !window.LR_FINISH?.ready(q)) {
     let A = q.x + Math.max(0, Ri - q.chapterTime) * 360;
     A < eA + 120 && At.listingBell(A, q.floorY, gA ? 0 : UA, q.won);
   }
@@ -22811,12 +22813,13 @@ function XD(e24, A, t) {
 function ig(e24, A, t) {
   if (!q || b === "home" || !q.shield && Xt <= 0) return;
   let i = A === "recover", r = i && q.slideRecoverAge >= 0.04 && q.slideRecoverAge < wt, o = A === "superjump" ? "grand" : A === "flip" ? "ball" : r ? "roll" : A === "slide" || i ? "low" : "stand", s = i ? xe((q.slideRecoverAge - wt) / (Rr - wt)) : 0, n = Xt > 0 || _t < 0 ? 1 : Math.min(1, _t / hu);
-  d.save(), d.scale(t / 0.34, t / 0.34), At.shield(0, 0, gA ? 0 : UA, Xt, { layer: e24, activation: n, shape: o, character: PA, action: A, recoveryProgress: s, reduced: gA }), d.restore();
+  d.save(), q.won && (d.globalAlpha *= Math.max(0, 1 - ni / .25)), d.scale(t / 0.34, t / 0.34), At.shield(0, 0, gA ? 0 : UA, Xt, { layer: e24, activation: n, shape: o, character: PA, action: A, recoveryProgress: s, reduced: gA }), d.restore();
 }
 function MQ(e24, A, t, i, r = 0.34) {
   if (!_i) return;
+  if (b === "home" && window.LR_TITLE_LAUNCH?.draw(d, si, PA, e24, A, r)) return;
   let o = q?.flight && !q.grounded || q?.flightLanding > 0 ? 8 : t === "idle" ? 6 + Math.floor(UA * (PA === "trond" ? 0.35 : 2)) % 2 : t === "run" ? i : t === "jump" ? 8 : t === "fall" ? 9 : PA === "trond" ? fe < 0.1 ? 10 : 11 : 10 + Math.floor(fe * 9) % 2, s = !!((q?.flight || q?.packFade > 0) && t !== "flip" && t !== "superjump"), n = s ? q.packFade > 0 ? q.packFade / 0.8 : Math.min(1, q.flightAge / 0.25) : 0;
-  d.save(), d.translate(e24, A), q?.invincible > 0 && b !== "home" && (d.globalAlpha = 0.5 + Math.sin(UA * 20) * 0.28);
+  d.save(), d.translate(e24, A), q?.invincible > 0 && !q.won && b !== "home" && (d.globalAlpha = 0.5 + Math.sin(UA * 20) * 0.28);
   let a = s && !q.grounded, g = a ? bD(q.flightAge, q.vy || 0) : null;
   if (a ? (d.translate(0, g.bob * n), d.rotate(g.lean * n), d.scale(1 + g.breath, 1 - g.breath)) : q?.grounded && q.support === null && !q.transfer ? d.rotate(Math.max(-0.42, Math.min(0.42, Math.atan(q.terrainSlope || 0)))) : !gA && q && !q.grounded && t !== "flip" && t !== "superjump" && d.rotate(Math.max(-0.035, Math.min(0.04, q.vy / 14e3))), !gA && tr < 0.15 && t === "jump" && !s) {
     let l = Math.sin(tr / 0.15 * Math.PI) * 0.035;
@@ -22896,10 +22899,16 @@ function vu(e24 = false) {
   if (ut.environment = l && g ? $A : null, At.environment = l ? $A : null, tx(), bA.style.transform = n ? "scaleY(-1)" : "none", bA.style.visibility = g || l ? "hidden" : "visible", mt.dataset.location = a, g || (nt && !nt.lost ? nt.render(r, UA, eA, kA) : ag && xD(r)), d.setTransform(ht.width / eA, 0, 0, ht.height / kA, 0, 0), d.clearRect(0, 0, eA, kA), g && !l && ut.background(a, gi[a], eA, kA, r, UA, gA), n && (d.translate(0, kA), d.scale(1, -1)), d.translate(0, o && (o.toContrarian || s < 0.5) ? 0 : Kt), g || WD(r), g ? ut.terrain(q || { districtId: a, floorAt: () => T, distance: r, chapterDistance: r, worldItems: [], setPiece: null }, eA, UA, gA) : A && (q?.mode === "chapter" || q?.procedural) && !q.contrarian && (!o || s >= 0.5) ? At.terrain(eA, (E) => q.floorAt(E - i), q.mode === "chapter" ? q.chapterDistance : r, UA, q.chapterPhase?.id, q.obstacles, i) : At.grid(eA, T, r, UA, A ? q?.obstacles : [], i), A) {
     if (q) {
       wD(), yD(i);
+      window.LR_FINISH?.back(d, q, eA);
       for (let I of q.pickups) kD(I, i);
-      if (q.grounded && q.support !== null || !LR_GAPS.overlaps(q.obstacles, q.x - 20, q.x + 20, i)) { d.fillStyle = "#03091288"; d.beginPath(); d.ellipse(q.x, (q.grounded ? q.y : q.floorY ?? T) + 2, 25, 4, 0, 0, Math.PI * 2); d.fill(); }
+      const exitActor = q.won ? window.LR_FINISH?.actor(q, ni) : null;
+      if (!exitActor && (q.grounded && q.support !== null || !LR_GAPS.overlaps(q.obstacles, q.x - 20, q.x + 20, i))) { d.fillStyle = "#03091288"; d.beginPath(); d.ellipse(q.x, (q.grounded ? q.y : q.floorY ?? T) + 2, 25, 4, 0, 0, Math.PI * 2); d.fill(); }
       let E = q.won ? "idle" : q.flight ? q.grounded ? "run" : "jump" : q.sliding ? "slide" : q.slideRecoverAge >= 0 ? "recover" : q.superJumpAge >= 0 ? "superjump" : q.flipAge >= 0 ? "flip" : q.grounded ? "run" : q.vy < 0 ? "jump" : "fall";
-      o || MQ(q.x, ir + (q.y - ir) * t - (q.won && !gA ? Math.max(0, Math.sin(Math.min(1, ni / 0.65) * Math.PI)) * 12 : 0), E, Math.floor(q.distance / 28) % 6);
+      if (exitActor) {
+        d.save(); d.fillStyle = "#03091266"; d.beginPath(); d.ellipse(exitActor.x, (exitActor.shadowY ?? q.floorY) + 2, 23, 3, 0, 0, Math.PI * 2); d.fill(); d.restore();
+        MQ(exitActor.x, exitActor.y, exitActor.action, exitActor.frame);
+      } else o || MQ(q.x, ir + (q.y - ir) * t, E, Math.floor(q.distance / 28) % 6);
+      window.LR_FINISH?.front(d, q, eA, ni);
     }
   } else {
     let E = eA * 0.72;
@@ -22920,10 +22929,10 @@ function Ku(e24) {
   let A = (e24 - au) / 1e3 || 0, t = Math.min(0.05, A);
   if (au = e24, QQ += t, (b === "playing" || b === "home") && (UA += t), b === "playing") {
     for (q.districtId && ut.update(t, q, gA), $i += t * (window.LR_FX ? LR_FX.ts(t) : 1); $i >= 1 / 120 && b === "playing"; ) ir = q.y, q.step(1 / 120, og.size > 0 || $t.has("ArrowDown") || $t.has("KeyS")), FD(), $i -= 1 / 120;
-    q.sliding ? (fe += t, Ar = 0, IQ += t, IQ > 0.045 && (Lt(q.x - 17, q.y - 3, "#b8ccd7", 2, true), IQ = 0)) : (RQ && (Ar = 0), Ar += t, fe = 0), RQ = q.sliding, e24 - gu > 100 && (Vu(), gu = e24);
+    q.sliding && !q.won ? (fe += t, Ar = 0, IQ += t, IQ > 0.045 && (Lt(q.x - 17, q.y - 3, "#b8ccd7", 2, true), IQ = 0)) : (RQ && (Ar = 0), Ar += t, fe = 0), RQ = q.sliding, e24 - gu > 100 && (Vu(), gu = e24);
   }
   if (b === "playing" || b === "home") {
-    rr += t, tr += t, ni >= 0 && b === "playing" && (ni += t, ni >= 0.95 && qQ()), Xt = Math.max(0, Xt - t / UD), _t >= 0 && (_t = q?.shield ? Math.min(hu, _t + t) : -1);
+    rr += t, tr += t, ni >= 0 && b === "playing" && (ni += t, ni >= (window.LR_FINISH?.duration(q) ?? .95) && qQ()), Xt = Math.max(0, Xt - t / UD), _t >= 0 && (_t = q?.shield ? Math.min(hu, _t + t) : -1);
     for (let i of ze) i.age += t;
     ze = ze.filter((i) => i.age < i.life);
     for (let i of bt) i.x += i.vx * t, i.y += i.vy * t, i.vy += 160 * t, i.life -= t;
@@ -22932,7 +22941,7 @@ function Ku(e24) {
     Ht = Ht.filter((i) => i.life > 0);
   }
   if ((b === "playing" || b === "home") && $A.update(t, q, { id: b === "home" ? "opening" : q?.districtId || "opening", reduced: gA, quality: dQ() }), b === "playing" && !q.transfer) {
-    let i = q.floorY ?? T, r = q.flight ? q.flightKind === "cruise" ? T - i : 0 : T - (q.terrainProfile && q.terrainProfile.districtId === "opening" && !q.contrarian ? 0.62 * i + 0.38 * q.floorAt(q.x + 220) : i) + Math.max(0, i - 207 - q.y);
+    let i = q.floorY ?? T, r = q.flight ? q.flightKind === "cruise" ? T - i : 0 : T - (q.terrainProfile && q.terrainProfile.districtId === "opening" && !q.contrarian ? 0.62 * i + 0.38 * q.floorAt(q.x + 220) : i) + Math.max(0, i - 207 - (q.won ? window.LR_FINISH?.actor(q, ni)?.y ?? q.y : q.y));
     if (q.mode === "endless" && !q.flight && !q.contrarian) r = endlessCameraY(q, eA, kA);
     Kt += (r - Kt) * (1 - Math.exp(-t * 8));
   }

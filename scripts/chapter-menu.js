@@ -18,8 +18,6 @@
     var marker = browser.querySelector(".map-player");
     var legs = Array.from(browser.querySelectorAll("[data-leg]"));
     var markerLength = 0, markerFrame = 0, markerTarget = 0, runner = "", artwork = "";
-    var launchAction = null, launchChapter = "", launchRunner = "";
-    var start = document.getElementById("start");
     var stops = [0, legs[0].getTotalLength(), route.getTotalLength()];
     var names = { opening: "Opening Bell", midtown: "Midtown", park: "Central Park" };
     var reduce = matchMedia("(prefers-reduced-motion: reduce)");
@@ -31,15 +29,9 @@
       nicolai: "assets/map-characters-v20/nicolai.webp",
       trond: "assets/map-characters-v20/trond.webp"
     };
-    var gestureSources = {
-      nicolai: "assets/map-gestures-v117/nicolai.webp",
-      trond: "assets/map-gestures-v117/trond.webp"
-    };
     var avatarImages = Object.create(null);
-    var gestureImages = Object.create(null);
     Object.keys(avatarSources).forEach(function (id) {
       var image = new Image(); image.src = avatarSources[id]; avatarImages[id] = image;
-      var gesture = new Image(); gesture.src = gestureSources[id]; gestureImages[id] = gesture;
     });
     var figure = document.createElement("div");
     figure.className = "map-player-figure";
@@ -55,7 +47,6 @@
       var chosen = window.longRun ? longRun.character : button && button.dataset.character;
       var id = chosen === "trond" ? "trond" : "nicolai";
       if (runner === id) return;
-      if (launchAction) cancelLaunch();
       runner = id;
       marker.dataset.runner = id;
       artwork = "";
@@ -64,9 +55,9 @@
     function useArtwork(kind) {
       if (artwork === kind) return;
       artwork = kind;
-      var image = kind === "gesture" ? gestureImages[runner] : avatarImages[runner];
+      var image = avatarImages[runner];
       figure.style.backgroundImage = 'url("' + image.src + '")';
-      figure.style.backgroundSize = kind === "gesture" ? "300% 100%" : "700% 100%";
+      figure.style.backgroundSize = "700% 100%";
     }
     function pose(frame) {
       useArtwork("run");
@@ -87,51 +78,8 @@
       pose(0);
       expression(0, 0, 0);
     }
-    function cancelLaunch() {
-      launchAction = null;
-      start.removeAttribute("aria-busy");
-      settleMarker();
-    }
-    function finishLaunch() {
-      var action = launchAction;
-      launchAction = null;
-      start.removeAttribute("aria-busy");
-      // Hide the map by starting the level before resetting its artwork. There
-      // is deliberately no arm-lowering animation after the held thumbs-up.
-      if (action && menuActive()) action();
-      settleMarker();
-    }
     function menuActive() {
       return !document.hidden && !intro.classList.contains("hidden") && !document.querySelector("dialog[open]") && !(window.LR_RUN && LR_RUN.previewing()) && isStory() && window.longRun && longRun.state === "home";
-    }
-    function thumbsUp() {
-      cancelAnimationFrame(markerFrame);
-      expression(0, 0, 0);
-      useArtwork("gesture");
-      marker.dataset.motion = "thumbs-up";
-      figure.style.backgroundPositionX = "0%";
-      var began = performance.now();
-      function step(now) {
-        if (!launchAction || !menuActive()) { cancelLaunch(); return; }
-        var age = now - began;
-        figure.style.backgroundPositionX = age < 110 ? "0%" : age < 250 ? "50%" : "100%";
-        if (age >= 2000) { finishLaunch(); return; }
-        markerFrame = requestAnimationFrame(step);
-      }
-      markerFrame = requestAnimationFrame(step);
-    }
-    function launch(action) {
-      if (launchAction) return true; // Repeated Play / controller presses cannot queue runs.
-      refresh();
-      var image = gestureImages[runner];
-      if (!menuActive() || reduce.matches || !image.complete || !image.naturalWidth) return false;
-      launchAction = action;
-      launchChapter = selectedCard().dataset.district;
-      launchRunner = runner;
-      start.setAttribute("aria-busy", "true");
-      // If Play is pressed during a trip, finish that trip before the gesture.
-      if (!markerFrame) thumbsUp();
-      return true;
     }
     function isStory() { var b = document.querySelector("[data-mode].selected"); return !b || b.dataset.mode === "chapter"; }
     function selectedCard() { return cards.find(function (b) { return b.classList.contains("selected"); }) || cards[0]; }
@@ -163,7 +111,7 @@
       var began = performance.now(), lead = 80, landing = 150;
       var duration = Math.min(1250, 500 + distance * 1.15);
       function step(now) {
-        if (!menuActive()) { cancelLaunch(); return; }
+        if (!menuActive()) { settleMarker(); return; }
         var age = now - began;
         if (age < lead) {
           expression(0, direction * 2 * age / lead, Math.sin(age / lead * Math.PI) * .035);
@@ -183,7 +131,7 @@
           marker.dataset.motion = "arriving";
           placeMarker(to); pose(0);
           expression(0, 0, Math.sin(arrival * Math.PI) * .055);
-          if (arrival >= 1) { settleMarker(); if (launchAction) thumbsUp(); return; }
+          if (arrival >= 1) { settleMarker(); return; }
         }
         markerFrame = requestAnimationFrame(step);
       }
@@ -227,7 +175,6 @@
       browser.hidden = !story;
       intro.classList.toggle("is-endless", !story);
       syncRunner();
-      if (launchAction && (!story || chosen.dataset.district !== launchChapter || runner !== launchRunner)) cancelLaunch();
       if (!story && markerFrame) settleMarker();
       var completed = 0;
       cards.forEach(function (card, i) {
@@ -339,12 +286,9 @@
     window.addEventListener("resize", function () { if (!drag) scrollToCard(browsing, true); });
     window.addEventListener("storage", queueRefresh);
     reduce.addEventListener("change", function () {
-      if (reduce.matches) { if (launchAction) finishLaunch(); else settleMarker(); }
+      if (reduce.matches) settleMarker();
     });
-    document.addEventListener("visibilitychange", function () { if (document.hidden) cancelLaunch(); });
-    document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape" && launchAction) cancelLaunch();
-    });
+    document.addEventListener("visibilitychange", function () { if (document.hidden) settleMarker(); });
     // Horizontal pad input belongs to the map; A / jump and result defaults
     // stay in the existing gameplay controller handler.
     var padPolling = false, lastPadDirection = 0;
@@ -368,9 +312,8 @@
     try { if (navigator.getGamepads && Array.from(navigator.getGamepads()).some(Boolean)) startMapPad(); } catch (_) {}
     window.LR_MENU = {
       refresh: queueRefresh,
-      launch: launch,
       focusChapter: function (id) { var i = cards.findIndex(function (card) { return card.dataset.district === id; }); if (i >= 0) activate(i, true); },
-      get state() { return { mode: isStory() ? "story" : "endless", selected: selectedCard().dataset.district, browsing: cards[browsing].dataset.district, runner: runner, moving: marker.dataset.motion !== "idle", launching: !!launchAction }; }
+      get state() { return { mode: isStory() ? "story" : "endless", selected: selectedCard().dataset.district, browsing: cards[browsing].dataset.district, runner: runner, moving: marker.dataset.motion !== "idle" }; }
     };
     refresh();
   }
