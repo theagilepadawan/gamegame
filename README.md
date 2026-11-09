@@ -4,6 +4,19 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
+## Version 1.23 — A clean send-off in the spotlight
+
+Nicolai and Trond lift one arm smoothly from the original title idle, hold a
+thumbs-up and start the selected chapter. The jacket no longer has a transparent
+mask seam; palm registration removes the double-hand dissolve. A stationary,
+soft-edged spotlight keeps the character clear while the menu dims, then clears
+before gameplay. The existing faces, outfits, shoes and map stay registered.
+[Verification](docs/verification-v123.md).
+
+The [complete finance-humour review](docs/finance-humor-review-v123.md) covers all
+35 obstacle captions, plus signs, pickups and the five Endless ticker families.
+Those wording/art recommendations are proposals; current obstacle copy is retained.
+
 ## Version 1.22 — A clearer call and fairer courses
 
 The larger retro comms screen holds Nicolai’s exclamation and surprised face

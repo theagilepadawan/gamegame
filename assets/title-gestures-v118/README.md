@@ -8,10 +8,20 @@ the exact original idle. Head, lower body, legs and selected chapter shoes stay
 from the game's existing atlas. Body position and scale never change.
 
 Registration into the original 512 cell: Nicolai scale .855, translation (37,41);
-Trond scale .88, translation (28,29). See the seam mask in title-launch.js.
-Poses progress from idle through release to a relaxed held thumbs-up; a short
-interpolation smooths the small forearm movement. There is no lowering before
-launch. The full gesture lasts 2000ms and the hand reaches its hold at 600ms.
+Trond scale .88, translation (28,29). The native masters are unchanged in 1.23.
+The runtime uses the exact original idle followed by source cells 2, 3, 4, 5;
+the unnecessary downstroke in cells 0/1 is skipped. Registered palm positions
+guide a local arm warp before adjacent poses blend in premultiplied alpha.
+The curved cloth seam is feathered and backed by the original solid jacket,
+preventing transparent cuts. The full character is drawn only once per frame.
 
-The current-title original face and legs are pixel-compared in map-launch.mjs.
+Forty-five small 122×112 arm crops are cached during menu idle (about 2.35 MiB
+of pixel data per selected atlas), rather than full-sized character frames.
+The original face and lower body remain pixel-identical throughout. The lift
+runs from 100 to 840ms; there is no lowering before the 2000ms automatic launch.
+The fixed, soft title spotlight dims the surrounding HTML menu too, without
+blocking input or moving the camera. It disappears on cancellation or launch.
+
+The original idle/body and every intermediate jacket are pixel-compared in
+title-compositing.mjs; map-launch.mjs tests light registration and launch lifecycle.
 Masters remain untouched; runtime images use lossless WebP at native resolution.

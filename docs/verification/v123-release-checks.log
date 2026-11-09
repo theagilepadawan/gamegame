@@ -1,0 +1,25 @@
+
+> nbim-the-long-run@1.23.0 test
+> node tests/browser.mjs
+
+/workspace/nbim-arcade/release/The-Long-Run-NBIM.html: 66,959,518 bytes; 75 embedded assets.
+Testing http://127.0.0.1:34145/release/The-Long-Run-NBIM.html
+PASS both title arm sequences, exact original faces/legs, unchanged map, two-second hold, automatic start, repeated input, Escape, retargeting, runner/mode changes, dialogs, hidden tabs, Endless and reduced motion.
+PASS 90 title poses: exact first idle, unchanged face/body outside the arm, solid jacket interiors, visible held gestures. [{"runner":"nicolai","poses":45,"outsideChanges":0,"opaqueJacketHoles":0,"firstFrameChanges":0,"armChanges":4350,"coldMedianMs":7.199999988079071,"coldMaxMs":33.799999952316284,"cachedMedianMs":0,"cachedP95Ms":0.10000002384185791},{"runner":"trond","poses":45,"outsideChanges":0,"opaqueJacketHoles":0,"firstFrameChanges":0,"armChanges":4090,"coldMedianMs":6.800000011920929,"coldMaxMs":73.69999998807907,"cachedMedianMs":0,"cachedP95Ms":0.10000002384185791}]
+Briefing: checking blink timing.
+Briefing: checking visibility and keyboard lifecycle.
+Briefing: checking compact layouts.
+Briefing: checking reduced motion and actual Play flow.
+PASS six-beat briefing, portrait mouth/blink with fixed head/body, map-safe keyboard, once-only completion, Skip/Escape, cancellation/pagehide, hidden-tab pause, reduced motion, desktop/compact/portrait fit and actual Play → call → title gesture → course.
+PASS first touch on background: real output signal, one gesture, honest state.
+PASS first touch on sound: real output signal, one gesture, honest state.
+PASS first touch on map: real output signal, one gesture, honest state.
+PASS saved mute, zero volume, no extra music button, desktop first click and automatic return from a level.
+PASS warm Midtown: 2376 fixed-camera layouts, opaque seams, late/spaced venues, 505 exclusively at the finish, original lossless paintings and unchanged curb/physics.
+PASS: 40 baseline assets unchanged; release fonts, scripts, native city art, map runners and audio load without external requests; course/character switching and Contrarian remain playable offline.
+All release browser checks passed.
+npm notice
+npm notice New major version of npm available! 11.9.0 -> 12.2.2
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v12.2.2
+npm notice To update run: npm install -g npm@12.2.2
+npm notice

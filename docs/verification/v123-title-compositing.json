@@ -1,0 +1,29 @@
+{
+  "results": [
+    {
+      "runner": "nicolai",
+      "poses": 45,
+      "outsideChanges": 0,
+      "opaqueJacketHoles": 0,
+      "firstFrameChanges": 0,
+      "armChanges": 4350,
+      "coldMedianMs": 7.199999988079071,
+      "coldMaxMs": 33.799999952316284,
+      "cachedMedianMs": 0,
+      "cachedP95Ms": 0.10000002384185791
+    },
+    {
+      "runner": "trond",
+      "poses": 45,
+      "outsideChanges": 0,
+      "opaqueJacketHoles": 0,
+      "firstFrameChanges": 0,
+      "armChanges": 4090,
+      "coldMedianMs": 6.800000011920929,
+      "coldMaxMs": 73.69999998807907,
+      "cachedMedianMs": 0,
+      "cachedP95Ms": 0.10000002384185791
+    }
+  ],
+  "errors": []
+}

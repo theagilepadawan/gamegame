@@ -1,6 +1,6 @@
 # The Long Run — cutscene production handoff
 
-This folder is a working brief for a fresh ChatGPT agent using the user's Runway plugin. It contains the complete editable game, native art references and production notes. **Version 1.22 enlarges the retro comms call, holds Nicolai’s surprised reaction on his first reply, and reuses the approved rear-view walk at 505. It also improves Midtown/Park obstacle spacing and reward trails. The supplied running-shoe film still plays only on Next: Central Park after Midtown results, with a separate piano cue. Other cinematic ideas below remain proposals.**
+This folder is a working brief for a fresh ChatGPT agent using the user's Runway plugin. It contains the complete editable game, native art references and production notes. **Version 1.23 polishes both title thumbs-up gestures and adds a fixed cinematic spotlight. The complete finance-caption review is a proposal, not applied copy. The larger retro call, reply-triggered surprise, rear-view walks into the subway and 505, and fairer Midtown/Park routes remain from 1.22. The supplied running-shoe film still plays only on Next: Central Park after Midtown results, with a separate piano cue. Other cinematic ideas below remain proposals.**
 
 Start with the packaged game and its current art. The user has invested heavily in character likeness, natural scenery placement and animation quality. Preserve those decisions while adding a small number of short, polished cinematic moments.
 

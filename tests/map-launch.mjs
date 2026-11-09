@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {chromium} from 'playwright';
 
-const proof = process.env.MAP_PROOF_DIR || 'review/v118/launch';
+const proof = process.env.MAP_PROOF_DIR || 'review/v123/launch';
 await mkdir(proof, {recursive: true});
 const browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', args: ['--no-sandbox', '--enable-unsafe-swiftshader']});
 const errors = [];
@@ -40,6 +40,19 @@ try {
     assert.equal(retained.head,0,'Exact approved title face is preserved');
     assert.equal(retained.legs,0,'Exact original trousers and chapter-specific shoes are preserved');
     assert.ok(retained.arm>100,'The large title character visibly raises their own arm');
+    const light = await page.evaluate(() => {
+      const canvas=document.getElementById('title-launch-light'), game=document.getElementById('game');
+      const c=canvas.getContext('2d'), matrix=d.getTransform();
+      const point=new DOMPoint(eA*.72,T-85).matrixTransform(matrix);
+      return {hidden:canvas.hidden,opacity:Number(canvas.style.opacity),pointerEvents:getComputedStyle(canvas).pointerEvents,
+        dimensions:[canvas.width,canvas.height],game:[game.width,game.height],
+        edge:c.getImageData(20,20,1,1).data[3],hero:c.getImageData(Math.round(point.x),Math.round(point.y),1,1).data[3]};
+    });
+    assert.equal(light.hidden,false,'Play reveals the cinematic light');
+    assert.equal(light.opacity,1,'Light settles during the held gesture');
+    assert.equal(light.pointerEvents,'none','Dimming never intercepts cancellation or other menu input');
+    assert.deepEqual(light.dimensions,light.game,'Light follows the rendered canvas resolution');
+    assert.ok(light.edge>=145 && light.hero<=3,'The menu dims while the character stays in the clear light core');
     await page.screenshot({path: `${proof}/${runner}-title-thumbs-up.png`});
     await page.evaluate(() => {document.querySelector('#start').click(); document.querySelector('#start').click();});
     await page.clock.fastForward(1150);
@@ -51,6 +64,7 @@ try {
     assert.equal(await page.evaluate(() => q.character), runner);
     assert.equal(await page.evaluate(() => LR_TITLE_LAUNCH.state.active), false);
     assert.equal(await page.locator('#start').getAttribute('aria-busy'), null);
+    assert.equal(await page.evaluate(() => document.getElementById('title-launch-light').hidden),true,'The light is removed before gameplay');
     await page.evaluate(() => Cu(false)); await page.clock.runFor(32);
   }
 
@@ -58,6 +72,7 @@ try {
   await page.keyboard.press('Escape'); await page.clock.fastForward(2400);
   assert.equal(await page.evaluate(() => longRun.state), 'home', 'Escape cancels a pending launch');
   assert.equal(await page.evaluate(() => LR_TITLE_LAUNCH.state.active), false);
+  assert.equal(await page.evaluate(() => document.getElementById('title-launch-light').hidden),true,'Escape restores the full menu immediately');
 
   await page.locator('#start').click(); await skipOpeningCall(page); await page.clock.runFor(350);
   await page.evaluate(() => LR_MENU.focusChapter('opening'));
@@ -118,6 +133,12 @@ try {
   await mobile.locator('#start').tap(); await skipOpeningCall(mobile); await mobile.clock.runFor(700);
   assert.equal(await mobile.locator('.map-player').getAttribute('data-motion'), 'idle');
   assert.equal(await mobile.evaluate(() => LR_TITLE_LAUNCH.state.active),true);
+  const mobileLight=await mobile.evaluate(()=>{
+    const c=document.getElementById('title-launch-light'),m=d.getTransform(),point=new DOMPoint(eA*.72,T-85).matrixTransform(m);
+    return {visible:!c.hidden,hero:c.getContext('2d').getImageData(Math.round(point.x),Math.round(point.y),1,1).data[3]};
+  });
+  assert.equal(mobileLight.visible,true);
+  assert.ok(mobileLight.hero<=3,'The spotlight remains registered at the smallest touch layout');
   const marker = await mobile.locator('.map-player').boundingBox(), rail = await mobile.locator('#district-picker').boundingBox();
   assert.ok(marker.y >= rail.y && marker.x >= rail.x && marker.x + marker.width <= rail.x + rail.width, 'Unchanged map runner fits the tightest touch map');
   await mobile.screenshot({path: `${proof}/mobile-launch.png`});

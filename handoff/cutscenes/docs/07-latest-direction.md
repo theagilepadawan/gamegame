@@ -1,6 +1,23 @@
 # Latest user direction
 
-## Current authority: version 1.22
+## Current authority: version 1.23
+
+The title send-off is a smooth, single-arm thumbs-up from the approved idle.
+Keep the original face, body position, outfit and selected shoes. The arm stays
+up until the level starts at 2000ms; do not return it to the lowered pose.
+Only the large title character performs this gesture. The map keeps its normal
+idle. A fixed, warm spotlight clears around the character while the rest of
+the menu dims; avoid moving camera/light effects. See
+`game/docs/verification-v123.md` and `game/scripts/title-launch.js`.
+
+The user challenged the finance meanings and quality of the obstacle jokes.
+The complete list and recommendations are in
+`game/docs/finance-humor-review-v123.md`. These are proposals awaiting their
+editorial selection, not implemented copy. Do not assume debt, capex, cash,
+pay rises or interest-rate cuts are inherently bad. Preserve the approved
+painted props and Park artwork when interpreting this brief.
+
+## Retained direction: version 1.22
 
 The opening call is a larger retro colour comms console, retaining the approved
 Grete/Nicolai portraits and still silhouettes. The reaction now starts only when

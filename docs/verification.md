@@ -1,6 +1,11 @@
-# Version 1.22 — Comms, arrivals and district fairness
+# Version 1.23 — A clean title send-off and fixed spotlight
 
-See [the current verification record](verification-v122.md) for the completed
+See [the current verification record](verification-v123.md) for the title-arm
+compositing and spotlight checks. Both runners retain their approved face and
+body. The complete [finance-humour review](finance-humor-review-v123.md) is a
+proposal; this release leaves current captions unchanged.
+
+See [the previous verification record](verification-v122.md) for the retained
 checks. The larger retro call triggers and holds Nicolai’s surprised reaction
 only on his first reply. His approved rear-view walk now enters 505 as well as
 the subway. Midtown and Park receive fairer obstacle placement, supported ledge

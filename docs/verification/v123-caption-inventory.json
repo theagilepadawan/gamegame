@@ -1,0 +1,103 @@
+{
+  "opening": {
+    "obstacles": [
+      "DEBT",
+      "RED TAPE",
+      "HURDLE RATE",
+      "EXPECTATIONS",
+      "PREMIUM",
+      "MORE PREMIUM",
+      "CONSENSUS",
+      "GUIDANCE",
+      "DOWNGRADE",
+      "MARGIN CALL",
+      "REVISED GUIDANCE",
+      "FINE PRINT",
+      "VOLATILITY"
+    ],
+    "signs": [],
+    "pickups": [
+      "dividend",
+      "diversification",
+      "opportunity",
+      "conviction",
+      "research",
+      "contrarian",
+      "jetpack"
+    ]
+  },
+  "midtown": {
+    "obstacles": [
+      "ENTRY FEE",
+      "LOW GUIDANCE",
+      "FEE DRAG",
+      "RATE CEILING",
+      "CAPEX",
+      "SUNK COST",
+      "OVERHANG",
+      "MOVING GUIDANCE"
+    ],
+    "signs": [
+      "HIGH CONVICTION / STREET LEVEL",
+      "FIFTH AVENUE",
+      "WORK IN PROGRESS",
+      "TOPPING OUT"
+    ],
+    "pickups": [
+      "opportunity",
+      "diversification",
+      "dividend",
+      "research"
+    ]
+  },
+  "park": {
+    "obstacles": [
+      "BENCHMARK",
+      "LOW YIELD",
+      "PARKED CASH",
+      "RATE CUT",
+      "OVERHANG",
+      "SIT & HOLD",
+      "LONG VIEW",
+      "TRIM RISK"
+    ],
+    "signs": [
+      "CANOPY WALK / LAKESIDE PATH",
+      "BETHESDA TERRACE",
+      "TAKE THE LONG VIEW"
+    ],
+    "pickups": [
+      "opportunity",
+      "diversification",
+      "dividend",
+      "research"
+    ]
+  },
+  "endless": [
+    {
+      "name": "WALL STREET",
+      "low": "DEBT",
+      "high": "RED TAPE"
+    },
+    {
+      "name": "EARNINGS SEASON",
+      "low": "FINE PRINT",
+      "high": "REVISED DOWN"
+    },
+    {
+      "name": "MIDTOWN",
+      "low": "COMMITTEE",
+      "high": "ONE LAST Q"
+    },
+    {
+      "name": "TIMES SQUARE",
+      "low": "INBOX",
+      "high": "QUICK SYNC"
+    },
+    {
+      "name": "CORPORATE DRAMA",
+      "low": "BONUS",
+      "high": "PAY RISE"
+    }
+  ]
+}

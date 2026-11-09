@@ -344,7 +344,7 @@ captures = {
     'opening-call-nicolai.png': 'release/Opening-v122-nicolai.png',
     'midtown-gift-film.png': 'release/Midtown-v120-gift.png',
     'finance-guidance-gameplay.png': 'release/Midtown-v113-guidance.png',
-    'chapter-map-and-title-sendoff.png': 'release/Nicolai-v118-title-sendoff.png',
+    'chapter-map-and-title-sendoff.png': 'release/Nicolai-v123-title-sendoff.png',
     'opening-finish-entrance.png': 'release/Opening-v122-boarding.png',
     'nicolai-boarding-preview.mp4': 'release/Nicolai-v121-boarding.mp4',
     'midtown-office-entry.mp4': 'release/Nicolai-v122-office-entry.mp4',
