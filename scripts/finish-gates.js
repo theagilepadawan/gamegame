@@ -105,7 +105,7 @@
     if (info.train) {
       // Follow the painted destination board's shallow perspective. Keep the
       // lettering inside its screw positions without compressing the glyphs.
-      ctx.save(); ctx.transform(1, -.045, 0, 1, 1300, 419);
+      ctx.save(); ctx.transform(1, -.045, 0, 1, 1300, 424);
       ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
       ctx.fillStyle = "#f7e6ba"; ctx.font = "600 28px Arial, sans-serif";
       const size = 28 * Math.min(1, 190 / ctx.measureText(info.title).width);

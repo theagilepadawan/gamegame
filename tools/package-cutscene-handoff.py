@@ -345,7 +345,7 @@ captures = {
     'midtown-gift-film.png': 'release/Midtown-v120-gift.png',
     'finance-guidance-gameplay.png': 'release/Midtown-v113-guidance.png',
     'chapter-map-and-title-sendoff.png': 'release/Nicolai-v118-title-sendoff.png',
-    'opening-finish-entrance.png': 'release/Opening-v120-subway.png',
+    'opening-finish-entrance.png': 'release/Opening-v1201-subway.png',
     'midtown-finish-entrance.png': 'release/Midtown-v119-entrance.png',
     'park-finish-entrance.png': 'release/Park-v118-entrance.png',
     'midtown-finish-mobile.png': 'release/Midtown-v119-mobile-entrance.png',

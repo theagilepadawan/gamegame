@@ -1,6 +1,7 @@
-# Version 1.20 — Portrait and story-transition polish
+# Version 1.20.1 — Destination lettering
 
-See [the current verification record](verification-v120.md) for this release.
+See [the lettering verification record](verification-v1201.md) for this patch.
+The [version 1.20 record](verification-v120.md) covers the retained story polish.
 The [version 1.19 record](verification-v119.md) covers the retained film and
 finish structures; [version 1.19.2](verification-v1192.md) covers title autoplay.
 

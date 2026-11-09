@@ -4,6 +4,12 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
+## Version 1.20.1 — Destination lettering
+
+Moved “Union Square” down five pixels in the train artwork's native coordinate
+space, keeping the type size, perspective and horizontal placement.
+[Verification](docs/verification-v1201.md).
+
 ## Version 1.20 — A quieter call and a change of pace
 
 The opening call uses the approved minimal ink-cartoon Grete artwork and a
