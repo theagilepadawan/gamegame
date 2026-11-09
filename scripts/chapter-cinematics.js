@@ -1,11 +1,11 @@
-/* The supplied silent gift reveal, after the 505 arrival and before results.
+/* The supplied gift reveal, only on Next: Central Park after winning Midtown.
    Decoded once per visit; no timer substitutes for the actual video ending. */
 (function () {
   "use strict";
   const source = "assets/cutscenes-v119/midtown-gift.mp4";
   const poster = "assets/cutscenes-v119/midtown-gift-poster.webp";
   let dialog, video, playButton, active = null, lastReason = null;
-  function eligible(run) { return !!(run?.mode === "chapter" && run.districtId === "midtown" && run.won); }
+  function eligible(run, next) { return !!(next === "park" && run?.mode === "chapter" && run.districtId === "midtown" && run.won); }
   function create() {
     if (dialog) return;
     dialog = document.createElement("dialog"); dialog.id = "chapter-film";
@@ -53,6 +53,7 @@
       if (!active || active === current && document.hidden) video.pause();
     }).catch(() => {
       if (active !== current) return;
+      current.audio.musicTracks.gift?.pause();
       current.waiting = true; playButton.hidden = false; playButton.focus({preventScroll: true});
     });
   }
@@ -60,15 +61,16 @@
     const current = active; if (!current) return;
     active = null; lastReason = reason; clearInterval(current.watchdog);
     video.pause(); dialog.close();
+    current.audio.endMusic({resume: false});
     current.audio.ducked = current.ducked; current.audio.scene = current.scene; current.audio.apply();
     if (notify) current.done();
   }
-  function play(run, audio, done) {
-    if (!eligible(run)) { done(); return; }
+  function play(run, next, audio, done) {
+    if (!eligible(run, next)) { done(); return; }
     finish("replaced", false); prepare(run);
     active = {audio, done, ducked: audio.ducked, scene: audio.scene, stalled: 0, waiting: false, ended: false, time: 0};
     lastReason = null; video.currentTime = 0; playButton.hidden = true;
-    audio.stopClips(); audio.scene = "cutscene"; audio.ducked = true; audio.apply(); audio.syncMusic();
+    audio.stopClips(); audio.scene = "cutscene"; audio.ducked = false; audio.startMusic("gift");
     dialog.showModal(); dialog.querySelector(".film-skip").focus({preventScroll: true});
     const current = active;
     current.watchdog = setInterval(() => {

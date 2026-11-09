@@ -1,12 +1,14 @@
 # Delivery and eventual integration
 
-Version 1.19 implements `game/scripts/chapter-cinematics.js`: a modal silent
-1280 × 530 / 30 fps / 121-frame film after the Midtown entrance and before
-`qQ()` results. `completeRunPresentation()` sets `b = "cutscene"`, clears input
-and freezes covered game rendering. The actual video end (or Skip / failure)
-opens results. Music is softly ducked, visibility pauses both clocks, and
-`Cu` / `Ko` cancel stale callbacks. `story-briefing.js` supplies a player-paced
-opening communication call before the existing title thumbs-up. Native files,
+Version 1.20 updates `game/scripts/chapter-cinematics.js`: Midtown completion
+opens `qQ()` results immediately. Clicking “Next: Central Park” then opens the
+modal 1280 × 530 / 30 fps / 121-frame gift film, sets `b = "cutscene"`, clears
+input and freezes covered game rendering. The actual video end (or Skip /
+failure) starts Central Park. Selecting Park from the map bypasses this film.
+The separate original piano cue “A change of pace” takes exclusive ownership
+of music during the scene; mute and volume still apply. Visibility pauses both
+clocks, and `Cu` / `Ko` cancel stale callbacks. `story-briefing.js` supplies a
+minimal, player-paced sketch-portrait call before the title thumbs-up. Native files,
 crop provenance and live tests are in the game source. These behaviors are
 implemented; the remainder of this document is guidance for further films.
 The existing Opening Bell fund-history reveal is retained.
@@ -54,7 +56,7 @@ At exit, pause and detach the video source when no longer needed, clear pending 
 
 Default replay policy: show chapter scenes once per profile or provide a replay option; skip them automatically on rapid retries. Keep this preference separate from progress/unlock keys. Never auto-start a surprise full-screen movie on an ordinary mid-run Easter egg.
 
-The requested LR-SH-01 shoe beat belongs after successful Midtown completion and before Central Park starts. A proposed gate is the existing Next: Central Park action after results bookkeeping. It must not fire during the live 505 encounter or delay unlock persistence. Finish, Skip and media failure should converge on one Park start; its existing `LR_SHOES` selection supplies the trainers without a new equipment/unlock state. Optional LR-PK-01 scenery or LR-OF-01 greeting can support the same edit instead of adding mandatory films. The requested shoe recipient is Nicolai; define an explicit selected-runner policy before showing it on later Trond replays. This is future integration guidance, not an implemented gate.
+The LR-SH-01 shoe beat uses the Next: Central Park action after results bookkeeping. It does not fire during the live 505 encounter or delay unlock persistence. Finish, Skip and media failure converge on one Park start; the existing `LR_SHOES` selection supplies the trainers without a new equipment/unlock state. This gate is implemented for either selected runner; the supplied film always shows Nicolai. Any future runner-specific replacement is a separate creative decision. Optional LR-PK-01 scenery or LR-OF-01 greeting may support a future edit without adding mandatory films.
 
 Reduced-motion preference should use the poster and a short opacity transition or direct Continue, particularly for Contrarian rotation. Keyboard, touch and controller users need an obvious, focusable Skip. Caption any future dialogue. Maintain visible controls at small landscape sizes and display notches.
 

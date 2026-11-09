@@ -1,0 +1,115 @@
+{
+  "asset": "assets/cutscenes-v120/a-change-of-pace.mp3",
+  "duration": 4.1,
+  "score": [
+    [
+      0.03,
+      50,
+      2.9,
+      38
+    ],
+    [
+      0.07,
+      57,
+      2.2,
+      35
+    ],
+    [
+      0.2,
+      66,
+      1.6,
+      43
+    ],
+    [
+      0.82,
+      69,
+      1.6,
+      42
+    ],
+    [
+      1.47,
+      76,
+      1.3,
+      37
+    ],
+    [
+      1.54,
+      55,
+      1.7,
+      32
+    ],
+    [
+      1.58,
+      59,
+      1.7,
+      30
+    ],
+    [
+      2.15,
+      74,
+      1.45,
+      40
+    ],
+    [
+      2.82,
+      62,
+      0.6,
+      31
+    ],
+    [
+      2.86,
+      66,
+      0.55,
+      29
+    ],
+    [
+      2.9,
+      69,
+      0.5,
+      27
+    ]
+  ],
+  "instrument": "Acoustic piano, TimGM6mb.sf2, GM program 0",
+  "version": "1.20.0",
+  "kind": "original piano miniature",
+  "title": "A change of pace",
+  "scoreColumns": [
+    "startSeconds",
+    "midiPitch",
+    "lengthSeconds",
+    "velocity"
+  ],
+  "renderScript": "tools/render-gift-cue.py",
+  "instrumentAttribution": {
+    "name": "TimGM6mb",
+    "authors": [
+      "Tim Brechbill (2004)",
+      "David Bolton (2010)"
+    ],
+    "systemPackage": "timgm6mb-soundfont",
+    "soundfontLicense": "GPL-2",
+    "soundfontBundled": false
+  },
+  "export": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "sample_rate": "48000",
+        "channels": 2,
+        "bit_rate": "256000"
+      }
+    ],
+    "format": {
+      "duration": "4.128000"
+    }
+  },
+  "files": [
+    {
+      "path": "assets/cutscenes-v120/a-change-of-pace.mp3",
+      "bytes": 132960,
+      "sha256": "dfc9461fdcb934901fe7e981eb8f25670e2f10c7ca6909433ba29f308dd205f1"
+    }
+  ]
+}

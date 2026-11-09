@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {chromium} from 'playwright';
-const proof=process.env.FINISH_PROOF_DIR || 'review/v119/finish';
+const proof=process.env.FINISH_PROOF_DIR || 'review/v120/finish';
 await mkdir(proof,{recursive:true});
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH || '/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});
 const errors=[];

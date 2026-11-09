@@ -6,6 +6,8 @@ rows, retaining all 1280 horizontal pixels and all 121 frames. No extra action,
 audio or facial pixels have been invented; the original band already obscures
 the top of the figures. `midtown-gift-native.mp4` is the untouched source.
 
-Plays after entering 505 and before Story results. The existing Midtown music
-continues softly underneath. Skip, hidden-tab pause/resume, media error fallback
-and cancellation are implemented in `scripts/chapter-cinematics.js`.
+Since v1.20, Midtown completion opens Story results first. The film plays only
+when pressing “Next: Central Park,” with the separate quiet piano cue in
+`assets/cutscenes-v120/`. Direct Park selection bypasses it. Skip, hidden-tab
+pause/resume, media error fallback and cancellation are implemented in
+`scripts/chapter-cinematics.js`.

@@ -1,27 +1,38 @@
 # Latest user direction
 
-## Current authority: version 1.19
+## Current authority: version 1.20
 
 The opening Nicolai/Grete conversation gives the journey a purpose: a walking
 investment meeting in Central Park, via 505 to collect running shoes. It is a
-colour portrait dialogue inspired by the user's communication-screen reference,
-with six user-advanced lines, Skip and local mouth/blink animation. The approved
-title thumbs-up follows it. No imitation voices have been created.
+minimal ink-and-flat-colour portrait dialogue inspired by the user's
+communication-screen reference, with six user-advanced lines, Skip and local
+mouth/blink animation. Grete uses the exact generated artwork the user called
+perfect. Nicolai’s face is refined against the supplied photographs, keeping
+the blue checked blazer and open collar. His latest likeness still awaits user
+review. The approved title thumbs-up follows it. No imitation voices were created.
 
 Downtown's Listing Bell pavilion is replaced by an angled, recessed 6-train
 station portal. The rejected rectangular station block is not shipped. A tapered
 approach, shallow foot/shadow descent, transparent outer silhouette and ground
-foundation connect it to the original street. Midtown has no duplicate 505 in
+foundation connect it to the original street. The train destination now reads
+“Union Square,” centered inside the board and following its shallow perspective.
+Midtown has no duplicate 505 in
 its background; its full blue glass and host remain at the foreground finish.
 
-The supplied gift film is implemented after the Midtown arrival and before
-results: 1280 × 530, 30 fps, 121 frames, silent. The encoded top black band was
+Midtown arrival now opens results immediately. The supplied gift film plays
+only after pressing “Next: Central Park,” then launches Park. Direct map
+selection of Park never shows it. The video remains 1280 × 530, 30 fps,
+121 frames, silent, accompanied by a separate original four-second piano cue,
+“A change of pace.” The cue replaces gameplay music and honors saved audio
+settings. The encoded top black band was
 removed by cropping 190 pixels. Heads partly hidden by the source band were
 not reconstructed. Untouched source and cropped runtime are both packaged in
-`game/assets/cutscenes-v119/`. Read `game/docs/verification-v119.md` and
+`game/assets/cutscenes-v119/`; the piano lives in `cutscenes-v120/`.
+Read `game/docs/verification-v120.md` and
 `game/docs/story-briefing.md`. Browser audio autoplay policy still applies;
-permitted autoplay starts without a suspended Web Audio graph, and blocked
-playback offers a truthful Start music control.
+permitted autoplay starts without a suspended Web Audio graph. The user
+rejected an extra music-start button; ordinary trusted menu input unlocks
+blocked playback. Synthetic keyboard events cannot bypass browser policy.
 
 ## Retained version 1.18 direction
 

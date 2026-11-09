@@ -5,7 +5,7 @@
   // Display titles supplied by the user. Audio files and playback stay intact.
   const titles = {title: "Why talking to people is a superpower x Mellow Lounge",
     main: "Downtown Good Company", midtown: "Good Company Never Dies",
-    park: "Diversified Ballad", contrarian: "Good ol’ Company"};
+    park: "Diversified Ballad", contrarian: "Good ol’ Company", gift: "A change of pace"};
   let mixer, timer, revision = 0, shown = "", current = "";
   const card = document.createElement("div");
   card.id = "now-playing"; card.className = "now-playing"; card.hidden = true;

@@ -6,7 +6,7 @@
   const definitions = {
     opening: {src: "assets/finish-gates-v119/subway.webp", end: 75, speed: 360, scale: .48, foot: 750, door: 1185, pier: 1425, interiorRise: -27.36, train: true,
       approach: [[0,750],[310,750],[460,749],[620,765],[780,786],[940,802],[1185,807],[1605,807]],
-      title: "UPTOWN · 6 LOCAL", number: "I"},
+      title: "Union Square", number: "I"},
     midtown: {src: "assets/finish-gates-v118/midtown.webp", end: 60, speed: 320, scale: .36, foot: 976, door: 320, pier: 628, outerPier: 1200, interiorRise: 10, host: true, title: "505 FIFTH", number: "II"},
     park: {src: "assets/finish-gates-v118/park.webp", end: 60, speed: 320, scale: .395, foot: 980, door: 404, pier: 973, plaque: [712, 249], title: "THE LONG VIEW", sub: "RETURNS, WITH A VIEW", number: "III"}
   };
@@ -103,9 +103,16 @@
     if (info.train) { const stone = foundation(); if (stone) ctx.drawImage(stone, 0, 0); }
     ctx.drawImage(info.image, 0, 0);
     if (info.train) {
-      ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.fillStyle = "#f7e6ba"; ctx.font = "600 19px system-ui, sans-serif";
-      ctx.fillText(info.title, 1290, 420, 235);
+      // Follow the painted destination board's shallow perspective. Keep the
+      // lettering inside its screw positions without compressing the glyphs.
+      ctx.save(); ctx.transform(1, -.045, 0, 1, 1300, 419);
+      ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+      ctx.fillStyle = "#f7e6ba"; ctx.font = "600 28px Arial, sans-serif";
+      const size = 28 * Math.min(1, 190 / ctx.measureText(info.title).width);
+      ctx.font = `600 ${size}px Arial, sans-serif`;
+      const lettering = ctx.measureText(info.title);
+      ctx.fillText(info.title, 0, (lettering.actualBoundingBoxAscent - lettering.actualBoundingBoxDescent) / 2);
+      ctx.restore();
     }
     if (info.plaque) {
       ctx.textAlign = "center"; ctx.textBaseline = "middle";

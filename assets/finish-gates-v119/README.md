@@ -5,6 +5,9 @@ This revised image replaces the rejected rectangular station set. It uses an
 asymmetric iron canopy, angled cheek-wall, tapered stone approach, contact
 shadow and a shallow descent to a recessed train doorway. The green 6 and
 railing sign are painted; the destination display is lettered at runtime.
+As of v1.20 it reads “Union Square.” Warm ivory lettering follows the board's
+slight upward perspective, with equal vertical clearance and space inside the
+screw positions. Text size is measured to fit without horizontal stretching.
 
 This is stylised station scenery, not an engineering reconstruction. The street
 apron is at native y=750; the sill at y=807. The runner and contact shadow

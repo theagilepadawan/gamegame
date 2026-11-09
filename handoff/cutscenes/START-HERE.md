@@ -1,13 +1,15 @@
 # The Long Run — cutscene production handoff
 
-This folder is a working brief for a fresh ChatGPT agent using the user's Runway plugin. It contains the complete editable game, native art references and production notes. **Version 1.19 includes an opening Grete/Nicolai communication sequence and the user-supplied, cropped post-Midtown running-shoe film. Other cinematic ideas below remain proposals.**
+This folder is a working brief for a fresh ChatGPT agent using the user's Runway plugin. It contains the complete editable game, native art references and production notes. **Version 1.20 includes the minimal Grete/Nicolai call and the supplied running-shoe film, now shown only on Next: Central Park after Midtown results, with a separate piano cue. Other cinematic ideas below remain proposals.**
 
 Start with the packaged game and its current art. The user has invested heavily in character likeness, natural scenery placement and animation quality. Preserve those decisions while adding a small number of short, polished cinematic moments.
 
-The included 1.19.2 patch keeps first-touch title music recovery and removes
-the separate music-start button at the user's request. See
-`game/docs/verification-v1192.md`; retain the browser-gesture fallback and avoid
-routing media through a suspended audio context.
+Version 1.20 uses the approved minimal ink Grete portrait and a photograph-led
+Nicolai face refinement in a cleaner call layout. The gift film plays only on
+**Next: Central Park** after winning Midtown, with a separate quiet piano cue;
+the actual film ending or Skip starts the Park. Direct map entry skips it.
+See `game/docs/verification-v120.md`. The title music retains first-interaction
+recovery and has no separate start-music button.
 
 ## Open these first
 

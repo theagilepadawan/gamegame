@@ -22224,6 +22224,7 @@ var _i = false, b = "home", zA = "chapter", q = null, eA = 1e3, kA = 540, EQ = 1
 SA.registerClip("laugh", "assets/original-38.mp3");
 SA.registerMusic("contrarian", "assets/original-39.mp3", { gain: 0.79 });
 SA.registerMusic("title", "assets/audio/title-mellow-lounge.mp3", { gain: 0.72, loop: true });
+SA.registerMusic("gift", "assets/cutscenes-v120/a-change-of-pace.mp3", { gain: 0.82 });
 window.LR_MUSIC?.attach(SA);
 var Kt = 0, hu = 0.62, UD = 0.65, gu = 0, Bu = 0, bt = [], Ht = [], IQ = 0, rr = 1, tr = 1, Xt = 0, _t = -1, ze = [], ni = -1, rg = 0, hQ = -1, Co = 0, Vo = 2.25, $t = /* @__PURE__ */ new Set(), ai = /* @__PURE__ */ new Set(), og = /* @__PURE__ */ new Set(), gg = matchMedia("(pointer:coarse)"), gA = matchMedia("(prefers-reduced-motion: reduce)").matches, lu = { get(e24) {
   try {
@@ -22418,12 +22419,7 @@ function Ko(e24 = zA, A = {}) {
   m("#district").textContent = Ot[q.districtId || "opening"].place, m("#pause").textContent = "\u2161", m("#pause").setAttribute("aria-label", "Pause"), m("#event").classList.remove("show", "hidden"), m("#next-chapter").classList.add("hidden"), m("#ticker-text").textContent = q.districtId === "park" ? "A long horizon leaves room for a walk in the park." : q.districtId === "midtown" ? "The growth outlook is under construction." : "Markets react to markets reacting.", Vu(), ht.focus({ preventScroll: true }), CA(392, 0.09), setTimeout(() => CA(587, 0.13), 100);
 }
 function completeRunPresentation() {
-  const finishedRun = q;
-  if (window.LR_CINEMA?.eligible(q)) {
-    b = "cutscene"; De();
-    for (const id of ["#touch-controls", "#pause", "#event", "#chapter-strip"]) m(id).classList.add("hidden");
-    window.LR_CINEMA.play(q, SA, () => { if (q === finishedRun && b === "cutscene") qQ(); });
-  } else qQ();
+  qQ();
 }
 function qQ() {
   window.LR_MUSIC?.page("results");
@@ -22511,9 +22507,17 @@ for (let e24 of document.querySelectorAll("[data-mode]")) e24.onclick = () => {
   b === "home" && ["chapter", "endless"].includes(e24.dataset.mode) && (zA = e24.dataset.mode, Eg(), Ei());
 };
 m("#next-chapter").onclick = () => {
-  if (b !== "over" || !q?.won) return;
-  let e24 = Ot[q.districtId || "opening"].next;
-  e24 && (Cu(false), zA = "chapter", fu(e24), Ko());
+  if (b !== "over" || q?.mode !== "chapter" || !q.won) return;
+  const finishedRun = q, next = Ot[q.districtId || "opening"].next;
+  if (!next) return;
+  const continueStory = () => { Cu(false); zA = "chapter"; fu(next); Ko(); };
+  if (window.LR_CINEMA?.eligible(finishedRun, next)) {
+    b = "cutscene"; De(); m("#results").classList.add("hidden");
+    window.LR_MUSIC?.page("transition");
+    LR_CINEMA.play(finishedRun, next, SA, () => {
+      if (q === finishedRun && b === "cutscene") continueStory();
+    });
+  } else continueStory();
 };
 function uQ() {
   m("#sound-state").textContent = SA.enabled ? SA.autoplayBlocked ? "TAP" : "ON" : "OFF", m("#sound").setAttribute("aria-label", SA.enabled ? SA.autoplayBlocked ? "Start music" : "Mute all audio" : "Enable audio"), m("#music-volume").value = Math.round(SA.musicVolume * 100), m("#fx-volume").value = Math.round(SA.fxVolume * 100), m("#music-value").textContent = Math.round(SA.musicVolume * 100) + "%", m("#fx-value").textContent = Math.round(SA.fxVolume * 100) + "%";

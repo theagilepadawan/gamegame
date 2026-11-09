@@ -169,6 +169,7 @@ for name in ['index.html', 'game.css', 'build.mjs', 'serve.mjs', 'package.json',
 for name in ['scripts', 'tests', 'docs']:
     shutil.copytree(ROOT / name, game / name)
 copy(ROOT / 'tools' / 'package-game.py', game / 'tools' / 'package-game.py')
+copy(ROOT / 'tools' / 'render-gift-cue.py', game / 'tools' / 'render-gift-cue.py')
 
 # Keep all forty baseline files for hash tests, plus current runtime art only.
 # The rejected alternate Park and discarded sprite experiments are not shipped.
@@ -339,11 +340,12 @@ captures = {
     'downtown-gameplay.png': 'release/Opening-v112-street.png',
     'central-park-gameplay.png': 'release/Park-v113-benchmark.png',
     'midtown-gameplay.png': 'release/Midtown-v113-street.png',
-    'opening-call.png': 'release/Opening-v119-briefing.png',
-    'midtown-gift-film.png': 'release/Midtown-v119-gift.png',
+    'opening-call.png': 'release/Opening-v120-briefing.png',
+    'opening-call-nicolai.png': 'release/Opening-v120-nicolai.png',
+    'midtown-gift-film.png': 'release/Midtown-v120-gift.png',
     'finance-guidance-gameplay.png': 'release/Midtown-v113-guidance.png',
     'chapter-map-and-title-sendoff.png': 'release/Nicolai-v118-title-sendoff.png',
-    'opening-finish-entrance.png': 'release/Opening-v119-subway.png',
+    'opening-finish-entrance.png': 'release/Opening-v120-subway.png',
     'midtown-finish-entrance.png': 'release/Midtown-v119-entrance.png',
     'park-finish-entrance.png': 'release/Park-v118-entrance.png',
     'midtown-finish-mobile.png': 'release/Midtown-v119-mobile-entrance.png',
@@ -356,6 +358,7 @@ for name, relative in captures.items():
 audio = {
     '01-opening-theme.mp3': 'original-37.mp3',
     '06-title-mellow-lounge.mp3': 'audio/title-mellow-lounge.mp3',
+    '07-gift-piano.mp3': 'cutscenes-v120/a-change-of-pace.mp3',
     '02-midtown-theme.mp3': 'original-19.mp3',
     '03-central-park-theme.mp3': 'original-20.mp3',
     '04-nicolai-laugh.mp3': 'original-38.mp3',
@@ -386,7 +389,7 @@ metadata = {
     'included': ['Current editable game source', 'Self-contained playable HTML', 'Native production sprites, detailed city tiles and current prop atlas',
                  'Restored warm Midtown lossless paintings, native finance-obstacle atlas, stone material, chapter-map runner strips and authoring notes',
                  'Location index linking to exact native game assets without duplicate city-art copies',
-                 'Six game audio sources, indexed without duplicate files',
+                 'Seven game audio sources, including the original gift piano cue, indexed without duplicate files',
                  'User-supplied cropped Midtown gift MP4 plus unmodified native source and provenance',
                  'Grete/Nicolai opening communication, native portrait atlas and revised 6-train portal',
                  'Cutscene production brief, shot slate, prompts and integration notes'],

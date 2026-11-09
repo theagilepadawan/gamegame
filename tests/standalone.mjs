@@ -74,8 +74,12 @@ try{
   await page.waitForFunction(()=>document.querySelector('#chapter-video')?.readyState>=2);
   assert.deepEqual(await page.evaluate(()=>{const v=document.querySelector('#chapter-video');return {embedded:v.currentSrc.startsWith('data:video/mp4;base64,'),w:v.videoWidth,h:v.videoHeight,portraits:LR_BRIEFING.inspect().portraitsReady};}),{embedded:true,w:1280,h:530,portraits:true});
   await page.evaluate(()=>{q.won=true;completeRunPresentation();});
-  await page.locator('.film-skip').click();
   assert.equal(await page.evaluate(()=>longRun.state),'over');
+  await page.locator('#next-chapter').click();
+  await page.waitForFunction(()=>LR_CINEMA.inspect().active);
+  assert.equal(await page.evaluate(()=>SA.musicTracks.gift.src.startsWith('data:audio/mpeg;base64,')),true,'Gift piano is embedded offline');
+  await page.locator('.film-skip').click();
+  assert.equal(await page.evaluate(()=>longRun.state==='playing' && q.districtId==='park'),true);
   assert.deepEqual(errors,[]);
   assert.deepEqual(failed,[]);
   assert.deepEqual(external,[],'Standalone game fetched an external resource');

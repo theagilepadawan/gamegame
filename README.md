@@ -4,6 +4,21 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
+## Version 1.20 — A quieter call and a change of pace
+
+The opening call uses the approved minimal ink-cartoon Grete artwork and a
+new Nicolai portrait refined against the user's photographs, retaining his
+blue checked blazer and open collar. A spare two-portrait layout replaces
+the route diagram and layered panels. Six dialogue beats, local expressions,
+Skip and the title thumbs-up remain.
+
+Midtown now shows results immediately. Its gift film plays only when the
+player presses **Next: Central Park**, accompanied by a short, quiet piano cue.
+Finishing or skipping the film starts Central Park. Selecting Central Park
+directly from the map never plays the film. The train display now says
+**Union Square**, with lettering aligned to the painted destination board.
+[Verification](docs/verification-v120.md).
+
 ## Version 1.19.2 — Clean title screen
 
 Removed the separate **Play opening music** button. Music still attempts

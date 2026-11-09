@@ -1,0 +1,89 @@
+{
+  "version": "1.20.0",
+  "kind": "minimal ink-and-colour dialogue portrait atlases",
+  "nativeDimensions": [
+    1536,
+    1024
+  ],
+  "grid": {
+    "columns": 3,
+    "rows": 2,
+    "cell": [
+      512,
+      512
+    ]
+  },
+  "columns": [
+    "listening",
+    "speaking",
+    "blink"
+  ],
+  "generation": {
+    "tool": "image_gen",
+    "greteSource": "exec-f213bd6c-02cd-4ba4-bbb5-eb670219a1ac.png",
+    "nicolaiSource": "exec-031862e9-bbfd-4a48-bfcb-6bb7846aae5d.png",
+    "references": [
+      "User-supplied Grete photographs and communication-screen reference",
+      "User-supplied Nicolai frontal and outdoor profile photographs",
+      "Approved blue checked jacket and open-collar outfit"
+    ],
+    "notes": "Grete uses the exact approved sketch source; Nicolai uses a separate refinement. Latest Nicolai likeness awaits user review. No title or playable sprites changed."
+  },
+  "registration": {
+    "grete": {
+      "asset": "portraits.webp",
+      "row": 0,
+      "mouthEllipse": [
+        329,
+        278,
+        55,
+        26
+      ],
+      "eyesEllipse": [
+        323,
+        187,
+        83,
+        34
+      ]
+    },
+    "nicolai": {
+      "asset": "nicolai-portraits.webp",
+      "row": 1,
+      "mouthEllipse": [
+        245,
+        283,
+        52,
+        25
+      ],
+      "eyesEllipse": [
+        239,
+        181,
+        82,
+        29
+      ],
+      "displayMirrored": false
+    }
+  },
+  "files": [
+    {
+      "path": "assets/briefing-v120/nicolai-portraits-native.png",
+      "bytes": 2069639,
+      "sha256": "49fc39f8bbba3e21dc458c72e6a1b8af3ed4cb96b9df0d01d0eb2d0a5ec07b35"
+    },
+    {
+      "path": "assets/briefing-v120/nicolai-portraits.webp",
+      "bytes": 1408898,
+      "sha256": "e548384dbba2300868c1b7bddfeb6f20dec131ff8384419417142cc29a6d5455"
+    },
+    {
+      "path": "assets/briefing-v120/portraits-native.png",
+      "bytes": 1931534,
+      "sha256": "cbef317fd845b20a99f17ea25e2bb6d8f39022b445bcddac1a0d972ed2574918"
+    },
+    {
+      "path": "assets/briefing-v120/portraits.webp",
+      "bytes": 1330886,
+      "sha256": "5a2c6d3a49c8218336e0bbacec622b249e17630c00dd58a2a0de211e2a2afe80"
+    }
+  ]
+}

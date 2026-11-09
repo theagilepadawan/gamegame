@@ -1,10 +1,12 @@
 /* A short, player-paced call before Nicolai's first New York chapter.
-   Registered local expression patches keep the portrait silhouettes still. */
+   Minimal ink portraits; local expressions keep the silhouettes still. */
 (function () {
   "use strict";
   const reduce = matchMedia("(prefers-reduced-motion: reduce)");
   const atlas = new Image(); atlas.decoding = "async";
-  atlas.src = "assets/briefing-v119/portraits.webp";
+  atlas.src = "assets/briefing-v120/portraits.webp";
+  const nicolaiAtlas = new Image(); nicolaiAtlas.decoding = "async";
+  nicolaiAtlas.src = "assets/briefing-v120/nicolai-portraits.webp";
   const lines = [
     {speaker: "grete", text: "Nicolai, change of plan. We’re taking the investment meeting to Central Park."},
     {speaker: "nicolai", text: "What’s wrong with the meeting room?"},
@@ -14,8 +16,8 @@
     {speaker: "nicolai", text: "Fine. I’m counting this as active management."}
   ];
   const portraits = {
-    grete: {row: 0, name: "Grete", mouth: [329, 275, 55, 25], eyes: [323, 187, 83, 34], blinkOffset: 0},
-    nicolai: {row: 1, name: "Nicolai", mouth: [339, 260, 51, 27], eyes: [333, 171, 72, 31], blinkOffset: 1370}
+    grete: {image: atlas, row: 0, name: "Grete", mouth: [329, 278, 55, 26], eyes: [323, 187, 83, 34], blinkOffset: 0},
+    nicolai: {image: nicolaiAtlas, row: 1, name: "Nicolai", mouth: [245, 283, 52, 25], eyes: [239, 181, 82, 29], blinkOffset: 1370}
   };
   let dialog, speaker, text, next, count, active = null, raf = 0, previousTime = 0;
   let lastReason = null, frameCache = null;
@@ -33,7 +35,7 @@
   function shape(canvas, data, column, ellipse) {
     const patch = document.createElement("canvas"); patch.width = patch.height = 512;
     const p = patch.getContext("2d");
-    p.drawImage(atlas, column * 512, data.row * 512, 512, 512, 0, 0, 512, 512);
+    p.drawImage(data.image, column * 512, data.row * 512, 512, 512, 0, 0, 512, 512);
     const mask = document.createElement("canvas"); mask.width = mask.height = 512;
     const m = mask.getContext("2d"); m.filter = "blur(3px)"; m.fillStyle = "white";
     m.beginPath(); m.ellipse(...ellipse, 0, 0, Math.PI * 2); m.fill();
@@ -41,13 +43,13 @@
     canvas.getContext("2d").drawImage(patch, 0, 0);
   }
   function frames() {
-    if (frameCache || !atlas.complete || !atlas.naturalWidth) return frameCache;
+    if (frameCache || !atlas.complete || !atlas.naturalWidth || !nicolaiAtlas.complete || !nicolaiAtlas.naturalWidth) return frameCache;
     frameCache = {};
     for (const [id, data] of Object.entries(portraits)) {
       frameCache[id] = [];
       for (let f = 0; f < 4; f++) {
         const canvas = document.createElement("canvas"); canvas.width = canvas.height = 512;
-        canvas.getContext("2d").drawImage(atlas, 0, data.row * 512, 512, 512, 0, 0, 512, 512);
+        canvas.getContext("2d").drawImage(data.image, 0, data.row * 512, 512, 512, 0, 0, 512, 512);
         if (f & 1) shape(canvas, data, 1, data.mouth);
         if (f & 2) shape(canvas, data, 2, data.eyes);
         frameCache[id].push(canvas);
@@ -69,7 +71,6 @@
       if (!force && lastFrame[id] === frame) continue;
       lastFrame[id] = frame;
       const c = canvases[id].getContext("2d"); c.save();
-      if (id === "nicolai") { c.translate(512, 0); c.scale(-1, 1); }
       c.drawImage(art[id][frame], 0, 0); c.restore();
     }
   }
@@ -87,7 +88,6 @@
     dialog.dataset.speaker = line.speaker;
     count.textContent = `${active.beat + 1} / ${lines.length}`;
     next.textContent = active.beat === lines.length - 1 ? "Let’s go →" : "Continue →";
-    dialog.querySelectorAll(".briefing-step").forEach((node, i) => node.classList.toggle("is-read", i <= active.beat));
     draw(true);
   }
   function advance() {
@@ -100,14 +100,14 @@
     dialog = document.createElement("dialog"); dialog.id = "story-briefing";
     dialog.setAttribute("aria-labelledby", "briefing-title");
     dialog.innerHTML = `<section class="briefing-shell">
-      <header class="briefing-heading"><div><p class="briefing-kicker">NEW YORK LINE</p><h2 id="briefing-title">A change of plan.</h2></div><span class="briefing-connected"><i aria-hidden="true"></i>Connected</span></header>
+      <header class="briefing-heading"><h2 id="briefing-title">New York line</h2><span>A change of plan.</span></header>
       <div class="briefing-connection">
-        <figure class="briefing-portrait" data-person="grete"><canvas width="512" height="512" role="img" aria-label="Grete, wearing glasses, a lavender blazer and a patterned scarf"></canvas><figcaption><strong>Grete</strong><span class="briefing-voice" aria-hidden="true"><i></i><i></i><i></i><i></i></span></figcaption></figure>
-        <div class="briefing-route" aria-label="Route: Downtown, 505 Fifth Avenue, Central Park"><span class="briefing-route-line" aria-hidden="true"></span><span class="briefing-route-stop">Downtown</span><span class="briefing-route-stop">505 Fifth</span><span class="briefing-route-stop briefing-route-goal">Central<br>Park</span><small>THE LONG WAY UP</small></div>
-        <figure class="briefing-portrait" data-person="nicolai"><canvas width="512" height="512" role="img" aria-label="Nicolai, wearing his blue checked jacket"></canvas><figcaption><strong>Nicolai</strong><span class="briefing-voice" aria-hidden="true"><i></i><i></i><i></i><i></i></span></figcaption></figure>
+        <figure class="briefing-portrait" data-person="grete"><canvas width="512" height="512" role="img" aria-label="Ink portrait of Grete, wearing glasses, a lavender blazer and a patterned scarf"></canvas><figcaption><strong>Grete</strong><i aria-hidden="true"></i></figcaption></figure>
+        <div class="briefing-link" aria-hidden="true"><svg viewBox="0 0 100 32"><path d="M3 16h25m44 0h25M38 11v10m8-16v22m8-22v22m8-16v10"/></svg><span>Connected</span></div>
+        <figure class="briefing-portrait" data-person="nicolai"><canvas width="512" height="512" role="img" aria-label="Ink portrait of Nicolai, wearing his blue checked jacket"></canvas><figcaption><strong>Nicolai</strong><i aria-hidden="true"></i></figcaption></figure>
       </div>
       <div class="briefing-dialogue" aria-live="polite" aria-atomic="true"><span id="briefing-speaker"></span><p id="briefing-text"></p></div>
-      <footer class="briefing-footer"><button type="button" class="briefing-skip">Skip call</button><div class="briefing-progress" aria-label="Conversation progress">${lines.map(() => '<span class="briefing-step" aria-hidden="true"></span>').join("")}<span class="briefing-count"></span></div><button type="button" class="briefing-next">Continue →</button></footer>
+      <footer class="briefing-footer"><button type="button" class="briefing-skip">Skip call</button><span class="briefing-count" aria-label="Conversation progress"></span><button type="button" class="briefing-next">Continue →</button></footer>
     </section>`;
     document.querySelector("#stage").append(dialog);
     for (const id of Object.keys(portraits)) canvases[id] = dialog.querySelector(`[data-person="${id}"] canvas`);
@@ -149,8 +149,9 @@
   window.addEventListener("pagehide", cancel);
   reduce.addEventListener("change", () => draw(true));
   atlas.addEventListener("load", () => draw(true));
+  nicolaiAtlas.addEventListener("load", () => draw(true));
   window.LR_BRIEFING = {launch, cancel, inspect: () => ({active: !!active, beat: active?.beat ?? -1,
     speaker: active ? lines[active.beat].speaker : null, age: active?.age ?? 0, clock: active?.clock ?? 0,
-    reason: lastReason, reduced: reduce.matches, portraitsReady: !!(atlas.complete && atlas.naturalWidth),
+    reason: lastReason, reduced: reduce.matches, portraitsReady: !!(atlas.complete && atlas.naturalWidth && nicolaiAtlas.complete && nicolaiAtlas.naturalWidth),
     frames: {...lastFrame}, count: lines.length})};
 })();

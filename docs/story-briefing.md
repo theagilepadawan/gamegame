@@ -25,8 +25,8 @@ approved behavior. No voice has been generated.
 
 - `scripts/story-briefing.js`: native dialog, dialogue, expression rendering,
   focus, cancellation, and visibility lifecycle.
-- `styles/story-briefing.css`: responsive colour communications panel.
-- `assets/briefing-v119/`: native and lossless runtime portrait atlas and its
+- `styles/story-briefing.css`: minimal two-portrait call, responsive to phone layouts.
+- `assets/briefing-v120/`: approved Grete and corrected Nicolai ink portraits and their
   registration/provenance notes.
 - `tests/story-briefing.mjs`: dialogue, local animation, input, lifecycle and
   responsive layout checks.
@@ -38,27 +38,30 @@ is open, for non-Nicolai characters, or while the character reveal is active.
 calling it. `inspect()` reports active beat, speaker, expression frames, clock,
 readiness and completion reason.
 
-The engine calls this only for Story / Opening Bell / Nicolai, then call
+The engine calls this only for Story / Opening Bell / Nicolai, then calls
 the existing title-gesture launch from `onComplete`. Main-menu and new-run
 operations cancel a pending briefing. Pagehide and selection changes also
 cancel without starting a run. A hidden tab holds both reading and expression
-clocks, then resumes the same line; reduced motion suppresses expression and
-signal animation. The native dialog keeps the underlying map and Play button
+clocks, then resumes the same line; reduced motion suppresses expressions.
+The native dialog keeps the underlying map and Play button
 inert while the call is open.
 
-The artwork is a new colour interpretation of two-person game communications,
-with navy, teal and warm gold; no borrowed game interface, logo or sound. The
+The artwork uses minimal ink lines and flat colour on a solid navy call screen.
+The user approved Grete's generated sheet; that exact source supplies her frames.
+Nicolai's face was refined using the subsequently supplied photographs, keeping
+his blue checked blazer and open collar. His portrait is now frontal and is not
+mirrored. There is no route diagram, card stack or animated waveform. The
 approved playable and title-screen characters are unchanged. Portraits use a
 stationary listening base with registered local mouth and eye overlays, rather
 than whole-face transformations.
 
 ## Verified in this change
 
-`TEST_URL=http://127.0.0.1:4181/ node tests/story-briefing.mjs` passed against
-the integrated source on 2026-11-08. It checks all six lines, once-only
-completion, mouth/blink changes with pixel-identical hair and shoulders,
+`node tests/story-briefing.mjs` passed against the integrated source and built
+standalone release. It checks all six lines, once-only completion, both
+portraits' mouth/blink changes with pixel-identical hair and shoulders,
 hidden-tab pause/resume, keyboard isolation from the map, Escape and Skip,
 pagehide/cancel, reduced motion, and the real Play → call → two-second title
 thumbs-up → Opening Bell flow. Every dialogue beat and action fits desktop,
 844 × 390, 568 × 320 and 390 × 844 viewports. The captures in
-`review/v119/briefing/` were visually inspected.
+`review/v120/briefing/` are the current version's captures.
