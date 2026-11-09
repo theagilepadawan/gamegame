@@ -1,7 +1,8 @@
 # Finance humour review — complete current obstacle inventory
 
-Editorial proposals, not a runtime copy change. Version 1.23 changes the title
-send-off; its obstacle captions remain as shipped in 1.22 for this review.
+Approved review, implemented in version 1.24. The tables preserve the original
+before/after decisions. See [the implementation](obstacles-v124.md) for the new
+art, sizes, lettering, motion and occasional ticker delivery.
 
 ## Direction
 
@@ -142,5 +143,6 @@ completion; forcing a punchline into every sign would weaken the world.
    without explanation. Cut the weaker half of any extra joke pool rather
    than filling the game with terminology.
 
-This is the proposed next editorial/art pass. It does not change level physics,
-approved city backdrops, Easter-egg placement or any current caption yet.
+This review was proposed in 1.23 and approved for 1.24, together with new
+obstacle art and physical sizes. Approved city backdrops and Easter-egg
+placement remain unchanged.

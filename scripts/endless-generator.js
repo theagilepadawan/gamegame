@@ -120,6 +120,9 @@
     s.recent.push(id); if (s.recent.length > 8) s.recent.shift();
     q.markers.push({ x: o - 50, w: 0, route: id, announced: false });
     var actions = [], endTime = 0, platforms = [], gapRanges = [];
+    // Art/copy/motion have their own stream: none may reshuffle terrain,
+    // landing banks, rewards or the platform director.
+    var propMotion = stream(q.seed,index,0x50524f50);
     var xAt = function (t) { return o + t * v; };
     function floorRange(x, width) {
       var min = Infinity, max = -Infinity;
@@ -149,6 +152,20 @@
       if (kind === "high" && floor.max - floor.min > 24) { kind = "low"; width = 116; floor = floorRange(x, width); }
       var object = q.hazard(kind, x, width, kind === "high" ? floor.min : q.floorAt(x + width / 2));
       if (kind === "low") object.groundSlope = (q.floorAt(x + width) - q.floorAt(x)) / width;
+      if(window.LR_HAZARDS) {
+        LR_HAZARDS.endless(object,q,planTime+t);
+        x=object.x;width=object.w;
+        object.groundEnds=[q.floorAt(x+7),q.floorAt(x+width-7)];
+        if(kind==="low")object.groundSlope=(q.floorAt(x+width)-q.floorAt(x))/width;
+        const moving = kind === "high" && planTime+t>9 &&
+          planTime+t-(s.lastMovingAt??-100)>5.8 && propMotion()<.44+.16*d.pressure;
+        if(moving) {
+          s.lastMovingAt=planTime+t;
+          LR_HAZARDS.moving(object,q,between(propMotion,3.6-1.0*d.pressure,5.2-.4*d.pressure),
+            between(propMotion,28,42),propMotion()<.5?"lift":"sine");
+          if(object.artDistrict==="midtown" && propMotion()<.45)object.label="MOVING GUIDANCE";
+        }
+      }
       actions.push({ type: kind, t: t, widthTime: width / v, x: x, width: width });
       coins(t - .16, .32, kind === "high" ? 35 : 140, "opportunity", 3);
       endTime = Math.max(endTime, t + width / v + .8);

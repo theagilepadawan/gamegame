@@ -1,7 +1,5 @@
-> Current runtime (1.22): the earlier painted barrier and copper market board
-> from `assets/props-v18/` are active, alongside the original Park bench/branch.
-> The caption and placement pass is in [district-polish-v122.md](district-polish-v122.md).
-> The alternative red-tape/binder artwork described below is historical.
+> Current runtime (1.24): [twelve new district objects, applied humour and varied motion](obstacles-v124.md).
+> The implementation below is retained as historical context.
 
 # Finance props — version 1.13 implementation
 

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 import {chromium} from 'playwright';
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});
-await mkdir('review/v122/districts',{recursive:true});
+await mkdir('review/v124/districts',{recursive:true});
 try{
  const page=await browser.newPage({viewport:{width:1280,height:720}}),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
@@ -28,12 +28,12 @@ try{
      for(const name of ['obstacles','platforms','pickups','springs','worldItems'])for(const item of q[name])item.x-=time*320;
      q.time=q.chapterTime=time;q.distance=q.chapterDistance=time*320;q.routeResolved=true;q.routeResolvedAt=16.2;q.routeChoice={id:route,label:route==='high'?q.district.highRoute:q.district.lowRoute};
      const support=q.platforms.find(p=>q.onRoute(p)&&q.x>=p.x&&q.x<p.x+p.w);
-     q.y=support?.y??q.floorY;q.support=support?.id??null;q.grounded=true;
+     LR_HAZARDS.update(q);q.y=support?.y??q.floorY;q.support=support?.id??null;q.grounded=true;
      b='paused';SA.pause();ir=q.y;Kt=T-q.floorY;$i=0;UA=time;
      $A.update(0,q,{id:districtId,reduced:false,quality:1});Vu();vu();
      return {obstacles:q.obstacles.filter(o=>o.x>0&&o.x<eA).map(o=>({label:o.label,base:o.base,platform:o.platformId})),support:!!support};
    },{districtId,time,route});
-   await page.screenshot({path:`review/v122/districts/${districtId}-${name}.png`});
+   await page.screenshot({path:`review/v124/districts/${districtId}-${name}.png`});
    if(name==='ledge')assert.ok(info.support&&info.obstacles.some(o=>o.platform),'Ledge challenge renders on its supporting platform');
   }
  }

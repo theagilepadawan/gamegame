@@ -3,7 +3,7 @@ import {mkdir} from 'node:fs/promises';
 import {chromium} from 'playwright';
 
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});
-await mkdir('review/v122/alert',{recursive:true});
+await mkdir('review/v124/alert',{recursive:true});
 try {
   const page=await browser.newPage({viewport:{width:1280,height:720}}),errors=[];
   page.on('pageerror',error=>errors.push(error.message));
@@ -24,6 +24,10 @@ try {
   await page.waitForTimeout(2100);
   assert.equal(await page.evaluate(()=>window.alertCalls),0,'Grete’s first line does not trigger a premature reaction');
   assert.equal(await page.locator('.briefing-alert').isVisible(),false);
+  assert.equal(await page.locator('.briefing-link b').textContent(),'06:00');
+  assert.equal(await page.locator('.briefing-unknown').textContent(),'???');
+  assert.equal(await page.evaluate(()=>SA.musicAudible),false);
+  assert.equal(await page.evaluate(()=>[SA.track,...Object.values(SA.musicTracks)].every(t=>t.paused)),true,'Music is stopped throughout comms, not just ducked');
   const neutral=await page.evaluate(portraitHashes);
   await page.locator('.briefing-next').click();
   const surprise=await page.evaluate(portraitHashes);
@@ -41,7 +45,7 @@ try {
     finally{SA.fx.disconnect(analyser);analyser.disconnect();}
   });
   assert.ok(peak>.001,'The supplied cue reaches the effects audio graph');
-  await page.screenshot({path:'review/v122/alert/desktop.png'});
+  await page.screenshot({path:'review/v124/alert/desktop.png'});
   await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,get:()=>true});document.dispatchEvent(new Event('visibilitychange'));});
   const held=await page.evaluate(()=>({age:LR_BRIEFING.inspect().alertAge,time:SA.clips['mission-alert'].currentTime}));
   await page.waitForTimeout(250);
@@ -53,11 +57,15 @@ try {
   assert.equal(await page.evaluate(()=>window.alertCalls),1,'Visibility resumes the same cue without replay');
   await page.waitForTimeout(2300);
   assert.equal(await page.locator('.briefing-alert').isVisible(),true,'The mark stays until the reader advances');
-  assert.equal(await page.evaluate(()=>LR_BRIEFING.inspect().frames.nicolai),5,'The second surprised keyframe settles for reading');
+  assert.equal(await page.evaluate(()=>LR_BRIEFING.inspect().frames.nicolai),4,'Surprise stays for the whole first reply');
   const settled=await page.evaluate(portraitHashes);
-  assert.equal(neutral.hair,settled.hair);assert.equal(neutral.jacket,settled.jacket);assert.notEqual(surprise.face,settled.face);
+  assert.equal(neutral.hair,settled.hair);assert.equal(neutral.jacket,settled.jacket);assert.equal(surprise.face,settled.face);
   await page.locator('.briefing-next').click();assert.equal(await page.evaluate(()=>window.alertCalls),1);
   assert.equal(await page.locator('.briefing-alert').isVisible(),false,'Next dialogue removes the mark immediately');
+  await page.locator('.briefing-next').click();
+  assert.equal(await page.evaluate(()=>LR_BRIEFING.inspect().frames.nicolai),5,'The final answer uses the smile drawing');
+  assert.equal(await page.evaluate(()=>SA.musicAudible),false,'Music remains stopped on the last line');
+  await page.screenshot({path:'review/v124/alert/smile.png'});
   await page.locator('.briefing-skip').click();
   assert.equal(await page.evaluate(()=>SA.clips['mission-alert'].paused&&!SA.ducked),true,'Leaving the call stops the effect and restores music');
   await page.evaluate(()=>Cu(false));
@@ -67,6 +75,7 @@ try {
   const once=await page.evaluate(()=>window.alertCalls);await page.locator('.briefing-next').click();
   assert.equal(await page.evaluate(()=>window.alertCalls),once);
   await page.evaluate(()=>LR_BRIEFING.cancel());await page.waitForTimeout(950);
+  assert.equal(await page.evaluate(()=>SA.musicHolds.size),0,'Cancellation releases the music hold');
   assert.equal(await page.evaluate(()=>window.alertCalls),once,'No delayed sound after cancellation');
   await page.evaluate(()=>{if(SA.enabled)SA.toggle();});await launch();await page.locator('.briefing-next').click();
   await page.waitForFunction(()=>LR_BRIEFING.inspect().alertAge>100);
@@ -76,7 +85,7 @@ try {
     await page.setViewportSize(viewport);await launch();await page.locator('.briefing-next').click();await page.waitForFunction(()=>LR_BRIEFING.inspect().alertAge>200);
     const icon=await page.locator('.briefing-alert').boundingBox(), portrait=await page.locator('[data-person="nicolai"] canvas').boundingBox(), heading=await page.locator('.briefing-heading').boundingBox();
     assert.ok(icon.x>=0&&icon.y>=heading.y+heading.height&&icon.x+icon.width<=viewport.width&&icon.y+icon.height<=portrait.y+2,'Reaction stays above his head, clear of the header');
-    if(viewport.width===568)await page.screenshot({path:'review/v122/alert/mobile.png'});
+    if(viewport.width===568)await page.screenshot({path:'review/v124/alert/mobile.png'});
     await page.evaluate(()=>LR_BRIEFING.cancel());
   }
   await page.emulateMedia({reducedMotion:'reduce'});await launch();await page.locator('.briefing-next').click();await page.waitForFunction(()=>LR_BRIEFING.inspect().alertAge>100);

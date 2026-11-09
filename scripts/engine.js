@@ -242,7 +242,140 @@ function Yo(e24, { districtId: A = "opening", ground: t = 422 } = {}) {
   return i === "endless" ? window.LR_ENDLESS_GENERATOR ? LR_ENDLESS_GENERATOR.terrain(o, r) : Wu(o, r) : xu(o, i, r);
 }
 var T = 422, Rr = 0.4, wt = 0.28, Do = 0.3;
-var hr = 0.88, Qr = [{ name: "WALL STREET", place: "LOWER MANHATTAN", title: "The opening bell.", caption: "New York moves fast. Keep your cool.", low: "DEBT", high: "RED TAPE", cause: "An unexpectedly solid pile of debt.", joke: "Markets react to markets reacting." }, { name: "EARNINGS SEASON", place: "EARNINGS SEASON", title: "Record results. Shares fall.", caption: "Please duck the revised forecasts.", low: "FINE PRINT", high: "REVISED DOWN", cause: "A quarterly report with considerable weight.", joke: "Analyst raises probability of something happening." }, { name: "MIDTOWN", place: "MIDTOWN MANHATTAN", title: "Just one final question.", caption: "The next panel is somewhere on Fifth Avenue.", low: "COMMITTEE", high: "ONE LAST Q", cause: "An unscheduled appearance on a panel.", joke: "Brief panel discussion enters its third hour." }, { name: "TIMES SQUARE", place: "TIMES SQUARE", title: "Your calendar has been updated.", caption: "The city never sleeps. Neither does your inbox.", low: "INBOX", high: "QUICK SYNC", cause: "A quick sync with no end in sight.", joke: "Extraordinary meeting scheduled to discuss fewer meetings." }, { name: "CORPORATE DRAMA", place: "CORPORATE DRAMA", title: "Perfectly aligned incentives.", caption: "Executive bonuses have become an obstacle.", low: "BONUS", high: "PAY RISE", cause: "A compensation package of unusual size.", joke: "Compensation committee sees no issue." }];
+var hr = 0.88, Qr = [{ name: "WALL STREET", place: "LOWER MANHATTAN", title: "The opening bell.", caption: "New York moves fast. Keep your cool.", low: "DEBT SPIRAL", high: "RED TAPE", cause: "The debt was manageable. Until it wasn't.", joke: "Markets react to markets reacting." }, { name: "EARNINGS SEASON", place: "EARNINGS SEASON", title: "Record results. Shares fall.", caption: "Please duck the revised forecasts.", low: "HIDDEN FEES", high: "REVISED DOWN", cause: "A quarterly report with considerable weight.", joke: "Beat estimates. Missed expectations." }, { name: "MIDTOWN", place: "MIDTOWN MANHATTAN", title: "Just one final question.", caption: "The next panel is somewhere on Fifth Avenue.", low: "ONE MORE COMMITTEE", high: "ONE LAST Q", cause: "An unscheduled appearance on a panel.", joke: "Brief panel discussion enters its third hour." }, { name: "TIMES SQUARE", place: "TIMES SQUARE", title: "Your calendar has been updated.", caption: "The city never sleeps. Neither does your inbox.", low: "REPLY ALL", high: "QUICK SYNC", cause: "A quick sync with no end in sight.", joke: "Extraordinary meeting scheduled to discuss fewer meetings." }, { name: "CORPORATE DRAMA", place: "CORPORATE DRAMA", title: "Perfectly aligned incentives.", caption: "A rising tide lifts all bonus pools.", low: "PAY FOR LUCK", high: "GOLDEN PARACHUTE", cause: "A soft landing. For one.", joke: "Pay tracks performance. Only upwards." }];
+// Authored prop silhouettes, finance copy and motion share one physical model.
+// Rendering reads these values; it never moves an obstacle independently.
+var LR_HAZARDS = (() => {
+  const widths = {
+    "DEBT SPIRAL":100,"HURDLE RATE":102,"FOMO":96,"MORE FOMO":112,"GUIDANCE CUT":96,
+    "MARGIN CALL":100,"REVISED DOWN":94,"VOL SPIKE":106,"FEE ON FEES":64,"FEE DRAG":70,
+    "CAPEX CREEP":122,"SUNK-COST TRAP":112,"BENCHMARK":108,"PARKING FEE":114,
+    "BAGHOLDER":88,"SHORT-TERMISM":112
+  };
+  const wide = {"PRICED FOR PERFECTION":160,"CROWDED TRADE":150,"RISING OVERHEADS":156,
+    "DEBT OVERHANG":148,"MOVING GUIDANCE":154,"TAIL RISK":154,"HAIRCUT":140,"FEE CREEP":150};
+  const lines = {
+    "DEBT SPIRAL":"The repayment plan needs a repayment plan.",
+    "RED TAPE":"Pre-approved. Pending approval.",
+    "HURDLE RATE":"A perfectly reasonable hurdle. Until you meet it.",
+    "PRICED FOR PERFECTION":"Assumes nothing goes wrong. Ever.",
+    "FOMO":"Due diligence: everyone else bought it.",
+    "MORE FOMO":"The valuation improved. In the presentation.",
+    "CROWDED TRADE":"All independent thinkers. Same position.",
+    "GUIDANCE CUT":"The outlook has found a lower floor.",
+    "DOWNGRADE":"The recommendation arrived after the move.",
+    "MARGIN CALL":"This call could have been an email. It wasn't.",
+    "REVISED DOWN":"Same confidence. Smaller number.",
+    "HIDDEN FEES":"Small print. Large invoice.",
+    "VOL SPIKE":"Calm was transitory.",
+    "FEE ON FEES":"Net of fees. Then net of more fees.",
+    "FEE DRAG":"A small percentage of rather a lot.",
+    "RISING OVERHEADS":"The costs have taken the lift.",
+    "CAPEX CREEP":"On budget. On the new budget.",
+    "SUNK-COST TRAP":"The next expense was meant to fix the last one.",
+    "DEBT OVERHANG":"Tomorrow's cash flow is already booked.",
+    "MOVING GUIDANCE":"Same target. New location.",
+    "BENCHMARK":"The benchmark was harder to beat than expected.",
+    "FEE CREEP":"The fees have put down roots.",
+    "PARKING FEE":"Even sitting this one out has a fee.",
+    "HAIRCUT":"A little off the valuation.",
+    "BAGHOLDER":"The investment thesis has become luggage.",
+    "SHORT-TERMISM":"A long-term view. Reviewed every minute.",
+    "TAIL RISK":"It was outside the model. And inside the park.",
+    "ONE MORE COMMITTEE":"The decision needs a decision about the decision.",
+    "ONE LAST Q":"Brief panel discussion enters its third hour.",
+    "REPLY ALL":"Your inbox has been diversified.",
+    "QUICK SYNC":"Extraordinary meeting scheduled to discuss fewer meetings.",
+    "PAY FOR LUCK":"A rising tide lifts all bonus pools.",
+    "GOLDEN PARACHUTE":"A soft landing. For one."
+  };
+  function district(item, place) { return item.artDistrict || place || (item.theme >= 2 ? "midtown" : "opening"); }
+  function variant(item, place) {
+    const p=district(item,place), label=item.label||"";
+    if(item.type==="high") {
+      if(p==="park")return /FEE CREEP|TAIL RISK/.test(label)?3:2;
+      if(p==="midtown")return /COMMITTEE|LAST Q|SYNC|PARACHUTE|RISING OVERHEADS/.test(label)?3:2;
+      return /RED TAPE|MARGIN|DOWNGRADE/.test(label)?3:2;
+    }
+    if(p==="park")return /BAGHOLDER/.test(label)?1:0;
+    if(p==="midtown")return /CAPEX|SUNK|PAY FOR LUCK/.test(label)?1:0;
+    return /FOMO|PERFECTION|HURDLE/.test(label)?1:0;
+  }
+  function fit(h,q) {
+    if(h.type==="gap")return h;
+    const place=q.districtId||"opening", compact=h.type==="low"&&h.h<50;
+    const desired=h.type==="high"?(wide[h.label]||144):(widths[h.label]||90)*(compact?.80:1);
+    h.x+=(h.w-desired)/2;h.w=desired;h.artDistrict=place;h.artVariant=variant(h,place);
+    proportions(h);
+    const at=x=>q.terrainAt((q.chapterDistance||0)+x-q.x);
+    h.groundEnds=[at(h.x+7),at(h.x+h.w-7)];
+    if(h.type==="low") {
+      h.base=at(h.x+h.w/2);h.groundSlope=(at(h.x+h.w)-at(h.x))/h.w;
+    } else {
+      let floor=Infinity;for(let x=0;x<=h.w;x+=h.w/12)floor=Math.min(floor,at(h.x+x));
+      h.base=floor;
+    }
+    return h;
+  }
+  // These are the native physical faces in the art manifest. Uniform scale
+  // preserves the illustrator's proportions; ornaments remain forgiving.
+  const ratios={opening:[699/437,701/441,721/387,763/354],midtown:[501/466,730/320,726/347,742/374],park:[780/410,529/428,713/156,679/164]};
+  function proportions(h) {
+    const ratio=ratios[h.artDistrict||"opening"][h.artVariant??variant(h)];
+    let height=h.w/ratio;
+    if(h.type==="low"&&height>82){const old=h.w;h.w=82*ratio;h.x+=(old-h.w)/2;height=82;}
+    h.h=height;
+  }
+  function body(h,x) {
+    const base=h.base+(h.groundSlope||0)*(Math.max(h.x,Math.min(h.x+h.w,x))-h.x-h.w/2);
+    const inset=h.artDistrict==="park"&&h.artVariant===2?h.w*.16:5;
+    return {x:h.x+inset,y:base-(h.type==="high"?96+h.h:h.h),w:h.w-inset*2,h:h.type==="high"?h.h:h.h-4};
+  }
+  const pools = [
+    [["DEBT SPIRAL","HURDLE RATE","FOMO","MARGIN CALL","MORE FOMO"],["RED TAPE","PRICED FOR PERFECTION","CROWDED TRADE","DOWNGRADE"]],
+    [["HIDDEN FEES","GUIDANCE CUT","VOL SPIKE","FEE ON FEES"],["REVISED DOWN","GUIDANCE CUT","DEBT OVERHANG"]],
+    [["FEE DRAG","CAPEX CREEP","SUNK-COST TRAP","FEE ON FEES"],["ONE MORE COMMITTEE","ONE LAST Q","RISING OVERHEADS"]],
+    [["REPLY ALL","FEE DRAG","ONE MORE COMMITTEE"],["QUICK SYNC","ONE LAST Q","RISING OVERHEADS"]],
+    [["PAY FOR LUCK","FOMO","MORE FOMO"],["GOLDEN PARACHUTE","CROWDED TRADE","ONE LAST Q"]]
+  ];
+  function endless(h,q,time) {
+    const theme=Math.floor(time/32)%5, list=pools[theme][h.type==="high"?1:0];
+    const recent=q.propLabels||[], choices=list.filter(label=>!recent.includes(label));
+    const options=choices.length?choices:list;
+    const hash=Math.imul((q.seed||0)^Math.round(h.x-q.x+q.distance),2246822519)>>>0;
+    h.label=options[hash%options.length];h.theme=theme;h.artDistrict=theme>=2?"midtown":"opening";
+    h.artVariant=variant(h,h.artDistrict);proportions(h);q.propLabels=[...recent,h.label].slice(-3);
+  }
+  function moving(h,q,period,travel=38,shape="sine",salt=0) {
+    const hash=(Math.imul((q.seed||0)^Math.round(h.x-q.x+(q.distance||0)),2654435761)>>>0)/4294967296;
+    h.guidance={base:h.base,phase:(hash*6.28318530718+salt)%6.28318530718,period,travel,shape};
+    return h;
+  }
+  function offset(h,time) {
+    if(!h.guidance)return 0;
+    const m=h.guidance, u=.5+.5*Math.sin(time*Math.PI*2/m.period+m.phase);
+    const eased=m.shape==="lift"?u*u*(3-2*u):u;
+    return -(m.travel??38)*(1-eased);
+  }
+  function update(q) {
+    for(const h of q.obstacles) {
+      let mount=h.guidance?.base??h.base;
+      if(h.platformId) {
+        const p=q.platforms.find(p=>p.id===h.platformId);
+        if(p){mount=p.y;h.active=p.active;h.groundSlope=0;}
+      }
+      h.mountBase=mount;
+      if(h.guidance||h.platformId)h.base=mount+offset(h,q.time);
+    }
+  }
+  function cause(h) {return lines[h.label]||(h.type==="high"?"A lower ceiling than the forecast suggested.":"The market priced in your landing.");}
+  function cleared(q,h) {
+    if(!lines[h.label]||q.time-(q.lastPropQuip??-20)<9||q.flight||q.contrarian)return;
+    q.lastPropQuip=q.time;q.emit("propQuip",{line:lines[h.label]});
+  }
+  return {version:1240,widths,wide,lines,district,variant,fit,endless,proportions,body,moving,offset,update,cause,cleared};
+})();
+window.LR_HAZARDS = LR_HAZARDS;
 function Br(e24) {
   let A = e24 >>> 0;
   return () => {
@@ -259,7 +392,7 @@ function xo(e24) {
 function Pe(e24, A) {
   return e24.x < A.x + A.w && e24.x + e24.w > A.x && e24.y < A.y + A.h && e24.y + e24.h > A.y;
 }
-var Ir = (e24) => 315 + 1.65 * e24 + 55 * Math.log1p(e24 / 60), cg = ["OPENING BELL", "BULL RUN", "BREAKOUT", "FLOATING AVERAGE", "MOMENTUM EXPRESS", "SELL-OFF", "VOLATILITY", "ALL-TIME HIGH"], cr = 60, Fo = 11, Oe = cr + Fo, Ri = Oe + 4, xQ = [{ id: "opening", name: "THE OPENING BELL", start: 0, end: 10 }, { id: "bull", name: "BULL RUN", start: 10, end: 27 }, { id: "recovery", name: "A DIFFERENT PERSPECTIVE", start: 27, end: 36 }, { id: "selloff", name: "COMPOUNDING", start: 36, end: 54 }, { id: "launch", name: "THE IPO ROADSHOW", start: 54, end: cr }, { id: "ipo", name: "IPO HYPE MACHINE", start: cr, end: Oe }, { id: "landing", name: "NEXT STOP: UPTOWN", start: Oe, end: Ri }], zo = (e24) => (e24 = Math.max(0, Math.min(1, e24)), e24 * e24 * (3 - 2 * e24));
+var Ir = (e24) => 315 + 1.65 * e24 + 55 * Math.log1p(e24 / 60), cg = ["OPENING BELL", "BULL RUN", "BREAKOUT", "FLOATING AVERAGE", "MOMENTUM EXPRESS", "SELL-OFF", "VOL SPIKE", "ALL-TIME HIGH"], cr = 60, Fo = 11, Oe = cr + Fo, Ri = Oe + 4, xQ = [{ id: "opening", name: "THE OPENING BELL", start: 0, end: 10 }, { id: "bull", name: "BULL RUN", start: 10, end: 27 }, { id: "recovery", name: "A DIFFERENT PERSPECTIVE", start: 27, end: 36 }, { id: "selloff", name: "COMPOUNDING", start: 36, end: 54 }, { id: "launch", name: "THE IPO ROADSHOW", start: 54, end: cr }, { id: "ipo", name: "IPO HYPE MACHINE", start: cr, end: Oe }, { id: "landing", name: "NEXT STOP: UPTOWN", start: Oe, end: Ri }], zo = (e24) => (e24 = Math.max(0, Math.min(1, e24)), e24 * e24 * (3 - 2 * e24));
 function ee(e24) {
   if (e24 <= 36) return e24 * 330;
   if (e24 <= 54) {
@@ -503,7 +636,10 @@ var hi = class {
     let A = this.speed / 315;
     for (let t = 0; t < 4; t++) {
       let i = this.x + (1120 + t * 700) * A;
-      this.hazard(t % 2 ? "high" : "low", i, (t % 2 ? 105 : 58) * A), this.trail(i - 110 * A, T - (t % 2 ? 38 : 145), 170 * A, 4, "opportunity");
+      const h=this.hazard(t % 2 ? "high" : "low", i, (t % 2 ? 105 : 58) * A);
+      h.artDistrict=this.districtId||(this.theme>=2?"midtown":"opening");
+      h.artVariant=LR_HAZARDS.variant(h);LR_HAZARDS.proportions(h);
+      this.trail(i - 110 * A, T - (t % 2 ? 38 : 145), 170 * A, 4, "opportunity");
     }
     this.emit("contrarian");
   }
@@ -516,16 +652,20 @@ var hi = class {
   prepareChapter() {
     this.autoSpawn = false;
     let A = (a) => this.x + ee(a), t = (a) => this.terrainAt(ee(a)), i = (a, g, l) => {
+      const authoredTime=a;
       this.procedural && (a += (this.layoutRandom() - 0.5) * 0.22);
       let E = g === "high" ? Math.min(t(a), this.terrainAt(ee(a) + 110)) : t(a), I = this.hazard(g, A(a), g === "high" ? 110 : 60, E);
-      return I.label = l, I;
+      I.label = l; LR_HAZARDS.fit(I,this);
+      const cycle = g === "high" && ({6.8:[4.8,32],22:[3.6,40],48:[4.1,38]})[authoredTime];
+      if(cycle) LR_HAZARDS.moving(I,this,cycle[0],cycle[1],authoredTime===22?"lift":"sine",authoredTime);
+      return I;
     }, r = (a, g = 4, l = 110, E = "dividend") => {
       for (let I = 0; I < g; I++) {
         let Q = a + I * 0.25;
         this.pickups.push({ x: A(Q), y: t(Q) - l, kind: E, taken: false });
       }
     }, o = (a, g, l = 65) => this.pickups.push({ x: A(a), y: t(a) - l, kind: g, taken: false });
-    i(3.2, "low", "DEBT"), r(2.8, 4, 145), i(6.8, "high", "RED TAPE"), r(6.6, 3, 38), o(8.5, "diversification");
+    i(3.2, "low", "DEBT SPIRAL"), r(2.8, 4, 145), i(6.8, "high", "RED TAPE"), r(6.6, 3, 38), o(8.5, "diversification");
     let s = (a, g, l) => {
       if (g === "low" && LR_STEEP(this, ee(a)) && (g = "high"), i(a, g, l), g === "high") r(a - 0.25, 3, 34);
       else for (let [E, I] of [[-0.32, 130], [-0.1, 177], [0.12, 175], [0.34, 126]]) this.pickups.push({ x: A(a + E), y: t(a + E) - I, kind: "opportunity", taken: false });
@@ -533,9 +673,9 @@ var hi = class {
       let Q = this.platform(A(a), LR_PLAT(this, ee(a), l, g), l, E, { premium: true, phrase: I });
       return this.trail(Q.x + 35, Q.y - 42, Q.w - 70, 4, "opportunity", Q), Q;
     };
-    for (let [a, g, l] of [[12.1, "low", "HURDLE RATE"], [13.6, "high", "EXPECTATIONS"], [19, "low", "PREMIUM"], [20.4, "low", "MORE PREMIUM"], [22, "high", "CONSENSUS"]]) s(a, g, l);
+    for (let [a, g, l] of [[12.1, "low", "HURDLE RATE"], [13.6, "high", "PRICED FOR PERFECTION"], [19, "low", "FOMO"], [20.4, "low", "MORE FOMO"], [22, "high", "CROWDED TRADE"]]) s(a, g, l);
     n(14.8, 160, 285, "bull", "bull-staircase"), n(16.1, 160, 285, "bull", "bull-staircase"), n(23.5, 160, 270, "bull", "bull-crown"), n(24.7, 160, 285, "bull", "bull-crown"), o(16, "conviction"), o(28, "research"), o(31, "contrarian", 175), r(33, 5, 65);
-    for (let [a, g, l] of [[38.5, "low", "GUIDANCE"], [40.05, "high", "DOWNGRADE"], [45.2, "low", "MARGIN CALL"], [46.45, "low", "REVISED GUIDANCE"], [48, "high", "FINE PRINT"], [51, "low", "VOLATILITY"]]) s(a, g, l);
+    for (let [a, g, l] of [[38.5, "low", "GUIDANCE CUT"], [40.05, "high", "DOWNGRADE"], [45.2, "low", "MARGIN CALL"], [46.45, "low", "REVISED DOWN"], [48, "high", "HIDDEN FEES"], [51, "low", "VOL SPIKE"]]) s(a, g, l);
     n(41.6, 160, 285, "crumble", "selloff-roofs"), n(42.7, 160, 300, "crumble", "selloff-roofs"), o(49, "diversification"), o(57, "jetpack"), this.pickups.at(-1).flightKind = "ipo", this.ambientJetpacks && this.addCruiseCorridor(33.5 + this.layoutRandom() * 0.5, (a) => ee(a));
   }
   addCruiseCorridor(A, t) {
@@ -664,6 +804,7 @@ var hi = class {
     for (let l of [this.obstacles, this.pickups, this.platforms, this.springs, this.gates]) for (let E of l) E.x -= n;
     this.research = Math.max(0, this.research - A), this.conviction = Math.max(0, this.conviction - A), this.invincible = Math.max(0, this.invincible - A), this.forcedBounce = Math.max(0, this.forcedBounce - A), this.flipAge >= 0 && (this.flipAge += A, this.flipAge >= this.flipDuration && (this.flipAge = -1)), o && !this.pickups.some((l) => l.kind === "jetpack" && l.x > this.x - 40) && this.pickups.push({ x: this.x + 360, y: this.floorY - 65, kind: "jetpack", flightKind: "ipo", taken: false });
     for (let l of this.platforms) l.prevY = l.y, l.kind === "crumble" && l.collapseAt && this.time > l.collapseAt && (l.active = false, l.y += 230 * A);
+    LR_HAZARDS.update(this);
     for (let l of this.pickups) if (l.platformId) {
       let E = this.platforms.find((I) => I.id === l.platformId);
       E && (l.y = E.y + l.offsetY);
@@ -684,9 +825,8 @@ var hi = class {
     for (let l of this.obstacles) {
       // Endless low props follow their bank. Sample the same sheared body at
       // the runner, so the painted slope and collision height stay registered.
-      let bodyBase = l.base + (l.groundSlope || 0) * (Math.max(l.x, Math.min(l.x + l.w, this.x)) - l.x - l.w / 2);
-      let E = { x: l.x + 5, y: bodyBase - (l.type === "high" ? 181 : l.h), w: l.w - 10, h: l.type === "high" ? 85 : l.h - 4 };
-      Pe(a, E) && this.hit(l.type === "high" ? "A meeting you should have ducked." : "The market priced in your landing."), !l.passed && l.x + l.w < this.x - 20 && (l.passed = true, this.cleared++, this.flow++, this.bonus += 25);
+      let E = LR_HAZARDS.body(l,this.x);
+      Pe(a, E) && this.hit(LR_HAZARDS.cause(l)), !l.passed && l.x + l.w < this.x - 20 && (l.passed = true, this.cleared++, this.flow++, this.bonus += 25, LR_HAZARDS.cleared(this,l));
     }
     if (this.dead || this.updateBoss(A, r, a), this.dead) return;
     let g = null;
@@ -750,6 +890,7 @@ var hi = class {
     }
     for (let I of this.pickups) I.kind === "contrarian" && !I.announced && I.x < this.width - 75 && (I.announced = true, this.emit("contrarianOffer"));
     for (let I of this.platforms) I.prevY = I.y, I.kind === "crane" && (I.y = I.baseY + Math.sin(this.time * I.frequency + I.phase) * I.amp), I.kind === "crumble" && I.collapseAt && this.time > I.collapseAt && (I.active = false, I.y += 230 * A);
+    LR_HAZARDS.update(this);
     for (let I of this.pickups) if (I.platformId) {
       let Q = this.platforms.find((R) => R.id === I.platformId);
       Q && (I.y = Q.y + I.offsetY);
@@ -773,10 +914,10 @@ var hi = class {
     let g = this.bodyBox();
     for (let I of this.obstacles) {
       if (I.type !== "gap") {
-        let Q = I.base ?? T, R = { x: I.x + 5, y: Q - (I.type === "high" ? 181 : I.h), w: I.w - 10, h: I.type === "high" ? 85 : I.h - 4 };
-        window.LR_ENDLESS && LR_ENDLESS.near(this, I, g, R), Pe(g, R) && this.hit(I.type === "high" ? "A meeting you should have ducked." : Qr[I.theme].cause);
+        let R = LR_HAZARDS.body(I,this.x);
+        window.LR_ENDLESS && LR_ENDLESS.near(this, I, g, R), Pe(g, R) && this.hit(LR_HAZARDS.cause(I));
       }
-      !I.passed && I.x + I.w < this.x - 20 && (I.passed = true, this.cleared++, this.flow++, this.bonus += (15 + Math.min(30, this.flow)) * (this.conviction > 0 ? 2 : 1) * (window.LR_ENDLESS ? LR_ENDLESS.mult(this) : 1), window.LR_ENDLESS && LR_ENDLESS.cleared(this, I), this.emit("clear"));
+      !I.passed && I.x + I.w < this.x - 20 && (I.passed = true, this.cleared++, this.flow++, this.bonus += (15 + Math.min(30, this.flow)) * (this.conviction > 0 ? 2 : 1) * (window.LR_ENDLESS ? LR_ENDLESS.mult(this) : 1), window.LR_ENDLESS && LR_ENDLESS.cleared(this, I), this.emit("clear"), LR_HAZARDS.cleared(this,I));
     }
     if (this.dead) return;
     let l = false, E = false;
@@ -1013,7 +1154,12 @@ var ko = class {
     return this.scene === "playing" || this.scene === "results" || (this.scene === "cutscene" && !document.hidden) || (this.scene === "home" && this.activeMusic === "title" && !document.hidden);
   }
   wantedMusic(A) {
-    return this.enabled && this.playing && (this.activeMusic ? !this.musicEnded && A === this.musicTracks[this.activeMusic] : A === this.track);
+    return !this.musicHolds?.size && this.enabled && this.playing && (this.activeMusic ? !this.musicEnded && A === this.musicTracks[this.activeMusic] : A === this.track);
+  }
+  holdMusic(reason, held) {
+    this.musicHolds ||= new Set();
+    held ? this.musicHolds.add(reason) : this.musicHolds.delete(reason);
+    this.syncMusic(); this.reportPlayback();
   }
   routed(A) {
     return A === this.track ? !!this.source : Object.entries(this.musicTracks).some(([id, track]) => track === A && !!this.musicSources[id]);
@@ -1145,7 +1291,7 @@ var ko = class {
     this.pause(), this.scene = "home", this.endMusic({ resume: false });
   }
   home() {
-    if (!this.enabled || document.hidden) return;
+    if (!this.enabled || document.hidden || this.musicHolds?.size) return;
     this.scene = "home";
     if (this.activeMusic === "title") {
       if (this.musicTracks.title.paused || this.ctx && this.ctx.state !== "running" || !this.ctx && navigator.userActivation?.hasBeenActive) {
@@ -1440,7 +1586,7 @@ var Po = class {
     let E = (A.targetTop ?? n) >= 140;
     if (A.announced && !A.passed && (!E || n >= 145)) {
       let I = E ? n - 63 : a + 53;
-      this.rect(o - 11, I - 11, s + 22, 20, "#071e2dea", 3), this.line(o - 7, I - 11, o + s + 7, I - 11, g, 1), r.textAlign = "center", r.font = "700 7px Arial,sans-serif", r.fillStyle = "#e8d8b6", r.fillText(A.attackId === "valuation" ? "VALUATION" : A.attackId === "guidance" ? "GUIDANCE" : "PRICE SQUEEZE", o + s / 2, I + 2);
+      this.rect(o - 11, I - 11, s + 22, 20, "#071e2dea", 3), this.line(o - 7, I - 11, o + s + 7, I - 11, g, 1), r.textAlign = "center", r.font = "700 7px Arial,sans-serif", r.fillStyle = "#e8d8b6", r.fillText(A.attackId === "valuation" ? "VALUATION" : A.attackId === "guidance" ? "GUIDANCE CUT" : "PRICE SQUEEZE", o + s / 2, I + 2);
     }
     r.restore();
   }
@@ -1540,8 +1686,8 @@ var Po = class {
     let o = this.c, s = A.x + t, n = A.base ?? i, a = A.w;
     if (s > r + 70 || s + a < -70) return;
     if (A.type === "gap") return; // The terrain renderer owns the complete opening.
-    if (window.LR_PROPS?.hazard(o, A, s, n, "opening")) return;
-    let g = A.type === "high", l = g ? n - 181 : n - A.h, E = g ? 85 : A.h;
+    if (window.LR_PROPS?.hazard(o, A, s, n, "opening", this.environment?.run)) return;
+    let g = A.type === "high", l = g ? n - 96 - A.h : n - A.h, E = A.h;
     this.rect(s, l, a, E, "#071825", 3), this.rect(s + 2, l + 2, a - 4, E - 4, this.metal(s, l, a, E, ["#b37e6c", "#694d4a", "#3b3540"]), 3), this.rect(s + 8, l + 8, a - 16, E - 16, "#432f39", 2), this.line(s + 2, l + 2, s + a - 2, l + 2, "#e3b597", 1.5), this.line(s + 2, l + 2, s + 2, l + E - 2, "#d69f8580", 1), this.line(s + 2, l + E - 2, s + a - 2, l + E - 2, "#b27e6d", 1.5);
     for (let Q of [s + 5, s + a - 5]) for (let R of [l + 6, l + E - 6]) this.rivet(Q, R, 1.4);
     if (g) for (let Q of [s + 13, s + a - 13]) this.line(Q, l - 42, Q, l, "#091b27", 3), this.line(Q, l - 42, Q, l, "#83938b", 1), this.rect(Q - 4, l - 3, 8, 5, "#b9a17b", 1);
@@ -1610,13 +1756,18 @@ var yo = class extends hi {
   }
   prepareDistrict() {
     let A = this.districtId === "park", t = (g) => this.x + g * ye, i = (g) => this.terrainAt(g * ye), r = (g, l, E, I = null, Q = null, R = 54) => {
-      const guidance = !A && l === "high" && !I && (g === 35.4 || g === 55.2);
+      const cycle = l === "high" && !I && (A ?
+        ({6.5:[5.2,28],12.2:[4.4,22],35.4:[3.7,32],55.2:[3.3,24]})[g] :
+        ({6.5:[4.6,34],12.2:[3.6,40],33.85:[4.1,38],35.4:[3.2,42],55.2:[2.8,42]})[g]);
       this.procedural && !I && (g < 13.5 || g > 30 && g < 37 || g > 47.5) && (g += (this.layoutRandom() - 0.5) * 0.3);
       let h = this.hazard(l, t(g), l === "high" ? 112 : 58, Q ?? (this.procedural && l === "high" ? Math.min(i(g), this.terrainAt(g * ye + 112)) : i(g)));
-      // Two occasional hoists, with a readable, fixed cycle. The base is shared
-      // by rendering and collision; never accumulate offsets or use wall time.
-      if (guidance) h.guidance = {base: h.base, phase: g, period: 3.8}, E = "MOVING GUIDANCE";
-      return h.label = E, h.route = I, h.skin = A ? l === "high" ? "branch" : "bench" : l === "high" ? "girder" : "barrier", l === "low" && (h.h = R), h;
+      if(cycle && !A && (cycle[0]===3.2 || cycle[0]===2.8)) E="MOVING GUIDANCE";
+      h.label=E;h.route=I;h.skin=A?(l==="high"?"branch":"bench"):(l==="high"?"girder":"barrier");
+      if(l==="low")h.h=R;
+      LR_HAZARDS.fit(h,this);
+      if(Q!==null){h.base=Q;h.groundSlope=0;}
+      if(cycle)LR_HAZARDS.moving(h,this,cycle[0],cycle[1],A?"sine":"lift",g);
+      return h;
     }, o = (g, l = 4, E = 76, I = "dividend", Q = null) => {
       for (let R = 0; R < l; R++) this.pickups.push({ x: t(g + R * 0.24), y: i(g + R * 0.24) - E, kind: I, taken: false, route: Q });
     }, s = (g, l, E, I, Q = null, R = {}) => {
@@ -1625,7 +1776,7 @@ var yo = class extends hi {
       for (let B of this.pickups) B.platformId === h.id && (B.route = Q);
       return h;
     }, n = (g, l, E = {}) => this.worldItems.push({ id: "world-" + this.nextId++, kind: l, x: t(g), y: i(g), w: l === "puddle" ? 115 : 60, triggered: false, age: 0, ...E });
-    for (let [g, l, parkLabel, cityLabel] of [[3.2, "low", "BENCHMARK", "ENTRY FEE"], [6.5, "high", "LOW YIELD", "LOW GUIDANCE"], [9.5, "low", "PARKED CASH", "FEE DRAG"], [12.2, "high", "RATE CUT", "RATE CEILING"]]) r(g, l, A ? parkLabel : cityLabel), o(g - 0.3, 3, l === "high" ? 35 : 145, "opportunity");
+    for (let [g, l, parkLabel, cityLabel] of [[3.2, "low", "BENCHMARK", "FEE ON FEES"], [6.5, "high", "FEE CREEP", "GUIDANCE CUT"], [9.5, "low", "PARKING FEE", "FEE DRAG"], [12.2, "high", "HAIRCUT", "RISING OVERHEADS"]]) r(g, l, A ? parkLabel : cityLabel), o(g - 0.3, 3, l === "high" ? 35 : 145, "opportunity");
     this.pickups.push({ x: t(8), y: i(8) - 65, kind: "diversification", taken: false }), n(13.2, "sign", { role: "fork", label: this.district.highRoute + " / " + this.district.lowRoute }), s(14.9, 92, 850, A ? "bridge" : "scaffold", null, { entry: true, premium: true });
     let a = [];
     for (let [g, l, E] of [[17.8, 124, 540], [19.7, 144, 520], [21.55, 124, 530], [23.45, 144, 520], [25.3, 124, 530], [27.2, 92, 650]]) {
@@ -1642,20 +1793,20 @@ var yo = class extends hi {
       }
       return hazard;
     };
-    supported(20.45, "high", A ? "OVERHANG" : "LOW GUIDANCE", a[1]);
-    supported(24.2, "low", A ? "SIT & HOLD" : "CAPEX", a[3], 42);
+    LR_HAZARDS.moving(supported(20.45, "high", A ? "DEBT OVERHANG" : "GUIDANCE CUT", a[1]),this,A?4.7:3.9,A?20:36,A?"sine":"lift",20.45);
+    supported(24.2, "low", A ? "BAGHOLDER" : "CAPEX CREEP", a[3], 42);
     // Stagger the two routes horizontally: an upper and lower prop must not
     // read as a single wall, even though only the chosen path can collide.
-    for (let [g, l, parkLabel, cityLabel] of [[18.2, "low", "LONG VIEW", "SUNK COST"], [22.35, "high", "TRIM RISK", "OVERHANG"], [25.75, "low", "PARKED CASH", "ENTRY FEE"], [28.5, "high", "LOW YIELD", "RATE CEILING"]]) r(g, l, A ? parkLabel : cityLabel, "low"), o(g - 0.3, 4, l === "high" ? 34 : 145, "dividend", "low");
+    for (let [g, l, parkLabel, cityLabel] of [[18.2, "low", "SHORT-TERMISM", "SUNK-COST TRAP"], [22.35, "high", "TAIL RISK", "DEBT OVERHANG"], [25.75, "low", "PARKING FEE", "FEE ON FEES"], [28.5, "high", "FEE CREEP", "RISING OVERHEADS"]]) r(g, l, A ? parkLabel : cityLabel, "low"), o(g - 0.3, 4, l === "high" ? 34 : 145, "dividend", "low");
     n(30, "sign", { role: "rejoin", label: A ? "BETHESDA TERRACE" : "FIFTH AVENUE" }), this.pickups.push({ x: t(30.5), y: i(30.5) - 65, kind: "research", taken: false });
-    for (let [g, l, parkLabel, cityLabel] of [[32.3, "low", "BENCHMARK", "FEE DRAG"], [33.85, "high", "RATE CUT", "OVERHANG"], [35.4, "high", "LOW YIELD", "LOW GUIDANCE"], [36.75, "low", "SIT & HOLD", "CAPEX"]]) r(g, l, A ? parkLabel : cityLabel), o(g - 0.35, 4, l === "high" ? 34 : 145, "opportunity");
+    for (let [g, l, parkLabel, cityLabel] of [[32.3, "low", "BENCHMARK", "FEE DRAG"], [33.85, "high", "HAIRCUT", "DEBT OVERHANG"], [35.4, "high", "FEE CREEP", "GUIDANCE CUT"], [36.75, "low", "BAGHOLDER", "CAPEX CREEP"]]) r(g, l, A ? parkLabel : cityLabel), o(g - 0.35, 4, l === "high" ? 34 : 145, "opportunity");
     s(38.2, 72, 470, "awning", null, { bounce: 100, setPiece: true }), A ? (s(39.95, 122, 440, "stone", null, { setPiece: true }), s(41.55, 106, 460, "awning", null, { bounce: 100, setPiece: true }), s(43.25, 138, 440, "stone", null, { setPiece: true }), s(44.9, 84, 490, "bridge", null, { setPiece: true }), n(40.4, "puddle", { w: 650, role: "water-garden" })) : (s(39.95, 122, 440, "crumble", null, { setPiece: true }), s(41.55, 122, 460, "crane", null, { amp: 24, phase: 0.3, frequency: 1.2, setPiece: true }), s(43.25, 122, 440, "crumble", null, { setPiece: true }), s(44.9, 84, 490, "scaffold", null, { setPiece: true }));
     // Obstacles belong on the ledges, with room to land before the next
     // input. Never sandwich the runner between a ground crate and a low deck.
     const ledges = this.platforms.filter(p => p.setPiece);
-    supported(40.75, "low", A ? "LONG VIEW" : "SUNK COST", ledges[1]);
-    supported(45.95, "high", A ? "TRIM RISK" : "RATE CEILING", ledges[4]);
-    for (let [g, l, parkLabel, cityLabel] of [[49.7, "high", "OVERHANG", "LOW GUIDANCE"], [52.5, "low", "PARKED CASH", "FEE DRAG"], [55.2, "high", "RATE CUT", "RATE CEILING"]]) r(g, l, A ? parkLabel : cityLabel), o(g - 0.3, 3, l === "high" ? 34 : 145, "opportunity");
+    supported(40.75, "low", A ? "SHORT-TERMISM" : "SUNK-COST TRAP", ledges[1]);
+    supported(45.95, "high", A ? "TAIL RISK" : "RISING OVERHEADS", ledges[4]);
+    for (let [g, l, parkLabel, cityLabel] of [[49.7, "high", "DEBT OVERHANG", "GUIDANCE CUT"], [52.5, "low", "PARKING FEE", "FEE DRAG"], [55.2, "high", "HAIRCUT", "RISING OVERHEADS"]]) r(g, l, A ? parkLabel : cityLabel), o(g - 0.3, 3, l === "high" ? 34 : 145, "opportunity");
     o(57.5, 7, 65, "opportunity");
     // Small seating groves frame the benches; keep the lake, bridge and
     // water-garden sequence open instead of stamping a tree every 4.5 seconds.
@@ -1664,6 +1815,7 @@ var yo = class extends hi {
     for (let g of [2.1, 10.5, 29.9, 36.7, 48.5, 56.8]) n(g, "birds");
     for (let g of [4.8, 11, 30.8, 37, 48.1, 54.2]) n(g, "puddle");
     for (let g of [8.9, 33, 50]) n(g, "sign", { label: A ? "TAKE THE LONG VIEW" : "WORK IN PROGRESS" });
+    if(A)n(58.4,"rest-bench",{label:"SIT & HOLD",w:88});
     n(60, "finish", { label: A ? "BETHESDA TERRACE" : "TOPPING OUT", w: 180 }), this.ambientJetpacks && this.addCruiseCorridor(48 + this.layoutRandom() * 0.4, (g) => g * ye);
   }
   resolveRoute() {
@@ -1697,13 +1849,7 @@ var yo = class extends hi {
     let s = this.setPiece, n = s.active;
     s.active = this.chapterTime >= s.start && this.chapterTime < s.end, s.progress = Math.max(0, Math.min(1, (this.chapterTime - s.start) / (s.end - s.start))), s.active && !n && this.emit("setpiece", { id: s.id, name: s.name });
     for (let g of this.platforms) g.prevY = g.y, g.flex = Math.max(0, (g.flex || 0) - A * 2.6), g.kind === "crane" && (g.y = g.baseY + Math.sin(this.time * g.frequency + g.phase) * g.amp), g.kind === "crumble" && g.collapseAt && this.time >= g.collapseAt && (g.active && (g.active = false, this.emit("worldReaction", { kind: "collapse", id: g.id, x: g.x + g.w / 2, y: g.y })), g.y += 220 * A);
-    for (const g of this.obstacles) {
-      if (g.guidance) g.base = g.guidance.base - 16 + 22 * Math.sin(this.time * Math.PI * 2 / g.guidance.period + g.guidance.phase);
-      if (g.platformId) {
-        const platform = this.platforms.find(p => p.id === g.platformId);
-        if (platform) g.base = platform.y, g.active = platform.active;
-      }
-    }
+    LR_HAZARDS.update(this);
     for (let g of this.pickups) if (g.platformId) {
       let l = this.platforms.find((E) => E.id === g.platformId);
       l && (g.y = l.y + g.offsetY);
@@ -1726,8 +1872,8 @@ var yo = class extends hi {
     let a = this.bodyBox();
     for (let g of this.obstacles) {
       if (g.active === false || g.route && (!this.routeResolved || !this.onRoute(g))) continue;
-      let l = { x: g.x + 5, y: g.base - (g.type === "high" ? 181 : g.h), w: g.w - 10, h: g.type === "high" ? 85 : g.h - 4 };
-      Pe(a, l) && this.hit(g.type === "high" ? "A low clearance. Time to slide." : this.districtId === "park" ? "The park works were more solid than expected." : "A delivery with a firm landing."), !g.passed && g.x + g.w < this.x - 20 && (g.passed = true, this.cleared++, this.flow++, this.bonus += 25);
+      let l = LR_HAZARDS.body(g,this.x);
+      Pe(a, l) && this.hit(LR_HAZARDS.cause(g)), !g.passed && g.x + g.w < this.x - 20 && (g.passed = true, this.cleared++, this.flow++, this.bonus += 25, LR_HAZARDS.cleared(this,g));
     }
     if (!this.dead) {
       for (let g of this.pickups) {
@@ -1962,7 +2108,7 @@ var wo = class {
     let s = this.c, n = A.x, a = A.base ?? t.floorAt(n), g = A.w;
     if (!this.visible(n, g, i, 80)) return;
     if (window.LR_PROPS?.hazard(s, A, n, a, t.districtId, t)) return;
-    let l = t.districtId === "park", E = A.type === "high", I = E ? a - 181 : a - A.h, Q = E ? 85 : A.h;
+    let l = t.districtId === "park", E = A.type === "high", I = E ? a - 96 - A.h : a - A.h, Q = A.h;
     if (s.save(), A.type === "gap") {
       this.rect(n, a, g, 180, l ? "#1d4549" : "#102330");
       for (let R = 0; R < 4; R++) this.line(n + 8, a + 9 + R * 7, n + g - 8, a + 9 + R * 7, l ? "#a9cbb055" : "#899f9740", 1);
@@ -2020,6 +2166,7 @@ var wo = class {
     for (let o of A.worldItems || []) {
       if (!this.visible(o.x, o.w || 0, t, 140)) continue;
       let s = this.itemY(o, A);
+      if(o.kind==="rest-bench"){window.LR_PROPS?.rest(this.c,o,A);continue;}
       o.kind === "puddle" ? this.puddle(o.x, s, o.w || 100, A) : o.kind === "tree" ? this.tree(o.x, A.floorAt(o.x), A.districtId === "park", o.id || 0, false, (n) => A.floorAt(n)) : o.kind === "lamp" ? !(window.LR_SCENERY?.layered && A.districtId === "midtown") && this.lamp(o.x, s, A.districtId === "park") : o.kind === "sign" ? this.sign(o, A, s, r) : o.kind === "finish" && this.finish(o.x, s, A, i, r);
     }
   }
@@ -22640,6 +22787,7 @@ function FD() {
       let A = e24.kind === "cruise" || q.flightKind === "cruise";
       Ge(A ? "BACK TO THE LONG RUN" : "FINAL APPROACH", A ? "A soft landing. A longer horizon." : "Bring it home.", 1.5);
     }
+    if(e24.type === "propQuip") m("#ticker-text").textContent=e24.line;
     if (e24.type === "contrarianOffer" && (m("#ticker-text").textContent = "A different perspective is yours to take."), e24.type === "contrarian" && (q.transfer.fromCamera = Kt, Kt = 0, ir = q.y, bt = [], Ht = [], De(), SA.startMusic("contrarian"), SA.clip("laugh"), m("#event").classList.remove("show"), m("#ticker-text").textContent = "Everyone agrees. " + gt[PA].name + " has questions.", m("#district").textContent = "AGAINST THE CONSENSUS"), e24.type === "contrarianEnd" && (q.transfer.fromCamera = Kt, Kt = T - (q.transfer.toY ?? T), ir = q.y, bt = [], Ht = [], De(), SA.endMusic({ fade: true }), SA.clip("laugh"), Ge("IN GOOD COMPANY", q.mode === "chapter" ? "Independent thinking." : "Independent thinking. +500", 3), m("#district").textContent = "LOWER MANHATTAN"), e24.type === "jump") {
       tr = 0;
       let A = e24.chainStage || 1;

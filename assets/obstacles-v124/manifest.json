@@ -1,0 +1,349 @@
+{
+  "version": 1240,
+  "nativeSize": [
+    1536,
+    1024
+  ],
+  "generation": "image_gen, three transparent native atlases; no AI enlargement",
+  "encoding": "Lossless WebP; decoded RGBA pixels verified identical to original generated PNG, including transparent RGB. Native masters retained.",
+  "sets": {
+    "downtown": {
+      "path": "assets/obstacles-v124/downtown.webp",
+      "native": "assets/obstacles-v124/downtown-native.png",
+      "sha256": "ee58aad7220e461b9fc267c2d234336163cf710a0a2f6fff08331f5d45710115",
+      "nativeSha256": "e71093f10906236646b19631d02f6a173465e3138228578b3e5891af3767105a",
+      "sprites": [
+        {
+          "key": "ledger",
+          "source": [
+            28,
+            41,
+            711,
+            441
+          ],
+          "body": [
+            38,
+            43,
+            699,
+            437
+          ],
+          "plaque": [
+            192,
+            319,
+            379,
+            124
+          ],
+          "ink": "dark"
+        },
+        {
+          "key": "valuation",
+          "source": [
+            789,
+            35,
+            708,
+            447
+          ],
+          "body": [
+            794,
+            39,
+            701,
+            441
+          ],
+          "plaque": [
+            960,
+            290,
+            389,
+            91
+          ],
+          "ink": "light"
+        },
+        {
+          "key": "market-board",
+          "source": [
+            9,
+            527,
+            726,
+            444
+          ],
+          "body": [
+            12,
+            582,
+            721,
+            387
+          ],
+          "plaque": [
+            105,
+            635,
+            536,
+            108
+          ],
+          "ink": "dark",
+          "anchors": [
+            [
+              156,
+              551
+            ],
+            [
+              594,
+              551
+            ]
+          ]
+        },
+        {
+          "key": "exchange-clock",
+          "source": [
+            765,
+            545,
+            771,
+            422
+          ],
+          "body": [
+            770,
+            611,
+            763,
+            354
+          ],
+          "plaque": [
+            1080,
+            713,
+            371,
+            163
+          ],
+          "ink": "light",
+          "anchors": [
+            [
+              903,
+              572
+            ],
+            [
+              1398,
+              572
+            ]
+          ]
+        }
+      ]
+    },
+    "midtown": {
+      "path": "assets/obstacles-v124/midtown.webp",
+      "native": "assets/obstacles-v124/midtown-native.png",
+      "sha256": "1161decb5c712c2e66fe7ecbd07e72662b1e649324e1ba0c0413f5f0d142391f",
+      "nativeSha256": "b658c0a422ec4c5f29f87fe3303c0e783d9e75ff32ff027da3fd2049388657da",
+      "sprites": [
+        {
+          "key": "invoice-cart",
+          "source": [
+            53,
+            7,
+            604,
+            516
+          ],
+          "body": [
+            150,
+            54,
+            501,
+            466
+          ],
+          "plaque": [
+            177,
+            290,
+            426,
+            98
+          ],
+          "ink": "dark"
+        },
+        {
+          "key": "budget-chest",
+          "source": [
+            778,
+            45,
+            739,
+            448
+          ],
+          "body": [
+            784,
+            170,
+            730,
+            320
+          ],
+          "plaque": [
+            893,
+            243,
+            403,
+            76
+          ],
+          "ink": "light"
+        },
+        {
+          "key": "forecast-lift",
+          "source": [
+            13,
+            566,
+            734,
+            427
+          ],
+          "body": [
+            18,
+            643,
+            726,
+            347
+          ],
+          "plaque": [
+            194,
+            720,
+            439,
+            133
+          ],
+          "ink": "light",
+          "anchors": [
+            [
+              149,
+              593
+            ],
+            [
+              613,
+              593
+            ]
+          ]
+        },
+        {
+          "key": "agenda-clock",
+          "source": [
+            773,
+            568,
+            749,
+            424
+          ],
+          "body": [
+            778,
+            616,
+            742,
+            374
+          ],
+          "plaque": [
+            1006,
+            704,
+            452,
+            187
+          ],
+          "ink": "light",
+          "anchors": [
+            [
+              1046,
+              603
+            ],
+            [
+              1433,
+              589
+            ]
+          ]
+        }
+      ]
+    },
+    "park": {
+      "path": "assets/obstacles-v124/park.webp",
+      "native": "assets/obstacles-v124/park-native.png",
+      "sha256": "d5d49d07208a7638520445f3dcb61f3a9033c2cfc67aaff82ebaa0c1dbde857e",
+      "nativeSha256": "4e0ca13790a20287ee867d4dadfeec62157ba0ae09d4891a3723b4a897e9fc31",
+      "sprites": [
+        {
+          "key": "benchmark-bench",
+          "source": [
+            18,
+            89,
+            837,
+            435
+          ],
+          "body": [
+            48,
+            112,
+            780,
+            410
+          ],
+          "plaque": [
+            246,
+            145,
+            391,
+            75
+          ],
+          "ink": "dark"
+        },
+        {
+          "key": "bagholder-seat",
+          "source": [
+            943,
+            87,
+            553,
+            436
+          ],
+          "body": [
+            964,
+            93,
+            529,
+            428
+          ],
+          "plaque": [
+            1086,
+            107,
+            270,
+            51
+          ],
+          "ink": "dark"
+        },
+        {
+          "key": "autumn-bough",
+          "source": [
+            11,
+            617,
+            809,
+            300
+          ],
+          "body": [
+            64,
+            752,
+            713,
+            156
+          ],
+          "plaque": [
+            249,
+            780,
+            330,
+            63
+          ],
+          "ink": "dark"
+        },
+        {
+          "key": "ivy-planter",
+          "source": [
+            836,
+            624,
+            693,
+            290
+          ],
+          "body": [
+            847,
+            748,
+            679,
+            164
+          ],
+          "plaque": [
+            987,
+            801,
+            383,
+            50
+          ],
+          "ink": "dark",
+          "anchors": [
+            [
+              924,
+              657
+            ],
+            [
+              1437,
+              657
+            ]
+          ]
+        }
+      ]
+    }
+  }
+}

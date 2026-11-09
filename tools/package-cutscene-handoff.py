@@ -337,27 +337,59 @@ if host_master.exists():
 # Use current Downtown/Midtown release captures. Park retains its unchanged art.
 # All required files must exist; do not silently substitute a previous city view.
 captures = {
-    'downtown-gameplay.png': 'release/Opening-v112-street.png',
-    'central-park-gameplay.png': 'release/Park-v113-benchmark.png',
-    'midtown-gameplay.png': 'release/Midtown-v113-street.png',
-    'opening-call.png': 'release/Opening-v122-call.png',
-    'opening-call-nicolai.png': 'release/Opening-v122-nicolai.png',
+    'downtown-gameplay.png': 'release/Opening-v124-obstacles.png',
+    'central-park-gameplay.png': 'release/Park-v124-obstacles.png',
+    'midtown-gameplay.png': 'release/Midtown-v124-obstacles.png',
+    'opening-call.png': 'release/Opening-v124-comms.png',
+    'opening-call-nicolai.png': 'release/Opening-v124-smile.png',
     'midtown-gift-film.png': 'release/Midtown-v120-gift.png',
-    'finance-guidance-gameplay.png': 'release/Midtown-v113-guidance.png',
+    'finance-guidance-gameplay.png': 'release/Props-v124-collection.png',
     'chapter-map-and-title-sendoff.png': 'release/Nicolai-v123-title-sendoff.png',
     'opening-finish-entrance.png': 'release/Opening-v122-boarding.png',
-    'nicolai-boarding-preview.mp4': 'release/Nicolai-v121-boarding.mp4',
-    'midtown-office-entry.mp4': 'release/Nicolai-v122-office-entry.mp4',
-    'park-ledge-challenge.png': 'release/Park-v122-ledge.png',
-    'midtown-route-challenge.png': 'release/Midtown-v122-route.png',
+    'park-ledge-challenge.png': 'release/Park-v124-ledge.png',
+    'midtown-route-challenge.png': 'release/Midtown-v124-route.png',
     'midtown-finish-entrance.png': 'release/Midtown-v122-entrance.png',
     'park-finish-entrance.png': 'release/Park-v118-entrance.png',
     'midtown-finish-mobile.png': 'release/Midtown-v122-mobile-entrance.png',
 }
+stage_notes = list(STAGE.glob('*.md')) + list(STAGE.glob('*.json')) + list((STAGE / 'docs').glob('*.md'))
 for name, relative in captures.items():
     p = ROOT / relative
     assert p.is_file(), f'Missing current release capture: {relative}'
-    copy(p, refs / 'gameplay' / name)
+    if p.suffix.lower() == '.png':
+        # Lossless reference encoding saves archive space, with no reduction
+        # in pixel dimensions or decoded quality. Native game masters stay intact.
+        target = refs / 'gameplay' / Path(name).with_suffix('.webp')
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with Image.open(p) as source:
+            source.save(target, 'WEBP', lossless=True, exact=True, method=6)
+            with Image.open(target) as encoded:
+                assert source.size == encoded.size
+                assert source.convert('RGBA').tobytes() == encoded.convert('RGBA').tobytes()
+        # Keep the shipped reference links in step with the lossless encoding.
+        for note in stage_notes:
+            contents = note.read_text()
+            updated = contents.replace(name, target.name)
+            if updated != contents:
+                note.write_text(updated)
+    else:
+        copy(p, refs / 'gameplay' / name)
+
+# Optional recordings duplicate animations already available in the complete
+# source. Link their immutable release bytes, preserving all native art and
+# the actual in-game film inside this archive instead of reducing either.
+motion_revision = '99df76e9292e7d04f571f5da957101b55d48ce14'
+motion_notes = ['# Optional motion recordings', '',
+    'The complete animations, native keyframes and renderer are included in game/.',
+    'These two earlier reference recordings are linked separately to keep the source handoff below 100 MiB.',
+    'The supplied in-game gift film and its native source remain inside this ZIP.', '',
+    '| Recording | Bytes | SHA-256 |', '|---|---:|---|']
+for name in ['Nicolai-v121-boarding.mp4', 'Nicolai-v122-office-entry.mp4']:
+    p = ROOT / 'release' / name
+    assert p.is_file(), f'Missing motion reference: {name}'
+    url = f'https://github.com/theagilepadawan/gamegame/raw/{motion_revision}/release/{name}'
+    motion_notes.append(f'| [{name}]({url}) | {p.stat().st_size} | `{sha(p)}` |')
+(refs / 'gameplay' / 'MOTION-REFERENCES.md').write_text('\n'.join(motion_notes) + '\n')
 
 audio = {
     '01-opening-theme.mp3': 'original-37.mp3',
@@ -397,8 +429,10 @@ metadata = {
                  'Eight game audio sources, including the gift piano and supplied reaction cue, indexed without duplicate files',
                  'User-supplied cropped Midtown gift MP4 plus unmodified native source and provenance',
                  'Grete/Nicolai opening call and reaction, native portrait and rear-view boarding atlases, and the 6-train portal',
+                 'Lossless WebP gameplay references, decoded-pixel checked against the original captures',
                  'Cutscene production brief, shot slate, prompts and integration notes'],
     'notIncluded': ['No separate intro-reference video supplied yet', 'No Runway credentials or plugin installation',
+                    'Two optional earlier animation recordings are linked with hashes in references/gameplay/MOTION-REFERENCES.md; their native keyframes and full implementation are included',
                     'Original inline office/host reference photographs were not exposed as downloadable local files',
                     'No rejected cartoon runner study, alternate Park artwork, retired city-block/venue-island art, low-detail v1.8 city sheets or superseded prop variants'],
 }

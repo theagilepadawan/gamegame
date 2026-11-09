@@ -1,3 +1,8 @@
+> Version 1.24: the opening comms pauses every music track using the briefing
+> music hold. Keep effects enabled so the first Nicolai reply can play the
+> supplied alert. Release the hold on complete, Skip, cancel or pagehide; do not
+> persist this temporary hold as the user's mute preference.
+
 # Sound and edit notes
 
 The audio sources are stored byte for byte in `game/assets/` and linked from `references/audio/INDEX.md`, without duplicate MP3 copies. The following durations were measured with `ffprobe`; they are source-file durations, not proposed cutscene edit lengths.

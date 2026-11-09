@@ -48,7 +48,7 @@ try{
     details:['kabin','lei','joju','omars','gussy'],retired:false,stone:[1254,1254]},
     'Complete Downtown paintings and warm complete Midtown paintings with five current native frontage crops');
   const addedArt=await page.evaluate(()=>[...LR_VENUE_DETAILS.images,...LR_PROPS.images,...LR_OFFICE_HOST.images].map(image=>({embedded:image.src.startsWith('data:'),ready:image.complete&&image.naturalWidth>0})));
-  assert.equal(addedArt.length,12,'Five active venue fronts, six prop images and the office host');
+  assert.equal(addedArt.length,13,'Five active venue fronts, four pickups, three district prop atlases and the office host');
   assert.ok(addedArt.every(image=>image.embedded&&image.ready),'Venue, prop and host artwork is decoded and embedded');
   // Continue through the real Contrarian event after loading with no network.
   await page.context().setOffline(true);

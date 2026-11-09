@@ -69,7 +69,7 @@ Five seconds, one continuous shot, calm movement and a clean ending.
 
 ## LR-SH-01 — proposed shoe handoff and footwear shots
 
-The required outcome is Nicolai receiving his exact Park trainers after completing Midtown, before Central Park. Establish shoe continuity from `game/assets/original-17.webp` and `original-18.webp`, checked against `game/scripts/park-shoes.js` and `references/gameplay/central-park-gameplay.png`. Use `original-27.webp`/`original-28.webp` for formal footwear only; the generic extracted run frame is not the trainer reference. His trousers and other clothing remain unchanged. The following two-shot office treatment is optional; a 6–8-second total edit is suggested, with individual shot lengths selected from the plugin's actual capabilities and trimmed deliberately.
+The required outcome is Nicolai receiving his exact Park trainers after completing Midtown, before Central Park. Establish shoe continuity from `game/assets/original-17.webp` and `original-18.webp`, checked against `game/scripts/park-shoes.js` and `references/gameplay/central-park-gameplay.webp`. Use `original-27.webp`/`original-28.webp` for formal footwear only; the generic extracted run frame is not the trainer reference. His trousers and other clothing remain unchanged. The following two-shot office treatment is optional; a 6–8-second total edit is suggested, with individual shot lengths selected from the plugin's actual capabilities and trimmed deliberately.
 
 Compose and inspect each input frame before generation. For the suggested handoff shot, show the host holding an open shoebox with the correct trainers already visible, so their design is established without invented opening mechanics.
 

@@ -40,7 +40,10 @@ for(let seed=0;seed<128;seed++){
   G.generate(q);const row=G.inspect(q).history.at(-1);
   for(const o of q.obstacles){
    if(o.type==='gap'){gaps++;if(o.w/row.speed>.66)broad++;}
-   else assert.ok(o.w>=98,'Opening hazards retain their painted proportions');
+   else {
+    assert.ok(o.w>=88&&o.h>=40,'No thin slivers: even the tall invoice cart keeps a full readable body');
+    assert.ok(o.artDistrict&&Number.isInteger(o.artVariant),'Every generated hurdle uses registered native district art');
+   }
   }
   q.distance=row.end-900;q.nextX=q.x+900;q.obstacles=[];q.platforms=[];q.pickups=[];q.springs=[];q.markers=[];
  }
@@ -53,5 +56,5 @@ assert.ok(bands.every(n=>n>30),'Small, medium, wide and chasm gaps all occur');
 report.distinctWidths=new Set(report.widths.map(v=>v.toFixed(4))).size;
 assert.ok(report.distinctWidths>400,'Widths vary continuously rather than a few fixed lengths');
 report.gapBands=bands;report.minGapSeconds=Math.min(...report.widths);report.maxGapSeconds=Math.max(...report.widths);delete report.widths;
-await mkdir('review/v115',{recursive:true});await writeFile('review/v115/endless-spacing.json',JSON.stringify(report,null,2));
+await mkdir('review/v124',{recursive:true});await writeFile('review/v124/endless-spacing.json',JSON.stringify(report,null,2));
 console.log('PASS: '+report.sections+' real-model sections; clear ground hurdles, independent landing banks, '+report.gaps+' gaps across four width bands; terrain range and bounded section population.',report);

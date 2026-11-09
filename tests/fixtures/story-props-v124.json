@@ -1,0 +1,78 @@
+{
+  "reference": "v1.24 approved district obstacle artwork, copy and motion",
+  "scope": "Procedural Opening Bell states at frames 0,120,300. Updated specifically for approved physical prop dimensions, captions and simulation-bound overhead motion. Character controls, terrain, camera and city artwork remain independently covered by their existing preservation tests.",
+  "cases": [
+    {
+      "seed": 1,
+      "width": 540,
+      "character": "nicolai",
+      "sha256": "bb68ac3533a73fe9ca0809fff5ef5151f6434099924ec9724cfdeb9f10c44212"
+    },
+    {
+      "seed": 1,
+      "width": 540,
+      "character": "trond",
+      "sha256": "bb68ac3533a73fe9ca0809fff5ef5151f6434099924ec9724cfdeb9f10c44212"
+    },
+    {
+      "seed": 1,
+      "width": 864,
+      "character": "nicolai",
+      "sha256": "d80078c8b5e0c8279c83a75f581e42f3d45b28fab62355b1ef4755d3ad74f43e"
+    },
+    {
+      "seed": 1,
+      "width": 864,
+      "character": "trond",
+      "sha256": "d80078c8b5e0c8279c83a75f581e42f3d45b28fab62355b1ef4755d3ad74f43e"
+    },
+    {
+      "seed": 42,
+      "width": 540,
+      "character": "nicolai",
+      "sha256": "c07dadd888da95ab681f230006c55c9c684a6a185f1b7cdb05625e00b35884ce"
+    },
+    {
+      "seed": 42,
+      "width": 540,
+      "character": "trond",
+      "sha256": "c07dadd888da95ab681f230006c55c9c684a6a185f1b7cdb05625e00b35884ce"
+    },
+    {
+      "seed": 42,
+      "width": 864,
+      "character": "nicolai",
+      "sha256": "07dbcebfd96ea903c904f2f4c940667fded9c7d2978587fbb62c0e5051c67a41"
+    },
+    {
+      "seed": 42,
+      "width": 864,
+      "character": "trond",
+      "sha256": "07dbcebfd96ea903c904f2f4c940667fded9c7d2978587fbb62c0e5051c67a41"
+    },
+    {
+      "seed": 3735928559,
+      "width": 540,
+      "character": "nicolai",
+      "sha256": "70f0e6f32a090a40c8c1b23a3513370b11214d05df628a228ed1069069d4bde1"
+    },
+    {
+      "seed": 3735928559,
+      "width": 540,
+      "character": "trond",
+      "sha256": "70f0e6f32a090a40c8c1b23a3513370b11214d05df628a228ed1069069d4bde1"
+    },
+    {
+      "seed": 3735928559,
+      "width": 864,
+      "character": "nicolai",
+      "sha256": "eeb385ed9bca004f3d8b7605facfbc67a56cbe26a9e3f2213a1f38237dc53e0e"
+    },
+    {
+      "seed": 3735928559,
+      "width": 864,
+      "character": "trond",
+      "sha256": "eeb385ed9bca004f3d8b7605facfbc67a56cbe26a9e3f2213a1f38237dc53e0e"
+    }
+  ]
+}

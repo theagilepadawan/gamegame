@@ -4,6 +4,20 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
+## Version 1.24 — District props and a 06:00 rendezvous
+
+Twelve newly painted obstacles give each district its own materials and visual
+jokes, with native proportions, varied sizes and crisp lettering in the actual
+plaques. The approved finance-caption pass is implemented. Fourteen authored
+overheads now move at varied speeds; Endless receives spaced, seeded movers.
+[Art and gameplay details](docs/obstacles-v124.md).
+
+Grete calls at 06:00: an undisclosed “???” can meet Nicolai in Central Park at
+07:00. She arranges his joggers at 505. Music pauses for the call; the supplied
+reaction sound remains. Nicolai holds surprise for his first reply and smiles
+for “Let’s see if active management can beat a taxi.”
+[Verification](docs/verification-v124.md).
+
 ## Version 1.23 — A clean send-off in the spotlight
 
 Nicolai and Trond lift one arm smoothly from the original title idle, hold a
@@ -15,7 +29,7 @@ before gameplay. The existing faces, outfits, shoes and map stay registered.
 
 The [complete finance-humour review](docs/finance-humor-review-v123.md) covers all
 35 obstacle captions, plus signs, pickups and the five Endless ticker families.
-Those wording/art recommendations are proposals; current obstacle copy is retained.
+Those recommendations were approved and applied in version 1.24.
 
 ## Version 1.22 — A clearer call and fairer courses
 

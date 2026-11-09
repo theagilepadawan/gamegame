@@ -1,6 +1,24 @@
 # Latest user direction
 
-## Current authority: version 1.23
+## Current authority: version 1.24
+
+The approved humour review is implemented, with twelve new native district
+objects in `game/assets/obstacles-v124/`. See `game/docs/obstacles-v124.md`.
+Do not restore the rejected red-tape/binder artwork or change the approved
+warm city paintings, venue spacing, character sprites or camera motion.
+
+The opening call is a private 06:00 New York line. Grete says “???” just had
+a cancellation and can meet Nicolai in Central Park in an hour (07:00).
+Nicolai: “Sounds like an easy run, but I could really use my joggers.”
+Grete: “Stop by 505. I’ll have a pair waiting for you.”
+Nicolai: “Perfect. Let’s see if active management can beat a taxi.”
+Use the existing approved portraits. The first Nicolai reply triggers the
+exclamation and supplied cue; hold the surprised face through Grete's reply.
+Only his final line uses the smile. Music is stopped for the entire call,
+including visibility changes and repeated menu input; effects remain enabled
+subject to the saved mute. Completion, Skip and cancellation release the hold.
+
+## Retained direction: version 1.23
 
 The title send-off is a smooth, single-arm thumbs-up from the approved idle.
 Keep the original face, body position, outfit and selected shoes. The arm stays
@@ -12,8 +30,7 @@ the menu dims; avoid moving camera/light effects. See
 
 The user challenged the finance meanings and quality of the obstacle jokes.
 The complete list and recommendations are in
-`game/docs/finance-humor-review-v123.md`. These are proposals awaiting their
-editorial selection, not implemented copy. Do not assume debt, capex, cash,
+`game/docs/finance-humor-review-v123.md`. These proposals were subsequently approved and implemented in 1.24. Do not assume debt, capex, cash,
 pay rises or interest-rate cuts are inherently bad. Preserve the approved
 painted props and Park artwork when interpreting this brief.
 
@@ -21,9 +38,8 @@ painted props and Park artwork when interpreting this brief.
 
 The opening call is a larger retro colour comms console, retaining the approved
 Grete/Nicolai portraits and still silhouettes. The reaction now starts only when
-the reader clicks into Nicolai’s first reply; two new localized expressions
-show surprise, then settle. The mark and settled face remain until the next
-click. Keep the supplied cue and its existing mute/volume lifecycle. Native
+the reader clicks into Nicolai’s first reply; the surprise is held through the first reply. Version 1.24 reserves the smile
+for the final reply. The mark remains until the next click. Keep the supplied cue and its existing mute/volume lifecycle. Native
 expression sources and runtime registration are in `game/assets/briefing-v122/`
 and `game/scripts/story-briefing.js`.
 

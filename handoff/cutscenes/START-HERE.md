@@ -1,12 +1,12 @@
 # The Long Run — cutscene production handoff
 
-This folder is a working brief for a fresh ChatGPT agent using the user's Runway plugin. It contains the complete editable game, native art references and production notes. **Version 1.23 polishes both title thumbs-up gestures and adds a fixed cinematic spotlight. The complete finance-caption review is a proposal, not applied copy. The larger retro call, reply-triggered surprise, rear-view walks into the subway and 505, and fairer Midtown/Park routes remain from 1.22. The supplied running-shoe film still plays only on Next: Central Park after Midtown results, with a separate piano cue. Other cinematic ideas below remain proposals.**
+This folder is a working brief for a fresh ChatGPT agent using the user's Runway plugin. It contains the complete editable game, native art references and production notes. **Version 1.24 implements the approved finance humour and twelve native district obstacle assets, with varied sizes and moving hazards. The opening call is now a quiet 06:00 briefing: “???” can meet Nicolai in Central Park at 07:00; Grete arranges joggers at 505. Hold his surprised drawing on his first reply and through Grete's response; use his smile only on the final reply. Music pauses during the call, but the supplied reaction cue remains. The 1.23 title thumbs-up/spotlight, rear-view entrances and Next: Central Park shoe film remain. Other cinematic ideas below are proposals.**
 
 Start with the packaged game and its current art. The user has invested heavily in character likeness, natural scenery placement and animation quality. Preserve those decisions while adding a small number of short, polished cinematic moments.
 
 Version 1.22 keeps the normal run → four-pose turn → eight-pose rear walk at
-both the 6 train and 505. The first Nicolai reply triggers the exclamation, two
-local surprise expressions and the supplied sound; the next click clears them.
+both the 6 train and 505. The first Nicolai reply triggers the exclamation, the held
+surprised expression and the supplied sound; the next click clears them.
 See `game/docs/verification-v122.md` and the native assets in
 `game/assets/boarding-v121/`, `game/assets/briefing-v122/` and `game/assets/story-v121/`.
 
@@ -30,7 +30,7 @@ Also read `docs/07-latest-direction.md`: the user's forthcoming intro reference 
 
 `game/` is the complete editable source snapshot. With Node.js 20 or newer, run `node serve.mjs` in that folder and open the printed URL, or run `node build.mjs` to create one standalone HTML. Neither command requires an npm install or network access. `npm ci` is needed only for the browser test dependency. The release snapshot and file hashes supplied with the ZIP are the source of truth for the packaged revision; do not resume development from an older chat artifact.
 
-If including the compiled HTML would push this handoff over 100 MiB, packaging omits that duplicate file while retaining every native asset, test, reference and source file. The source-only form includes build instructions, the expected standalone SHA-256 and a verified staged-source rebuild record. The separate `The-Long-Run-NBIM.zip` remains the direct ready-to-play download. Current city references are Downtown’s complete warm street paintings from the supplied HTML, the original complete warm Midtown paintings and five integrated native venue fronts. The full 505 entrance and its host now belong exclusively to the foreground finish. They are not reduced to meet the archive limit. The small implemented cartoon finance-prop pass is documented in game/docs/finance-props-direction.md.
+If including the compiled HTML would push this handoff over 100 MiB, packaging omits that duplicate file while retaining every native asset, test and source file, plus the current still references. The source-only form includes build instructions, the expected standalone SHA-256 and a verified staged-source rebuild record. The separate `The-Long-Run-NBIM.zip` remains the direct ready-to-play download. Current city references are Downtown’s complete warm street paintings from the supplied HTML, the original complete warm Midtown paintings and five integrated native venue fronts. The full 505 entrance and its host now belong exclusively to the foreground finish. They are not reduced to meet the archive limit. The current district-prop pass is documented in game/docs/obstacles-v124.md. Gameplay reference screenshots use lossless WebP with identical decoded pixels to the original captures; native production art and masters retain their original resolution and bytes.
 
 ## Paste this into the next ChatGPT session
 
@@ -118,3 +118,5 @@ production/
 ```
 
 Use `cutscene-manifest.template.json` as a starting schema. Empty output fields mean work has not been generated; they are not download URLs. Keep source files and alternate takes separate from approved delivery assets.
+
+Two optional earlier boarding/office-entry recordings are linked with hashes in `references/gameplay/MOTION-REFERENCES.md`. Their native keyframes and complete animation implementation remain in this source handoff, as do the actual in-game gift film and its original source.

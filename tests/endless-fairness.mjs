@@ -91,16 +91,17 @@ function replayControls(initial, target, controls) {
 }
 
 async function main() {
-  const output = process.env.ENDLESS_FAIRNESS_OUTPUT || path.join(root, 'review/v20-endless/fairness');
+  const output = process.env.ENDLESS_FAIRNESS_OUTPUT || path.join(root, 'review/v124/endless-fairness');
   await fs.mkdir(output, {recursive: true});
   const [engine, endless, generator, baseline] = await Promise.all([
     fs.readFile(path.join(root, 'scripts/engine.js'), 'utf8'), fs.readFile(path.join(root, 'scripts/endless.js'), 'utf8'),
     fs.readFile(path.join(root, 'scripts/endless-generator.js'), 'utf8'),
-    fs.readFile(path.join(root, 'tests/fixtures/endless-story-preservation-v19.json'), 'utf8').then(JSON.parse)]);
+    fs.readFile(path.join(root, 'tests/fixtures/story-props-v124.json'), 'utf8').then(JSON.parse)]);
   const c = model(engine, endless, generator), G = c.LR_ENDLESS_GENERATOR;
   // After unrelated presentation/copy edits, replay previously discovered
   // witnesses through the current real engine instead of repeating the search.
-  const replay = process.env.ENDLESS_REPLAY_REPORT ? JSON.parse(await fs.readFile(process.env.ENDLESS_REPLAY_REPORT, 'utf8')) : null;
+  const replayPath=process.env.ENDLESS_REPLAY_REPORT||(process.env.ENDLESS_SEARCH==='1'?null:path.join(root,'tests/fixtures/endless-controls-v124.json'));
+  const replay = replayPath ? JSON.parse(await fs.readFile(replayPath, 'utf8')) : null;
   assert.equal(G.version, 4);
   const sample = new c.hi(540, 42, {mode: 'endless', procedural: true});
   assert.equal(sample.terrainProfile.version, 4, 'Constructor uses the new terrain in real Endless');

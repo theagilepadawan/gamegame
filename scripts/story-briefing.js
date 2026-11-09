@@ -10,12 +10,10 @@
   const reactionAtlas = new Image(); reactionAtlas.decoding = "async";
   reactionAtlas.src = "assets/briefing-v122/nicolai-reaction.webp";
   const lines = [
-    {speaker: "grete", text: "Nicolai, change of plan. We’re taking the investment meeting to Central Park."},
-    {speaker: "nicolai", text: "What’s wrong with the meeting room?"},
-    {speaker: "grete", text: "Nothing. But the long view is easier to find without forty-seven slides."},
-    {speaker: "nicolai", text: "I’m downtown. In office shoes."},
-    {speaker: "grete", text: "Stop at 505. Your running shoes are waiting. Then head north—we’ll walk and talk."},
-    {speaker: "nicolai", text: "Fine. I’m counting this as active management."}
+    {speaker: "grete", text: "Nicolai, it’s 06:00. ??? just had a cancellation. They can meet you in Central Park in one hour."},
+    {speaker: "nicolai", expression: 4, text: "Sounds like an easy run, but I could really use my joggers."},
+    {speaker: "grete", expression: 4, text: "Stop by 505. I’ll have a pair waiting for you."},
+    {speaker: "nicolai", expression: 5, text: "Perfect. Let’s see if active management can beat a taxi."}
   ];
   const portraits = {
     grete: {image: atlas, row: 0, name: "Grete", mouth: [329, 278, 55, 26], eyes: [323, 187, 83, 34], blinkOffset: 0},
@@ -107,8 +105,10 @@
       const syllable = Math.floor(active.age / 145) % 9;
       const speaking = !reduce.matches && line.speaker === id && active.age < Math.min(4800, 800 + line.text.length * 30);
       const mouth = speaking && [1, 2, 4, 6, 7].includes(syllable);
-      const reacting = id === "nicolai" && active.beat === 1 && art.nicolai.length > 4;
-      const frame = reacting ? (!reduce.matches && active.age < 440 ? 4 : 5) : (mouth ? 1 : 0) + (blinking ? 2 : 0);
+      // Hold the surprised drawing for the entire first reply; reserve the
+      // smile for his final line instead of morphing between them mid-sentence.
+      const expression = id === "nicolai" && line.expression;
+      const frame = expression && art.nicolai.length > expression ? expression : (mouth ? 1 : 0) + (blinking ? 2 : 0);
       if (!force && lastFrame[id] === frame) continue;
       lastFrame[id] = frame;
       const c = canvases[id].getContext("2d"); c.save();
@@ -128,7 +128,13 @@
   function showBeat() {
     const line = lines[active.beat]; active.age = 0;
     speaker.textContent = portraits[line.speaker].name;
-    text.textContent = line.text;
+    const words = line.text.split("???");
+    text.replaceChildren(document.createTextNode(words[0]));
+    if (words.length > 1) {
+      const unknown = document.createElement("span"); unknown.className = "briefing-unknown";
+      unknown.textContent = "???"; unknown.setAttribute("aria-label", "an undisclosed contact");
+      text.append(unknown, document.createTextNode(words[1]));
+    }
     dialog.dataset.speaker = line.speaker;
     count.textContent = `${active.beat + 1} / ${lines.length}`;
     next.textContent = active.beat === lines.length - 1 ? "Let’s go →" : "Continue →";
@@ -147,10 +153,10 @@
     dialog = document.createElement("dialog"); dialog.id = "story-briefing";
     dialog.setAttribute("aria-labelledby", "briefing-title");
     dialog.innerHTML = `<section class="briefing-shell">
-      <header class="briefing-heading"><h2 id="briefing-title">New York line</h2><span><i aria-hidden="true"></i> Call connected</span></header>
+      <header class="briefing-heading"><h2 id="briefing-title">New York · Before the bell</h2><span><i aria-hidden="true"></i> Private line</span></header>
       <div class="briefing-connection">
         <figure class="briefing-portrait" data-person="grete"><canvas width="512" height="512" role="img" aria-label="Ink portrait of Grete, wearing glasses, a lavender blazer and a patterned scarf"></canvas><figcaption><strong>Grete</strong><i aria-hidden="true"></i></figcaption></figure>
-        <div class="briefing-link" aria-hidden="true"><span>NBIM · NYC</span><b>05.05</b><svg viewBox="0 0 100 32"><path d="M3 16h25m44 0h25M38 11v10m8-16v22m8-22v22m8-16v10"/></svg><span>Direct line</span></div>
+        <div class="briefing-link" aria-label="06:00 New York. Rendezvous at 07:00."><span>NBIM · NYC</span><b>06:00</b><svg aria-hidden="true" viewBox="0 0 100 32"><path d="M3 16h25m44 0h25M38 11v10m8-16v22m8-22v22m8-16v10"/></svg><span>07:00 · Rendezvous</span></div>
         <figure class="briefing-portrait" data-person="nicolai"><span class="briefing-alert" aria-hidden="true" hidden><svg viewBox="0 0 48 78"><defs><linearGradient id="briefing-alert-gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff5cf"/><stop offset=".55" stop-color="#f5d28a"/><stop offset="1" stop-color="#c89140"/></linearGradient></defs><g fill="#041425" stroke="#041425" stroke-width="5" stroke-linejoin="round" transform="translate(2 3)"><path d="M15 8Q14 4 19 4H35Q40 4 39 9L32 48Q31 53 27 53H22Q18 53 18 49Z"/><circle cx="24" cy="66" r="7"/></g><g fill="url(#briefing-alert-gold)" stroke="#132b3c" stroke-width="2.5" stroke-linejoin="round"><path d="M15 8Q14 4 19 4H35Q40 4 39 9L32 48Q31 53 27 53H22Q18 53 18 49Z"/><circle cx="24" cy="66" r="7"/></g><path d="M20 10H32M22 17L24 43M21 63L25 61" fill="none" stroke="#fff7dd" stroke-width="2.2" stroke-linecap="round" opacity=".8"/><g class="alert-rays" fill="none" stroke="#b7d9cb" stroke-width="2" stroke-linecap="round"><path d="M5 18L2 14M42 25L46 22M9 42L5 43"/></g></svg></span><canvas width="512" height="512" role="img" aria-label="Ink portrait of Nicolai, wearing his blue checked jacket"></canvas><figcaption><strong>Nicolai</strong><i aria-hidden="true"></i></figcaption></figure>
       </div>
       <div class="briefing-dialogue" aria-live="polite" aria-atomic="true"><span id="briefing-speaker"></span><p id="briefing-text"></p></div>
@@ -179,6 +185,7 @@
     active = null; lastReason = reason; cancelAnimationFrame(raf); raf = 0; previousTime = 0;
     stopSurprise(pending); alert.hidden = true; dialog.removeAttribute("data-alert");
     dialog?.close(); dialog?.removeAttribute("data-hidden");
+    pending.audio?.holdMusic?.("briefing", false);
     if (proceed && window.longRun?.state === "home" && selected() === pending.selection) pending.onComplete();
   }
   function cancel() { finish("cancelled"); }
@@ -186,6 +193,7 @@
     if (active) return true;
     if (character !== "nicolai" || typeof onComplete !== "function" || !available()) return false;
     create(); lastReason = null; active = {onComplete, audio, selection: selected(), beat: 0, age: 0, clock: 0, alertAt: null};
+    audio?.holdMusic?.("briefing", true);
     showBeat(); dialog.showModal(); next.focus({preventScroll: true});
     previousTime = 0; raf = requestAnimationFrame(tick); return true;
   }

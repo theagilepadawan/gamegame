@@ -1,10 +1,10 @@
 {
-  "version": "1.23.0",
+  "version": "1.24.0",
   "archive": "/workspace/nbim-arcade/release/The-Long-Run-NBIM.zip",
-  "bytes": 49806882,
-  "sha256": "50db3d4e1a679edd433489f69ff7d2d824de23d3f5a39262d2076437033efdf5",
-  "htmlBytes": 66959518,
-  "htmlSha256": "42903cf05ec802d22ac61546376ea8892b0f957256a7de13d25352553150656a",
+  "bytes": 54873096,
+  "sha256": "f94c0115cc6e5f541cdb5d0b2eb664b2e96a87558f6ba9def2805da56f561a86",
+  "htmlBytes": 73658525,
+  "htmlSha256": "e069aad081524d112179f68ac0c767f7e5a5fbcd7bfa83f08ce8cd5fb65c2641",
   "crcVerified": true,
   "htmlByteIdentical": true,
   "checksums": [
@@ -14,9 +14,16 @@
     "City-Asset-Choices.png",
     "Park-Asset-Choices.png",
     "The-Long-Run-Cutscene-Handoff.zip",
-    "Nicolai-v123-title-sendoff.png",
-    "Title-v123-sendoff.mp4",
-    "Trond-v123-title-sendoff.png"
+    "Midtown-v124-obstacles.png",
+    "Midtown-v124-route.png",
+    "Obstacles-v124-motion.mp4",
+    "Opening-v124-comms.png",
+    "Opening-v124-obstacles.png",
+    "Opening-v124-smile.png",
+    "Opening-v124-surprise.png",
+    "Park-v124-ledge.png",
+    "Park-v124-obstacles.png",
+    "Props-v124-collection.png"
   ],
   "omitted": []
 }

@@ -14,7 +14,7 @@ Begin with `references/production-character-board.jpg` for orientation, then use
 | Trond original flip sheet | `game/assets/original-30.webp` | 2048×1024, 512×512 cells; retain alongside current signature motion. |
 | Trond belly slide / ball | `game/assets/original-31.webp` | 2560×1024, 4 columns × 2 rows of 640×512 cells. |
 | Chapter-map Nicolai and Trond | `game/assets/map-characters-v20/` | Lossless 7-frame strips cropped from the approved run/idle atlases. The adjacent README records exact cells and foot registration; these are UI miniatures, not replacement playable sprites. |
-| Nicolai Park footwear variant | `game/assets/original-17.webp`, `original-18.webp` | Loaded by `game/scripts/park-shoes.js`; check `references/gameplay/central-park-gameplay.png` for the trainers' rendered silhouette/colors. These are LR-SH-01's shoe authority; the generic extracted run frame has formal shoes. |
+| Nicolai Park footwear variant | `game/assets/original-17.webp`, `original-18.webp` | Loaded by `game/scripts/park-shoes.js`; check `references/gameplay/central-park-gameplay.webp` for the trainers' rendered silhouette/colors. These are LR-SH-01's shoe authority; the generic extracted run frame has formal shoes. |
 | Office host | `references/office-host/` and `game/assets/office-host-v14/` | Final art; provenance and placement metadata are in `game/docs/office-host-v14.md`. Use the packaged result, not earlier generation candidates. |
 
 Named extracted cells include `nicolai-run.png`, `nicolai-idle.png`, `nicolai-jump.png`, `nicolai-slide.png`, `nicolai-somersault.png`, `trond-run.png`, `trond-idle.png`, `trond-jump.png`, `trond-bellyslide.png` and `trond-ball.png`.

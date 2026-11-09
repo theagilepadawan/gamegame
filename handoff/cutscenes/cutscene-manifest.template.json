@@ -44,7 +44,7 @@
       "proposedStaging": "The office host presents a shoebox outside 505; Nicolai changes formal shoes for the exact Park trainers, tightens laces and takes a light test step toward Park",
       "proposedCaption": "Investing in the long run",
       "optionalTreatmentDetails": ["505 setting", "Office host participation", "Shoebox and lace-tightening staging", "6–8 second duration", "Caption"],
-      "requiredReferences": ["game/assets/original-17.webp", "game/assets/original-18.webp", "game/scripts/park-shoes.js", "references/gameplay/central-park-gameplay.png"],
+      "requiredReferences": ["game/assets/original-17.webp", "game/assets/original-18.webp", "game/scripts/park-shoes.js", "references/gameplay/central-park-gameplay.webp"],
       "beforeFootwearReferences": ["game/assets/original-27.webp", "game/assets/original-28.webp"],
       "proposedGate": "Existing Next: Central Park action after successful Midtown completion bookkeeping and before starting Park",
       "integrationConstraints": ["Do not interrupt the active Midtown course or trigger at the live office encounter", "Preserve unlocks and existing Park shoe selection", "Finish, Skip and media failure start Park exactly once", "Do not force replay on every retry", "Define selected-runner handling explicitly before later Trond replays"],

@@ -1,9 +1,14 @@
-# Version 1.23 — A clean title send-off and fixed spotlight
+# Version 1.24 — District obstacles and the quiet 06:00 call
 
-See [the current verification record](verification-v123.md) for the title-arm
-compositing and spotlight checks. Both runners retain their approved face and
-body. The complete [finance-humour review](finance-humor-review-v123.md) is a
-proposal; this release leaves current captions unchanged.
+See [the current verification record](verification-v124.md) for native art,
+registration, live lettering, collision-enabled route witnesses, varied moving
+obstacles, briefing audio and mobile/offline checks. The approved humour
+recommendations are now implemented. [Implementation](obstacles-v124.md).
+
+The [version 1.23 record](verification-v123.md) covers the retained clean title
+thumbs-up and fixed spotlight. The new call holds surprise on the first reply
+and during Grete's answer, then uses the smile for Nicolai's final line. Music
+is paused throughout the conversation; the supplied reaction cue still plays.
 
 See [the previous verification record](verification-v122.md) for the retained
 checks. The larger retro call triggers and holds Nicolai’s surprised reaction

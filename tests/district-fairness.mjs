@@ -71,8 +71,8 @@ function search(initial,section){
 const sections=[{name:'opening',start:0,end:13.5},{name:'upper fork',start:13.5,end:30.3,route:'high'},
   {name:'lower fork',start:13.5,end:30.3,route:'low'},{name:'jump-slide cadence',start:31,end:37.8},
   {name:'ledge reward',start:37.3,end:47.5,goal:true},{name:'final street',start:48,end:59.5}];
-await mkdir('review/v122/fairness',{recursive:true});
-const previous=process.env.DISTRICT_SEARCH==='1'?[]:JSON.parse(await readFile('tests/fixtures/district-controls-v122.json','utf8').catch(()=> '[]'));
+await mkdir('review/v124/fairness',{recursive:true});
+const previous=process.env.DISTRICT_SEARCH==='1'?[]:JSON.parse(await readFile('tests/fixtures/district-controls-v124.json','utf8').catch(()=> '[]'));
 for(const districtId of ['midtown','park'])for(const character of ['nicolai','trond'])for(const seed of [42,91827]){
   const all=new c.yo(1000,seed,{districtId,character,procedural:true,ambientJetpacks:false});
   for(const h of all.obstacles){
@@ -82,9 +82,15 @@ for(const districtId of ['midtown','park'])for(const character of ['nicolai','tr
   }
   for(const section of sections){
     const initial=fixture(districtId,character,seed,section),known=previous.find(r=>r.districtId===districtId&&r.character===character&&r.seed===seed&&r.section===section.name&&r.pass);
-    const result=known?{pass:true,controls:known.controls}:search(initial,section);
+    let valid=false;
+    if(known){
+      const probe=fixture(districtId,character,seed,section);
+      for(const input of known.controls)advance(probe,Number(input));
+      valid=!probe.dead&&!probe.qaDamage&&!probe.qaThirdJump&&probe.grounded&&probe.time>=section.end&&(!section.goal||probe.qaCollected)&&(!section.route||probe.routeChoice?.id===section.route);
+    }
+    const result=valid?{pass:true,controls:known.controls}:search(initial,section);
     const record={districtId,character,seed,section:section.name,...result};report.push(record);
-    await writeFile('review/v122/fairness/report.json',JSON.stringify(report,null,2));
+    await writeFile('review/v124/fairness/report.json',JSON.stringify(report,null,2));
     assert.ok(result.pass,`No safe control witness: ${JSON.stringify(record)}`);
     const replay=fixture(districtId,character,seed,section);
     for(const input of result.controls)advance(replay,Number(input));
@@ -98,7 +104,7 @@ for(const districtId of ['midtown','park'])for(const character of ['nicolai','tr
 // colliding as a suspended invisible wall once the deck has gone.
 for(const character of ['nicolai','trond']){
   const q=new c.yo(1000,42,{districtId:'midtown',character,procedural:true,ambientJetpacks:false});
-  const h=q.obstacles.find(o=>o.platformId&&o.label==='SUNK COST'),p=q.platforms.find(p=>p.id===h.platformId);
+  const h=q.obstacles.find(o=>o.platformId&&o.label==='SUNK-COST TRAP'),p=q.platforms.find(p=>p.id===h.platformId);
   q.time=1;p.collapseAt=.5;h.x=q.x-20;p.x=q.x-80;q.y=p.y;q.grounded=false;q.vy=0;
   const coin=q.pickups.find(coin=>coin.platformId===p.id),offset=coin.offsetY;
   q.step(1/120);
