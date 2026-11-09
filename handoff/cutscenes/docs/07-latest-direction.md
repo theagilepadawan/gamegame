@@ -1,6 +1,23 @@
 # Latest user direction
 
-## Current authority: version 1.24
+## Current authority: version 1.25
+
+Start the call with a short ring using both supplied recordings. GDL expands
+into Grete Direct Line before the portraits connect. Answer connects early;
+Skip bypasses the call. Keep the 06:00 clock, omit that time from Grete's spoken
+text, and do not show a 07:00 rendezvous label. Nicolai's first line is now
+“Hellandussen, that’s great! Sounds like an easy run, but I could really use my
+joggers.” Highlight Hellandussen; hover/focus/touch explains “Norwegian dialect
+for 'woah'”. Native recordings and mix provenance are in `game/assets/briefing-v125/`.
+Music pauses for ringing and dialogue; existing portrait/reaction direction remains.
+
+Story obstacle captions are unique across each chapter's routes and Contrarian
+additions. Preserve the existing art and geometry. Endless has a slightly
+faster speed ramp and recurring IPO Hype Machine encounters, with seeded
+branch/timing/lane variation and a smooth return to the street. See
+`game/docs/comms-and-endless-v125.md` and `game/docs/verification-v125.md`.
+
+## Retained direction: version 1.24
 
 The approved humour review is implemented, with twelve new native district
 objects in `game/assets/obstacles-v124/`. See `game/docs/obstacles-v124.md`.
@@ -8,8 +25,8 @@ Do not restore the rejected red-tape/binder artwork or change the approved
 warm city paintings, venue spacing, character sprites or camera motion.
 
 The opening call is a private 06:00 New York line. Grete says “???” just had
-a cancellation and can meet Nicolai in Central Park in an hour (07:00).
-Nicolai: “Sounds like an easy run, but I could really use my joggers.”
+a cancellation and can meet Nicolai in Central Park in an hour.
+Nicolai's first reply is updated by version 1.25 above.
 Grete: “Stop by 505. I’ll have a pair waiting for you.”
 Nicolai: “Perfect. Let’s see if active management can beat a taxi.”
 Use the existing approved portraits. The first Nicolai reply triggers the

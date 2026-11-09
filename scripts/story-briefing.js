@@ -9,9 +9,10 @@
   nicolaiAtlas.src = "assets/briefing-v120/nicolai-portraits.webp";
   const reactionAtlas = new Image(); reactionAtlas.decoding = "async";
   reactionAtlas.src = "assets/briefing-v122/nicolai-reaction.webp";
+  const dialDuration = 4400;
   const lines = [
-    {speaker: "grete", text: "Nicolai, it’s 06:00. ??? just had a cancellation. They can meet you in Central Park in one hour."},
-    {speaker: "nicolai", expression: 4, text: "Sounds like an easy run, but I could really use my joggers."},
+    {speaker: "grete", text: "Nicolai, ??? just had a cancellation. They can meet you in Central Park in one hour."},
+    {speaker: "nicolai", expression: 4, text: "Hellandussen, that’s great! Sounds like an easy run, but I could really use my joggers."},
     {speaker: "grete", expression: 4, text: "Stop by 505. I’ll have a pair waiting for you."},
     {speaker: "nicolai", expression: 5, text: "Perfect. Let’s see if active management can beat a taxi."}
   ];
@@ -19,7 +20,7 @@
     grete: {image: atlas, row: 0, name: "Grete", mouth: [329, 278, 55, 26], eyes: [323, 187, 83, 34], blinkOffset: 0},
     nicolai: {image: nicolaiAtlas, row: 1, name: "Nicolai", mouth: [245, 283, 52, 25], eyes: [239, 181, 82, 29], blinkOffset: 1370}
   };
-  let dialog, speaker, text, next, count, alert, active = null, raf = 0, previousTime = 0;
+  let dialog, speaker, text, next, count, alert, dial, dialStatus, dialWords, dialOrbit, dialSignal, active = null, raf = 0, previousTime = 0;
   let lastReason = null, frameCache = null;
   const canvases = {}, lastFrame = {};
 
@@ -41,9 +42,68 @@
     alert.style.transform = `translate(-50%, ${rise}px) scale(${scale})`;
     alert.querySelector(".alert-rays").style.opacity = reduce.matches ? "0" : String(Math.max(0, 1 - age / 580));
   }
-  function stopSurprise(pending) {
+  function stopClip(pending, id) {
     const audio = pending?.audio;
-    if (audio?.activeClip && audio.activeClip === audio.clips["mission-alert"]) audio.stopClips();
+    if (audio?.activeClip && audio.activeClip === audio.clips[id]) audio.stopClips();
+  }
+  function stopSurprise(pending) { stopClip(pending, "mission-alert"); }
+  const ease = value => { const t = Math.max(0, Math.min(1, value)); return t * t * (3 - 2 * t); };
+  function drawDial() {
+    if (!active || active.phase !== "ringing") return;
+    const age = active.dialAge, progress = Math.min(1, age / dialDuration);
+    const unfold = ease((age - 1850) / 1250), pulse = Math.sin(age / 190) ** 2;
+    dial.style.opacity = String(reduce.matches ? 1 : 1 - ease((age - 4060) / 340));
+    dial.style.setProperty("--dial-pulse", reduce.matches ? "0" : String(pulse));
+    dialOrbit.style.opacity = String(reduce.matches ? .35 : .5 * (1 - unfold));
+    dialOrbit.style.transform = reduce.matches ? "none" : `rotate(${age * .012}deg)`;
+    dial.querySelector(".dial-progress").style.strokeDashoffset = String(628.32 * (1 - progress));
+    dialWords.forEach((word, index) => {
+      const appear=reduce.matches?1:ease((age-90-index*120)/210);
+      word.style.opacity=String(appear);word.style.transform=`translateY(${3*(1-appear)}px)`;
+      const amount = reduce.matches ? 1 : ease((age - 1850 - index * 120) / 900);
+      const suffix = word.querySelector(".dial-suffix");
+      suffix.style.maxWidth = `${suffix.textContent.length * amount}ch`;
+      suffix.style.opacity = String(amount);
+    });
+    const signal = age < 1850 ? "Incoming call" : age < 3300 ? "Connecting" : "Line open";
+    if (dialStatus.textContent !== signal) dialStatus.textContent = signal;
+    dialSignal.style.transform = reduce.matches ? "none" : `rotate(${age < 1850 ? Math.sin(age / 27) * pulse * 5 : 0}deg)`;
+  }
+  function connect() {
+    if (!active || active.phase !== "ringing") return;
+    stopClip(active, "gdl-ring");
+    active.phase = "talk"; active.clock = active.age = 0;
+    dialog.dataset.phase = "talk"; dial.hidden = true;
+    showBeat();
+  }
+  function closeTranslation() {
+    const tip = dialog?.querySelector(".dialect-tooltip"), term = dialog?.querySelector(".dialect-term");
+    if (!tip || tip.hidden) return false;
+    tip.hidden = true; term.setAttribute("aria-expanded", "false"); return true;
+  }
+  function dialogueText(line) {
+    text.replaceChildren();
+    for (const part of line.split(/(\?\?\?|Hellandussen)/)) {
+      if (part === "???") {
+        const unknown = document.createElement("span"); unknown.className = "briefing-unknown";
+        unknown.textContent = part; unknown.setAttribute("aria-label", "an undisclosed contact"); text.append(unknown);
+      } else if (part === "Hellandussen") {
+        const wrap = document.createElement("span"); wrap.className = "dialect-wrap";
+        const term = document.createElement("button"); term.type = "button"; term.className = "dialect-term";
+        term.textContent = part; term.setAttribute("aria-describedby", "dialect-meaning");
+        term.setAttribute("aria-expanded", "false");
+        const tip = document.createElement("span"); tip.className = "dialect-tooltip";
+        tip.id = "dialect-meaning"; tip.setAttribute("role", "tooltip"); tip.hidden = true;
+        tip.textContent = "Norwegian dialect for 'woah'";
+        const open = () => { tip.hidden = false; term.setAttribute("aria-expanded", "true"); };
+        wrap.addEventListener("pointerenter", event => { if (event.pointerType !== "touch") open(); });
+        wrap.addEventListener("pointerleave", () => { if (document.activeElement !== term) closeTranslation(); });
+        term.addEventListener("focus", open); term.addEventListener("blur", closeTranslation);
+        // Touch and keyboard can reveal the same note without advancing the call.
+        term.addEventListener("click", event => { event.stopPropagation(); open(); });
+        wrap.append(term, tip); text.append(wrap);
+      } else text.append(document.createTextNode(part));
+    }
   }
 
   function selected() {
@@ -95,6 +155,7 @@
   }
   function draw(force = false) {
     if (!active) return;
+    if (active.phase === "ringing") { drawDial(); return; }
     drawSurprise();
     const art = frames(); if (!art) return;
     reactionFrames(art);
@@ -120,7 +181,10 @@
     if (window.longRun?.state !== "home" || selected() !== active.selection) { cancel(); return; }
     const delta = previousTime ? Math.min(80, now - previousTime) : 0; previousTime = now;
     if (!document.hidden) {
-      active.clock += delta; active.age += delta;
+      if (active.phase === "ringing") {
+        active.dialAge += delta;
+        if (active.dialAge >= dialDuration) connect();
+      } else { active.clock += delta; active.age += delta; }
       draw();
     }
     raf = requestAnimationFrame(tick);
@@ -128,13 +192,7 @@
   function showBeat() {
     const line = lines[active.beat]; active.age = 0;
     speaker.textContent = portraits[line.speaker].name;
-    const words = line.text.split("???");
-    text.replaceChildren(document.createTextNode(words[0]));
-    if (words.length > 1) {
-      const unknown = document.createElement("span"); unknown.className = "briefing-unknown";
-      unknown.textContent = "???"; unknown.setAttribute("aria-label", "an undisclosed contact");
-      text.append(unknown, document.createTextNode(words[1]));
-    }
+    dialogueText(line.text);
     dialog.dataset.speaker = line.speaker;
     count.textContent = `${active.beat + 1} / ${lines.length}`;
     next.textContent = active.beat === lines.length - 1 ? "Let’s go →" : "Continue →";
@@ -142,6 +200,7 @@
   }
   function advance() {
     if (!active || document.hidden) return;
+    if (active.phase === "ringing") { connect(); return; }
     if (active.beat === lines.length - 1) { finish("complete", true); return; }
     if (active.beat === 1) stopSurprise(active);
     active.beat++;
@@ -154,9 +213,17 @@
     dialog.setAttribute("aria-labelledby", "briefing-title");
     dialog.innerHTML = `<section class="briefing-shell">
       <header class="briefing-heading"><h2 id="briefing-title">New York · Before the bell</h2><span><i aria-hidden="true"></i> Private line</span></header>
+      <div class="briefing-dial" aria-label="Incoming call. GDL: Grete Direct Line">
+        <svg class="dial-orbit" viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="120" r="100"/><path d="M120 10v12m0 196v12M10 120h12m196 0h12"/><circle class="dial-progress" cx="120" cy="120" r="100" pathLength="628.32"/></svg>
+        <div class="dial-ident"><span class="dial-tag">GDL / PRIVATE CONNECTION</span>
+          <div class="dial-brand" aria-hidden="true"><span class="dial-word">G<span class="dial-suffix">rete</span></span><span class="dial-word">D<span class="dial-suffix">irect</span></span><span class="dial-word">L<span class="dial-suffix">ine</span></span></div>
+          <div class="dial-status-line"><svg class="dial-receiver" viewBox="0 0 32 32" aria-hidden="true"><path d="M9 5l5 5-3 4c2 4 3 5 7 7l4-3 5 5-2 4c-1 2-5 1-9-1C9 22 5 17 4 10c0-2 2-4 5-5Z"/><path class="dial-waves" d="M21 5c4 1 6 3 7 7M21 10c1 0 2 1 2 2"/></svg><span class="dial-status" role="status">Incoming call</span><span class="dial-dots" aria-hidden="true">···</span></div>
+        </div>
+        <div class="dial-baseline" aria-hidden="true"><span>NEW YORK</span><span>06:00</span><span>DIRECT LINE</span></div>
+      </div>
       <div class="briefing-connection">
         <figure class="briefing-portrait" data-person="grete"><canvas width="512" height="512" role="img" aria-label="Ink portrait of Grete, wearing glasses, a lavender blazer and a patterned scarf"></canvas><figcaption><strong>Grete</strong><i aria-hidden="true"></i></figcaption></figure>
-        <div class="briefing-link" aria-label="06:00 New York. Rendezvous at 07:00."><span>NBIM · NYC</span><b>06:00</b><svg aria-hidden="true" viewBox="0 0 100 32"><path d="M3 16h25m44 0h25M38 11v10m8-16v22m8-22v22m8-16v10"/></svg><span>07:00 · Rendezvous</span></div>
+        <div class="briefing-link" aria-label="06:00 New York. Grete Direct Line."><span>NBIM · NYC</span><b>06:00</b><svg aria-hidden="true" viewBox="0 0 100 32"><path d="M3 16h25m44 0h25M38 11v10m8-16v22m8-22v22m8-16v10"/></svg><span>GDL · CONNECTED</span></div>
         <figure class="briefing-portrait" data-person="nicolai"><span class="briefing-alert" aria-hidden="true" hidden><svg viewBox="0 0 48 78"><defs><linearGradient id="briefing-alert-gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff5cf"/><stop offset=".55" stop-color="#f5d28a"/><stop offset="1" stop-color="#c89140"/></linearGradient></defs><g fill="#041425" stroke="#041425" stroke-width="5" stroke-linejoin="round" transform="translate(2 3)"><path d="M15 8Q14 4 19 4H35Q40 4 39 9L32 48Q31 53 27 53H22Q18 53 18 49Z"/><circle cx="24" cy="66" r="7"/></g><g fill="url(#briefing-alert-gold)" stroke="#132b3c" stroke-width="2.5" stroke-linejoin="round"><path d="M15 8Q14 4 19 4H35Q40 4 39 9L32 48Q31 53 27 53H22Q18 53 18 49Z"/><circle cx="24" cy="66" r="7"/></g><path d="M20 10H32M22 17L24 43M21 63L25 61" fill="none" stroke="#fff7dd" stroke-width="2.2" stroke-linecap="round" opacity=".8"/><g class="alert-rays" fill="none" stroke="#b7d9cb" stroke-width="2" stroke-linecap="round"><path d="M5 18L2 14M42 25L46 22M9 42L5 43"/></g></svg></span><canvas width="512" height="512" role="img" aria-label="Ink portrait of Nicolai, wearing his blue checked jacket"></canvas><figcaption><strong>Nicolai</strong><i aria-hidden="true"></i></figcaption></figure>
       </div>
       <div class="briefing-dialogue" aria-live="polite" aria-atomic="true"><span id="briefing-speaker"></span><p id="briefing-text"></p></div>
@@ -167,6 +234,9 @@
     speaker = dialog.querySelector("#briefing-speaker"); text = dialog.querySelector("#briefing-text");
     next = dialog.querySelector(".briefing-next"); count = dialog.querySelector(".briefing-count");
     alert = dialog.querySelector(".briefing-alert");
+    dial = dialog.querySelector(".briefing-dial"); dialStatus = dialog.querySelector(".dial-status");
+    dialWords = [...dialog.querySelectorAll(".dial-word")]; dialOrbit = dialog.querySelector(".dial-orbit");
+    dialSignal = dialog.querySelector(".dial-receiver");
     next.onclick = advance;
     dialog.querySelector(".briefing-skip").onclick = () => finish("skipped", true);
     dialog.addEventListener("cancel", event => { event.preventDefault(); finish("skipped", true); });
@@ -174,7 +244,7 @@
       // The game's window handlers also consume Escape and map arrows. Keep
       // modal input here so a skipped call cannot change the selected course.
       event.stopPropagation();
-      if (event.code === "Escape") { event.preventDefault(); if (!event.repeat) finish("skipped", true); }
+      if (event.code === "Escape") { event.preventDefault(); if (!event.repeat && !closeTranslation()) finish("skipped", true); }
       else if (event.code === "ArrowRight") { event.preventDefault(); if (!event.repeat) advance(); }
       else if (event.repeat && ["Enter", "Space"].includes(event.code)) event.preventDefault();
     });
@@ -183,7 +253,7 @@
   function finish(reason, proceed = false) {
     const pending = active; if (!pending) return;
     active = null; lastReason = reason; cancelAnimationFrame(raf); raf = 0; previousTime = 0;
-    stopSurprise(pending); alert.hidden = true; dialog.removeAttribute("data-alert");
+    stopClip(pending, "gdl-ring"); stopSurprise(pending); alert.hidden = true; dialog.removeAttribute("data-alert");
     dialog?.close(); dialog?.removeAttribute("data-hidden");
     pending.audio?.holdMusic?.("briefing", false);
     if (proceed && window.longRun?.state === "home" && selected() === pending.selection) pending.onComplete();
@@ -192,15 +262,17 @@
   function launch({character, onComplete, audio} = {}) {
     if (active) return true;
     if (character !== "nicolai" || typeof onComplete !== "function" || !available()) return false;
-    create(); lastReason = null; active = {onComplete, audio, selection: selected(), beat: 0, age: 0, clock: 0, alertAt: null};
+    create(); lastReason = null; active = {onComplete, audio, selection: selected(), phase: "ringing", dialAge: 0, beat: 0, age: 0, clock: 0, alertAt: null};
     audio?.holdMusic?.("briefing", true);
-    showBeat(); dialog.showModal(); next.focus({preventScroll: true});
+    dialog.dataset.phase = "ringing"; dialog.removeAttribute("data-speaker"); dial.hidden = false; alert.hidden = true;
+    text.replaceChildren(); speaker.textContent = ""; count.textContent = "Incoming"; next.textContent = "Answer call →";
+    drawDial(); dialog.showModal(); next.focus({preventScroll: true}); audio?.clip?.("gdl-ring");
     previousTime = 0; raf = requestAnimationFrame(tick); return true;
   }
   document.addEventListener("visibilitychange", () => {
     if (!active) return;
     previousTime = 0; dialog.toggleAttribute("data-hidden", document.hidden);
-    const current = active, audio = current.audio, clip = audio?.clips["mission-alert"];
+    const current = active, audio = current.audio, clip = audio?.clips[current.phase === "ringing" ? "gdl-ring" : "mission-alert"];
     if (document.hidden) {
       cancelAnimationFrame(raf); raf = 0;
       if (clip && audio.activeClip === clip) clip.pause();
@@ -208,7 +280,7 @@
       if (clip && audio.enabled && audio.activeClip === clip && !clip.ended) {
         Promise.resolve(clip.play()).then(() => {
           if (!active || active === current && (document.hidden || !audio.enabled)) clip.pause();
-        }).catch(() => { if (active === current) stopSurprise(current); });
+        }).catch(() => { if (active === current) audio.stopClips(); });
       }
       draw(true); raf = requestAnimationFrame(tick);
     }
@@ -219,7 +291,8 @@
   nicolaiAtlas.addEventListener("load", () => draw(true));
   reactionAtlas.addEventListener("load", () => draw(true));
   window.LR_BRIEFING = {launch, cancel, inspect: () => ({active: !!active, beat: active?.beat ?? -1,
-    speaker: active ? lines[active.beat].speaker : null, age: active?.age ?? 0, clock: active?.clock ?? 0,
+    phase: active?.phase ?? null, dialAge: active?.dialAge ?? 0, dialDuration,
+    speaker: active?.phase === "talk" ? lines[active.beat].speaker : null, age: active?.age ?? 0, clock: active?.clock ?? 0,
     reason: lastReason, reduced: reduce.matches, portraitsReady: !!(atlas.complete && atlas.naturalWidth && nicolaiAtlas.complete && nicolaiAtlas.naturalWidth),
     reactionReady: !!(reactionAtlas.complete && reactionAtlas.naturalWidth),
     alertPlayed: active?.alertAt !== null && active?.alertAt !== undefined,

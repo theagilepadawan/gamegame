@@ -104,7 +104,7 @@ for(const districtId of ['midtown','park'])for(const character of ['nicolai','tr
 // colliding as a suspended invisible wall once the deck has gone.
 for(const character of ['nicolai','trond']){
   const q=new c.yo(1000,42,{districtId:'midtown',character,procedural:true,ambientJetpacks:false});
-  const h=q.obstacles.find(o=>o.platformId&&o.label==='SUNK-COST TRAP'),p=q.platforms.find(p=>p.id===h.platformId);
+  const h=q.obstacles.find(o=>o.platformId&&o.type==='low'&&q.platforms.some(p=>p.id===o.platformId&&p.setPiece&&p.kind==='crumble')),p=q.platforms.find(p=>p.id===h.platformId);
   q.time=1;p.collapseAt=.5;h.x=q.x-20;p.x=q.x-80;q.y=p.y;q.grounded=false;q.vy=0;
   const coin=q.pickups.find(coin=>coin.platformId===p.id),offset=coin.offsetY;
   q.step(1/120);

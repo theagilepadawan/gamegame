@@ -51,7 +51,7 @@ for(const time of [0,90,300])for(const family of G.families){
 }
 const routes=new Set(),powerups=new Set(),types=new Set(),eventGaps=[];
 for(let seed=1;seed<=32;seed++){
- const log=course(seed),seen=[],lastEvent={jetpack:null,contrarian:null};
+ const log=course(seed),seen=[],lastEvent={jetpack:null,contrarian:null,ipo:null};
  for(const row of log){
   routes.add(row.route);row.pickups.forEach(p=>powerups.add(p[0]));row.shape.forEach(p=>types.add(p[0]==='s'?'spring':p[1]));
   if(G.families.some(f=>f.id===row.route)){assert.ok(!seen.slice(-4).includes(row.route),`Immediate motif repetition: seed${seed}`);}

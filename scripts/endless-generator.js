@@ -2,7 +2,7 @@
    while terrain, section layout, rewards and rare events use separate streams. */
 (function () {
   "use strict";
-  var VERSION = 4, GROUND = 422;
+  var VERSION = 5, GROUND = 422;
   var FAMILIES = [
     { id: 20, name: "MARKET RHYTHM", kind: "rhythm", unlock: 0 },
     { id: 21, name: "ROOFTOP DIVIDENDS", kind: "roofs", unlock: 0 },
@@ -29,10 +29,10 @@
   var choose = function (r, list) { return list[Math.floor(r() * list.length)]; };
   var integer = function (r, a, b) { return a + Math.floor(r() * (b - a + 1)); };
   var active = function (q) { return !!q && q.mode === "endless" && q.procedural === true; };
-  var speed = function (time) { return 340 + 360 * (1 - Math.exp(-Math.max(0, time) / 150)); };
+  var speed = function (time) { return 340 + 360 * (1 - Math.exp(-Math.max(0, time) / 125)); };
   function distanceAtTime(time) {
     time = Math.max(0, Number(time) || 0);
-    return 700 * time - 54000 * (1 - Math.exp(-time / 150));
+    return 700 * time - 45000 * (1 - Math.exp(-time / 125));
   }
   function timeAtDistance(distance) {
     distance = Math.max(0, distance);
@@ -52,7 +52,7 @@
     var r = stream(q.seed, 0, 0x4556454e);
     return q.__endlessDirector = { version: VERSION, section: 0, recent: [], history: [],
       nextFlight: between(r, 28, 42), nextContrarian: between(r, 48, 66), nextRecovery: integer(r, 4, 7),
-      lastEventAt: -100, lastPowerAt: -100, eventCounts: { jetpack: 0, contrarian: 0, recovery: 0 } };
+      nextIPO: between(r, 76, 102), lastEventAt: -100, lastPowerAt: -100, eventCounts: { jetpack: 0, contrarian: 0, recovery: 0, ipo: 0 } };
   }
   function terrain(seed, ground) {
     ground = Number.isFinite(ground) ? ground : GROUND;
@@ -97,7 +97,8 @@
     var family, event = null, recent = s.recent.slice(-4), forced = Number.isInteger(forcedRoute);
     if (forced) family = FAMILIES.find(function (f) { return f.id === forcedRoute; });
     if (!family && !forced && !q.flight && !q.flightLanding && !q.transfer && !q.contrarian && planTime - s.lastEventAt > 20) {
-      if (q.ambientJetpacks && planTime >= s.nextFlight) event = "jetpack";
+      if (q.ambientJetpacks && planTime >= s.nextIPO) event = "ipo";
+      else if (q.ambientJetpacks && planTime >= s.nextFlight) event = "jetpack";
       else if (planTime >= s.nextContrarian) event = "contrarian";
     }
     if (!family && !event) {
@@ -115,7 +116,7 @@
       }
     }
     q.spawnCount++;
-    var id = event === "jetpack" ? 32 : event === "contrarian" ? 33 : family.id;
+    var id = event === "ipo" ? 36 : event === "jetpack" ? 32 : event === "contrarian" ? 33 : family.id;
     q.recent.push(id); if (q.recent.length > 8) q.recent.shift();
     s.recent.push(id); if (s.recent.length > 8) s.recent.shift();
     q.markers.push({ x: o - 50, w: 0, route: id, announced: false });
@@ -220,7 +221,13 @@
     }
     if (event) {
       s.lastEventAt = planTime; s.eventCounts[event]++;
-      if (event === "jetpack") {
+      if (event === "ipo") {
+        s.nextIPO=planTime+between(events,92,138);
+        const offer=between(layout,.9,1.4);
+        pickup(xAt(offer),q.floorAt(xAt(offer))-65,"jetpack",null,{flightKind:"ipo",encounterSeed:Math.floor(events()*4294967296)>>>0});
+        coins(offer+.5,1.4,34,"dividend",4);
+        endTime=offer+3.2; // The arena pauses the street; both entry and return have clear ground.
+      } else if (event === "jetpack") {
         s.nextFlight = planTime + between(events, 38, 63); q.lastCruiseSection = q.spawnCount - 1;
         var launch = between(layout, .7, 1.1);
         pickup(xAt(launch), q.floorAt(xAt(launch)) - 160, "jetpack", null, { flightKind: "cruise" });
@@ -342,7 +349,7 @@
   }
   window.LR_ENDLESS_GENERATOR = { version: VERSION, active: active, generate: generate, terrain: terrain, speed: speed, difficulty: difficulty, distanceAtTime: distanceAtTime,
     families: FAMILIES.map(function (f) { return Object.freeze(Object.assign({}, f)); }),
-    routeName: function (id) { return id === 32 ? "IPO AIRSPACE" : id === 33 ? "AGAINST THE CONSENSUS" : (FAMILIES.find(function (f) { return f.id === id; }) || {}).name || ""; },
+    routeName: function (id) { return id === 36 ? "IPO HYPE MACHINE" : id === 32 ? "LIQUIDITY LIFT" : id === 33 ? "AGAINST THE CONSENSUS" : (FAMILIES.find(function (f) { return f.id === id; }) || {}).name || ""; },
     inspect: function (q) { if (!active(q)) return null; var s = state(q); return { version: VERSION, section: s.section, nextFlight: s.nextFlight,
-      nextContrarian: s.nextContrarian, recent: s.recent.slice(), events: Object.assign({}, s.eventCounts), history: s.history.slice() }; } };
+      nextContrarian: s.nextContrarian, nextIPO:s.nextIPO, recent: s.recent.slice(), events: Object.assign({}, s.eventCounts), history: s.history.slice() }; } };
 })();

@@ -71,6 +71,7 @@ try{
   await page.waitForFunction(()=>longRun.snapshot.contrarian);
   await page.evaluate(()=>{q.endContrarian();});
   await page.waitForFunction(()=>!longRun.snapshot.contrarian);
+  assert.equal(await page.evaluate(()=>SA.clips['gdl-ring'].src.startsWith('data:audio/mpeg;base64,')),true,'The mixed incoming-call recording is embedded offline');
   // The film and briefing remain usable from the single HTML with no network.
   await page.evaluate(()=>{Cu(false);fu('midtown');Ko('chapter');});
   await page.waitForFunction(()=>document.querySelector('#chapter-video')?.readyState>=2);

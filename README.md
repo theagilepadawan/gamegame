@@ -4,6 +4,19 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
+## Version 1.25 — Grete Direct Line and changing markets
+
+The opening call rings with the supplied vibration/ringtone mix while GDL
+expands into Grete Direct Line. Hellandussen has an accessible translation,
+the dialogue omits redundant clock references, and Story prop captions no
+longer repeat within a chapter. Music stays paused throughout the call.
+
+Endless accelerates slightly faster and occasionally offers an IPO Hype Machine
+encounter. Its seeded price branches, warning times and safe passages vary;
+later encounters increase the challenge. Clearing it awards leaderboard points
+and returns smoothly to the same course position and pace.
+[Implementation](docs/comms-and-endless-v125.md) · [Verification](docs/verification-v125.md).
+
 ## Version 1.24 — District props and a 06:00 rendezvous
 
 Twelve newly painted obstacles give each district its own materials and visual

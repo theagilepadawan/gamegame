@@ -88,7 +88,7 @@
     generate: function (q, forcedRoute) { return !!window.LR_ENDLESS_GENERATOR && LR_ENDLESS_GENERATOR.generate(q, forcedRoute); },
     // A readable pace ceiling leaves room for increasingly varied combinations.
     speed: function (t) { return window.LR_ENDLESS_GENERATOR ? LR_ENDLESS_GENERATOR.speed(t) : 340 + 820 * (1 - Math.exp(-t / 150)); },
-    speedAt: function (q, t) { return on(q) ? this.speed(t) : null; },
+    speedAt: function (q, t) { return on(q) ? this.speed(t-(q.ipoElapsed||0)) : null; },
     // which sections the spawner may pick next (never empty, never the last three)
     routes: function (q) {
       var R = regime(q), s = stats(q);
@@ -176,7 +176,7 @@
     regimeToast: function (q, Ge, A) {
       if (!on(q)) { Ge(A.name, A.title, 2.6); return; }
       toast = Ge; var L = level(q), R = regime(q);
-      say(q, "LEVEL " + (L + 1) + " · PACE " + (this.speed(q.time + 2) / 315).toFixed(1) + "×", L >= REGIMES.length - 1 ? R.title.replace("The long run.", "The long run" + (ROMAN[Math.min(10, L - REGIMES.length + 2)] || "") + ".") : R.title, 2.8);
+      say(q, "LEVEL " + (L + 1) + " · PACE " + (this.speedAt(q,q.time + 2) / 315).toFixed(1) + "×", L >= REGIMES.length - 1 ? R.title.replace("The long run.", "The long run" + (ROMAN[Math.min(10, L - REGIMES.length + 2)] || "") + ".") : R.title, 2.8);
       var tk = document.getElementById("ticker-text"); if (tk) tk.textContent = R.sub;
       window.LR_FX && LR_FX.regime();
     },

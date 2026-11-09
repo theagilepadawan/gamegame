@@ -1,10 +1,10 @@
 {
-  "version": "1.24.0",
+  "version": "1.25.0",
   "archive": "/workspace/nbim-arcade/release/The-Long-Run-NBIM.zip",
-  "bytes": 54873096,
-  "sha256": "f94c0115cc6e5f541cdb5d0b2eb664b2e96a87558f6ba9def2805da56f561a86",
-  "htmlBytes": 73658525,
-  "htmlSha256": "e069aad081524d112179f68ac0c767f7e5a5fbcd7bfa83f08ce8cd5fb65c2641",
+  "bytes": 54977547,
+  "sha256": "7c36ca78f6edd92cbd72509c335eac902833e6eeadb6f43f889da0a53670764b",
+  "htmlBytes": 73814618,
+  "htmlSha256": "7c3fff97a72764bd1cb15c7f8be27d4926d1166a7dc4356eed34d9b320322679",
   "crcVerified": true,
   "htmlByteIdentical": true,
   "checksums": [
@@ -14,16 +14,11 @@
     "City-Asset-Choices.png",
     "Park-Asset-Choices.png",
     "The-Long-Run-Cutscene-Handoff.zip",
-    "Midtown-v124-obstacles.png",
-    "Midtown-v124-route.png",
-    "Obstacles-v124-motion.mp4",
-    "Opening-v124-comms.png",
-    "Opening-v124-obstacles.png",
-    "Opening-v124-smile.png",
-    "Opening-v124-surprise.png",
-    "Park-v124-ledge.png",
-    "Park-v124-obstacles.png",
-    "Props-v124-collection.png"
+    "Endless-v125-ipo.png",
+    "Opening-v125-comms.png",
+    "Opening-v125-gdl.mp4",
+    "Opening-v125-gdl.png",
+    "Opening-v125-translation.png"
   ],
   "omitted": []
 }

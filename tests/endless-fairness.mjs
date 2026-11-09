@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
+import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
@@ -15,6 +16,7 @@ export function model(engine, endless, generator = '') {
   assert.ok(end > 0, 'Extract the actual model before rendering/DOM bootstrap');
   vm.runInContext(engine.slice(0, end), context);
   if (generator) vm.runInContext(generator, context);
+  vm.runInContext(readFileSync(path.join(root,'scripts/endless-ipo.js'),'utf8'),context);
   vm.runInContext(endless, context);
   return context;
 }
@@ -91,7 +93,7 @@ function replayControls(initial, target, controls) {
 }
 
 async function main() {
-  const output = process.env.ENDLESS_FAIRNESS_OUTPUT || path.join(root, 'review/v124/endless-fairness');
+  const output = process.env.ENDLESS_FAIRNESS_OUTPUT || path.join(root, 'review/v125/endless-fairness');
   await fs.mkdir(output, {recursive: true});
   const [engine, endless, generator, baseline] = await Promise.all([
     fs.readFile(path.join(root, 'scripts/engine.js'), 'utf8'), fs.readFile(path.join(root, 'scripts/endless.js'), 'utf8'),
@@ -100,11 +102,11 @@ async function main() {
   const c = model(engine, endless, generator), G = c.LR_ENDLESS_GENERATOR;
   // After unrelated presentation/copy edits, replay previously discovered
   // witnesses through the current real engine instead of repeating the search.
-  const replayPath=process.env.ENDLESS_REPLAY_REPORT||(process.env.ENDLESS_SEARCH==='1'?null:path.join(root,'tests/fixtures/endless-controls-v124.json'));
+  const replayPath=process.env.ENDLESS_REPLAY_REPORT||(process.env.ENDLESS_SEARCH==='1'?null:path.join(root,'tests/fixtures/endless-controls-v125.json'));
   const replay = replayPath ? JSON.parse(await fs.readFile(replayPath, 'utf8')) : null;
-  assert.equal(G.version, 4);
+  assert.equal(G.version, 5);
   const sample = new c.hi(540, 42, {mode: 'endless', procedural: true});
-  assert.equal(sample.terrainProfile.version, 4, 'Constructor uses the new terrain in real Endless');
+  assert.equal(sample.terrainProfile.version, 5, 'Constructor uses the new terrain in real Endless');
   sample.spawn(20);
   assert.equal(G.inspect(sample).history.at(-1).route, 20, 'Real engine spawn delegates to the new generator');
   const report = {sourceSha256: {engine: createHash('sha256').update(engine).digest('hex'), endless: createHash('sha256').update(endless).digest('hex'), generator: createHash('sha256').update(generator).digest('hex')}, storyReference: baseline.reference, storyChecks: [], compactReaction: [], physics: [], bars: 0, events: []};
@@ -151,6 +153,7 @@ async function main() {
     G.inspect(q); // Initialize the real director before setting its due event.
     q.__endlessDirector.nextFlight = kind === 'jetpack' ? 0 : Infinity;
     q.__endlessDirector.nextContrarian = kind === 'contrarian' ? 0 : Infinity;
+    q.__endlessDirector.nextIPO = Infinity;
     q.spawn();
     const event = G.inspect(q).history.at(-1);
     assert.equal(event.event, kind);

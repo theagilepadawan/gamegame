@@ -287,8 +287,54 @@ var LR_HAZARDS = (() => {
     "REPLY ALL":"Your inbox has been diversified.",
     "QUICK SYNC":"Extraordinary meeting scheduled to discuss fewer meetings.",
     "PAY FOR LUCK":"A rising tide lifts all bonus pools.",
-    "GOLDEN PARACHUTE":"A soft landing. For one."
+    "GOLDEN PARACHUTE":"A soft landing. For one.",
+    "TRACKING ERROR":"The benchmark went that way.",
+    "FEE THICKET":"The small print has grown branches.",
+    "COMPOUND FEES":"The one thing compounding without fail.",
+    "CASH DRAG":"Your cash is taking the scenic route.",
+    "EXIT FEE":"Leaving? That will cost extra.",
+    "DEEPER CUT":"Just a trim. Of the entire forecast.",
+    "GUIDANCE TRIM":"The forecast needed pruning.",
+    "NO BID":"Plenty of conviction. No buyers.",
+    "PANIC SELL":"A thirty-year horizon. Until this morning.",
+    "FAT TAIL":"Rare event. Right on schedule.",
+    "LEVERAGED LIMB":"The branch was strong. Before the leverage.",
+    "ADMIN FEE":"A fee for processing the other fee.",
+    "MEETING TAX":"Charged by the hour. Paid in attention.",
+    "MISSED ESTIMATES":"The estimate was precise. The result wasn't.",
+    "DEBT CEILING":"Limited headroom. Unlimited discussion.",
+    "SCOPE CREEP":"One small change. Three more floors.",
+    "THESIS DRIFT":"Same holding. Entirely new reason.",
+    "SHIFTING TARGET":"Still on target. After moving the target.",
+    "HOT TIP":"Source: someone who sounded very sure.",
+    "HERD INSTINCT":"Independent research. Group decision.",
+    "ECHO CHAMBER":"The second opinion was the first opinion again.",
+    "CONSENSUS TRAP":"Everyone agreed. That was the warning.",
+    "PEAK CONFIDENCE":"Certainty reached an all-time high.",
+    "EXIT QUEUE":"Everyone's liquidity plan was the same exit."
   };
+  // Captions are assigned after fitting the native art. New words must never
+  // change an approved obstacle's silhouette, placement or collision geometry.
+  const alternatives = {
+    "BENCHMARK":["TRACKING ERROR"], "FEE CREEP":["FEE THICKET","COMPOUND FEES"],
+    "PARKING FEE":["CASH DRAG","EXIT FEE"], "HAIRCUT":["DEEPER CUT","GUIDANCE TRIM"],
+    "BAGHOLDER":["NO BID"], "SHORT-TERMISM":["PANIC SELL"], "TAIL RISK":["FAT TAIL"],
+    "DEBT OVERHANG":["DEBT CEILING","LEVERAGED LIMB"], "FEE ON FEES":["ADMIN FEE"],
+    "FEE DRAG":["MEETING TAX","REPLY ALL"], "GUIDANCE CUT":["REVISED DOWN","MISSED ESTIMATES"],
+    "RISING OVERHEADS":["ONE MORE COMMITTEE","QUICK SYNC"], "CAPEX CREEP":["SCOPE CREEP"],
+    "SUNK-COST TRAP":["THESIS DRIFT"], "MOVING GUIDANCE":["SHIFTING TARGET"],
+    "DEBT SPIRAL":["HOT TIP","HERD INSTINCT"], "RED TAPE":["ECHO CHAMBER","CONSENSUS TRAP"]
+  };
+  function story(h,q) {
+    if(q.mode!=="chapter"||h.type==="gap")return h;
+    const used=q.storyLabels||[];
+    if(used.includes(h.label)) {
+      const options=h.artDistrict==="park"&&h.label==="DEBT OVERHANG"?["LEVERAGED LIMB"]:(alternatives[h.label]||[]);
+      h.label=[...options,"HOT TIP","HERD INSTINCT","ECHO CHAMBER","CONSENSUS TRAP","PEAK CONFIDENCE","EXIT QUEUE",...Object.keys(lines)].find(label=>!used.includes(label))||h.label;
+    }
+    q.storyLabels=[...used,h.label];
+    return h;
+  }
   function district(item, place) { return item.artDistrict || place || (item.theme >= 2 ? "midtown" : "opening"); }
   function variant(item, place) {
     const p=district(item,place), label=item.label||"";
@@ -373,7 +419,7 @@ var LR_HAZARDS = (() => {
     if(!lines[h.label]||q.time-(q.lastPropQuip??-20)<9||q.flight||q.contrarian)return;
     q.lastPropQuip=q.time;q.emit("propQuip",{line:lines[h.label]});
   }
-  return {version:1240,widths,wide,lines,district,variant,fit,endless,proportions,body,moving,offset,update,cause,cleared};
+  return {version:1250,widths,wide,lines,district,variant,fit,story,endless,proportions,body,moving,offset,update,cause,cleared};
 })();
 window.LR_HAZARDS = LR_HAZARDS;
 function Br(e24) {
@@ -479,6 +525,7 @@ var hi = class {
     this.width = A, this.x = Math.min(250, A * 0.25);
     let i = this.x - t;
     this.nextX += i;
+    window.LR_ENDLESS_IPO?.resize(this,i);
     for (let r of [this.obstacles, this.platforms, this.pickups, this.springs, this.markers]) for (let o of r) o.x += i;
     return i;
   }
@@ -632,13 +679,14 @@ var hi = class {
   }
   beginContrarian() {
     if (this.contrarian || this.contrarianDone || this.dead || this.transfer || this.flight) return;
-    this.mode === "chapter" && (this.chapterSaved = { obstacles: this.obstacles, platforms: this.platforms, pickups: this.pickups.filter((t) => !t.taken && t.kind !== "contrarian"), springs: this.springs, markers: this.markers }), this.transfer = { age: 0, duration: 0.7, fromY: this.y, toContrarian: true }, this.contrarian = true, this.speed = window.LR_ENDLESS && this.mode !== "chapter" && this.procedural ? LR_ENDLESS.speed(this.time) : Ir(this.time), this.contrarianEnd = this.time + 0.7 + 12, this.autoSpawn = false, this.obstacles = [], this.platforms = [], this.pickups = [], this.springs = [], this.markers = [], this.resetSurface();
+    this.mode === "chapter" && (this.chapterSaved = { obstacles: this.obstacles, platforms: this.platforms, pickups: this.pickups.filter((t) => !t.taken && t.kind !== "contrarian"), springs: this.springs, markers: this.markers }), this.transfer = { age: 0, duration: 0.7, fromY: this.y, toContrarian: true }, this.contrarian = true, this.speed = window.LR_ENDLESS && this.mode !== "chapter" && this.procedural ? LR_ENDLESS.speedAt(this,this.time) : Ir(this.time), this.contrarianEnd = this.time + 0.7 + 12, this.autoSpawn = false, this.obstacles = [], this.platforms = [], this.pickups = [], this.springs = [], this.markers = [], this.resetSurface();
     let A = this.speed / 315;
     for (let t = 0; t < 4; t++) {
       let i = this.x + (1120 + t * 700) * A;
       const h=this.hazard(t % 2 ? "high" : "low", i, (t % 2 ? 105 : 58) * A);
       h.artDistrict=this.districtId||(this.theme>=2?"midtown":"opening");
       h.artVariant=LR_HAZARDS.variant(h);LR_HAZARDS.proportions(h);
+      LR_HAZARDS.story(h,this);
       this.trail(i - 110 * A, T - (t % 2 ? 38 : 145), 170 * A, 4, "opportunity");
     }
     this.emit("contrarian");
@@ -658,6 +706,7 @@ var hi = class {
       I.label = l; LR_HAZARDS.fit(I,this);
       const cycle = g === "high" && ({6.8:[4.8,32],22:[3.6,40],48:[4.1,38]})[authoredTime];
       if(cycle) LR_HAZARDS.moving(I,this,cycle[0],cycle[1],authoredTime===22?"lift":"sine",authoredTime);
+      LR_HAZARDS.story(I,this);
       return I;
     }, r = (a, g = 4, l = 110, E = "dividend") => {
       for (let I = 0; I < g; I++) {
@@ -733,12 +782,13 @@ var hi = class {
     }
     if (!this.flight) return false;
     this.grounded && (this.y = this.floorY, this.held && (this.vy = Math.min(this.vy, -110))), this.flightAge += A, this.flightLaunch = Math.max(0, this.flightLaunch - A), this.sliding = false, this.flightLaunch > 0 ? this.vy = -210 : (this.vy += (this.held ? -900 : 560) * A, this.vy = Math.max(-250, Math.min(250, this.vy))), this.y += this.vy * A;
-    let t = this.flightKind === "cruise" ? this.floorY - 290 : 115;
+    let t = this.endlessIPO ? this.floorY - 307 : this.flightKind === "cruise" ? this.floorY - 290 : 115;
     this.y < t && (this.y = t, this.vy = Math.max(0, this.vy));
     let i = this.grounded;
     return this.grounded = this.y >= this.floorY, this.grounded && (this.y = this.floorY, this.vy = 0, i || this.emit("land", { y: this.y })), this.flightKind === "cruise" && this.flightAge >= this.flightDuration && this.endFlight(), true;
   }
   beginFlight(A = {}) {
+    if(this.mode === "endless" && A.kind === "ipo") { window.LR_ENDLESS_IPO?.start(this,A); return; }
     if (A.kind === "cruise") {
       this.beginCruise(A.duration);
       return;
@@ -767,7 +817,7 @@ var hi = class {
         n.clearAge += A;
         continue;
       }
-      if (r.age < n.telegraphAt || (n.state === "waiting" && (n.state = "warning", this.emit("bossTelegraph", { index: n.index, name: n.attackName, cue: n.cue })), n.warning = Math.min(1, Math.max(0, (r.age - n.telegraphAt) / 0.85)), r.age < n.fireAt)) continue;
+      if (r.age < n.telegraphAt || (n.state === "waiting" && (n.state = "warning", this.emit("bossTelegraph", { index: n.index, name: n.attackName, cue: n.cue })), n.warning = Math.min(1, Math.max(0, (r.age - n.telegraphAt) / (n.fireAt-n.telegraphAt))), r.age < n.fireAt)) continue;
       n.state === "warning" && (n.state = "active", r.muzzleFlash = 1, this.emit("bossAttack", { index: n.index, name: n.attackName, cue: n.cue }));
       let a = (r.age - n.fireAt) / n.travelDuration, g = (o - n.fireAt) / n.travelDuration;
       n.travel = a;
@@ -786,7 +836,7 @@ var hi = class {
   endFlight() {
     if (!this.flight) return;
     let A = this.flightKind;
-    this.resetJumpChain(), this.flight = false, this.held = false, this.vy = 0, this.buffer = 0, this.gates = [], this.priceWaves = [], this.packFade = 0.8, this.flightLanding = this.grounded ? 0 : 0.8, this.flightLandingFrom = this.y, A === "ipo" && (this.chapterTime = Oe), this.emit("flightEnd", { kind: A });
+    this.resetJumpChain(), this.flight = false, this.held = false, this.vy = 0, this.buffer = 0, this.gates = [], this.priceWaves = [], this.packFade = 0.8, this.flightLanding = this.grounded ? 0 : 0.8, this.flightLandingFrom = this.y, A === "ipo" && this.mode === "chapter" && (this.chapterTime = Oe), this.emit("flightEnd", { kind: A });
   }
   stepChapter(A, t = false) {
     if (this.dead || this.won) {
@@ -870,12 +920,13 @@ var hi = class {
     this.stepLegacy(A, t);
   }
   stepLegacy(A, t = false) {
+    if(this.endlessIPO) { window.LR_ENDLESS_IPO.step(this,A); return; }
     if (this.dead || this.won) {
       this.slideRecoverAge = -1, this.resetJumpChain();
       return;
     }
     let i = this.sliding;
-    this.time += A, this.advanceJumpChain(A), this.packFade = Math.max(0, this.packFade - A), this.flipAge >= 0 && (this.flipAge += A, this.flipAge >= this.flipDuration && (this.flipAge = -1)), this.speed = window.LR_ENDLESS && this.mode !== "chapter" && this.procedural ? LR_ENDLESS.speed(this.time) : Ir(this.time), this.research = Math.max(0, this.research - A), this.conviction = Math.max(0, this.conviction - A), this.invincible = Math.max(0, this.invincible - A), this.forcedBounce = Math.max(0, this.forcedBounce - A);
+    this.time += A, this.advanceJumpChain(A), this.packFade = Math.max(0, this.packFade - A), this.flipAge >= 0 && (this.flipAge += A, this.flipAge >= this.flipDuration && (this.flipAge = -1)), this.speed = window.LR_ENDLESS && this.mode !== "chapter" && this.procedural ? LR_ENDLESS.speedAt(this,this.time) : Ir(this.time), this.research = Math.max(0, this.research - A), this.conviction = Math.max(0, this.conviction - A), this.invincible = Math.max(0, this.invincible - A), this.forcedBounce = Math.max(0, this.forcedBounce - A);
     let r = Math.floor(this.time / 32) % Qr.length;
     r !== this.theme && (this.theme = r, this.emit("theme", { theme: r })), this.contrarian && this.time >= this.contrarianEnd && this.endContrarian();
     let o = this.speed * A;
@@ -933,7 +984,7 @@ var hi = class {
         continue;
       }
       if (I.kind === "jetpack") {
-        E = true;
+        E = I;
         break;
       }
       let R = I.kind === "opportunity" ? 75 : I.kind === "dividend" ? 10 : 20;
@@ -944,7 +995,7 @@ var hi = class {
       return;
     }
     if (E) {
-      this.beginFlight({ kind: "cruise" });
+      this.beginFlight({ kind: E.flightKind || "cruise", seed: E.encounterSeed });
       return;
     }
     this.obstacles = this.obstacles.filter((I) => I.x + I.w > -100), this.pickups = this.pickups.filter((I) => I.x > -100 && !I.taken), this.platforms = this.platforms.filter((I) => I.x + I.w > -100 && I.y < this.floorAt(I.x) + 220), this.springs = this.springs.filter((I) => I.x + I.w > -100), this.markers = this.markers.filter((I) => I.x > -150);
@@ -1488,7 +1539,7 @@ var Po = class {
   }
   hypeMachine(A, t, i, r = false) {
     if (!A || A.defeatAge >= 2.1) return;
-    let o = this.c, s = A.stage === "defeated", n = A.age || 0, a = s ? Math.min(1, A.defeatAge / 2.1) : 0, g = 1 - Math.min(1, n / 0.85), l = Math.max(0, A.flash || 0), E = A.stage === "telegraph", I = Math.max(0, Math.min(1, A.telegraph || 0)), Q = (A.origin?.x !== void 0 ? A.origin.x + 124 : t - 126) + (r ? 0 : g * g * 210 + a * a * 240), R = 238 + (r ? 0 : a * 35);
+    let o = this.c, s = A.stage === "defeated", n = A.age || 0, a = s ? Math.min(1, A.defeatAge / 2.1) : 0, g = 1 - Math.min(1, n / 0.85), l = Math.max(0, A.flash || 0), E = A.stage === "telegraph", I = Math.max(0, Math.min(1, A.telegraph || 0)), Q = (A.origin?.x !== void 0 ? A.origin.x + 124 : t - 126) + (r ? 0 : g * g * 210 + a * a * 240), R = (A.origin?.y ?? 238) + (r ? 0 : a * 35);
     o.save(), o.translate(Q, R), o.globalAlpha *= (1 - a * 0.8) * (r ? 1 - g : 1), r || (o.translate(Math.sin(i * 47) * l * 3, Math.sin(i * 2.1) * 1.2), o.rotate(s ? Math.sin(i * 7) * 0.035 * a : 0));
     let h = this.metal(-80, -95, 160, 190, ["#f2dba4", "#ae8451", "#e8ca87", "#84613e"]), B = this.metal(-85, -100, 170, 200, ["#68827e", "#304a56", "#193242", "#4c6a6d"]);
     this.rect(-63, -220, 9, 390, "#122c3c", 2), this.rect(58, -220, 9, 390, "#122c3c", 2), this.line(-59, -220, -59, 158, "#9caf9c55", 2), this.line(62, -220, 62, 158, "#9caf9c55", 2);
@@ -1518,7 +1569,7 @@ var Po = class {
       let C = -35 + G * 35, u = G < (A.health ?? 3);
       this.rect(C - 13, 65, 26, 14, "#081f2c", 4), this.rect(C - 10, 68, 20, 8, u ? E ? "#e4c58a" : "#98b6a2" : "#3a5159", 2), u ? this.line(C - 7, 69, C + 6, 69, "#f6e7bc88", 1) : (this.line(C - 7, 69, C + 4, 74, "#071f2b", 1.6), this.line(C + 4, 74, C + 8, 69, "#071f2b", 1.6));
     }
-    let c = (A.muzzleY ?? A.origin?.y ?? 238) - 238, M = Math.max(0, Math.min(1, A.muzzleFlash ?? (A.stage === "attack" ? 0.4 : 0))), f = (l * 10 + M * 5) * (r ? 0 : 1);
+    let c = (A.muzzleY ?? A.origin?.y ?? 238) - (A.origin?.y ?? 238), M = Math.max(0, Math.min(1, A.muzzleFlash ?? (A.stage === "attack" ? 0.4 : 0))), f = (l * 10 + M * 5) * (r ? 0 : 1);
     if (this.rect(-113 + f, c - 12, 33, 24, "#091d2a", 4), this.rect(-122 + f, c - 18, 16, 36, h, 3), this.rect(-124 + f, c - 12, 5, 24, "#122c3a", 1), this.disc(-113 + f, c, 3, E ? "#ffe4ab" : s ? "#5b7273" : "#a0c9b7"), M > 0 && !s && (o.save(), o.globalAlpha *= 0.35 + M * 0.45, this.disc(-125, c, 6 + M * 3, "#f4d6a0"), o.restore()), this.rect(-13, -113, 26, 15, "#112b38", 4), this.rect(-9, -116, 18, 13, s ? "#486967" : E ? this.metal(-8, -115, 16, 14, ["#fff2bd", "#d89550"]) : "#9b7960", 5), E && (o.save(), o.globalAlpha *= 0.18 + I * 0.3, this.disc(0, -110, 18, "#f4dca1"), o.restore()), l > 0 && !r) {
       o.save(), o.globalAlpha *= Math.min(1, l * 2);
       for (let G = 0; G < 5; G++) {
@@ -1767,6 +1818,7 @@ var yo = class extends hi {
       LR_HAZARDS.fit(h,this);
       if(Q!==null){h.base=Q;h.groundSlope=0;}
       if(cycle)LR_HAZARDS.moving(h,this,cycle[0],cycle[1],A?"sine":"lift",g);
+      LR_HAZARDS.story(h,this);
       return h;
     }, o = (g, l = 4, E = 76, I = "dividend", Q = null) => {
       for (let R = 0; R < l; R++) this.pickups.push({ x: t(g + R * 0.24), y: i(g + R * 0.24) - E, kind: I, taken: false, route: Q });
@@ -1814,7 +1866,7 @@ var yo = class extends hi {
     else for (let g = 1.4; g < 58; g += 4.5) n(g, "lamp");
     for (let g of [2.1, 10.5, 29.9, 36.7, 48.5, 56.8]) n(g, "birds");
     for (let g of [4.8, 11, 30.8, 37, 48.1, 54.2]) n(g, "puddle");
-    for (let g of [8.9, 33, 50]) n(g, "sign", { label: A ? "TAKE THE LONG VIEW" : "WORK IN PROGRESS" });
+    for (let [g,parkLabel,cityLabel] of [[8.9,"TAKE THE LONG VIEW","WORK IN PROGRESS"],[33,"STAY THE COURSE","CAPITAL AT WORK"],[50,"LET IT COMPOUND","LONG-TERM PROJECT"]]) n(g, "sign", { label: A ? parkLabel : cityLabel });
     if(A)n(58.4,"rest-bench",{label:"SIT & HOLD",w:88});
     n(60, "finish", { label: A ? "BETHESDA TERRACE" : "TOPPING OUT", w: 180 }), this.ambientJetpacks && this.addCruiseCorridor(48 + this.layoutRandom() * 0.4, (g) => g * ye);
   }
@@ -22393,6 +22445,7 @@ try {
 var _i = false, b = "home", zA = "chapter", q = null, eA = 1e3, kA = 540, EQ = 1, au = 0, $i = 0, UA = 0, QQ = 0, ir = T, fe = 0, Ar = 1, RQ = false, SA = new ko("assets/original-37.mp3");
 SA.registerClip("laugh", "assets/original-38.mp3");
 SA.registerClip("mission-alert", "assets/story-v121/central-park-alert.mp3");
+SA.registerClip("gdl-ring", "assets/briefing-v125/gdl-ring.mp3");
 SA.registerMusic("contrarian", "assets/original-39.mp3", { gain: 0.79 });
 SA.registerMusic("title", "assets/audio/title-mellow-lounge.mp3", { gain: 0.72, loop: true });
 SA.registerMusic("gift", "assets/cutscenes-v120/a-change-of-pace.mp3", { gain: 0.82 });
@@ -22784,7 +22837,7 @@ function FD() {
     }
     if (e24.type === "bossAttack" && CA(105, 0.16, "triangle", 0.022, 55), e24.type === "bossHit" && CA(180, 0.23, "triangle", 0.02, 70), e24.type === "bossDefeated" && (m("#ticker-text").textContent = "Hype Machine: downgraded to office equipment.", SA.clip("laugh"), CA(440, 0.35, "triangle", 0.02, 880), Lt(eA - 125, 220, "#f2d6a0", 24)), e24.type === "flightEnd") {
       rr = 0;
-      let A = e24.kind === "cruise" || q.flightKind === "cruise";
+      let A = e24.kind === "cruise" || q.flightKind === "cruise" || q.mode === "endless";
       Ge(A ? "BACK TO THE LONG RUN" : "FINAL APPROACH", A ? "A soft landing. A longer horizon." : "Bring it home.", 1.5);
     }
     if(e24.type === "propQuip") m("#ticker-text").textContent=e24.line;
@@ -22816,8 +22869,8 @@ function FD() {
 function Vu() {
   if (!q) return;
   window.LR_ENDLESS && LR_ENDLESS.hud(q, Ge, m, SA);
-  let e24 = q.mode === "chapter", A = q.flight && q.flightKind === "cruise";
-  m("#chapter-strip").classList.toggle("hidden", q.won || !e24 && !A), m("#run-meta").classList.toggle("hidden", e24 || A), mt.classList.toggle("in-flight", !!q.flight), (e24 || A) && (m("#chapter-name").textContent = q.contrarian ? "THE CONTRARIAN" : A ? "LIQUIDITY LIFT" : q.flight ? "IPO HYPE MACHINE" : q.chapterPhase.name, m("#chapter-detail").textContent = A ? "HOLD TO CLIMB \xB7 " + Math.max(0, Math.ceil(q.flightDuration - q.flightAge)) + "s" : q.flight ? q.boss?.stage === "defeated" ? "HYPE DEFLATED" : (q.boss?.cue || "STAND BY") + " \xB7 " + q.bossProgress + "/3 VENTED" : (q.routeChoice ? q.routeChoice.label.toUpperCase() + " \xB7 " : "") + Math.round(q.chapterProgress * 100) + "%", m("#chapter-progress").style.transform = "scaleX(" + (A ? Math.max(0, 1 - q.flightAge / q.flightDuration) : q.chapterProgress) + ")", mt.dataset.phase = A ? "cruise" : q.chapterPhase.id), m("#jump-caption").textContent = q.flight ? "THRUST" : q.chainReady && q.jumpChain === 2 ? "JUMP \xD73" : "JUMP", m("#touch-jump").setAttribute("aria-label", q.flight ? "Hold to climb; release to descend" : q.chainReady && q.jumpChain === 2 ? "Jump now for the grand somersault" : "Jump; press again in the air to somersault, or time jumps after landing for a triple jump"), m("#slide-caption").textContent = q.flight ? "COAST" : "SLIDE", m("#score").textContent = String(q.score).padStart(5, "0"), m("#time").textContent = cu(q.time), m("#pace").textContent = (q.speed / 315).toFixed(2) + "\xD7", m("#flow").textContent = window.LR_ENDLESS && q.mode !== "chapter" && q.procedural ? LR_ENDLESS.flowLabel(q) : q.flow > 3 ? "FLOW " + q.flow : "MARKET OPEN", m("#multiplier").classList.toggle("hidden", q.conviction <= 0), m("#effects").innerHTML = [q.shield ? "\u2766 HEDGED" : null, q.research > 0 ? "\u2315 RESEARCH " + Math.ceil(q.research) + "s" : null, q.conviction > 0 ? (q.mode === "chapter" ? "CONVICTION " : "2\xD7 ") + Math.ceil(q.conviction) + "s" : null].filter(Boolean).map((t) => '<span class="effect">' + t + "</span>").join("");
+  let e24 = q.mode === "chapter" || !!q.endlessIPO, A = q.flight && q.flightKind === "cruise";
+  m("#chapter-strip").classList.toggle("hidden", q.won || !e24 && !A), m("#run-meta").classList.toggle("hidden", e24 || A), mt.classList.toggle("in-flight", !!q.flight), (e24 || A) && (m("#chapter-name").textContent = q.contrarian ? "THE CONTRARIAN" : A ? "LIQUIDITY LIFT" : q.flight ? "IPO HYPE MACHINE" : q.chapterPhase.name, m("#chapter-detail").textContent = A ? "HOLD TO CLIMB \xB7 " + Math.max(0, Math.ceil(q.flightDuration - q.flightAge)) + "s" : q.flight ? q.boss?.stage === "defeated" ? "HYPE DEFLATED" : (q.boss?.cue || "STAND BY") + " \xB7 " + q.bossProgress + "/3 VENTED" : (q.routeChoice ? q.routeChoice.label.toUpperCase() + " \xB7 " : "") + Math.round(q.chapterProgress * 100) + "%", m("#chapter-progress").style.transform = "scaleX(" + (A ? Math.max(0, 1 - q.flightAge / q.flightDuration) : q.endlessIPO ? q.bossProgress / 3 : q.chapterProgress) + ")", mt.dataset.phase = A ? "cruise" : q.endlessIPO ? "ipo" : q.chapterPhase.id), m("#jump-caption").textContent = q.flight ? "THRUST" : q.chainReady && q.jumpChain === 2 ? "JUMP \xD73" : "JUMP", m("#touch-jump").setAttribute("aria-label", q.flight ? "Hold to climb; release to descend" : q.chainReady && q.jumpChain === 2 ? "Jump now for the grand somersault" : "Jump; press again in the air to somersault, or time jumps after landing for a triple jump"), m("#slide-caption").textContent = q.flight ? "COAST" : "SLIDE", m("#score").textContent = String(q.score).padStart(5, "0"), m("#time").textContent = cu(q.time), m("#pace").textContent = (q.speed / 315).toFixed(2) + "\xD7", m("#flow").textContent = window.LR_ENDLESS && q.mode !== "chapter" && q.procedural ? LR_ENDLESS.flowLabel(q) : q.flow > 3 ? "FLOW " + q.flow : "MARKET OPEN", m("#multiplier").classList.toggle("hidden", q.conviction <= 0), m("#effects").innerHTML = [q.shield ? "\u2766 HEDGED" : null, q.research > 0 ? "\u2315 RESEARCH " + Math.ceil(q.research) + "s" : null, q.conviction > 0 ? (q.mode === "chapter" ? "CONVICTION " : "2\xD7 ") + Math.ceil(q.conviction) + "s" : null].filter(Boolean).map((t) => '<span class="effect">' + t + "</span>").join("");
 }
 function BQ(e24, A, t, i, r, o = 0) {
   d.fillStyle = r, d.beginPath(), d.roundRect(e24, A, t, i, o), d.fill();
@@ -22879,6 +22932,7 @@ function Qu(e24, A) {
   At.obstacle(e24, A, q?.floorY ?? T, eA);
 }
 function kD(e24, A) {
+  if (e24.taken) return;
   if (q.districtId && e24.route && q.routeResolved && !q.onRoute(e24)) {
     // A visible coin promises a collectible. Let the unchosen trail gently
     // disappear at the fork, while its physical scenery remains in place.
@@ -23198,7 +23252,7 @@ function Ku(e24) {
     Ht = Ht.filter((i) => i.life > 0);
   }
   if ((b === "playing" || b === "home") && $A.update(t, q, { id: b === "home" ? "opening" : q?.districtId || "opening", reduced: gA, quality: dQ() }), b === "playing" && !q.transfer) {
-    let i = q.floorY ?? T, r = q.flight ? q.flightKind === "cruise" ? T - i : 0 : T - (q.terrainProfile && q.terrainProfile.districtId === "opening" && !q.contrarian ? 0.62 * i + 0.38 * q.floorAt(q.x + 220) : i) + Math.max(0, i - 207 - (q.won ? window.LR_FINISH?.actor(q, ni)?.y ?? q.y : q.y));
+    let i = q.floorY ?? T, r = q.flight ? (q.flightKind === "cruise" || q.endlessIPO) ? T - i : 0 : T - (q.terrainProfile && q.terrainProfile.districtId === "opening" && !q.contrarian ? 0.62 * i + 0.38 * q.floorAt(q.x + 220) : i) + Math.max(0, i - 207 - (q.won ? window.LR_FINISH?.actor(q, ni)?.y ?? q.y : q.y));
     if (q.mode === "endless" && !q.flight && !q.contrarian) r = endlessCameraY(q, eA, kA);
     Kt += (r - Kt) * (1 - Math.exp(-t * 8));
   }

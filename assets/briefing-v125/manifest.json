@@ -1,0 +1,21 @@
+{
+  "purpose": "GDL incoming-call mix of the two supplied recordings. Native MP3s are unmodified.",
+  "durationSeconds": 4.2,
+  "filters": "[0:a]atrim=0:4.08,asetpts=PTS-STARTPTS,highpass=f=45,lowpass=f=3000,loudnorm=I=-26:TP=-8:LRA=8[v];[1:a]atrim=0:4.08,asetpts=PTS-STARTPTS,loudnorm=I=-21:TP=-6:LRA=8[r];[v][r]amix=inputs=2:duration=longest:normalize=0,alimiter=limit=0.79:level=false,afade=t=in:d=0.035,afade=t=out:st=3.55:d=0.53,apad=whole_dur=4.2,atrim=0:4.2[mix]",
+  "sources": [
+    {
+      "originalName": "ringtone_that_sounds_#4-1794199126778.mp3",
+      "file": "vibration-native.mp3",
+      "sha256": "2da7e30e0964499c34369c0e3630f19abb1eda4942bb16a6e63a45b88512e33c"
+    },
+    {
+      "originalName": "a_stylish,_cool_ring_#4-1794199048290.mp3",
+      "file": "ringtone-native.mp3",
+      "sha256": "036f0ee6332ca35670d2a5dd447c409c9e8430e93b99680fa8686cdd9a3da481"
+    }
+  ],
+  "runtime": {
+    "file": "gdl-ring.mp3",
+    "sha256": "19a2aa4f36350745c64696e8622f1fd1b92de3caf236cb9c1e256c4ee5f8d885"
+  }
+}

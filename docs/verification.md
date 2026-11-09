@@ -1,6 +1,12 @@
-# Version 1.24 — District obstacles and the quiet 06:00 call
+# Version 1.25 — Grete Direct Line and Endless IPO encounters
 
-See [the current verification record](verification-v124.md) for native art,
+See [the current verification record](verification-v125.md) for the GDL ring,
+accessible translation, unique Story captions, faster Endless ramp and varied
+recurring IPO encounters. [Implementation and dialogue](comms-and-endless-v125.md).
+
+The preceding district-art release is retained below for reference.
+
+See [the version 1.24 verification record](verification-v124.md) for native art,
 registration, live lettering, collision-enabled route witnesses, varied moving
 obstacles, briefing audio and mobile/offline checks. The approved humour
 recommendations are now implemented. [Implementation](obstacles-v124.md).

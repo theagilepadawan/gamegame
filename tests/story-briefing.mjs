@@ -4,7 +4,7 @@ import {chromium} from 'playwright';
 
 const base = process.env.TEST_URL || 'http://127.0.0.1:4181/';
 const browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', args: ['--no-sandbox', '--enable-unsafe-swiftshader']});
-await mkdir('review/v124/briefing', {recursive:true});
+await mkdir('review/v125/briefing', {recursive:true});
 try {
   const page = await browser.newPage({viewport:{width:1280,height:720}, reducedMotion:'reduce'}), errors=[];
   page.on('pageerror', error => errors.push(error.message));
@@ -19,7 +19,8 @@ try {
   async function launch() {
     return page.evaluate(() => {
       LR_BRIEFING.cancel(); window.briefingCompletions=0;
-      return LR_BRIEFING.launch({character:'nicolai', onComplete:()=>window.briefingCompletions++});
+      const opened=LR_BRIEFING.launch({character:'nicolai', onComplete:()=>window.briefingCompletions++});
+      document.querySelector('.briefing-next').click();return opened;
     });
   }
   function imageRegions(person='grete') {
@@ -42,7 +43,7 @@ try {
   assert.equal(before.hair,speaking.hair,'Speaking never shifts the hair/head outline');
   assert.equal(before.shoulders,speaking.shoulders,'Speaking never shifts the body');
   assert.notEqual(before.all,speaking.all,'Registered mouth patch animates');
-  await page.screenshot({path:'review/v124/briefing/desktop.png'});
+  await page.screenshot({path:'review/v125/briefing/desktop.png'});
   const at=await page.evaluate(()=>LR_BRIEFING.inspect().clock);
   console.log('Briefing: checking blink timing.');
   await page.clock.runFor(4120-at);
@@ -66,20 +67,20 @@ try {
   assert.equal(await page.evaluate(()=>LR_BRIEFING.inspect().beat),3);
   await page.clock.runFor(32);
   const nicolai=await page.evaluate(imageRegions,'nicolai');
-  await page.screenshot({path:'review/v124/briefing/nicolai-listening.png'});
+  await page.screenshot({path:'review/v125/briefing/nicolai-listening.png'});
   await page.clock.runFor(165);
   assert.equal(await page.evaluate(()=>LR_BRIEFING.inspect().frames.nicolai),5);
   const nicolaiSpeaking=await page.evaluate(imageRegions,'nicolai');
   assert.equal(nicolai.hair,nicolaiSpeaking.hair,'Nicolai’s refined hairline stays fixed during speech');
   assert.equal(nicolai.shoulders,nicolaiSpeaking.shoulders,'The approved outfit stays fixed');
   assert.equal(nicolai.all,nicolaiSpeaking.all,'Final reply holds the approved smile');
-  await page.screenshot({path:'review/v124/briefing/nicolai-speaking.png'});
+  await page.screenshot({path:'review/v125/briefing/nicolai-speaking.png'});
   await page.clock.runFor(7850-await page.evaluate(()=>LR_BRIEFING.inspect().clock));
   assert.equal(await page.evaluate(()=>LR_BRIEFING.inspect().frames.nicolai),5);
   const nicolaiBlink=await page.evaluate(imageRegions,'nicolai');
   assert.equal(nicolai.hair,nicolaiBlink.hair);assert.equal(nicolai.shoulders,nicolaiBlink.shoulders);
   assert.equal(nicolai.all,nicolaiBlink.all,'The smile does not switch back to a neutral or surprised drawing');
-  await page.screenshot({path:'review/v124/briefing/nicolai-blink.png'});
+  await page.screenshot({path:'review/v125/briefing/nicolai-blink.png'});
   assert.equal(await page.locator('.briefing-next').textContent(),'Let’s go →');
   await page.locator('.briefing-next').click();
   assert.equal(await page.evaluate(()=>window.briefingCompletions),1);
@@ -104,7 +105,7 @@ try {
         const box=await page.locator(selector).boundingBox();
         assert.ok(box.x>=0 && box.y>=0 && box.x+box.width<=viewport.width+1 && box.y+box.height<=viewport.height+1,`${selector} fits ${viewport.width}×${viewport.height} at beat ${beat}`);
       }
-      if(beat===3)await page.screenshot({path:`review/v124/briefing/${viewport.width}x${viewport.height}.png`});
+      if(beat===3)await page.screenshot({path:`review/v125/briefing/${viewport.width}x${viewport.height}.png`});
       await page.locator('.briefing-next').click();
     }
   }
@@ -119,6 +120,7 @@ try {
   await page.locator('#start').click();
   assert.equal(await page.evaluate(()=>LR_BRIEFING.inspect().active),true,'Actual Play opens the call first');
   assert.equal(await page.evaluate(()=>LR_TITLE_LAUNCH.state.active),false,'Thumbs-up waits until the conversation ends');
+  await page.locator('.briefing-next').click(); // Answer the ringing call.
   for(let i=0;i<4;i++)await page.locator('.briefing-next').click();
   assert.equal(await page.evaluate(()=>LR_TITLE_LAUNCH.state.active),true,'Accepting the mission starts the existing large character gesture');
   assert.equal(await page.evaluate(()=>longRun.state),'home');

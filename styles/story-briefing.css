@@ -26,6 +26,33 @@
 #briefing-speaker{display:block;margin-bottom:8px;color:#bed1a3;font-family:ui-monospace,monospace;font-size:10px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase}
 #briefing-text{margin:0;color:#f1ecdc;font-size:21px;font-weight:400;line-height:1.45;letter-spacing:-.01em}
 .briefing-unknown{display:inline-block;padding:0 .32em;border:1px solid #b9a17488;border-radius:2px;background:#bb9b4620;color:#f3d79c;font-family:ui-monospace,monospace;font-weight:700;letter-spacing:.16em;line-height:1.15;text-shadow:0 0 12px #edc77d33}
+.dialect-wrap{position:relative;display:inline-block}
+.dialect-term{font:inherit;font-weight:700;color:#f4d497;border:0;border-bottom:1px dotted #f4d497;background:linear-gradient(transparent 68%,#d9b36d20 68%);padding:0 1px 1px;margin:0;cursor:help;line-height:inherit;text-decoration:none;border-radius:1px}
+.dialect-term::after{content:"?";display:inline-grid;place-items:center;width:1.15em;height:1.15em;font:600 .5em ui-monospace,monospace;border:1px solid #cfb88c8a;border-radius:50%;margin-left:.38em;vertical-align:super;color:#d8c5a3}
+.dialect-term:hover,.dialect-term[aria-expanded="true"]{color:#fff0c9;border-bottom-style:solid}
+.dialect-term:focus-visible{outline:2px solid #e3c288;outline-offset:4px}
+.dialect-tooltip{position:absolute;bottom:calc(100% + 12px);left:0;z-index:8;width:max-content;max-width:min(280px,calc(100vw - 70px));padding:10px 13px;border:1px solid #a88f62;border-radius:4px;background:#152b31;color:#f4ebd6;box-shadow:0 7px 22px #0007;font-size:13px;font-weight:400;line-height:1.45;letter-spacing:0;white-space:normal;text-align:left}
+.dialect-tooltip::after{content:"";position:absolute;left:18px;bottom:-5px;width:8px;height:8px;transform:rotate(45deg);border-right:1px solid #a88f62;border-bottom:1px solid #a88f62;background:#152b31}
+.dialect-tooltip[hidden]{display:none}
+/* One fixed console; only the identity lettering unfolds during connection. */
+#story-briefing[data-phase="ringing"] .briefing-connection,#story-briefing[data-phase="ringing"] .briefing-dialogue{visibility:hidden;pointer-events:none}
+.briefing-dial{position:absolute;inset:70px 32px 76px;z-index:2;display:grid;place-items:center;--dial-pulse:0}
+.briefing-dial[hidden]{display:none}
+.dial-orbit{position:absolute;top:50%;left:50%;translate:-50% -50%;height:min(280px,39vh);aspect-ratio:1;fill:none;stroke:#8eac9a55;stroke-width:.6;pointer-events:none}
+.dial-orbit .dial-progress{stroke:#dbcc94;stroke-width:1.1;stroke-dasharray:628.32;stroke-dashoffset:628.32;transform:rotate(-90deg);transform-origin:center}
+.dial-ident{position:relative;display:flex;flex-direction:column;align-items:center;gap:22px;max-width:100%;padding:16px 0}
+.dial-tag{font:500 9px ui-monospace,monospace;letter-spacing:.2em;color:#9cb5a8}
+.dial-brand{display:flex;gap:16px;align-items:baseline;justify-content:center;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:clamp(22px,4.4vw,54px);font-weight:500;line-height:1.2;letter-spacing:-.035em;color:#f2e2b5;text-shadow:0 2px 0 #010d15,0 0 30px #c9db9620;white-space:nowrap}
+.dial-word{display:inline-flex;align-items:baseline}
+.dial-suffix{display:inline-block;overflow:hidden;max-width:0;opacity:0;color:#d6dfc8;letter-spacing:-.035em}
+.dial-status-line{display:flex;align-items:center;gap:12px;font:10px ui-monospace,monospace;text-transform:uppercase;letter-spacing:.18em;color:#aec7b1;min-height:28px}
+.dial-receiver{width:24px;height:24px;fill:none;stroke:#d4daa3;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.dial-waves{opacity:calc(.25 + var(--dial-pulse) * .65)}
+.dial-dots{font-size:19px;letter-spacing:.2em;opacity:calc(.35 + var(--dial-pulse) * .65)}
+.dial-baseline{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;padding-top:12px;border-top:1px solid #92af8d30;font:8px ui-monospace,monospace;letter-spacing:.15em;color:#799789}
+@media(max-height:440px){.briefing-dial{inset:44px 24px 53px}.dial-ident{gap:12px;padding:12px 0}.dial-brand{font-size:32px}.dial-tag{font-size:7px}.dial-status-line{font-size:8px;gap:8px}.dial-receiver{width:20px;height:20px}.dial-baseline{font-size:7px;padding-top:8px}}
+@media(max-height:360px){.briefing-dial{inset:42px 22px 50px}.dial-ident{gap:9px}.dial-brand{font-size:28px}.dial-baseline{padding-top:6px;font-size:6px}}
+@media(max-width:600px) and (min-height:441px){.briefing-dial{inset:70px 20px 75px}.dial-brand{gap:9px}.dial-tag{font-size:7px;letter-spacing:.12em}.dial-baseline{font-size:6px;letter-spacing:.08em}.dialect-tooltip{font-size:12px}}
 .briefing-footer{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px}
 .briefing-footer button{font-family:inherit;min-height:42px;cursor:pointer;letter-spacing:.02em}
 .briefing-skip{padding:8px 0;border:0;background:transparent;color:#a2b4a7;font-size:11px}

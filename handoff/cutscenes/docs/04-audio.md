@@ -1,7 +1,15 @@
-> Version 1.24: the opening comms pauses every music track using the briefing
+> Version 1.25: the opening comms pauses every music track using the briefing
 > music hold. Keep effects enabled so the first Nicolai reply can play the
 > supplied alert. Release the hold on complete, Skip, cancel or pagehide; do not
 > persist this temporary hold as the user's mute preference.
+
+The call first plays `game/assets/briefing-v125/gdl-ring.mp3`, a 4.2-second
+mix of the user's vibration and ringtone recordings. The untouched originals
+are `vibration-native.mp3` and `ringtone-native.mp3` in the same folder. Their
+hashes and exact mix recipe are recorded in `manifest.json`. GDL expands into
+Grete Direct Line during the ring. Natural connection follows at 4.4 seconds;
+Answer connects early and stops the ring. Hidden tabs pause both audio and
+the animation. The first Nicolai reply still owns the separate reaction cue.
 
 # Sound and edit notes
 
@@ -17,6 +25,7 @@ The audio sources are stored byte for byte in `game/assets/` and linked from `re
 | `06-title-mellow-lounge.mp3` | `game/assets/audio/title-mellow-lounge.mp3` | 72.912 s | Stereo / 48 kHz | Title screen: Why talking to people is a superpower x Mellow Lounge |
 | `07-gift-piano.mp3` | `game/assets/cutscenes-v120/a-change-of-pace.mp3` | 4.128 s | Stereo / 48 kHz | Gift film: A change of pace |
 | `08-central-park-alert.mp3` | `game/assets/story-v121/central-park-alert.mp3` | 1.620 s | Stereo / 44.1 kHz | User-supplied opening-call reaction |
+| `09-gdl-ring.mp3` | `game/assets/briefing-v125/gdl-ring.mp3` | 4.200 s | Stereo / 48 kHz | Supplied vibration/ringtone mix for the GDL opening |
 
 The main soundtrack is displayed as **Downtown Good Company**, with the original composer credit **radicalTomography** retained (source recording: **Extended 16-Bit Bitcrushed**). The Contrarian display title is **Good ol’ Company** (source recording: **Pixel Adventure**). The user earlier supplied a legacy In Good Company tune, but the latest game uses the files above. A separate clean legacy recording is not included in this handoff; do not substitute an assumed version.
 
