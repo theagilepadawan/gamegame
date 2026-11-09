@@ -242,7 +242,7 @@ function Yo(e24, { districtId: A = "opening", ground: t = 422 } = {}) {
   return i === "endless" ? window.LR_ENDLESS_GENERATOR ? LR_ENDLESS_GENERATOR.terrain(o, r) : Wu(o, r) : xu(o, i, r);
 }
 var T = 422, Rr = 0.4, wt = 0.28, Do = 0.3;
-var hr = 0.88, Qr = [{ name: "WALL STREET", place: "LOWER MANHATTAN", title: "The opening bell.", caption: "New York moves fast. Keep your cool.", low: "DEBT", high: "RED TAPE", cause: "An unexpectedly solid pile of debt.", joke: "Markets react to markets reacting." }, { name: "EARNINGS SEASON", place: "EARNINGS SEASON", title: "Record results. Shares fall.", caption: "Please duck the revised forecasts.", low: "Q4", high: "FORECAST", cause: "A quarterly report with considerable weight.", joke: "Analyst raises probability of something happening." }, { name: "MIDTOWN", place: "MIDTOWN MANHATTAN", title: "Just one final question.", caption: "The next panel is somewhere on Fifth Avenue.", low: "PANEL", high: "ON AIR", cause: "An unscheduled appearance on a panel.", joke: "Brief panel discussion enters its third hour." }, { name: "TIMES SQUARE", place: "TIMES SQUARE", title: "Your calendar has been updated.", caption: "The city never sleeps. Neither does your inbox.", low: "INBOX", high: "QUICK SYNC", cause: "A quick sync with no end in sight.", joke: "Extraordinary meeting scheduled to discuss fewer meetings." }, { name: "CORPORATE DRAMA", place: "CORPORATE DRAMA", title: "Perfectly aligned incentives.", caption: "Executive bonuses have become an obstacle.", low: "BONUS", high: "PAY RISE", cause: "A compensation package of unusual size.", joke: "Compensation committee sees no issue." }];
+var hr = 0.88, Qr = [{ name: "WALL STREET", place: "LOWER MANHATTAN", title: "The opening bell.", caption: "New York moves fast. Keep your cool.", low: "DEBT", high: "RED TAPE", cause: "An unexpectedly solid pile of debt.", joke: "Markets react to markets reacting." }, { name: "EARNINGS SEASON", place: "EARNINGS SEASON", title: "Record results. Shares fall.", caption: "Please duck the revised forecasts.", low: "FINE PRINT", high: "REVISED DOWN", cause: "A quarterly report with considerable weight.", joke: "Analyst raises probability of something happening." }, { name: "MIDTOWN", place: "MIDTOWN MANHATTAN", title: "Just one final question.", caption: "The next panel is somewhere on Fifth Avenue.", low: "COMMITTEE", high: "ONE LAST Q", cause: "An unscheduled appearance on a panel.", joke: "Brief panel discussion enters its third hour." }, { name: "TIMES SQUARE", place: "TIMES SQUARE", title: "Your calendar has been updated.", caption: "The city never sleeps. Neither does your inbox.", low: "INBOX", high: "QUICK SYNC", cause: "A quick sync with no end in sight.", joke: "Extraordinary meeting scheduled to discuss fewer meetings." }, { name: "CORPORATE DRAMA", place: "CORPORATE DRAMA", title: "Perfectly aligned incentives.", caption: "Executive bonuses have become an obstacle.", low: "BONUS", high: "PAY RISE", cause: "A compensation package of unusual size.", joke: "Compensation committee sees no issue." }];
 function Br(e24) {
   let A = e24 >>> 0;
   return () => {
@@ -1625,19 +1625,37 @@ var yo = class extends hi {
       for (let B of this.pickups) B.platformId === h.id && (B.route = Q);
       return h;
     }, n = (g, l, E = {}) => this.worldItems.push({ id: "world-" + this.nextId++, kind: l, x: t(g), y: i(g), w: l === "puddle" ? 115 : 60, triggered: false, age: 0, ...E });
-    for (let [g, l] of [[3.2, "low"], [6.5, "high"], [9.5, "low"], [12.2, "high"]]) r(g, l, A ? l === "high" ? "LOW BRANCH" : "PARK WORKS" : l === "high" ? "STEEL DELIVERY" : "ROAD WORKS"), o(g - 0.3, 3, l === "high" ? 35 : 145, "opportunity");
+    for (let [g, l, parkLabel, cityLabel] of [[3.2, "low", "BENCHMARK", "ENTRY FEE"], [6.5, "high", "LOW YIELD", "LOW GUIDANCE"], [9.5, "low", "PARKED CASH", "FEE DRAG"], [12.2, "high", "RATE CUT", "RATE CEILING"]]) r(g, l, A ? parkLabel : cityLabel), o(g - 0.3, 3, l === "high" ? 35 : 145, "opportunity");
     this.pickups.push({ x: t(8), y: i(8) - 65, kind: "diversification", taken: false }), n(13.2, "sign", { role: "fork", label: this.district.highRoute + " / " + this.district.lowRoute }), s(14.9, 92, 850, A ? "bridge" : "scaffold", null, { entry: true, premium: true });
     let a = [];
     for (let [g, l, E] of [[17.8, 124, 540], [19.7, 144, 520], [21.55, 124, 530], [23.45, 144, 520], [25.3, 124, 530], [27.2, 92, 650]]) {
       let I = A ? g === 21.55 ? "awning" : "stone" : g === 21.55 ? "crane" : g === 25.3 ? "crumble" : "scaffold";
       a.push(s(g, l, E, I, "high", { premium: true, bounce: I === "awning" ? 90 : 0, amp: I === "crane" ? 16 : 0, phase: 0.8, frequency: 1.1 }));
     }
-    r(20.45, "high", A ? "STONE ARCH" : "LOW GIRDER", "high", a[1].baseY), r(24.2, "low", A ? "GARDEN CRATE" : "TOOL CHEST", "high", a[3].baseY, 42);
-    for (let [g, l] of [[18.2, "low"], [21, "high"], [24.1, "low"], [27.1, "high"]]) r(g, l, A ? l === "high" ? "WILLOW" : "PICNIC CRATE" : l === "high" ? "SCAFFOLD BRACE" : "CEMENT BAGS", "low"), o(g - 0.3, 4, l === "high" ? 34 : 145, "dividend", "low");
+    const supported = (g, type, label, platform, height = 54) => {
+      const hazard = r(g, type, label, platform.route, platform.y, height);
+      hazard.platformId = platform.id;
+      // Reward the actual jump over a bench, not a row buried inside it.
+      if (type === "low") for (const coin of this.pickups) if (coin.platformId === platform.id) {
+        const dx = Math.abs(coin.x - hazard.x - hazard.w / 2);
+        if (dx < 155) coin.offsetY = -43 - 100 * Math.cos(dx / 155 * Math.PI / 2) ** 2, coin.y = platform.y + coin.offsetY;
+      }
+      return hazard;
+    };
+    supported(20.45, "high", A ? "OVERHANG" : "LOW GUIDANCE", a[1]);
+    supported(24.2, "low", A ? "SIT & HOLD" : "CAPEX", a[3], 42);
+    // Stagger the two routes horizontally: an upper and lower prop must not
+    // read as a single wall, even though only the chosen path can collide.
+    for (let [g, l, parkLabel, cityLabel] of [[18.2, "low", "LONG VIEW", "SUNK COST"], [22.35, "high", "TRIM RISK", "OVERHANG"], [25.75, "low", "PARKED CASH", "ENTRY FEE"], [28.5, "high", "LOW YIELD", "RATE CEILING"]]) r(g, l, A ? parkLabel : cityLabel, "low"), o(g - 0.3, 4, l === "high" ? 34 : 145, "dividend", "low");
     n(30, "sign", { role: "rejoin", label: A ? "BETHESDA TERRACE" : "FIFTH AVENUE" }), this.pickups.push({ x: t(30.5), y: i(30.5) - 65, kind: "research", taken: false });
-    for (let [g, l] of [[32.3, "low"], [35.4, "high"]]) r(g, l, A ? l === "high" ? "LOW LIMB" : "GARDEN WORKS" : l === "high" ? "CROSS BEAM" : "DELIVERY"), o(g - 0.35, 4, l === "high" ? 34 : 145, "opportunity");
+    for (let [g, l, parkLabel, cityLabel] of [[32.3, "low", "BENCHMARK", "FEE DRAG"], [33.85, "high", "RATE CUT", "OVERHANG"], [35.4, "high", "LOW YIELD", "LOW GUIDANCE"], [36.75, "low", "SIT & HOLD", "CAPEX"]]) r(g, l, A ? parkLabel : cityLabel), o(g - 0.35, 4, l === "high" ? 34 : 145, "opportunity");
     s(38.2, 72, 470, "awning", null, { bounce: 100, setPiece: true }), A ? (s(39.95, 122, 440, "stone", null, { setPiece: true }), s(41.55, 106, 460, "awning", null, { bounce: 100, setPiece: true }), s(43.25, 138, 440, "stone", null, { setPiece: true }), s(44.9, 84, 490, "bridge", null, { setPiece: true }), n(40.4, "puddle", { w: 650, role: "water-garden" })) : (s(39.95, 122, 440, "crumble", null, { setPiece: true }), s(41.55, 122, 460, "crane", null, { amp: 24, phase: 0.3, frequency: 1.2, setPiece: true }), s(43.25, 122, 440, "crumble", null, { setPiece: true }), s(44.9, 84, 490, "scaffold", null, { setPiece: true }));
-    for (let [g, l] of [[40.4, "low"], [43, "low"], [46.4, "low"], [49.7, "high"], [52.5, "low"], [55.2, "high"]]) r(g, l, A ? l === "high" ? "LOW BRANCH" : "GARDEN WORKS" : l === "high" ? "HOIST CLEARANCE" : "MATERIALS"), o(g - 0.3, 3, l === "high" ? 34 : 145, "opportunity");
+    // Obstacles belong on the ledges, with room to land before the next
+    // input. Never sandwich the runner between a ground crate and a low deck.
+    const ledges = this.platforms.filter(p => p.setPiece);
+    supported(40.75, "low", A ? "LONG VIEW" : "SUNK COST", ledges[1]);
+    supported(45.95, "high", A ? "TRIM RISK" : "RATE CEILING", ledges[4]);
+    for (let [g, l, parkLabel, cityLabel] of [[49.7, "high", "OVERHANG", "LOW GUIDANCE"], [52.5, "low", "PARKED CASH", "FEE DRAG"], [55.2, "high", "RATE CUT", "RATE CEILING"]]) r(g, l, A ? parkLabel : cityLabel), o(g - 0.3, 3, l === "high" ? 34 : 145, "opportunity");
     o(57.5, 7, 65, "opportunity");
     // Small seating groves frame the benches; keep the lake, bridge and
     // water-garden sequence open instead of stamping a tree every 4.5 seconds.
@@ -1651,7 +1669,7 @@ var yo = class extends hi {
   resolveRoute() {
     if (this.routeResolved || this.chapterTime < 16.2) return;
     let A = this.platforms.find((o) => o.id === this.support), t = this.platforms.find((o) => o.entry && this.x >= o.x && this.x <= o.x + o.w), i = !!(!this.flight && !this.flightLanding && (A && (A.entry || A.route === "high") || t && this.y <= t.y + 8));
-    this.routeChoice = { id: i ? "high" : "low", label: i ? this.district.highRoute : this.district.lowRoute }, this.routeResolved = true;
+    this.routeChoice = { id: i ? "high" : "low", label: i ? this.district.highRoute : this.district.lowRoute }, this.routeResolved = true, this.routeResolvedAt = this.chapterTime;
     // Choosing a route records the journey; the other route remains in the
     // world. Removing it here made visible props below the runner vanish.
     this.emit("routeChoice", { ...this.routeChoice });
@@ -1679,8 +1697,12 @@ var yo = class extends hi {
     let s = this.setPiece, n = s.active;
     s.active = this.chapterTime >= s.start && this.chapterTime < s.end, s.progress = Math.max(0, Math.min(1, (this.chapterTime - s.start) / (s.end - s.start))), s.active && !n && this.emit("setpiece", { id: s.id, name: s.name });
     for (let g of this.platforms) g.prevY = g.y, g.flex = Math.max(0, (g.flex || 0) - A * 2.6), g.kind === "crane" && (g.y = g.baseY + Math.sin(this.time * g.frequency + g.phase) * g.amp), g.kind === "crumble" && g.collapseAt && this.time >= g.collapseAt && (g.active && (g.active = false, this.emit("worldReaction", { kind: "collapse", id: g.id, x: g.x + g.w / 2, y: g.y })), g.y += 220 * A);
-    for (const g of this.obstacles) if (g.guidance) {
-      g.base = g.guidance.base - 16 + 22 * Math.sin(this.time * Math.PI * 2 / g.guidance.period + g.guidance.phase);
+    for (const g of this.obstacles) {
+      if (g.guidance) g.base = g.guidance.base - 16 + 22 * Math.sin(this.time * Math.PI * 2 / g.guidance.period + g.guidance.phase);
+      if (g.platformId) {
+        const platform = this.platforms.find(p => p.id === g.platformId);
+        if (platform) g.base = platform.y, g.active = platform.active;
+      }
     }
     for (let g of this.pickups) if (g.platformId) {
       let l = this.platforms.find((E) => E.id === g.platformId);
@@ -1703,7 +1725,7 @@ var yo = class extends hi {
     this.resolveRoute(), this.routeResolved && !this.routeRejoined && this.chapterTime >= 30 && (this.routeRejoined = true, this.emit("routeRejoin", { id: this.routeChoice.id, label: this.routeChoice.label })), this.updateSlideRecovery(A, i, t);
     let a = this.bodyBox();
     for (let g of this.obstacles) {
-      if (g.route && (!this.routeResolved || !this.onRoute(g))) continue;
+      if (g.active === false || g.route && (!this.routeResolved || !this.onRoute(g))) continue;
       let l = { x: g.x + 5, y: g.base - (g.type === "high" ? 181 : g.h), w: g.w - 10, h: g.type === "high" ? 85 : g.h - 4 };
       Pe(a, l) && this.hit(g.type === "high" ? "A low clearance. Time to slide." : this.districtId === "park" ? "The park works were more solid than expected." : "A delivery with a firm landing."), !g.passed && g.x + g.w < this.x - 20 && (g.passed = true, this.cleared++, this.flow++, this.bonus += 25);
     }
@@ -1788,7 +1810,7 @@ var wo = class {
     for (let o = A + t; o > A; o -= 4) r.lineTo(o, i(o) + 0.8);
     r.lineTo(A, i(A) + 0.8), r.closePath(), r.clip();
   }
-  groundedBench(A, t, i, r, o) {
+  groundedBench(A, t, i, r, o, label) {
     if (!this.propsImage?.complete || !this.propsImage.naturalWidth) return false;
     let s = this.c, n = Math.max(i, r * 1.55), a = A + (i - n) / 2, g = 24 / 310 / (354 / 480), l = 281 / 310 - g * 24 / 480, E = o(a), I = (o(a + n) - E) / n, Q = Math.min((E - t) / l, (o(a + n) - t) / (l + g));
     // A shallow stone footing ties the seat to the promenade. Its edge follows
@@ -1799,7 +1821,7 @@ var wo = class {
     s.lineTo(a + n + 7, o(a + n + 7) + 2.5);
     for (let x = a + n + 7; x >= a - 7; x -= 2) s.lineTo(x, o(x) + 2.5);
     s.closePath(); s.fillStyle = "#a69b7c"; s.fill(); s.restore();
-    return this.supportShadow(a, n, o, 5), s.save(), this.clipAboveGround(a - 2, n + 4, o), s.transform(1, I - Q * g / n, 0, 1, a, E - Q * l + 0.5), this.prop("bench", 0, 0, n, Q), window.LR_PROPS?.benchmark(s, 0, 0, n, Q), s.restore(), true;
+    return this.supportShadow(a, n, o, 5), s.save(), this.clipAboveGround(a - 2, n + 4, o), s.transform(1, I - Q * g / n, 0, 1, a, E - Q * l + 0.5), this.prop("bench", 0, 0, n, Q), window.LR_PROPS?.benchmark(s, 0, 0, n, Q, label), s.restore(), true;
   }
   reframe(A) {
     for (let t of [this.splashes, this.ripples, this.flights]) for (let i of t) i.x += A;
@@ -1947,11 +1969,12 @@ var wo = class {
       this.line(n, a, n, a + 24, "#dbbc8b", 2), this.line(n + g, a, n + g, a + 24, "#dbbc8b", 2), s.restore();
       return;
     }
-    if (l && !E && this.groundedBench(n, I, g, Q, A.route === "high" ? () => a : (R) => t.floorAt(R))) {
+    if (l && !E && this.groundedBench(n, I, g, Q, A.platformId || A.route === "high" ? () => a : (R) => t.floorAt(R), A.label)) {
       s.restore();
       return;
     }
     if (l && E && this.prop("bough", n - 3, I, g + 6, Q)) {
+      window.LR_PROPS?.branchPlaque(s, A.label, n, I, g);
       s.restore();
       return;
     }
@@ -22708,6 +22731,15 @@ function Qu(e24, A) {
   At.obstacle(e24, A, q?.floorY ?? T, eA);
 }
 function kD(e24, A) {
+  if (q.districtId && e24.route && q.routeResolved && !q.onRoute(e24)) {
+    // A visible coin promises a collectible. Let the unchosen trail gently
+    // disappear at the fork, while its physical scenery remains in place.
+    const fade = Math.max(0, Math.min(1, 1 - (q.chapterTime - (q.routeResolvedAt ?? 16.2)) / .3));
+    if (!fade) return;
+    d.save(); d.globalAlpha *= fade;
+    e24.x + A < -80 || e24.x + A > eA + 80 || At.pickup(e24, A, UA, gA);
+    d.restore(); return;
+  }
   e24.x + A < -80 || e24.x + A > eA + 80 || At.pickup(e24, A, UA, gA);
 }
 function PD(e24, A) {
@@ -22721,8 +22753,11 @@ function yD(e24) {
     window.LR_SHOPS && LR_SHOPS.tick(q, eA, Ge), ut.scenery(q, eA, UA, gA);
     // The other branch belongs behind the current path, without disappearing.
     for (const active of [false, true]) {
+      d.save();
+      if (!active && q.routeResolved) d.globalAlpha *= 1 - .55 * Math.max(0, Math.min(1, (q.chapterTime - (q.routeResolvedAt ?? 16.2)) / .3));
       for (let A of q.platforms) if (q.onRoute(A) === active) ut.platform(A, q, UA, gA);
       for (let A of q.obstacles) if (q.onRoute(A) === active) ut.obstacle(A, q, eA, UA, gA);
+      d.restore();
     }
     return;
   }

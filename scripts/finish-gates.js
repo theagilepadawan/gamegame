@@ -53,7 +53,7 @@
     const seq = {gate, startX: run.x, startY: run.y, vy, gravity, land, landingX,
       endX, walkDuration, landingY: gate.info.train && runner === "nicolai" ? approachY(gate, landingX) : gate.floor,
       duration: land + walkDuration + .18};
-    if (gate.info.train && runner === "nicolai" && walkImage.complete && walkImage.naturalWidth) {
+    if ((gate.info.train || gate.info.host) && runner === "nicolai" && walkImage.complete && walkImage.naturalWidth) {
       // Finish the normal run at the sill, plant a foot and turn away from
       // the viewer. The subsequent steps travel into the carriage's depth,
       // rather than continuing sideways across the open doorway.
@@ -64,10 +64,10 @@
       const turnTime = .36, walkTime = 2.2;
       // Use the clear left half of the opening. A diagonal cross-door path
       // would intersect the central stanchion before reaching its depth.
-      const walkX = gate.threshold + 55 * gate.info.scale;
-      const insideX = gate.threshold + 65 * gate.info.scale;
+      const walkX = gate.threshold + (gate.info.host ? 110 : 55) * gate.info.scale;
+      const insideX = gate.threshold + (gate.info.host ? 123 : 65) * gate.info.scale;
       seq.boarding = {speed, walkSpeed, brake, brakeX, runTime, turnX, turnTime, walkX, walkTime, insideX,
-        rise: 58 * gate.info.scale, nearY: approachY(gate, walkX)};
+        rise: (gate.info.host ? 82 : 58) * gate.info.scale, nearY: entryY(gate, walkX)};
       seq.duration = land + runTime + brake + turnTime + walkTime + .24;
     }
     sequences.set(run, seq);
@@ -82,6 +82,11 @@
       y = a[1] + (b[1] - a[1]) * t * t * (3 - 2 * t); break;
     }
     return gate.floor + (y - gate.info.foot) * gate.info.scale;
+  }
+  function entryY(gate, x) {
+    if (gate.info.approach) return approachY(gate, x);
+    const t = Math.max(0, Math.min(1, (x - gate.threshold) / ((gate.info.pier - gate.info.door) * gate.info.scale)));
+    return gate.floor - (gate.info.interiorRise || 0) * t * t * (3 - 2 * t);
   }
   function actor(run, age) {
     const seq = sequences.get(run);
@@ -122,11 +127,10 @@
         walkFrame = 4 + Math.floor(depth * 16) % 8;
       }
     }
-    const entry = Math.max(0, Math.min(1, (x - seq.gate.threshold) / ((seq.gate.info.pier - seq.gate.info.door) * seq.gate.info.scale)));
     // 505's angled sill leads up into its recessed floor plane. Feet and
     // contact shadow follow that small perspective rise together.
     const shadowY = phase === "inside" ? seq.boarding.nearY - seq.boarding.rise * depth
-      : seq.gate.info.approach ? approachY(seq.gate, x) : seq.gate.floor - (seq.gate.info.interiorRise || 0) * entry * entry * (3 - 2 * entry);
+      : entryY(seq.gate, x);
     const y = airborne ? Math.min(seq.landingY, seq.startY + seq.vy * age + seq.gravity * age * age / 2) : shadowY;
     return {x, y, shadowY, action: airborne ? seq.vy + seq.gravity * age < 0 ? "jump" : "fall" : walking ? "walk" : "run",
       frame: walking ? walkFrame : Math.floor((run.distance + x - seq.startX) / 28) % 6,
@@ -207,6 +211,14 @@
       ctx.rect(left + 1300 * s, floor + (470 - info.foot) * s, 10 * s, 279 * s);
       ctx.rect(left + 1295 * s, floor + (749 - info.foot) * s, 21 * s, 7 * s);
       ctx.clip(); ctx.drawImage(info.image, left, floor - info.foot * s, 1536 * s, 1024 * s); ctx.restore();
+    }
+    if (info.host && sequences.get(run)?.boarding && actor(run, age)?.depth > .05) {
+      // The near revolving-door leaf sits in front of his left shoulder as
+      // he steps into the blue lobby. Preserve the original glass and frame.
+      ctx.save(); ctx.translate(left, floor - info.foot * s); ctx.scale(s, s);
+      ctx.beginPath(); ctx.moveTo(320, 520); ctx.lineTo(394, 552);
+      ctx.lineTo(394, 895); ctx.lineTo(320, 939); ctx.closePath(); ctx.clip();
+      ctx.drawImage(info.image, 0, 0); ctx.restore();
     }
     ctx.save();
     ctx.beginPath();

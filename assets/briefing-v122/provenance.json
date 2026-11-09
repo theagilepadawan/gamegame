@@ -1,0 +1,57 @@
+{
+  "asset": "assets/briefing-v122/nicolai-reaction.webp",
+  "nativeDimensions": [
+    1536,
+    1024
+  ],
+  "cell": [
+    512,
+    512
+  ],
+  "columns": 3,
+  "rows": 2,
+  "source": "assets/briefing-v120/nicolai-portraits.webp",
+  "sourceSha256": "e548384dbba2300868c1b7bddfeb6f20dec131ff8384419417142cc29a6d5455",
+  "generationSource": "exec-7e742f5a-daf8-4d69-8fe6-9adaccbf6a60.png",
+  "files": [
+    {
+      "path": "assets/briefing-v122/nicolai-reaction-native.png",
+      "sha256": "2cb3bac98675b635a5482f2128e65f191d6ba48841dd49ef4b8244b1f70863e2",
+      "bytes": 2072647
+    },
+    {
+      "path": "assets/briefing-v122/nicolai-reaction.webp",
+      "sha256": "f1e2aed5b0d4e4fa8f53bdf983c4437a825a35a6db94e352fe11facf7002b469",
+      "bytes": 1424594
+    }
+  ],
+  "losslessPixelsVerified": true,
+  "runtimeCells": [
+    {
+      "row": 1,
+      "column": 1,
+      "expression": "immediate surprise"
+    },
+    {
+      "row": 1,
+      "column": 2,
+      "expression": "settled questioning"
+    }
+  ],
+  "runtimePatches": {
+    "eyesAndBrows": [
+      242,
+      174,
+      94,
+      43
+    ],
+    "mouth": [
+      246,
+      285,
+      58,
+      37
+    ],
+    "featherPixels": 3
+  },
+  "registration": "Local patches over the unchanged approved neutral Nicolai frame. Native art is preserved; no Python painting or enlargement."
+}

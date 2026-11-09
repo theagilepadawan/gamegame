@@ -19,8 +19,10 @@ and normalizes head-to-foot height to prevent atlas drift. Registration,
 source references and checksums are in `provenance.json`.
 
 `scripts/finish-gates.js` owns the path, native crop registration and depth
-ordering. Only Nicolai's Downtown finish uses these poses. Trond, other chapter
-entrances, the title character and ordinary playable animations are retained.
+ordering. Nicolai's Downtown and Midtown finishes use these poses. At 505, his path
+passes through the left revolving-door bay; the original near glass leaf
+occludes his shoulder as he enters the blue lobby. Trond, the Park entrance,
+the title character and ordinary playable animations are retained.
 An airborne finish lands on the actual apron first. Pause freezes the whole
 sequence. Reduced motion keeps the existing short, stationary finish.
 

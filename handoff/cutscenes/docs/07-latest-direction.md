@@ -1,6 +1,29 @@
 # Latest user direction
 
-## Current authority: version 1.21
+## Current authority: version 1.22
+
+The opening call is a larger retro colour comms console, retaining the approved
+Grete/Nicolai portraits and still silhouettes. The reaction now starts only when
+the reader clicks into Nicolai’s first reply; two new localized expressions
+show surprise, then settle. The mark and settled face remain until the next
+click. Keep the supplied cue and its existing mute/volume lifecycle. Native
+expression sources and runtime registration are in `game/assets/briefing-v122/`
+and `game/scripts/story-briefing.js`.
+
+Reuse the approved rear-view walking poses at Midtown’s 505 entrance. Nicolai
+runs up, turns away and walks into the left revolving-door bay. The full blue
+entrance and host remain at the far right. The near leaf establishes depth;
+no changes to his hair, outfit or ordinary gameplay atlas. Subway lettering
+and the Next: Central Park film trigger remain as approved.
+
+Midtown and Park obstacles are spaced along the chosen route, with supported
+ledge challenges and coin arcs above benches. Alternate-route props remain
+visible as subdued scenery; their uncollectible coin trail fades at the fork.
+Live finance labels replace generic construction wording while keeping the
+restored painted barrier/market board and original Park bench/branch art.
+See `game/docs/district-polish-v122.md` for exact gameplay scope.
+
+## Retained direction: version 1.21
 
 The user explicitly wants Nicolai to turn his back toward the viewer and walk
 slowly INTO the subway, after his normal run to the door. The twelve-pose sheet
@@ -10,8 +33,8 @@ short and calm; do not revert to walking sideways across the doorway. The user
 approved the poses but specifically corrected the hair: retain very short grey
 hair across the crown, without a bald patch.
 
-Grete's first Central Park line triggers a gold vector exclamation above Nicolai
-and the user's `3.mp3` cue. The native upload is retained; only 0.400 seconds
+The first Nicolai reply now triggers the gold vector exclamation and the
+user's `3.mp3` cue, as corrected in version 1.22. The native upload is retained; only 0.400 seconds
 of initial silence was removed in the runtime copy. The effect honors mute,
 volume, hidden-tab pause and cancellation. No voice imitation was created.
 The new walk-in remains an experiment for user review.

@@ -4,6 +4,15 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
+## Version 1.22 — A clearer call and fairer courses
+
+The larger retro comms screen holds Nicolai’s exclamation and surprised face
+on his first reply, starting only when the reader advances into it. His approved
+rear-view walk now also enters 505’s blue lobby. Midtown and Park have staggered
+route obstacles, supported ledge challenges and jump-shaped reward trails;
+uncollectible coins on the other route fade when the route is chosen. New
+finance wording keeps the existing painted props. [Verification](docs/verification-v122.md).
+
 ## Version 1.21 — Boarding and a change of plan
 
 Nicolai runs to the subway doorway, turns his back to the viewer and walks

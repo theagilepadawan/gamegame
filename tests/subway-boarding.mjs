@@ -3,7 +3,7 @@ import {mkdir} from 'node:fs/promises';
 import {chromium} from 'playwright';
 
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});
-await mkdir('review/v121/boarding',{recursive:true});
+await mkdir('review/v122/boarding',{recursive:true});
 try {
   const page=await browser.newPage({viewport:{width:1280,height:720},reducedMotion:'no-preference'}), errors=[];
   page.on('pageerror',error=>errors.push(error.message));
@@ -11,14 +11,14 @@ try {
   await page.goto(url.href,{waitUntil:'networkidle'});
   await page.waitForFunction(()=>window.longRun?.environment.ready&&!document.querySelector('#splash')&&!document.querySelector('#start').disabled);
   await page.clock.install();await page.clock.pauseAt(new Date(Date.now()+100));
-  async function enter(airborne=false) {
-    await page.evaluate(()=>{Cu(false);fu('opening');});
+  async function enter(airborne=false, district="opening") {
+    await page.evaluate(district=>{Cu(false);fu(district);},district);
     await page.locator('[data-character="nicolai"]').click();
-    await page.evaluate(airborne=>{
-      Ko('chapter');q.chapterTime=75;q.chapterDistance=q.distance=ee(75);
+    await page.evaluate(({airborne,district})=>{
+      Ko('chapter');q.chapterTime=district==='opening'?75:60;q.chapterDistance=q.distance=district==='opening'?ee(75):60*320;
       q.obstacles=[];q.pickups=[];q.platforms=[];q.worldItems=[];q.flight=false;q.flightLanding=0;q.shield=false;
       q.y=q.floorY-(airborne?140:0);q.vy=airborne?-420:0;q.grounded=!airborne;q.won=true;mD();
-    },airborne);
+    },{airborne,district});
     await page.waitForFunction(()=>LR_FINISH.inspect(q).walkReady);
     return page.evaluate(()=>{
       const gate=LR_FINISH.inspect(q),at=t=>LR_FINISH.actor(q,t);
@@ -29,7 +29,8 @@ try {
         path:Array.from({length:121},(_,i)=>at(gate.duration*i/120))};
     });
   }
-  const scene=await enter();
+  for(const district of ["opening","midtown"]) {
+  const scene=await enter(false,district);
   assert.equal(scene.gate.boarding,true);assert.equal(scene.running.action,'run');
   assert.equal(scene.beforeDoor.action,'run');assert.ok(scene.beforeDoor.x<scene.gate.threshold);
   assert.equal(scene.walking.action,'walk');assert.ok(scene.walking.x>=scene.gate.threshold);
@@ -54,7 +55,7 @@ try {
   assert.equal(new Set(poses).size,12,'All twelve turn and rear-view walking keyframes render');
   const pole=await page.evaluate(()=>{
     const c=document.createElement('canvas');c.width=1280;c.height=720;const ctx=c.getContext('2d'),g=LR_FINISH.inspect(q);
-    const x=Math.round(g.left+1305*.48),y=Math.round(g.floor+(620-750)*.48);
+    const x=Math.round(g.left+(g.id==='opening'?1305*.48:350*.36)),y=Math.round(g.floor+(g.id==='opening'?(620-750)*.48:(650-976)*.36));
     LR_FINISH.back(ctx,q,1280);const expected=Array.from(ctx.getImageData(x,y,1,1).data);
     ctx.fillStyle='#ff00ff';ctx.fillRect(x-2,y-2,5,5);LR_FINISH.front(ctx,q,1280,g.walkAt+1.4);
     return {expected,actual:Array.from(ctx.getImageData(x,y,1,1).data)};
@@ -62,13 +63,13 @@ try {
   assert.ok(pole.actual.every((v,i)=>Math.abs(v-pole.expected[i])<5),'The original brass pole occludes the passenger inside the carriage');
   for(const [name,age] of [['run',scene.gate.turnAt-.5],['door',scene.gate.turnAt+.2],['step',scene.gate.walkAt+.65],['inside',scene.gate.walkAt+1.9]]) {
     await page.evaluate(age=>{ni=age;Kt=0;ir=q.y;Vu();vu();},age);
-    await page.screenshot({path:`review/v121/boarding/${name}.png`});
+    await page.screenshot({path:`review/v122/boarding/${district}-${name}.png`});
   }
   await page.evaluate(()=>{ni=LR_FINISH.inspect(q).walkAt+.4;sr();});
   const held=await page.evaluate(()=>ni);await page.clock.runFor(450);
   assert.equal(await page.evaluate(()=>ni),held,'Pause freezes the walking phase');
   await page.evaluate(()=>CQ());
-  const airborne=await enter(true);
+  const airborne=await enter(true,district);
   const landing=await page.evaluate(()=>{
     const t=LR_FINISH.inspect(q).landAt;return [LR_FINISH.actor(q,t-.0001),LR_FINISH.actor(q,t+.0001)];
   });
@@ -77,6 +78,8 @@ try {
   await page.emulateMedia({reducedMotion:'reduce'});
   assert.equal(await page.evaluate(()=>LR_FINISH.actor(q,.4).action),'idle');
   assert.equal(await page.evaluate(()=>LR_FINISH.duration(q)),.7);
+  await page.emulateMedia({reducedMotion:'no-preference'});
+  }
   assert.deepEqual(errors,[]);
-  console.log('PASS normal run → four-frame turn → eight rear-view walking poses, receding floor/perspective, real handrail occlusion, pause and airborne/reduced-motion arrivals.');
+  console.log('PASS normal run → four-frame turn → eight rear-view walking poses, receding floor/perspective, train handrail/505 door occlusion, pause and airborne/reduced-motion arrivals.');
 } finally {await browser.close();}

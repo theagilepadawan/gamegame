@@ -50,12 +50,12 @@ try {
       for (let i = 3; i < bytes.length; i += 4) if (bytes[i]) visible++;
       return {hash: hash >>> 0, visible};
     }
-    const obstacle = Object.freeze({x: 30, type: 'low', w: 58, h: 54, base: 220, label: 'ROAD WORKS'});
-    const overhead = Object.freeze({x: 160, type: 'high', w: 112, h: 85, base: 220, label: 'STEEL DELIVERY'});
+    const obstacle = Object.freeze({x: 30, type: 'low', w: 58, h: 54, base: 220, label: 'ENTRY FEE'});
+    const overhead = Object.freeze({x: 160, type: 'high', w: 112, h: 85, base: 220, label: 'LOW GUIDANCE'});
     const run = {districtId: 'park', floorAt: () => 220};
     const paintObstacles = () => {district.obstacle(obstacle, run, 560, 0, true); district.obstacle(overhead, run, 560, 0, true);};
     const enabledPark = pixels(paintObstacles), activeArt = window.LR_PROPS;
-    const withoutPlaque = {...activeArt,benchmark:()=>{}};
+    const withoutPlaque = {...activeArt,benchmark:()=>{},branchPlaque:()=>{}};
     window.LR_PROPS = withoutPlaque;
     const unchangedPark = pixels(paintObstacles);
     window.LR_PROPS = null;
@@ -101,7 +101,7 @@ try {
   assert.equal(report.outcomes[4].event.value, 10); assert.equal(report.outcomes[5].event.value, 75);
   assert.ok(report.outcomes[6].research > 8); assert.ok(report.outcomes[7].conviction > 7); assert.equal(report.outcomes[7].event.value, 40);
   assert.equal(report.spring.used, true); assert.equal(report.spring.grounded, false); assert.ok(report.spring.vy < 0); assert.equal(report.spring.event.type, 'spring');
-  assert.deepEqual(report.obstacles.unchangedPark, report.obstacles.originalPark, 'Park bench, branch and paving remain identical outside the small plaque');
+  assert.deepEqual(report.obstacles.unchangedPark, report.obstacles.originalPark, 'Park bench, branch and paving remain identical outside the small plaques');
   assert.notEqual(report.obstacles.enabledPark.hash,report.obstacles.unchangedPark.hash,'Small Benchmark plaque appears on the original bench');
   assert.notEqual(report.obstacles.upgradedMidtown.hash, report.obstacles.originalMidtown.hash, 'Midtown uses the painted obstacle render path');
   for(const face of report.faces){assert.equal(face.kind,face.after,'Variant is stable as the obstacle moves');assert.equal(face.unchanged,true,'Rendering does not mutate collision data');assert.ok(face.face.every(a=>a>240),`${face.kind}: solid body and support feet remain visible at their physical bounds`);}

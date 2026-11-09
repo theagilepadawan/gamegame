@@ -99,7 +99,7 @@
     const cap = bodyTop[kind], face = image.naturalHeight - cap, decorationHeight = h * cap / face;
     c.drawImage(image, 0, 0, image.naturalWidth, cap, x, top - decorationHeight, w, decorationHeight);
     c.drawImage(image, 0, cap, image.naturalWidth, face, x, top, w, h);
-    const label = item.label || (high ? "MARKET RISK" : "DELIVERY");
+    const label = item.label || (high ? "MARKET RISK" : "ENTRY FEE");
     if (high) {
       // Typography remains live and sharp instead of being baked into an atlas.
       const pw = w * .82, ph = 18, px = x + w / 2, py = top + h * .20;
@@ -123,11 +123,20 @@
     line(c, x + 3, high ? top + h - 1 : top + 1, x + w - 3, high ? top + h - 1 : top + 1, high ? "#f5d5a8" : "#f5e3b8", 1);
     c.restore(); return true;
   }
-  function benchmark(c, x, y, w, h) {
+  function benchmark(c, x, y, w, h, label = "BENCHMARK") {
     const pw = Math.min(28, w * .31), ph = Math.max(5, h * .105), px = x + w * .53, py = y + h * .22;
     box(c, px - pw / 2, py - ph / 2, pw, ph, "#2a3027", 1);
     box(c, px - pw / 2 + .6, py - ph / 2 + .6, pw - 1.2, ph - 1.2, "#c1a668", .7);
-    text(c, "BENCHMARK", px, py, 4.2, pw - 3, "#283d35", 700);
+    text(c, label, px, py, 4.2, pw - 3, "#283d35", 700);
+  }
+  function branchPlaque(c, label, x, y, w) {
+    if (!label) return;
+    const pw = Math.min(72, w * .67), px = x + w * .53, py = y + 40;
+    for (const dx of [-pw * .35, pw * .35]) line(c, px + dx, py - 13, px + dx, py - 3, "#c6b98c", 1);
+    box(c, px - pw / 2 + 1, py - 6, pw, 14, "#142e2866", 2);
+    box(c, px - pw / 2, py - 7, pw, 14, "#a38b57", 2);
+    box(c, px - pw / 2 + 1, py - 6, pw - 2, 12, "#294b3b", 1);
+    text(c, label, px, py, 7, pw - 8, "#f0dfac");
   }
   function sign(c, item, run, floor, angle) {
     const park = run.districtId === "park", fork = item.role === "fork" || item.route === "fork";
@@ -172,5 +181,5 @@
     c.restore(); return true;
   }
   window.LR_PROPS = {images: Object.values(art), get ready() {return Object.values(art).every(loaded);},
-    pickup, hazard, sign, spring, benchmark, variant, registration: bodyTop, version: 1151};
+    pickup, hazard, sign, spring, benchmark, branchPlaque, variant, registration: bodyTop, version: 1220};
 })();

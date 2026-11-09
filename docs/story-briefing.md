@@ -25,7 +25,7 @@ approved behavior. No voice has been generated.
 
 - `scripts/story-briefing.js`: native dialog, dialogue, expression rendering,
   focus, cancellation, and visibility lifecycle.
-- `styles/story-briefing.css`: minimal two-portrait call, responsive to phone layouts.
+- `styles/story-briefing.css`: larger retro colour comms console, responsive to phone layouts.
 - `assets/briefing-v120/`: approved Grete and corrected Nicolai ink portraits and their
   registration/provenance notes.
 - `tests/story-briefing.mjs`: dialogue, local animation, input, lifecycle and
@@ -43,11 +43,11 @@ The engine calls this only for Story / Opening Bell / Nicolai, then calls
 the existing title-gesture launch from `onComplete`. Main-menu and new-run
 operations cancel a pending briefing. Pagehide and selection changes also
 cancel without starting a run. A hidden tab holds both reading and expression
-clocks, then resumes the same line; reduced motion suppresses expressions.
+clocks, then resumes the same line; reduced motion suppresses cycling and uses a still surprised expression for the first reply.
 The native dialog keeps the underlying map and Play button
 inert while the call is open.
 
-The artwork uses minimal ink lines and flat colour on a solid navy call screen.
+The artwork uses minimal ink lines and flat colour inside a still navy/green instrument panel with fine scanlines and restrained brass details.
 The user approved Grete's generated sheet; that exact source supplies her frames.
 Nicolai's face was refined using the subsequently supplied photographs, keeping
 his blue checked blazer and open collar. His portrait is now frontal and is not
@@ -65,19 +65,22 @@ hidden-tab pause/resume, keyboard isolation from the map, Escape and Skip,
 pagehide/cancel, reduced motion, and the real Play → call → two-second title
 thumbs-up → Opening Bell flow. Every dialogue beat and action fits desktop,
 844 × 390, 568 × 320 and 390 × 844 viewports. The captures in
-`review/v121/briefing/` are the current version's captures.
+`review/v122/briefing/` are the current version's captures.
 
-## Central Park reaction (1.21)
+## Central Park reaction (1.22)
 
-At 850 ms into Grete's first line, one gold-and-ivory vector exclamation pops
-above Nicolai and the user-supplied `3.mp3` plays via the effects mixer. Quick
-Continue triggers it immediately if it has not fired; Skip before that point
-does not queue it. The 1700 ms mark has reserved headroom in every layout.
-Portrait art, local expressions and dialogue remain unchanged.
+Grete’s opening line stays calm for as long as the reader wants. Clicking into
+Nicolai’s first reply triggers the custom gold/ivory exclamation and the supplied
+`3.mp3` cue once. Two local facial keyframes show surprise, then a questioning
+expression. The settled face and mark stay until the next dialogue advance.
+Nothing is scheduled to fire during the initial line or after cancelling.
+The full portrait outline, hair and outfit remain fixed; reaction sources are in
+`assets/briefing-v122/`. Reduced motion shows the settled frame without cycling.
 
 The original audio is preserved in `assets/story-v121/`; the runtime copy trims
 0.400 seconds of initial silence to align sound with the pop. Effects volume
 and mute apply; title music ducks briefly. Hidden tabs pause both clocks and
-sound. Cancel/Skip stops the sound and prevents delayed playback. Reduced
-motion keeps a stationary mark with opacity transitions. `tests/briefing-alert.mjs`
-checks actual nonzero effects output, timing, lifecycle and compact layouts.
+sound. Advancing past the reply or leaving the call stops any remaining cue.
+`tests/briefing-alert.mjs` checks nonzero effects output, click-only timing,
+indefinite visual hold, distinct local frames, fixed hair/jacket pixels,
+lifecycle and compact layouts.

@@ -1,14 +1,14 @@
 # The Long Run — cutscene production handoff
 
-This folder is a working brief for a fresh ChatGPT agent using the user's Runway plugin. It contains the complete editable game, native art references and production notes. **Version 1.21 adds rear-view subway boarding and the supplied Central Park reaction sound. It retains the minimal Grete/Nicolai call and the supplied running-shoe film, now shown only on Next: Central Park after Midtown results, with a separate piano cue. Other cinematic ideas below remain proposals.**
+This folder is a working brief for a fresh ChatGPT agent using the user's Runway plugin. It contains the complete editable game, native art references and production notes. **Version 1.22 enlarges the retro comms call, holds Nicolai’s surprised reaction on his first reply, and reuses the approved rear-view walk at 505. It also improves Midtown/Park obstacle spacing and reward trails. The supplied running-shoe film still plays only on Next: Central Park after Midtown results, with a separate piano cue. Other cinematic ideas below remain proposals.**
 
 Start with the packaged game and its current art. The user has invested heavily in character likeness, natural scenery placement and animation quality. Preserve those decisions while adding a small number of short, polished cinematic moments.
 
-Version 1.21 adds a normal run → four-pose turn → eight-pose walk away into the
-6 train, with feet registered to the sill and interior floor. The first Grete
-line triggers a custom exclamation and the supplied sound. See
-`game/docs/verification-v121.md` and the native assets in
-`game/assets/boarding-v121/` and `game/assets/story-v121/`.
+Version 1.22 keeps the normal run → four-pose turn → eight-pose rear walk at
+both the 6 train and 505. The first Nicolai reply triggers the exclamation, two
+local surprise expressions and the supplied sound; the next click clears them.
+See `game/docs/verification-v122.md` and the native assets in
+`game/assets/boarding-v121/`, `game/assets/briefing-v122/` and `game/assets/story-v121/`.
 
 Version 1.20 uses the approved minimal ink Grete portrait and a photograph-led
 Nicolai face refinement in a cleaner call layout. The gift film plays only on

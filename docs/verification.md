@@ -1,10 +1,10 @@
-# Version 1.21 — Rear-view boarding and the Central Park reaction
+# Version 1.22 — Comms, arrivals and district fairness
 
-See [the boarding and reaction record](verification-v121.md) for this release.
-Nicolai keeps his normal run to the door, then turns and steps into the carriage
-with his back toward the viewer. The first Grete line gets a vector exclamation
-and the user-supplied cue. Twelve native poses and the original sound accompany
-the editable source; reduced motion, mute, pause and cancellation are respected.
+See [the current verification record](verification-v122.md) for the completed
+checks. The larger retro call triggers and holds Nicolai’s surprised reaction
+only on his first reply. His approved rear-view walk now enters 505 as well as
+the subway. Midtown and Park receive fairer obstacle placement, supported ledge
+rewards and sharper finance captions while keeping their existing artwork.
 
 See [the lettering verification record](verification-v1201.md) for the retained lettering.
 The [version 1.20 record](verification-v120.md) covers the retained story polish.
@@ -12,7 +12,7 @@ The [version 1.19 record](verification-v119.md) covers the retained film and
 finish structures; [version 1.19.2](verification-v1192.md) covers title autoplay.
 
 The opening call uses the approved sketch-style Grete portrait and a Nicolai
-portrait refined from the supplied photographs, within a minimal two-face
+portrait refined from the supplied photographs, within the larger retro comms
 layout. Local speech and blink patches hold each head and body still. The
 approved title thumbs-up follows the call. Downtown ends at the recessed 6
 train, whose destination board reads “Union Square,” aligned with its perspective.
