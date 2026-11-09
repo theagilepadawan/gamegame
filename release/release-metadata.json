@@ -1,10 +1,10 @@
 {
-  "version": "1.26.0",
+  "version": "1.27.0",
   "archive": "/workspace/nbim-arcade/release/The-Long-Run-NBIM.zip",
-  "bytes": 54979816,
-  "sha256": "9f20ed11b4bdcdddd17b6b5050d6971fb2ceb7c6a05fc0774d913a4210f8b21f",
-  "htmlBytes": 73820488,
-  "htmlSha256": "cca529696af97d5971fcad2509d27196ce43d0f4e01ad8b2b86a52166ac9cc85",
+  "bytes": 54982396,
+  "sha256": "7f88d370d6cb7948338b26e85306cc466d6205e090e6abceea3b1175f78522d6",
+  "htmlBytes": 73827607,
+  "htmlSha256": "c4230ade05656297466872812b225130e9de215f18b83ce5f5bda734e9e33f91",
   "crcVerified": true,
   "htmlByteIdentical": true,
   "checksums": [
@@ -14,9 +14,8 @@
     "City-Asset-Choices.png",
     "Park-Asset-Choices.png",
     "The-Long-Run-Cutscene-Handoff.zip",
-    "Endless-v126-slide.png",
-    "Midtown-v126-entrance.png",
-    "Opening-v126-boarding.png"
+    "Endless-v127-double-jump.png",
+    "Endless-v127-grand-jump.png"
   ],
   "omitted": []
 }

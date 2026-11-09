@@ -86,6 +86,6 @@ for(const t of [0,30,60,120,300,600,3600]){
 const story=fixture(1);story.mode='chapter';const before=hash(story);assert.equal(G.generate(story),false);assert.equal(hash(story),before);
 const output={deterministic:true,viewportIndependent:true,rewardIndependent:true,spawnClockIndependent:true,diversity,terrain,
  components:{families:[...routes],powerups:[...powerups],types:[...types]},difficulty:{early,late},acceleration:3,speedCap:null};
-await fs.mkdir(path.join(root,'review/v126/endless-generation'),{recursive:true});
-await fs.writeFile(path.join(root,'review/v126/endless-generation/generation-report.json'),JSON.stringify(output,null,2));
+await fs.mkdir(path.join(root,'review/v127/endless-generation'),{recursive:true});
+await fs.writeFile(path.join(root,'review/v127/endless-generation/generation-report.json'),JSON.stringify(output,null,2));
 console.log(`PASS: deterministic viewport/reward/frame-independent course; ${diversity.length} diversity cases ×64seeds; all${G.families.length}families/powerups/platforms; ${terrain.samples} continuous terrain samples; constant acceleration and varied difficulty.`);

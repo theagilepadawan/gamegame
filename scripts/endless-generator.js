@@ -2,7 +2,7 @@
    while terrain, section layout, rewards and rare events use separate streams. */
 (function () {
   "use strict";
-  var VERSION = 6, GROUND = 422;
+  var VERSION = 7, GROUND = 422;
   var FAMILIES = [
     { id: 20, name: "MARKET RHYTHM", kind: "rhythm", unlock: 0 },
     { id: 21, name: "ROOFTOP DIVIDENDS", kind: "roofs", unlock: 0 },
@@ -21,7 +21,11 @@
     { id: 37, name: "DUCK THE GUIDANCE", kind: "underpass", unlock: 12 },
     { id: 38, name: "HURDLE RATES", kind: "hurdles", unlock: 18 },
     { id: 39, name: "CROSS EXAMINATION", kind: "slalom", unlock: 32 },
-    { id: 40, name: "HOLD & RELEASE", kind: "compression", unlock: 45 }
+    { id: 40, name: "HOLD & RELEASE", kind: "compression", unlock: 45 },
+    { id: 41, name: "RISING ESTIMATES", kind: "rising", unlock: 8, minTier: 0 },
+    { id: 42, name: "DOUBLE EXPOSURE", kind: "doublegaps", unlock: 0, minTier: 1 },
+    { id: 43, name: "VOLATILITY STAIRS", kind: "stairs", unlock: 0, minTier: 2 },
+    { id: 44, name: "COMPOUND INTEREST", kind: "compound", unlock: 0, minTier: 3 }
   ];
   var clamp = function (x, lo, hi) { return Math.max(lo, Math.min(hi, x)); };
   var mix = function (x) { x >>>= 0; x = Math.imul(x ^ x >>> 16, 2146121005); x = Math.imul(x ^ x >>> 15, 2221713035); return (x ^ x >>> 16) >>> 0; };
@@ -43,19 +47,26 @@
     distance = Math.max(0, distance);
     return 2 * distance / (340 + Math.sqrt(340 * 340 + 6 * distance));
   }
+  // These are the HUD/music pace marks: 1.5x, 2x, 2.5x, 3x, then
+  // another level at every half-step. Arena time never advances street tiers.
+  function tierAtSpeed(pace) { return Math.max(0,Math.floor((pace+1e-7)/157.5)-2); }
+  function tierAtTime(time) { return tierAtSpeed(speed(time)); }
+  function tierPace(tier) { return tier ? 1+tier*.5 : 1; }
   function difficulty(time) {
-    var pressure = 1 - Math.exp(-Math.max(0, time) / 170);
-    return { pressure: pressure, tier: Math.min(6, Math.floor(Math.max(0, time) / 45)),
-      actionGap: 1.65 - .28 * pressure, rest: 1.30 - .25 * pressure,
-      gapTime: .92 + .16 * pressure, actions: Math.min(5, 3 + Math.floor(Math.max(0, time) / 100)),
-      movingAmplitude: 12 + 12 * pressure, movingFrequency: 1.0 + .45 * pressure };
+    var tier=tierAtTime(time),pressure=1-Math.exp(-tier/3.5);
+    return { pressure, tier,
+      actionGap: 1.65 - .28 * pressure, rest: 1.30 - .28 * pressure,
+      gapTime: .92 + .16 * pressure, actions: Math.min(6,3+Math.floor((tier+1)/2)),
+      landingTime:.64-.10*pressure, skillWeight:.30+.50*pressure,
+      challengeEvery:Math.max(2,4-Math.floor(tier/2)),
+      movingAmplitude:12+12*pressure, movingFrequency:1+.45*pressure };
   }
   function state(q) {
     if (q.__endlessDirector) return q.__endlessDirector;
     var r = stream(q.seed, 0, 0x4556454e);
     return q.__endlessDirector = { version: VERSION, section: 0, recent: [], history: [],
       nextFlight: between(r, 28, 42), nextContrarian: between(r, 48, 66), nextRecovery: integer(r, 4, 7),
-      nextIPO: between(r, 76, 102), nextChallenge: integer(r,2,3), lastEventAt: -100, lastPowerAt: -100, eventCounts: { jetpack: 0, contrarian: 0, recovery: 0, ipo: 0 } };
+      nextIPO: between(r, 76, 102), nextChallenge: integer(r,2,3), nextSkill:1, lastEventAt: -100, lastPowerAt: -100, eventCounts: { jetpack: 0, contrarian: 0, recovery: 0, ipo: 0 } };
   }
   function terrain(seed, ground) {
     ground = Number.isFinite(ground) ? ground : GROUND;
@@ -107,25 +118,33 @@
     if (!family && !event) {
       if (!forced && index >= s.nextRecovery && recent.indexOf(29) < 0) family = FAMILIES[9];
       else {
-        var available = FAMILIES.filter(function (f) { return f.unlock <= planTime && f.id !== 29 && recent.indexOf(f.id) < 0; });
-        if (!available.length) available = FAMILIES.filter(function (f) { return f.unlock <= planTime && f.id !== 29; });
+        var unlocked=f=>f.unlock<=planTime&&(f.minTier||0)<=d.tier&&f.id!==29;
+        var available = FAMILIES.filter(f=>unlocked(f)&&recent.indexOf(f.id)<0);
+        if (!available.length) available = FAMILIES.filter(unlocked);
         // Keep strong gap encounters in circulation instead of allowing a
         // long opening run to contain only rooftops and tiny spring holes.
-        if (index >= s.nextChallenge && available.some(f=>f.id>=37)) {
+        if (index >= s.nextSkill && available.some(f=>f.id>=41)) {
+          available=available.filter(f=>f.id>=41);
+          const stronger=available.filter(f=>(f.minTier||0)>=Math.max(0,Math.min(3,d.tier)-1));
+          if(stronger.length)available=stronger;
+        } else if (index >= s.nextChallenge && available.some(f=>f.id>=37)) {
           available=available.filter(f=>f.id>=37);
-        } else if (index > 0 && !s.recent.slice(-2).some(function (id) { return [23, 34, 35, 38, 39, 40].includes(id); })) {
+        } else if (index > 0 && !s.recent.slice(-2).some(function (id) { return [23,34,35,38,39,40,41,42,43,44].includes(id); })) {
           var crossings = available.filter(function (f) { return [23, 34, 35].includes(f.id); });
           if (crossings.length) available = crossings;
+        } else if(layout()<d.skillWeight&&available.some(f=>f.id>=37)) {
+          available=available.filter(f=>f.id>=37);
         }
         family = choose(layout, available);
       }
     }
     q.spawnCount++;
-    if(family?.id>=37)s.nextChallenge=index+integer(events,3,5);
+    if(family?.id>=37)s.nextChallenge=index+integer(events,d.challengeEvery,d.challengeEvery+1);
+    if(family?.id>=41)s.nextSkill=index+integer(events,d.challengeEvery,d.challengeEvery+2);
     var id = event === "ipo" ? 36 : event === "jetpack" ? 32 : event === "contrarian" ? 33 : family.id;
     q.recent.push(id); if (q.recent.length > 8) q.recent.shift();
     s.recent.push(id); if (s.recent.length > 8) s.recent.shift();
-    q.markers.push({ x: o - 50, w: 0, route: id, announced: false });
+    q.markers.push({ x: o - 50, w: 0, route: id, announced: false, tier:d.tier });
     var actions = [], endTime = 0, platforms = [], gapRanges = [];
     // Art/copy/motion have their own stream: none may reshuffle terrain,
     // landing banks, rewards or the platform director.
@@ -241,6 +260,70 @@
       endTime=Math.max(endTime,t+width/v+.65);
       return width/v;
     }
+    function skillCrossing(kind,start) {
+      // Build landings from ordinary jump trajectories, then vary their timing,
+      // width and height. A broad empty pit makes the islands compulsory.
+      const gravity=1950, rise=(t,velocity=720,air=null)=>air===null?
+        velocity*t-gravity*t*t/2:
+        velocity*air-gravity*air*air/2+650*(t-air)-gravity*(t-air)*(t-air)/2;
+      let launch=start,fromY=q.floorAt(xAt(launch)),last=null;
+      const gapStart=launch+.12, count=kind==="compound"?2:Math.min(4,2+Math.floor(d.tier/2));
+      const deck=(left,duration,y,style,label,extra={})=>{
+        const p=q.platform(xAt(left),y,v*duration,style,{skill:true,skillLabel:label,amp:0,frequency:1,phase:0,...extra});
+        platforms.push(p);
+        for(let n=0;n<3;n++)pickup(p.x+p.w*(.22+n*.25),y-40,"opportunity",p);
+        endTime=Math.max(endTime,left+duration+.5);return p;
+      };
+      let bankEnd=gapStart;
+      for(let i=0;i<count;i++) {
+        const double=kind==="doublegaps"&&i===0,compound=kind==="compound";
+        const flight=double?between(layout,.94,1.02):compound&&i===1?between(layout,.74,.78):between(layout,.61,.68);
+        const velocity=compound&&i===1?800:720,air=double?between(layout,.34,.39):null;
+        const y=fromY-rise(flight,velocity,air)+8;
+        const land=launch+flight,duration=d.landingTime+between(layout,-.06,.04);
+        const style=kind==="stairs"&&i>0?(i%2?"crane":"crumble"):"roof";
+        const p=deck(land-.15,duration,y,style,compound?`${i+1} · CHAIN`:double?"DOUBLE JUMP":"MIND THE SPREAD");
+        if(style==="crane") {p.amp=between(layout,7,12+d.pressure*5);p.frequency=between(layout,.9,1.3);p.phase=between(layout,0,Math.PI*2);}
+        // The approach gems trace the actual arc and its second impulse.
+        for(let j=1;j<=4;j++){
+          const t=flight*j/5;pickup(xAt(launch+t),fromY-rise(t,velocity,air!==null&&t>=air?air:null)-44,"opportunity");
+        }
+        actions.push({type:double?"double":"jump",t:launch,x:xAt(launch),width:v*flight,landing:p.id,rise:fromY-y});
+        bankEnd=land-.15+duration;last=p;fromY=y;launch=land+.22;
+      }
+      if(kind==="compound") {
+        const y=fromY;
+        // Missing the landing chain leaves a normal-jump lower route. A third
+        // grounded launch reaches the marked dividend shelf above it.
+        last=deck(launch+.52,.80,y-28,"roof","LOWER ROUTE");
+        const bonus=deck(launch+.57,.75,y-248,"bull","×3 · COMPOUND",{premium:true,grandBonus:true});
+        pickup(bonus.x+bonus.w*.54,bonus.y-44,"conviction",bonus);
+        actions.push({type:"grand-option",t:launch,x:xAt(launch),width:v*1.32,landing:bonus.id,rise:248});
+        bankEnd=launch+1.32;fromY=last.y;
+      }
+      // A final broad shelf runs toward the far bank. It also catches a missed
+      // optional upper route without switching off collisions or awarding it.
+      let exitStart=bankEnd+.30,exitFloor=floorRange(xAt(exitStart),v*1.25);
+      const descent=between(layout,25,65);
+      // A randomly rising far bank must never turn the last transfer into an
+      // impossible wall. Add a real intermediate step when it is too high.
+      for(let n=0;n<3&&exitFloor.min-24<fromY-105;n++){
+        const p=deck(exitStart,.65,fromY-85,"roof","STEP UP");
+        actions.push({type:"jump",t:bankEnd-.18,x:xAt(bankEnd-.18),width:v*.70,landing:p.id,rise:85});
+        fromY=p.y;bankEnd=exitStart+.65;exitStart=bankEnd+.30;
+        exitFloor=floorRange(xAt(exitStart),v*1.25);
+      }
+      const exitY=Math.min(fromY+descent,exitFloor.min-24);
+      last=deck(exitStart,.95,exitY,"roof","ONWARD");
+      actions.push({type:"jump",t:bankEnd-.18,x:xAt(bankEnd-.18),width:v*.70,landing:last.id,rise:fromY-exitY});
+      bankEnd=exitStart+.95;
+      const holeEnd=bankEnd-.08,hole=q.hazard("gap",xAt(gapStart),v*(holeEnd-gapStart),q.floorAt(xAt(gapStart)));
+      hole.skill=true;hole.fallY=Math.max(q.floorAt(xAt(gapStart)),exitFloor.max,...platforms.map(p=>p.y))+180;
+      hole.jumpCue=kind==="doublegaps"?"DOUBLE JUMP":kind==="compound"?"CHAIN 1 · 2 · 3":"JUMP THE SPREAD";
+      hole.launchY=q.floorAt(xAt(start));hole.launchOffset=-v*.12;
+      gapRanges.push([hole.x,hole.x+hole.w]);
+      endTime=Math.max(endTime,holeEnd+1.1);
+    }
     function challenge(types,start) {
       let t=start;
       for(let i=0;i<types.length;i++){
@@ -286,6 +369,8 @@
     } else {
       var count = integer(layout, Math.max(2, d.actions - 1), d.actions), lead = between(layout, .65, 1.0), t;
       switch (family.kind) {
+        case "rising": case "doublegaps": case "stairs": case "compound":
+          skillCrossing(family.kind,lead+.35);break;
         case "underpass":
           challenge(choose(layout,[["slide","low","slide"],["slide","low","low"],["low","slide","low"]]),lead+.25);break;
         case "hurdles":
@@ -386,7 +471,8 @@
     q.nextX = q.x + worldEnd - q.distance;
     var record = { index: index, route: id, family: event || family.kind, start: worldStart,
       end: worldEnd, time: planTime, speed: v, pressure: d.pressure, tier: d.tier,
-      actions: actions.map(function (a) { return { type: a.type, offset: Math.round((a.x - o) * 100) / 100, width: Math.round(a.width * 100) / 100, time: a.t }; }),
+      actions: actions.map(function (a) { return { type: a.type, offset: Math.round((a.x - o) * 100) / 100, width: Math.round(a.width * 100) / 100, time: a.t,
+        ...(a.landing?{landing:a.landing,rise:a.rise}:{} ) }; }),
       components: { obstacles: q.obstacles.length - counts.obstacles, platforms: q.platforms.length - counts.platforms, pickups: q.pickups.length - counts.pickups, springs: q.springs.length - counts.springs },
       recoverySeconds: rest, event: event };
     s.history.push(record); if (s.history.length > 64) s.history.shift();
@@ -398,7 +484,7 @@
     const a=nodes[i],b=nodes[i+1],u=(local-a[0])/(b[0]-a[0]);
     return a[1]+(b[1]-a[1])*u;
   }
-  window.LR_ENDLESS_GENERATOR = { version: VERSION, active: active, generate: generate, terrain: terrain, speed: speed, difficulty: difficulty, distanceAtTime: distanceAtTime, timeAtDistance, ceilingAt,
+  window.LR_ENDLESS_GENERATOR = { version: VERSION, active: active, generate: generate, terrain: terrain, speed: speed, difficulty: difficulty, distanceAtTime: distanceAtTime, timeAtDistance, ceilingAt, tierAtSpeed, tierAtTime, tierPace,
     families: FAMILIES.map(function (f) { return Object.freeze(Object.assign({}, f)); }),
     routeName: function (id) { return id === 36 ? "IPO HYPE MACHINE" : id === 32 ? "LIQUIDITY LIFT" : id === 33 ? "AGAINST THE CONSENSUS" : (FAMILIES.find(function (f) { return f.id === id; }) || {}).name || ""; },
     inspect: function (q) { if (!active(q)) return null; var s = state(q); return { version: VERSION, section: s.section, nextFlight: s.nextFlight,

@@ -4,6 +4,15 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
+## Version 1.27 — Jump the spread
+
+Endless difficulty now advances with each half-step pace increase. Four new
+seeded gap families add raised landings, double-jump crossings, moving and
+crumbling steps, and a high bonus route earned with a true triple-jump chain.
+Landing windows tighten and combinations grow as the run advances.
+[Implementation](docs/endless-v127.md) · [Verification](docs/verification-v127.md) ·
+[Recommendations for the next version](docs/endless-next-version.md).
+
 ## Version 1.26 — Keep the pace
 
 Nicolai fades gently into the subway and 505 as he walks inside. Endless now

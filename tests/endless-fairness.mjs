@@ -47,7 +47,7 @@ function stateKey(q) {
     q.jumpChain, q.chainWindow > 0, q.jumpCount, q.forcedBounce > 0, q.sliding, q.flight, q.flightLanding > 0,
     q.platforms.map(p => p.collapseAt ? Math.round((p.collapseAt - q.time) * 10) : '').join(',')].join('|');
 }
-export function controlSearch(context, initial, target, inputs = [0, 1, 2]) {
+export function controlSearch(context, initial, target, inputs = [0, 1, 2], options = {}) {
   // The test explores player inputs every100ms, while the real engine simulates
   // at120Hz. It neither moves geometry nor grants invincibility. A successful
   // path is a concrete witness; failure means this bounded search found none.
@@ -58,20 +58,21 @@ export function controlSearch(context, initial, target, inputs = [0, 1, 2]) {
     for (const previous of beam) for (const input of inputs) {
       const q = copy(previous.q);
       // Optional super-jumps must not be required to survive the street route.
-      if (input === 1 && !q.held && q.chainReady && q.jumpChain === 2) continue;
+      if (!options.allowGrand && input === 1 && !q.held && q.chainReady && q.jumpChain === 2) continue;
       if (input === 1 && !q.held) q.jump();
       else if (input !== 1 && q.held) q.release();
       for (let tick = 0; tick < 12 && !q.dead && !q.qaDamage && !q.qaThirdJump; tick++) {
         q.step(1 / 120, input === 2);
-        if (q.superJumpAge >= 0 || q.jumpChain >= 3) q.qaThirdJump = true;
+        if (q.superJumpAge >= 0 || q.jumpChain >= 3) {q.qaGrandUsed=true;if(!options.allowGrand)q.qaThirdJump = true;}
       }
       if (q.dead || q.qaDamage || q.qaThirdJump) continue;
       const controls = previous.controls + input;
-      if (q.distance >= target && q.grounded) return {pass: true, controls, seconds: q.time - initial.time, peak};
-      const key = stateKey(q), score = (q.grounded ? 0 : 40) + Math.abs(q.y - q.floorY) * .025 + (input === 2 ? 1 : 0);
+      if (q.distance >= target && q.grounded && (!options.goal || options.goal(q))) return {pass: true, controls, seconds: q.time - initial.time, peak};
+      const ahead=q.platforms.filter(p=>p.skill&&!p.premium&&p.active&&p.x>q.x+12&&p.x<q.x+q.speed*1.8).sort((a,b)=>a.x-b.x)[0];
+      const key = stateKey(q), score = (q.grounded ? 0 : 40) + Math.abs(q.y - (ahead?.y??q.floorY)) * (ahead?.1:.025) + (input === 2 ? 1 : 0);
       if (!seen.has(key) || score < seen.get(key).score) seen.set(key, {q, controls, score});
     }
-    beam = [...seen.values()].sort((a, b) => a.score - b.score).slice(0, 80);
+    beam = [...seen.values()].sort((a, b) => a.score - b.score).slice(0,options.beamWidth??(initial.platforms.some(p=>p.skill)?192:80));
     peak = Math.max(peak, beam.length);
     if (!beam.length) return {pass: false, failedAt: step * .1, peak};
   }
@@ -93,7 +94,7 @@ function replayControls(initial, target, controls) {
 }
 
 async function main() {
-  const output = process.env.ENDLESS_FAIRNESS_OUTPUT || path.join(root, 'review/v126/endless-fairness');
+  const output = process.env.ENDLESS_FAIRNESS_OUTPUT || path.join(root, 'review/v127/endless-fairness');
   await fs.mkdir(output, {recursive: true});
   const [engine, endless, generator, baseline] = await Promise.all([
     fs.readFile(path.join(root, 'scripts/engine.js'), 'utf8'), fs.readFile(path.join(root, 'scripts/endless.js'), 'utf8'),
@@ -102,11 +103,11 @@ async function main() {
   const c = model(engine, endless, generator), G = c.LR_ENDLESS_GENERATOR;
   // After unrelated presentation/copy edits, replay previously discovered
   // witnesses through the current real engine instead of repeating the search.
-  const replayPath=process.env.ENDLESS_REPLAY_REPORT||(process.env.ENDLESS_SEARCH==='1'?null:path.join(root,'tests/fixtures/endless-controls-v126.json'));
+  const replayPath=process.env.ENDLESS_REPLAY_REPORT||(process.env.ENDLESS_SEARCH==='1'?null:path.join(root,'tests/fixtures/endless-controls-v127.json'));
   const replay = replayPath ? JSON.parse(await fs.readFile(replayPath, 'utf8')) : null;
-  assert.equal(G.version, 6);
+  assert.equal(G.version, 7);
   const sample = new c.hi(540, 42, {mode: 'endless', procedural: true});
-  assert.equal(sample.terrainProfile.version, 6, 'Constructor uses the new terrain in real Endless');
+  assert.equal(sample.terrainProfile.version, 7, 'Constructor uses the new terrain in real Endless');
   sample.spawn(20);
   assert.equal(G.inspect(sample).history.at(-1).route, 20, 'Real engine spawn delegates to the new generator');
   const report = {sourceSha256: {engine: createHash('sha256').update(engine).digest('hex'), endless: createHash('sha256').update(endless).digest('hex'), generator: createHash('sha256').update(generator).digest('hex')}, storyReference: baseline.reference, storyChecks: [], compactReaction: [], physics: [], bars: 0, events: []};
@@ -139,8 +140,9 @@ async function main() {
     }
     const target = q.distance + q.nextX - q.x;
     const witness = replay?.physics.find(item => item.time === time && item.seed === seed && item.route === family.id);
-    if (replay) assert.ok(witness?.pass && witness.controls, 'Replay contains the exact previously successful seed/family/time witness');
-    const result = witness ? replayControls(q, target, witness.controls) : controlSearch(c, q, target);
+    if (replay && process.env.ENDLESS_SEARCH!=='1') assert.ok(witness?.pass && witness.controls, 'Replay contains the exact previously successful seed/family/time witness');
+    let result = witness ? replayControls(copy(q), target, witness.controls) : controlSearch(c, q, target);
+    if(!result.pass&&process.env.ENDLESS_SEARCH==='1')result=controlSearch(c,q,target);
     const item = {time, seed, family: family.kind, route: family.id, ...result};
     report.physics.push(item);
     await fs.writeFile(path.join(output, 'report.json'), JSON.stringify(report, null, 2));

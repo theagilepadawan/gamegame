@@ -15,10 +15,10 @@
   var ROMAN = ["", "", " II", " III", " IV", " V", " VI", " VII", " VIII", " IX", " X"];
   var NAMES = { 8: "STACKED HURDLES", 9: "DOUBLE DIP", 10: "BEAR TRAP", 11: "FLASH CRASH", 12: "WHIPSAW" };
   var on = function (q) { return !!q && q.mode === "endless" && q.procedural === true; };
-  var level = function (q) { return Math.floor((q.time || 0) / 32); };
+  var level = function (q) { return window.LR_ENDLESS_GENERATOR?.tierAtTime(Math.max(0,(q.time||0)-(q.ipoElapsed||0)))??0; };
   var regime = function (q) { return REGIMES[Math.min(REGIMES.length - 1, level(q))]; };
   function regimeName(q) { var L = level(q), R = regime(q); return R.name + (L >= REGIMES.length - 1 ? ROMAN[Math.min(10, L - REGIMES.length + 2)] || " " + (L - REGIMES.length + 2) : ""); }
-  var stats = function (q) { return q.__lr || (q.__lr = { close: 0, bestStreak: 0, maxSpeed: 0, swanAt: 0, toastAt: -9, bestDist: null, passedBest: false, pops: [], lastLevel: 0 }); };
+  var stats = function (q) { return q.__lr || (q.__lr = { close: 0, bestStreak: 0, maxSpeed: 0, swanAt: 0, toastAt: -9, bestDist: null, passedBest: false, pops: [], lastLevel: 0, announcedLevel:0 }); };
   var toast = null, sound = null, flash = 0;
   function pop(q, text, life) { stats(q).pops.push({ t: q.time, text: text, life: life }); }
   function say(q, tag, title, dur) { if (toast) { toast(tag, title, dur); stats(q).toastAt = q.time; } }
@@ -39,7 +39,7 @@
     reset: function () { this.clear(); this.semis = 0; var tr = this.track(); if (tr && tr.playbackRate !== 1 && !this.tape) tr.playbackRate = 1; },
     update: function (q) {
       var tr = this.track(); if (!tr || this.tape) return;
-      var want = 0, pace = q.speed / 315; this.STEPS.forEach(function (p) { if (pace >= p) want++; });
+      var want = Math.min(this.STEPS.length,level(q));
       // the game resets the rate when it resumes from pause: put it back straight away
       if (!this.pending && Math.abs(tr.playbackRate - this.rate(this.semis)) > 0.001) this.set(this.rate(this.semis));
       if (want <= this.semis || this.pending || tr.paused) return;
@@ -84,6 +84,7 @@
   window.LR_MUSIC = MUSIC;
   window.LR_ENDLESS = {
     on: on,
+    level: level,
     usesDirector: function (q) { return !!window.LR_ENDLESS_GENERATOR && LR_ENDLESS_GENERATOR.active(q); },
     generate: function (q, forcedRoute) { return !!window.LR_ENDLESS_GENERATOR && LR_ENDLESS_GENERATOR.generate(q, forcedRoute); },
     // Constant acceleration continues through the whole street run.
@@ -175,8 +176,11 @@
     // theme changes are regime changes in Endless: say the regime instead of the street
     regimeToast: function (q, Ge, A) {
       if (!on(q)) { Ge(A.name, A.title, 2.6); return; }
-      toast = Ge; var L = level(q), R = regime(q);
-      say(q, "LEVEL " + (L + 1) + " · PACE " + (this.speedAt(q,q.time + 2) / 315).toFixed(1) + "×", L >= REGIMES.length - 1 ? R.title.replace("The long run.", "The long run" + (ROMAN[Math.min(10, L - REGIMES.length + 2)] || "") + ".") : R.title, 2.8);
+      toast = Ge; var L = level(q), R = regime(q), s=stats(q);
+      if(L<=(s.announcedLevel||0)||q.flight||q.contrarian||q.transfer)return;
+      s.announcedLevel=L;
+      const clues=["Find the jump rhythm.","Higher landings. Use your double jump.","Moving and crumbling landings ahead.","Chain your landings for the upper dividend.","Longer combinations. Read the next landing."];
+      say(q, "LEVEL " + (L + 1) + " · PACE " + LR_ENDLESS_GENERATOR.tierPace(L).toFixed(1) + "×", clues[Math.min(4,L)], 2.8);
       var tk = document.getElementById("ticker-text"); if (tk) tk.textContent = R.sub;
       window.LR_FX && LR_FX.regime();
     },
@@ -196,8 +200,9 @@
       window.__lrq = q; toast = Ge; sound = SA;
       MUSIC.sa = SA;
       if (!on(q)) { MUSIC.reset(); return; }
-      MUSIC.update(q);
+      if(!q.flight&&!q.contrarian&&!q.transfer)MUSIC.update(q);
       var s = stats(q); s.maxSpeed = Math.max(s.maxSpeed, q.speed);
+      this.regimeToast(q,Ge);
       var el = m("#route-name"); if (el && level(q) !== s.lastLevel) { s.lastLevel = level(q); el.textContent = "L" + (level(q) + 1) + " · " + regimeName(q); }
       var best = readBest(q);
       if (best > 0 && !s.passedBest && q.distance > best) {
@@ -231,6 +236,19 @@
     drawTop: function (d, q, W, time) {
       if (!on(q)) return;
       var s = stats(q);
+      // Read the required opening even when a long landing is beyond the
+      // viewport. The cue belongs to the bank and fades as take-off arrives.
+      const opening=q.obstacles.find(h=>h.skill&&h.jumpCue&&h.x+h.launchOffset>q.x-8&&h.x+h.launchOffset<q.x+q.speed*1.45);
+      if(opening&&!q.flight&&!q.contrarian) {
+        const lead=(opening.x+opening.launchOffset-q.x)/q.speed;
+        const x=Math.min(W-82,Math.max(q.x+84,opening.x+opening.launchOffset)),y=opening.launchY-154;
+        d.save();d.globalAlpha=Math.max(0,Math.min(1,(1.45-lead)/.28,(lead+.025)/.12));
+        d.fillStyle="#092c3ee8";d.strokeStyle="#d5bc84";d.lineWidth=1.2;
+        d.beginPath();d.roundRect(x-69,y-15,138,30,7);d.fill();d.stroke();
+        d.font="800 10px 'Norges Bank',Arial,sans-serif";d.textAlign="center";d.textBaseline="middle";d.fillStyle="#f5ddb2";
+        d.fillText(opening.jumpCue,x,y,126);
+        d.beginPath();d.moveTo(x-4,y+18);d.lineTo(x,y+22);d.lineTo(x+4,y+18);d.stroke();d.restore();
+      }
       // at speed, what is about to come on screen shows at the right edge first
       if (q.speed > 520 && !q.flight) {
         var reach = q.speed * 0.6, a0 = Math.min(1, (q.speed - 520) / 160);

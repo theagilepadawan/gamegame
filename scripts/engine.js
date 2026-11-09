@@ -963,7 +963,7 @@ var hi = class {
           let h = this.platforms.filter((B) => B.active && this.x + 10 > B.x && this.x - 10 < B.x + B.w && Q <= B.prevY + 0.5 && this.y >= B.y).sort((B, c) => B.y - c.y)[0];
           h ? (this.y = h.y, this.vy = 0, this.grounded = true, this.airJumpAvailable = true, this.jumpCount = 0, this.flipAge = -1, this.support = h.id, h.touched || (h.touched = true, this.airLandings++, this.bonus += 25, this.emit("platform", { kind: h.kind })), h.kind === "crumble" && !h.collapseAt && (h.collapseAt = this.time + 0.62), this.landJumpChain(), this.emit("land", { y: this.y, chainStage: this.jumpChain })) : a && (Q <= this.floorY + 4 || LR_UP(this)) && this.y >= this.floorY && (this.y = this.floorY, this.vy = 0, this.grounded = true, this.airJumpAvailable = true, this.jumpCount = 0, this.flipAge = -1, this.support = null, this.landJumpChain(), this.emit("land", { y: this.y, chainStage: this.jumpChain }));
         }
-        this.y > this.floorY + 130 && (this.hit("A market correction. The floor was not guaranteed."), this.dead || (this.y = this.floorY, this.vy = 0, this.grounded = true, this.airJumpAvailable = true, this.jumpCount = 0, this.flipAge = -1, this.support = null, this.obstacles = this.obstacles.filter((R) => R !== n)));
+        this.y > (n?.fallY ?? this.floorY + 130) && (this.hit("A market correction. The floor was not guaranteed."), this.dead || (this.y = this.floorY, this.vy = 0, this.grounded = true, this.airJumpAvailable = true, this.jumpCount = 0, this.flipAge = -1, this.support = null, this.obstacles = this.obstacles.filter((R) => R !== n)));
       }
       for (let Q of this.springs) !Q.used && this.grounded && this.x > Q.x && this.x < Q.x + Q.w && Math.abs(this.y - Q.y) < 4 && (this.resetJumpChain(), Q.used = true, this.airJumpAvailable = true, this.jumpCount = 1, this.flipAge = -1, this.vy = -940, this.forcedBounce = 0.6, this.grounded = false, this.support = null, this.coyote = 0, this.sliding = false, this.emit("spring", { x: this.x, y: this.y }));
     }
@@ -1722,7 +1722,7 @@ var Po = class {
     }
     for (let M of [s + a * 0.2, s + a * 0.8]) M > Q - 15 && M < R + 15 && (this.poly([[M - 12, n + h], [M + 12, n + h], [M + 4, n + h + 12], [M - 4, n + h + 12]], "#1b3543", "#506e6c88"), this.rivet(M, n + h + 4, 1.5));
     if (a > 145) {
-      let M = g ? "SELL-OFF" : E ? "HIGH CONVICTION" : l ? "FLOATING AVG" : A.kind === "train" ? "MOMENTUM" : "LONG HORIZON", f = E ? 100 : 88, G = s + a / 2 - f / 2;
+      let M = A.skillLabel || (g ? "SELL-OFF" : E ? "HIGH CONVICTION" : l ? "FLOATING AVG" : A.kind === "train" ? "MOMENTUM" : "LONG HORIZON"), f = A.skillLabel ? Math.min(128,a-28) : E ? 100 : 88, G = s + a / 2 - f / 2;
       this.rect(G, n + 10, f, h - 20, "#0a202edd", 2), this.line(G + 2, n + 10, G + f - 2, n + 10, I + "66", 1), o.font = "600 6.5px ui-monospace,monospace", o.textAlign = "center", o.fillStyle = I, o.fillText(M, s + a / 2, n + h / 2 + 2);
     }
     if (A.collapseAt) {

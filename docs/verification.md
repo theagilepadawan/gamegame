@@ -1,6 +1,13 @@
-# Version 1.26 — Entrance depth and Endless challenge rhythm
+# Version 1.27 — Endless pace levels and skill crossings
 
-See [the current verification record](verification-v126.md) for the subtle
+See [the current verification record](verification-v127.md) for pace boundaries,
+raised/moving gap landings, double-jump routes and real grounded triple-jump
+bonus routes. [Implementation](endless-v127.md) ·
+[Proposed next pass](endless-next-version.md).
+
+## Version 1.26 — Entrance depth and Endless challenge rhythm
+
+See [the version 1.26 verification record](verification-v126.md) for the subtle
 entrance fade, constant acceleration, four new challenge families and mandatory
 slide passages. [Implementation](endless-v126.md).
 

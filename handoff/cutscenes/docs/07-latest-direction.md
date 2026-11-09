@@ -1,6 +1,17 @@
 # Latest user direction
 
-## Current authority: version 1.26
+## Current authority: version 1.27
+
+Endless levels now follow the same 1.5×, 2×, 2.5× and subsequent half-step pace
+marks as the speed progression. Four additional families bring the total to
+22: raised islands, double-jump landings, moving/crumbling stairs, and a true
+grounded triple-jump bonus route with a playable lower alternative. Every tier
+increases course pressure. Preserve Story and all native art. See
+`game/docs/endless-v127.md` and `game/docs/verification-v127.md`.
+`game/docs/endless-next-version.md` contains recommendations, not implemented
+features or authorization to change the game further.
+
+## Retained direction: version 1.26
 
 Preserve the approved rear-view entrance poses; gently fade Nicolai only once
 inside the subway or 505. Endless now accelerates at a constant +3 world

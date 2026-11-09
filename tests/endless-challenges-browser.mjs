@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import {chromium} from 'playwright';
-const witnesses=JSON.parse(await readFile('tests/fixtures/endless-controls-v126.json','utf8')).physics.filter(p=>p.route>=37);
+const witnesses=JSON.parse(await readFile('tests/fixtures/endless-controls-v127.json','utf8')).physics.filter(p=>p.route>=37&&p.route<=40);
 assert.equal(witnesses.length,8,'Four challenge families at early and late pace');
-await mkdir('review/v126/challenges',{recursive:true});
+await mkdir('review/v127/slide-challenges',{recursive:true});
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});
 const report=[];
 try{
@@ -43,7 +43,7 @@ try{
     }challengeRender();return {at,captured:false};
    },witness.controls);
    if(captured.captured&&witness.route===37&&witness.time===0)
-    await page.screenshot({path:`review/v126/challenges/${character}-slide-${viewport.width}.png`});
+    await page.screenshot({path:`review/v127/slide-challenges/${character}-slide-${viewport.width}.png`});
    const result=await page.evaluate(({controls,at})=>{
     for(let i=at;i<controls.length;i++)challengeStep(controls[i]);challengeRender();
     return {dead:q.dead,damage:q.qaDamage,finished:q.distance>=challengeTarget&&q.grounded,pace:q.speed,thirdJump:q.jumpChain>=3};
@@ -55,6 +55,6 @@ try{
   }
   assert.deepEqual(errors,[]);await page.close();
  }
- await writeFile('review/v126/challenges/browser-report.json',JSON.stringify(report,null,2));
+ await writeFile('review/v127/slide-challenges/browser-report.json',JSON.stringify(report,null,2));
  console.log(`PASS ${report.length} real browser challenge traversals: both runners, desktop/compact, early/late pace, actual slides, no damage or forced grand jump.`);
 }finally{await browser.close();}
