@@ -1,6 +1,14 @@
 # Latest user direction
 
-## Current authority: version 1.25
+## Current authority: version 1.26
+
+Preserve the approved rear-view entrance poses; gently fade Nicolai only once
+inside the subway or 505. Endless now accelerates at a constant +3 world
+pixels/second per second. Four new seeded challenge families require slides,
+hurdle jumps and gap crossings, while preserving landing/recovery space.
+See `game/docs/endless-v126.md` and `game/docs/verification-v126.md`.
+
+## Retained opening call direction (version 1.25)
 
 Start the call with a short ring using both supplied recordings. GDL expands
 into Grete Direct Line before the portraits connect. Answer connects early;

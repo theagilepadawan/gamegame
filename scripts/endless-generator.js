@@ -2,7 +2,7 @@
    while terrain, section layout, rewards and rare events use separate streams. */
 (function () {
   "use strict";
-  var VERSION = 5, GROUND = 422;
+  var VERSION = 6, GROUND = 422;
   var FAMILIES = [
     { id: 20, name: "MARKET RHYTHM", kind: "rhythm", unlock: 0 },
     { id: 21, name: "ROOFTOP DIVIDENDS", kind: "roofs", unlock: 0 },
@@ -17,7 +17,11 @@
     { id: 30, name: "DIVIDEND LADDER", kind: "ladder", unlock: 15 },
     { id: 31, name: "VOLATILITY RUN", kind: "volatility", unlock: 65 },
     { id: 34, name: "STEPPING STONES", kind: "islands", unlock: 0 },
-    { id: 35, name: "THE WIDE SPREAD", kind: "ravine", unlock: 18 }
+    { id: 35, name: "THE WIDE SPREAD", kind: "ravine", unlock: 18 },
+    { id: 37, name: "DUCK THE GUIDANCE", kind: "underpass", unlock: 12 },
+    { id: 38, name: "HURDLE RATES", kind: "hurdles", unlock: 18 },
+    { id: 39, name: "CROSS EXAMINATION", kind: "slalom", unlock: 32 },
+    { id: 40, name: "HOLD & RELEASE", kind: "compression", unlock: 45 }
   ];
   var clamp = function (x, lo, hi) { return Math.max(lo, Math.min(hi, x)); };
   var mix = function (x) { x >>>= 0; x = Math.imul(x ^ x >>> 16, 2146121005); x = Math.imul(x ^ x >>> 15, 2221713035); return (x ^ x >>> 16) >>> 0; };
@@ -29,16 +33,15 @@
   var choose = function (r, list) { return list[Math.floor(r() * list.length)]; };
   var integer = function (r, a, b) { return a + Math.floor(r() * (b - a + 1)); };
   var active = function (q) { return !!q && q.mode === "endless" && q.procedural === true; };
-  var speed = function (time) { return 340 + 360 * (1 - Math.exp(-Math.max(0, time) / 125)); };
+  // A constant increase: there is no exponential easing or late-run ceiling.
+  var speed = function (time) { return 340 + 3 * Math.max(0, Number(time) || 0); };
   function distanceAtTime(time) {
     time = Math.max(0, Number(time) || 0);
-    return 700 * time - 45000 * (1 - Math.exp(-time / 125));
+    return 340 * time + 1.5 * time * time;
   }
   function timeAtDistance(distance) {
     distance = Math.max(0, distance);
-    var low = 0, high = distance / 340 + 1;
-    for (var n = 0; n < 28; n++) { var mid = (low + high) / 2; if (distanceAtTime(mid) < distance) low = mid; else high = mid; }
-    return (low + high) / 2;
+    return 2 * distance / (340 + Math.sqrt(340 * 340 + 6 * distance));
   }
   function difficulty(time) {
     var pressure = 1 - Math.exp(-Math.max(0, time) / 170);
@@ -52,7 +55,7 @@
     var r = stream(q.seed, 0, 0x4556454e);
     return q.__endlessDirector = { version: VERSION, section: 0, recent: [], history: [],
       nextFlight: between(r, 28, 42), nextContrarian: between(r, 48, 66), nextRecovery: integer(r, 4, 7),
-      nextIPO: between(r, 76, 102), lastEventAt: -100, lastPowerAt: -100, eventCounts: { jetpack: 0, contrarian: 0, recovery: 0, ipo: 0 } };
+      nextIPO: between(r, 76, 102), nextChallenge: integer(r,2,3), lastEventAt: -100, lastPowerAt: -100, eventCounts: { jetpack: 0, contrarian: 0, recovery: 0, ipo: 0 } };
   }
   function terrain(seed, ground) {
     ground = Number.isFinite(ground) ? ground : GROUND;
@@ -108,7 +111,9 @@
         if (!available.length) available = FAMILIES.filter(function (f) { return f.unlock <= planTime && f.id !== 29; });
         // Keep strong gap encounters in circulation instead of allowing a
         // long opening run to contain only rooftops and tiny spring holes.
-        if (index > 0 && !s.recent.slice(-2).some(function (id) { return [23, 34, 35].includes(id); })) {
+        if (index >= s.nextChallenge && available.some(f=>f.id>=37)) {
+          available=available.filter(f=>f.id>=37);
+        } else if (index > 0 && !s.recent.slice(-2).some(function (id) { return [23, 34, 35, 38, 39, 40].includes(id); })) {
           var crossings = available.filter(function (f) { return [23, 34, 35].includes(f.id); });
           if (crossings.length) available = crossings;
         }
@@ -116,6 +121,7 @@
       }
     }
     q.spawnCount++;
+    if(family?.id>=37)s.nextChallenge=index+integer(events,3,5);
     var id = event === "ipo" ? 36 : event === "jetpack" ? 32 : event === "contrarian" ? 33 : family.id;
     q.recent.push(id); if (q.recent.length > 8) q.recent.shift();
     s.recent.push(id); if (s.recent.length > 8) s.recent.shift();
@@ -219,6 +225,37 @@
       });
       return t;
     }
+    function underpass(t) {
+      const width=Math.max(168,v*between(layout,.34,.52)),x=xAt(t),floor=floorRange(x,width);
+      const h=q.hazard("high",x,width,floor.min);
+      if(window.LR_HAZARDS)LR_HAZARDS.endless(h,q,planTime+t);
+      h.requiredAction="slide";h.h=64;
+      h.label=choose(layout,["LOWER GUIDANCE","DEBT CEILING","LOW VISIBILITY","REVISED DOWN"]);
+      // The visibly solid terminal extends above every jump. Its lower edge
+      // follows the actual ground, leaving the same clearance on every slope.
+      const steps=Math.max(8,Math.ceil(width/24));
+      h.roof=Array.from({length:steps+1},(_,i)=>[width*i/steps,q.floorAt(x+width*i/steps)-96]);
+      h.roofTop=floor.min-520;
+      actions.push({type:"slide",t,x,width,widthTime:width/v});
+      coins(t+.05,Math.max(.15,width/v-.1),35,"opportunity",3);
+      endTime=Math.max(endTime,t+width/v+.65);
+      return width/v;
+    }
+    function challenge(types,start) {
+      let t=start;
+      for(let i=0;i<types.length;i++){
+        const kind=types[i],next=types[i+1];
+        if(kind==="slide")t+=underpass(t)+between(layout,.72,.94)-d.pressure*.06;
+        else if(kind==="gap"){
+          const opening=gap(t,between(layout,.60,.84+d.pressure*.08));
+          t+=opening.duration+between(layout,.85,1.12);
+        } else {
+          hurdle(t,"low");
+          t+=between(layout,next==="slide"?1.12:1.02,next==="slide"?1.36:1.32)-d.pressure*.06;
+        }
+      }
+      return t;
+    }
     if (event) {
       s.lastEventAt = planTime; s.eventCounts[event]++;
       if (event === "ipo") {
@@ -249,6 +286,14 @@
     } else {
       var count = integer(layout, Math.max(2, d.actions - 1), d.actions), lead = between(layout, .65, 1.0), t;
       switch (family.kind) {
+        case "underpass":
+          challenge(choose(layout,[["slide","low","slide"],["slide","low","low"],["low","slide","low"]]),lead+.25);break;
+        case "hurdles":
+          challenge(choose(layout,[["low","gap","low","low"],["low","low","gap","low"],["gap","low","gap"]]),lead+.25);break;
+        case "slalom":
+          challenge(choose(layout,[["slide","low","gap","slide"],["low","slide","gap","low"],["gap","slide","low","slide"]]),lead+.35);break;
+        case "compression":
+          challenge(choose(layout,[["slide","slide","low","gap"],["low","gap","slide","low"],["slide","gap","low","slide"]]),lead+.35);break;
         case "rhythm":
           var pattern = [], last = null;
           for (var i = 0; i < count; i++) { var kind = layout() < .53 ? "low" : "high"; if (i > 1 && kind === last && pattern[i - 2] === kind) kind = kind === "low" ? "high" : "low"; pattern.push(kind); last = kind; }
@@ -347,7 +392,13 @@
     s.history.push(record); if (s.history.length > 64) s.history.shift();
     return true;
   }
-  window.LR_ENDLESS_GENERATOR = { version: VERSION, active: active, generate: generate, terrain: terrain, speed: speed, difficulty: difficulty, distanceAtTime: distanceAtTime,
+  function ceilingAt(item,x) {
+    const local=clamp(x-item.x,0,item.w),nodes=item.roof;
+    let i=Math.min(nodes.length-2,Math.floor(local/item.w*(nodes.length-1)));
+    const a=nodes[i],b=nodes[i+1],u=(local-a[0])/(b[0]-a[0]);
+    return a[1]+(b[1]-a[1])*u;
+  }
+  window.LR_ENDLESS_GENERATOR = { version: VERSION, active: active, generate: generate, terrain: terrain, speed: speed, difficulty: difficulty, distanceAtTime: distanceAtTime, timeAtDistance, ceilingAt,
     families: FAMILIES.map(function (f) { return Object.freeze(Object.assign({}, f)); }),
     routeName: function (id) { return id === 36 ? "IPO HYPE MACHINE" : id === 32 ? "LIQUIDITY LIFT" : id === 33 ? "AGAINST THE CONSENSUS" : (FAMILIES.find(function (f) { return f.id === id; }) || {}).name || ""; },
     inspect: function (q) { if (!active(q)) return null; var s = state(q); return { version: VERSION, section: s.section, nextFlight: s.nextFlight,

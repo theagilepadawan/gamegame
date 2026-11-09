@@ -79,10 +79,13 @@ for(let seed=0;seed<128;seed++){
 assert.ok(terrain.nonResetBoundaries>1100,'Terrain no longer resets to a fixed repeating4800-unit packet');
 const early=G.difficulty(0),late=G.difficulty(600);
 assert.ok(late.actions>early.actions&&late.actionGap<early.actionGap&&late.rest<early.rest&&late.gapTime>early.gapTime);
-for(const t of [0,30,60,120,300,600,3600])assert.ok(G.speed(t)>=340&&G.speed(t)<=700);
+for(const t of [0,30,60,120,300,600,3600]){
+ assert.equal(G.speed(t+60)-G.speed(t),180,'Every minute adds the same pace, without late-run easing');
+ assert.ok(Math.abs(G.timeAtDistance(G.distanceAtTime(t))-t)<1e-8,'The spatial clock inverts the constant-acceleration distance');
+}
 const story=fixture(1);story.mode='chapter';const before=hash(story);assert.equal(G.generate(story),false);assert.equal(hash(story),before);
 const output={deterministic:true,viewportIndependent:true,rewardIndependent:true,spawnClockIndependent:true,diversity,terrain,
- components:{families:[...routes],powerups:[...powerups],types:[...types]},difficulty:{early,late},speedCap:700};
-await fs.mkdir(path.join(root,'review/v20-endless'),{recursive:true});
-await fs.writeFile(path.join(root,'review/v20-endless/generation-report.json'),JSON.stringify(output,null,2));
-console.log(`PASS: deterministic viewport/reward/frame-independent course; ${diversity.length} diversity cases ×64seeds; all14families/powerups/platforms; ${terrain.samples} continuous terrain samples; bounded escalating difficulty.`);
+ components:{families:[...routes],powerups:[...powerups],types:[...types]},difficulty:{early,late},acceleration:3,speedCap:null};
+await fs.mkdir(path.join(root,'review/v126/endless-generation'),{recursive:true});
+await fs.writeFile(path.join(root,'review/v126/endless-generation/generation-report.json'),JSON.stringify(output,null,2));
+console.log(`PASS: deterministic viewport/reward/frame-independent course; ${diversity.length} diversity cases ×64seeds; all${G.families.length}families/powerups/platforms; ${terrain.samples} continuous terrain samples; constant acceleration and varied difficulty.`);

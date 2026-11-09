@@ -47,7 +47,7 @@ function stateKey(q) {
     q.jumpChain, q.chainWindow > 0, q.jumpCount, q.forcedBounce > 0, q.sliding, q.flight, q.flightLanding > 0,
     q.platforms.map(p => p.collapseAt ? Math.round((p.collapseAt - q.time) * 10) : '').join(',')].join('|');
 }
-export function controlSearch(context, initial, target) {
+export function controlSearch(context, initial, target, inputs = [0, 1, 2]) {
   // The test explores player inputs every100ms, while the real engine simulates
   // at120Hz. It neither moves geometry nor grants invincibility. A successful
   // path is a concrete witness; failure means this bounded search found none.
@@ -55,7 +55,7 @@ export function controlSearch(context, initial, target) {
   const maximumSteps = Math.ceil(((target - initial.distance) / context.LR_ENDLESS.speed(initial.time) + 4) / .1);
   for (let step = 0; step < maximumSteps; step++) {
     const seen = new Map();
-    for (const previous of beam) for (const input of [0, 1, 2]) {
+    for (const previous of beam) for (const input of inputs) {
       const q = copy(previous.q);
       // Optional super-jumps must not be required to survive the street route.
       if (input === 1 && !q.held && q.chainReady && q.jumpChain === 2) continue;
@@ -93,7 +93,7 @@ function replayControls(initial, target, controls) {
 }
 
 async function main() {
-  const output = process.env.ENDLESS_FAIRNESS_OUTPUT || path.join(root, 'review/v125/endless-fairness');
+  const output = process.env.ENDLESS_FAIRNESS_OUTPUT || path.join(root, 'review/v126/endless-fairness');
   await fs.mkdir(output, {recursive: true});
   const [engine, endless, generator, baseline] = await Promise.all([
     fs.readFile(path.join(root, 'scripts/engine.js'), 'utf8'), fs.readFile(path.join(root, 'scripts/endless.js'), 'utf8'),
@@ -102,11 +102,11 @@ async function main() {
   const c = model(engine, endless, generator), G = c.LR_ENDLESS_GENERATOR;
   // After unrelated presentation/copy edits, replay previously discovered
   // witnesses through the current real engine instead of repeating the search.
-  const replayPath=process.env.ENDLESS_REPLAY_REPORT||(process.env.ENDLESS_SEARCH==='1'?null:path.join(root,'tests/fixtures/endless-controls-v125.json'));
+  const replayPath=process.env.ENDLESS_REPLAY_REPORT||(process.env.ENDLESS_SEARCH==='1'?null:path.join(root,'tests/fixtures/endless-controls-v126.json'));
   const replay = replayPath ? JSON.parse(await fs.readFile(replayPath, 'utf8')) : null;
-  assert.equal(G.version, 5);
+  assert.equal(G.version, 6);
   const sample = new c.hi(540, 42, {mode: 'endless', procedural: true});
-  assert.equal(sample.terrainProfile.version, 5, 'Constructor uses the new terrain in real Endless');
+  assert.equal(sample.terrainProfile.version, 6, 'Constructor uses the new terrain in real Endless');
   sample.spawn(20);
   assert.equal(G.inspect(sample).history.at(-1).route, 20, 'Real engine spawn delegates to the new generator');
   const report = {sourceSha256: {engine: createHash('sha256').update(engine).digest('hex'), endless: createHash('sha256').update(endless).digest('hex'), generator: createHash('sha256').update(generator).digest('hex')}, storyReference: baseline.reference, storyChecks: [], compactReaction: [], physics: [], bars: 0, events: []};
@@ -116,7 +116,8 @@ async function main() {
   }
   for (const time of [0, 60, 180, 600, 1800]) {
     const seconds = (540 - sample.x - 15) / G.speed(time);
-    assert.ok(seconds >= .55, `Compact visible reaction time at${time}s: ${seconds}`);
+    // Pace is deliberately uncapped: record the narrowing compact-view window.
+    assert.ok(Number.isFinite(seconds) && seconds > 0);
     report.compactReaction.push({time, speed: G.speed(time), seconds});
   }
   // Record every actual collision, including a hit absorbed by a shield; the
@@ -131,7 +132,8 @@ async function main() {
     assert.equal(q.invincible, 0);
     for (const bar of q.obstacles.filter(o => o.type === 'high')) {
       for (let sampleX = bar.x; sampleX <= bar.x + bar.w; sampleX += 4) {
-        assert.ok(bar.base - 96 <= q.floorAt(sampleX) - 78 + .05, 'Slide clears the full bar, including terrain crests');
+        const edge=bar.requiredAction==='slide'?G.ceilingAt(bar,sampleX):bar.base-96;
+        assert.ok(edge <= q.floorAt(sampleX) - 78 + .05, 'Slide clears the full bar, including terrain crests');
       }
       report.bars++;
     }

@@ -16,7 +16,7 @@ for(let seed=1;seed<=32;seed++){
    assert.ok(!q.platforms.some(p=>p.x<o.x+o.w+24&&p.x+p.w>o.x-24),'Mandatory hurdle has no overlapping low platform');
   }
   const hurdles=q.obstacles.filter(o=>o.type!=='gap').sort((a,b)=>a.x-b.x);
-  for(let j=1;j<hurdles.length;j++)assert.ok(hurdles[j].x-(hurdles[j-1].x+hurdles[j-1].w)>record.speed*.85,'Hurdles retain readable reaction space');
+  for(let j=1;j<hurdles.length;j++)assert.ok(hurdles[j].x-(hurdles[j-1].x+hurdles[j-1].w)>record.speed*(record.route>=37?.60:.85),'Hurdles retain authored reaction space');
   for(const gap of gaps){report.gaps++;report.widths.push(gap.w/record.speed);
    if(record.family==='ravine'){
     assert.ok(q.platforms.filter(p=>p.x>gap.x&&p.x<gap.x+gap.w).length>=2,'Wide chasms have physical stepping platforms');
@@ -56,5 +56,5 @@ assert.ok(bands.every(n=>n>30),'Small, medium, wide and chasm gaps all occur');
 report.distinctWidths=new Set(report.widths.map(v=>v.toFixed(4))).size;
 assert.ok(report.distinctWidths>400,'Widths vary continuously rather than a few fixed lengths');
 report.gapBands=bands;report.minGapSeconds=Math.min(...report.widths);report.maxGapSeconds=Math.max(...report.widths);delete report.widths;
-await mkdir('review/v124',{recursive:true});await writeFile('review/v124/endless-spacing.json',JSON.stringify(report,null,2));
+await mkdir('review/v126',{recursive:true});await writeFile('review/v126/endless-spacing.json',JSON.stringify(report,null,2));
 console.log('PASS: '+report.sections+' real-model sections; clear ground hurdles, independent landing banks, '+report.gaps+' gaps across four width bands; terrain range and bounded section population.',report);

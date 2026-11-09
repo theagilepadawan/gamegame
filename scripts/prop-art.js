@@ -136,8 +136,47 @@
       }
     }
   }
+  function underpass(c,item,x,district,run) {
+    // A solid overhanging exchange terminal. The brass underside is the exact
+    // sampled collision edge, so the player can read the whole slide tunnel.
+    const {district:place}=style(item,district),park=place==="park",w=item.w,top=item.roofTop;
+    const edge=()=>{c.beginPath();c.moveTo(x,top);c.lineTo(x+w,top);
+      for(let i=item.roof.length-1;i>=0;i--)c.lineTo(x+item.roof[i][0],item.roof[i][1]);c.closePath();};
+    const underside=dy=>{c.beginPath();item.roof.forEach(([dx,y],i)=>i?c.lineTo(x+dx,y+dy):c.moveTo(x+dx,y+dy));};
+    const mid=window.LR_ENDLESS_GENERATOR.ceilingAt(item,item.x+w/2);
+    c.save();edge();c.fillStyle=gradient(c,x,top,w,0,park?["#243d33","#49604a","#203b34"]:["#17313e","#355663","#172d3c"]);c.fill();
+    c.save();edge();c.clip();
+    // Recessed panes and a restrained price trace give the tall silhouette
+    // purpose; fixed-size native art below remains proportionally registered.
+    for(let dx=18;dx<w-25;dx+=72){
+      box(c,x+dx,top+16,Math.min(56,w-dx-18),Math.max(20,mid-top-123),"#0d253570",5);
+      line(c,x+dx+1,top+20,x+dx+1,mid-111,"#92b6ae30",1);
+    }
+    const chartY=mid-150;
+    for(let k=0;k<3;k++)line(c,x+19,chartY-k*35,x+w-19,chartY-k*35,"#c9d4b31f",1);
+    c.beginPath();for(let i=0;i<9;i++){
+      const px=x+20+(w-40)*i/8,py=chartY-52+[0,-17,-8,-28,-12,8,-4,24,34][i];
+      i?c.lineTo(px,py):c.moveTo(px,py);
+    }c.strokeStyle="#c2a66a";c.lineWidth=2;c.stroke();
+    line(c,x+5,top,x+5,mid+100,"#c0aa77",3);line(c,x+w-5,top,x+w-5,mid+100,"#b59c69",3);
+    underside(-6);c.strokeStyle="#0a242d";c.lineWidth=15;c.stroke();
+    underside(-4);c.strokeStyle="#a9915e";c.lineWidth=7;c.stroke();
+    underside(-2);c.strokeStyle="#e7d8a5";c.lineWidth=2;c.stroke();
+    c.restore();
+    // No posts in the passage. The registered plaque hangs on the face above
+    // it; its original painted width/height ratio is preserved.
+    const plaqueWidth=Math.min(148,w-28),sprite=registration[place][2];
+    const board={...item,requiredAction:null,noSupports:true,artVariant:2,w:plaqueWidth,h:plaqueWidth*sprite.body[3]/sprite.body[2]};
+    hazard(c,board,x+(w-plaqueWidth)/2,mid+84,place,run);
+    for(const dx of [18,w-18]){
+      const y=window.LR_ENDLESS_GENERATOR.ceilingAt(item,item.x+dx);
+      arrow(c,x+dx,y-19,2,"#f2df9f",4);
+    }
+    c.restore();return true;
+  }
   function hazard(c, item, x, base, district, run) {
     if (item.type === "gap") return false;
+    if (item.requiredAction === "slide") return underpass(c,item,x,district,run);
     const {district:place,sprite,index}=style(item,district),image=art[place];
     if(!loaded(image))return false;
     const high=item.type==="high",w=item.w,h=item.h;
@@ -148,8 +187,8 @@
       c.translate(x+w/2,base);c.transform(1,item.groundSlope,0,1,0,0);x=-w/2;base=0;
     }
     const top=base-(high?96+h:h);
-    if(high)support(c,item,x,base,top,place,run,index,sprite);
-    else {
+    if(high&&!item.noSupports)support(c,item,x,base,top,place,run,index,sprite);
+    else if(!high) {
       c.save();c.globalAlpha*=.35;c.fillStyle="#142b28";c.beginPath();
       c.ellipse(x+w/2,base+.5,w*.5,2.2,0,0,Math.PI*2);c.fill();c.restore();
     }

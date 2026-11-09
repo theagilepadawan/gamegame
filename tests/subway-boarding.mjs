@@ -3,7 +3,7 @@ import {mkdir} from 'node:fs/promises';
 import {chromium} from 'playwright';
 
 const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox','--enable-unsafe-swiftshader']});
-await mkdir('review/v122/boarding',{recursive:true});
+await mkdir('review/v126/boarding',{recursive:true});
 try {
   const page=await browser.newPage({viewport:{width:1280,height:720},reducedMotion:'no-preference'}), errors=[];
   page.on('pageerror',error=>errors.push(error.message));
@@ -41,6 +41,15 @@ try {
   assert.equal(scene.end.y,scene.gate.boardingFloor);
   assert.ok(scene.atDoor.y-scene.end.y>25,'Feet recede along the carriage floor');
   assert.equal(scene.end.scale,.86,'Only the boarding depth changes perspective');
+  assert.equal(scene.running.opacity,1);assert.equal(scene.atDoor.opacity,1);
+  assert.equal(scene.end.opacity,.76,'Only a subtle attenuation at full entry depth');
+  assert.ok(scene.path.every((p,i)=>!i||p.opacity<=scene.path[i-1].opacity),'Opacity changes smoothly in one direction');
+  const restoredAlpha=await page.evaluate(()=>{
+    const c=document.createElement('canvas'),ctx=c.getContext('2d');ctx.globalAlpha=.5;
+    LR_FINISH.drawWalk(ctx,'nicolai',50,200,9,1,q,LR_FINISH.inspect(q).duration-.1);
+    return ctx.globalAlpha;
+  });
+  assert.equal(restoredAlpha,.5,'The fade never leaks into other sprites or the scenery');
   assert.ok(scene.path.filter(p=>p.phase==='inside').every(p=>p.frame>=4&&p.frame<=11),'Inside steps exclusively use the rear-view poses');
   assert.deepEqual([...new Set(scene.path.filter(p=>p.phase==='turn').map(p=>p.frame))],[0,1,2,3],'All four turn keyframes lead into the rear walk');
   const poses=await page.evaluate(()=>{
@@ -63,7 +72,7 @@ try {
   assert.ok(pole.actual.every((v,i)=>Math.abs(v-pole.expected[i])<5),'The original brass pole occludes the passenger inside the carriage');
   for(const [name,age] of [['run',scene.gate.turnAt-.5],['door',scene.gate.turnAt+.2],['step',scene.gate.walkAt+.65],['inside',scene.gate.walkAt+1.9]]) {
     await page.evaluate(age=>{ni=age;Kt=0;ir=q.y;Vu();vu();},age);
-    await page.screenshot({path:`review/v122/boarding/${district}-${name}.png`});
+    await page.screenshot({path:`review/v126/boarding/${district}-${name}.png`});
   }
   await page.evaluate(()=>{ni=LR_FINISH.inspect(q).walkAt+.4;sr();});
   const held=await page.evaluate(()=>ni);await page.clock.runFor(450);

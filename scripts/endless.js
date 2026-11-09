@@ -86,8 +86,8 @@
     on: on,
     usesDirector: function (q) { return !!window.LR_ENDLESS_GENERATOR && LR_ENDLESS_GENERATOR.active(q); },
     generate: function (q, forcedRoute) { return !!window.LR_ENDLESS_GENERATOR && LR_ENDLESS_GENERATOR.generate(q, forcedRoute); },
-    // A readable pace ceiling leaves room for increasingly varied combinations.
-    speed: function (t) { return window.LR_ENDLESS_GENERATOR ? LR_ENDLESS_GENERATOR.speed(t) : 340 + 820 * (1 - Math.exp(-t / 150)); },
+    // Constant acceleration continues through the whole street run.
+    speed: function (t) { return window.LR_ENDLESS_GENERATOR ? LR_ENDLESS_GENERATOR.speed(t) : 340 + 3 * Math.max(0,t); },
     speedAt: function (q, t) { return on(q) ? this.speed(t-(q.ipoElapsed||0)) : null; },
     // which sections the spawner may pick next (never empty, never the last three)
     routes: function (q) {

@@ -1,6 +1,12 @@
-# Version 1.25 — Grete Direct Line and Endless IPO encounters
+# Version 1.26 — Entrance depth and Endless challenge rhythm
 
-See [the current verification record](verification-v125.md) for the GDL ring,
+See [the current verification record](verification-v126.md) for the subtle
+entrance fade, constant acceleration, four new challenge families and mandatory
+slide passages. [Implementation](endless-v126.md).
+
+## Version 1.25 — Grete Direct Line and Endless IPO encounters
+
+See [the version 1.25 verification record](verification-v125.md) for the GDL ring,
 accessible translation, unique Story captions, faster Endless ramp and varied
 recurring IPO encounters. [Implementation and dialogue](comms-and-endless-v125.md).
 

@@ -1,5 +1,5 @@
 /* Painted chapter exits, using the game's existing canvas/Pixi compositor.
-   Back wall -> runner -> near door pier is real depth ordering, not a fade. */
+   Back wall -> runner -> near door pier, with gentle attenuation into depth. */
 (function () {
   "use strict";
   const reduce = matchMedia("(prefers-reduced-motion: reduce)");
@@ -134,7 +134,8 @@
     const y = airborne ? Math.min(seq.landingY, seq.startY + seq.vy * age + seq.gravity * age * age / 2) : shadowY;
     return {x, y, shadowY, action: airborne ? seq.vy + seq.gravity * age < 0 ? "jump" : "fall" : walking ? "walk" : "run",
       frame: walking ? walkFrame : Math.floor((run.distance + x - seq.startX) / 28) % 6,
-      walkAge, phase, depth, scale: 1 - .14 * depth};
+      walkAge, phase, depth, scale: 1 - .14 * depth,
+      opacity: 1 - .24 * Math.max(0, (depth - .12) / .88)};
   }
   function drawWalk(ctx, runner, x, y, frame, scale, run, age) {
     if (runner !== "nicolai" || !walkImage.complete || !walkImage.naturalWidth) return false;
@@ -145,8 +146,10 @@
     const s = scale * .84 * (state?.scale ?? 1) * 308 / (walkFeet[f] - walkTops[f]);
     const cellW = walkImage.naturalWidth / 4, cellH = walkImage.naturalHeight / 3;
     const unit = 512 / cellH;
+    ctx.save(); ctx.globalAlpha *= state?.opacity ?? 1;
     ctx.drawImage(walkImage, f % 4 * cellW, Math.floor(f / 4) * cellH, cellW, cellH,
       x - cellW * unit * .5 * s, y - walkFeet[f] * unit * s, cellW * unit * s, 512 * s);
+    ctx.restore();
     return true;
   }
   function gateFor(run) { return sequences.get(run)?.gate || geometry(run); }

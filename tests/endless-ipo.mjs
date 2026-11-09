@@ -6,11 +6,8 @@ const c=model(await fs.readFile('scripts/engine.js','utf8'),await fs.readFile('s
 const G=c.LR_ENDLESS_GENERATOR,IPO=c.LR_ENDLESS_IPO;
 const hash=x=>createHash('sha256').update(JSON.stringify(x)).digest('hex');
 const shapes=new Set(),lengths=new Set(),lanes=new Set(),periods=new Set(),report=[];
-for(const t of [60,120,180]) {
-  const old=340+360*(1-Math.exp(-t/150)),pace=G.speed(t);
-  assert.ok(pace>old*1.03&&pace<old*1.06,'A modestly faster ramp, without a sudden speed jump');
-}
-assert.equal(G.speed(0),340);assert.ok(G.speed(10000)<=700);
+for(const t of [60,120,180,600]) assert.equal(G.speed(t+30)-G.speed(t),90,'Constant street acceleration');
+assert.equal(G.speed(0),340);
 {
   const q=new c.hi(1280,42,{mode:'endless',procedural:true});
   q.beginFlight({kind:'ipo',seed:42});
@@ -82,6 +79,6 @@ for(let seed=0;seed<12;seed++){
   }
 }
 assert.ok(offers>30);assert.equal(encounterSeeds.size,offers);
-await fs.mkdir('review/v125/ipo',{recursive:true});
-await fs.writeFile('review/v125/ipo/model-report.json',JSON.stringify({shapes:shapes.size,branchCounts:[...lengths],lanes:lanes.size,warningPeriods:periods.size,offers,encounterSeeds:encounterSeeds.size,physics:report},null,2));
+await fs.mkdir('review/v126/ipo',{recursive:true});
+await fs.writeFile('review/v126/ipo/model-report.json',JSON.stringify({shapes:shapes.size,branchCounts:[...lengths],lanes:lanes.size,warningPeriods:periods.size,offers,encounterSeeds:encounterSeeds.size,physics:report},null,2));
 console.log(`PASS ${report.length} damage-free real-control IPO fights and landings; ${shapes.size} distinct attack trees; ${offers} recurring independent encounter seeds; preserved street/progression and exact score awards.`);

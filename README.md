@@ -4,6 +4,14 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
+## Version 1.26 — Keep the pace
+
+Nicolai fades gently into the subway and 505 as he walks inside. Endless now
+accelerates at a constant rate, without a late-run slowdown. Four new seeded
+challenge families combine mandatory slides, hurdles and varied gaps, with
+clear landing and recovery space. Story courses retain their existing physics.
+[Implementation](docs/endless-v126.md) · [Verification](docs/verification-v126.md).
+
 ## Version 1.25 — Grete Direct Line and changing markets
 
 The opening call rings with the supplied vibration/ringtone mix while GDL

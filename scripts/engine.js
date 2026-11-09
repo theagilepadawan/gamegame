@@ -303,6 +303,8 @@ var LR_HAZARDS = (() => {
     "MEETING TAX":"Charged by the hour. Paid in attention.",
     "MISSED ESTIMATES":"The estimate was precise. The result wasn't.",
     "DEBT CEILING":"Limited headroom. Unlimited discussion.",
+    "LOWER GUIDANCE":"The outlook just lost another floor.",
+    "LOW VISIBILITY":"Management sees one quarter ahead. Weather permitting.",
     "SCOPE CREEP":"One small change. Three more floors.",
     "THESIS DRIFT":"Same holding. Entirely new reason.",
     "SHIFTING TARGET":"Still on target. After moving the target.",
@@ -373,6 +375,10 @@ var LR_HAZARDS = (() => {
     h.h=height;
   }
   function body(h,x) {
+    if(h.requiredAction==="slide") {
+      const bottom=Math.min(...[-15,0,15].map(dx=>LR_ENDLESS_GENERATOR.ceilingAt(h,x+dx)));
+      return {x:h.x+4,y:h.roofTop,w:h.w-8,h:bottom-h.roofTop};
+    }
     const base=h.base+(h.groundSlope||0)*(Math.max(h.x,Math.min(h.x+h.w,x))-h.x-h.w/2);
     const inset=h.artDistrict==="park"&&h.artVariant===2?h.w*.16:5;
     return {x:h.x+inset,y:base-(h.type==="high"?96+h.h:h.h),w:h.w-inset*2,h:h.type==="high"?h.h:h.h-4};
@@ -946,7 +952,7 @@ var hi = class {
       let Q = this.platforms.find((R) => R.id === I.platformId);
       Q && (I.y = Q.y + I.offsetY);
     }
-    this.autoSpawn && this.nextX < (this.procedural ? this.x + 1100 : this.width + 260) && (!(window.LR_ENDLESS && LR_ENDLESS.usesDirector(this)) && !this.contrarianDone && this.spawnCount >= 2 && this.spawnCount % 5 === 2 && this.lastOfferSection !== this.spawnCount ? this.offerContrarian() : this.spawn());
+    this.autoSpawn && this.nextX < (this.procedural ? this.x + (this.mode === "endless" ? Math.max(1100,this.speed*2.5) : 1100) : this.width + 260) && (!(window.LR_ENDLESS && LR_ENDLESS.usesDirector(this)) && !this.contrarianDone && this.spawnCount >= 2 && this.spawnCount % 5 === 2 && this.lastOfferSection !== this.spawnCount ? this.offerContrarian() : this.spawn());
     for (let I of this.markers) !I.announced && I.x < this.x + 110 && (I.announced = true, this.route = I.route, this.routeCount++, this.emit("route", { route: I.route }));
     let s = this.stepFlight(A), n = LR_GAPS.find(this.obstacles, this.x), a = !n || this.invincible > 0;
     if (!s) {
@@ -23211,7 +23217,7 @@ function vu(e24 = false) {
       if (!exitActor && (q.grounded && q.support !== null || !LR_GAPS.overlaps(q.obstacles, q.x - 20, q.x + 20, i))) { d.fillStyle = "#03091288"; d.beginPath(); d.ellipse(q.x, (q.grounded ? q.y : q.floorY ?? T) + 2, 25, 4, 0, 0, Math.PI * 2); d.fill(); }
       let E = q.won ? "idle" : q.flight ? q.grounded ? "run" : "jump" : q.sliding ? "slide" : q.slideRecoverAge >= 0 ? "recover" : q.superJumpAge >= 0 ? "superjump" : q.flipAge >= 0 ? "flip" : q.grounded ? "run" : q.vy < 0 ? "jump" : "fall";
       if (exitActor) {
-        d.save(); d.fillStyle = "#03091266"; d.beginPath(); d.ellipse(exitActor.x, (exitActor.shadowY ?? q.floorY) + 2, 23, 3, 0, 0, Math.PI * 2); d.fill(); d.restore();
+        d.save(); d.globalAlpha *= exitActor.opacity ?? 1; d.fillStyle = "#03091266"; d.beginPath(); d.ellipse(exitActor.x, (exitActor.shadowY ?? q.floorY) + 2, 23, 3, 0, 0, Math.PI * 2); d.fill(); d.restore();
         MQ(exitActor.x, exitActor.y, exitActor.action, exitActor.frame);
       } else o || MQ(q.x, ir + (q.y - ir) * t, E, Math.floor(q.distance / 28) % 6);
       window.LR_FINISH?.front(d, q, eA, ni);
