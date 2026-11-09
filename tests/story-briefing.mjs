@@ -4,7 +4,7 @@ import {chromium} from 'playwright';
 
 const base = process.env.TEST_URL || 'http://127.0.0.1:4181/';
 const browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', args: ['--no-sandbox', '--enable-unsafe-swiftshader']});
-await mkdir('review/v120/briefing', {recursive:true});
+await mkdir('review/v121/briefing', {recursive:true});
 try {
   const page = await browser.newPage({viewport:{width:1280,height:720}, reducedMotion:'reduce'}), errors=[];
   page.on('pageerror', error => errors.push(error.message));
@@ -42,7 +42,7 @@ try {
   assert.equal(before.hair,speaking.hair,'Speaking never shifts the hair/head outline');
   assert.equal(before.shoulders,speaking.shoulders,'Speaking never shifts the body');
   assert.notEqual(before.all,speaking.all,'Registered mouth patch animates');
-  await page.screenshot({path:'review/v120/briefing/desktop.png'});
+  await page.screenshot({path:'review/v121/briefing/desktop.png'});
   const at=await page.evaluate(()=>LR_BRIEFING.inspect().clock);
   console.log('Briefing: checking blink timing.');
   await page.clock.runFor(4120-at);
@@ -64,20 +64,20 @@ try {
   assert.equal(await page.locator('#briefing-speaker').textContent(),'Nicolai');
   await page.clock.runFor(32);
   const nicolai=await page.evaluate(imageRegions,'nicolai');
-  await page.screenshot({path:'review/v120/briefing/nicolai-listening.png'});
+  await page.screenshot({path:'review/v121/briefing/nicolai-listening.png'});
   await page.clock.runFor(165);
   assert.equal(await page.evaluate(()=>LR_BRIEFING.inspect().frames.nicolai),1);
   const nicolaiSpeaking=await page.evaluate(imageRegions,'nicolai');
   assert.equal(nicolai.hair,nicolaiSpeaking.hair,'Nicolai’s refined hairline stays fixed during speech');
   assert.equal(nicolai.shoulders,nicolaiSpeaking.shoulders,'The approved outfit stays fixed');
   assert.notEqual(nicolai.all,nicolaiSpeaking.all,'Nicolai has a local speaking expression');
-  await page.screenshot({path:'review/v120/briefing/nicolai-speaking.png'});
+  await page.screenshot({path:'review/v121/briefing/nicolai-speaking.png'});
   await page.clock.runFor(7850-await page.evaluate(()=>LR_BRIEFING.inspect().clock));
   assert.equal(await page.evaluate(()=>LR_BRIEFING.inspect().frames.nicolai),2);
   const nicolaiBlink=await page.evaluate(imageRegions,'nicolai');
   assert.equal(nicolai.hair,nicolaiBlink.hair);assert.equal(nicolai.shoulders,nicolaiBlink.shoulders);
   assert.notEqual(nicolai.all,nicolaiBlink.all,'Nicolai blinks without changing his facial outline');
-  await page.screenshot({path:'review/v120/briefing/nicolai-blink.png'});
+  await page.screenshot({path:'review/v121/briefing/nicolai-blink.png'});
   for(let i=0;i<4;i++) await page.locator('.briefing-next').click();
   assert.equal(await page.locator('.briefing-next').textContent(),'Let’s go →');
   await page.locator('.briefing-next').click();
@@ -103,7 +103,7 @@ try {
         const box=await page.locator(selector).boundingBox();
         assert.ok(box.x>=0 && box.y>=0 && box.x+box.width<=viewport.width+1 && box.y+box.height<=viewport.height+1,`${selector} fits ${viewport.width}×${viewport.height} at beat ${beat}`);
       }
-      if(beat===4)await page.screenshot({path:`review/v120/briefing/${viewport.width}x${viewport.height}.png`});
+      if(beat===4)await page.screenshot({path:`review/v121/briefing/${viewport.width}x${viewport.height}.png`});
       await page.locator('.briefing-next').click();
     }
   }

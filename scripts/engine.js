@@ -22222,6 +22222,7 @@ try {
 }
 var _i = false, b = "home", zA = "chapter", q = null, eA = 1e3, kA = 540, EQ = 1, au = 0, $i = 0, UA = 0, QQ = 0, ir = T, fe = 0, Ar = 1, RQ = false, SA = new ko("assets/original-37.mp3");
 SA.registerClip("laugh", "assets/original-38.mp3");
+SA.registerClip("mission-alert", "assets/story-v121/central-park-alert.mp3");
 SA.registerMusic("contrarian", "assets/original-39.mp3", { gain: 0.79 });
 SA.registerMusic("title", "assets/audio/title-mellow-lounge.mp3", { gain: 0.72, loop: true });
 SA.registerMusic("gift", "assets/cutscenes-v120/a-change-of-pace.mp3", { gain: 0.82 });
@@ -22366,7 +22367,7 @@ function KD(e24) {
   } else e24 === "diversification" ? (CA(330, 0.24, "triangle", 0.022, 660), CA(990, 0.16, "sine", 0.012)) : e24 === "research" ? (CA(620, 0.2, "sine", 0.024, 1240), CA(930, 0.12, "sine", 0.013)) : e24 === "conviction" && (CA(196, 0.25, "triangle", 0.023, 294), CA(392, 0.22, "sine", 0.016));
 }
 function mD() {
-  window.LR_FINISH?.begin(q);
+  window.LR_FINISH?.begin(q, PA);
   window.LR_MUSIC?.page("arrival");
   m("#touch-controls").classList.add("hidden");
   if (De(), ni = 0, m("#event").classList.remove("show"), m("#ticker-text").textContent = q.districtId === "park" ? "The best returns sometimes come with a view." : q.districtId === "midtown" ? "Built for the long run." : "Hype is temporary. The horizon is long.", CA(523, 0.55, "sine", 0.03), CA(784, 0.7, "sine", 0.02), CA(1046, 0.85, "sine", 0.012), !gA) for (let e24 = 0; e24 < 30; e24++) bt.push({ x: q.x + (Math.random() - 0.5) * 110, y: q.y - 105 - Math.random() * 85, vx: (Math.random() - 0.5) * 120, vy: -45 - Math.random() * 150, life: 0.8 + Math.random() * 0.5, color: ["#eac98a", "#9fdec8", "#fff0c5"][e24 % 3], size: 3 });
@@ -22395,7 +22396,7 @@ function confirmMenuRun() {
   // opening call finishes first; then the approved title character says yes
   // with the same two-second thumbs-up. Map browsing remains unchanged.
   gg.matches && qu(); vD();
-  if (mode === "chapter" && chapter === "opening" && window.LR_BRIEFING?.launch({character: runner, onComplete: launch})) return;
+  if (mode === "chapter" && chapter === "opening" && window.LR_BRIEFING?.launch({character: runner, audio: SA, onComplete: launch})) return;
   launch();
 }
 function Ko(e24 = zA, A = {}) {
@@ -22882,6 +22883,10 @@ function ig(e24, A, t) {
 function MQ(e24, A, t, i, r = 0.34) {
   if (!_i) return;
   if (b === "home" && window.LR_TITLE_LAUNCH?.draw(d, si, PA, e24, A, r)) return;
+  if (t === "walk") {
+    if (window.LR_FINISH?.drawWalk(d, PA, e24, A, i, r, q, ni)) return;
+    t = "run"; i %= 6;
+  }
   let o = q?.flight && !q.grounded || q?.flightLanding > 0 ? 8 : t === "idle" ? 6 + Math.floor(UA * (PA === "trond" ? 0.35 : 2)) % 2 : t === "run" ? i : t === "jump" ? 8 : t === "fall" ? 9 : PA === "trond" ? fe < 0.1 ? 10 : 11 : 10 + Math.floor(fe * 9) % 2, s = !!((q?.flight || q?.packFade > 0) && t !== "flip" && t !== "superjump"), n = s ? q.packFade > 0 ? q.packFade / 0.8 : Math.min(1, q.flightAge / 0.25) : 0;
   d.save(), d.translate(e24, A), q?.invincible > 0 && !q.won && b !== "home" && (d.globalAlpha = 0.5 + Math.sin(UA * 20) * 0.28);
   let a = s && !q.grounded, g = a ? bD(q.flightAge, q.vy || 0) : null;

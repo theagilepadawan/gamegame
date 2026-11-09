@@ -31,12 +31,13 @@ approved behavior. No voice has been generated.
 - `tests/story-briefing.mjs`: dialogue, local animation, input, lifecycle and
   responsive layout checks.
 
-`LR_BRIEFING.launch({character, onComplete})` returns true when it opens or is
+`LR_BRIEFING.launch({character, onComplete, audio})` returns true when it opens or is
 already active. It returns false outside the title screen, when another dialog
 is open, for non-Nicolai characters, or while the character reveal is active.
 `onComplete` runs once after Skip or the final line. `cancel()` closes without
 calling it. `inspect()` reports active beat, speaker, expression frames, clock,
-readiness and completion reason.
+readiness, reaction timing and completion reason. `audio` is the existing `SA`
+effects mixer; callers can omit it for a silent presentation.
 
 The engine calls this only for Story / Opening Bell / Nicolai, then calls
 the existing title-gesture launch from `onComplete`. Main-menu and new-run
@@ -64,4 +65,19 @@ hidden-tab pause/resume, keyboard isolation from the map, Escape and Skip,
 pagehide/cancel, reduced motion, and the real Play → call → two-second title
 thumbs-up → Opening Bell flow. Every dialogue beat and action fits desktop,
 844 × 390, 568 × 320 and 390 × 844 viewports. The captures in
-`review/v120/briefing/` are the current version's captures.
+`review/v121/briefing/` are the current version's captures.
+
+## Central Park reaction (1.21)
+
+At 850 ms into Grete's first line, one gold-and-ivory vector exclamation pops
+above Nicolai and the user-supplied `3.mp3` plays via the effects mixer. Quick
+Continue triggers it immediately if it has not fired; Skip before that point
+does not queue it. The 1700 ms mark has reserved headroom in every layout.
+Portrait art, local expressions and dialogue remain unchanged.
+
+The original audio is preserved in `assets/story-v121/`; the runtime copy trims
+0.400 seconds of initial silence to align sound with the pop. Effects volume
+and mute apply; title music ducks briefly. Hidden tabs pause both clocks and
+sound. Cancel/Skip stops the sound and prevents delayed playback. Reduced
+motion keeps a stationary mark with opacity transitions. `tests/briefing-alert.mjs`
+checks actual nonzero effects output, timing, lifecycle and compact layouts.

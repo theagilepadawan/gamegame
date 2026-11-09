@@ -1,8 +1,14 @@
 # The Long Run — cutscene production handoff
 
-This folder is a working brief for a fresh ChatGPT agent using the user's Runway plugin. It contains the complete editable game, native art references and production notes. **Version 1.20 includes the minimal Grete/Nicolai call and the supplied running-shoe film, now shown only on Next: Central Park after Midtown results, with a separate piano cue. Other cinematic ideas below remain proposals.**
+This folder is a working brief for a fresh ChatGPT agent using the user's Runway plugin. It contains the complete editable game, native art references and production notes. **Version 1.21 adds rear-view subway boarding and the supplied Central Park reaction sound. It retains the minimal Grete/Nicolai call and the supplied running-shoe film, now shown only on Next: Central Park after Midtown results, with a separate piano cue. Other cinematic ideas below remain proposals.**
 
 Start with the packaged game and its current art. The user has invested heavily in character likeness, natural scenery placement and animation quality. Preserve those decisions while adding a small number of short, polished cinematic moments.
+
+Version 1.21 adds a normal run → four-pose turn → eight-pose walk away into the
+6 train, with feet registered to the sill and interior floor. The first Grete
+line triggers a custom exclamation and the supplied sound. See
+`game/docs/verification-v121.md` and the native assets in
+`game/assets/boarding-v121/` and `game/assets/story-v121/`.
 
 Version 1.20 uses the approved minimal ink Grete portrait and a photograph-led
 Nicolai face refinement in a cleaner call layout. The gift film plays only on
@@ -51,7 +57,7 @@ characters. 505 Fifth must keep the electric-blue/cyan glass lobby, complete
 paired revolving doors and the office host's supplied likeness/plum suit.
 Central Park must preserve its original dreamy painting. Downtown now restores the complete warm paintings and camera from the supplied
 HTML. The rejected full-screen river/cutout composition is gone. Midtown also returns to its warm complete paintings with calm horizontal scrolling
-and fixed vertical framing. Six native storefront crops retain venue detail inside
+and fixed vertical framing. Five native storefront crops retain venue detail inside
 those streets. Inspect downtown-scenery.js, midtown-painted.js, scenery.js, venue-details.js and the
 current gameplay frames.
 There is no added traffic or replacement panorama module in the runtime.
@@ -94,8 +100,9 @@ music choices. Keep the existing fund-history reveal and chapter progression.
 The shoe scene belongs after Midtown completion and before starting Park;
 do not interrupt the active course or force it on every retry. A separate
 Park establishing shot or office greeting is optional, not an extra mandatory
-film at the same transition. This ZIP has no generated video cutscenes or
-new video player; the existing fund-history reveal remains part of the game.
+film at the same transition. This ZIP includes the supplied gift film and its integrated player, the opening
+call, and a gameplay preview of the rear-view subway boarding. The existing
+fund-history reveal remains part of the game.
 Implement integration only when requested; the current task is cutscene
 production. Do not spend the session merely proposing to begin.
 ```

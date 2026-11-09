@@ -1,0 +1,94 @@
+{
+  "version": "1.21.0",
+  "tool": "image_gen",
+  "source": "exec-a639e403-10b2-4916-8462-403f2cc05278.png",
+  "references": [
+    "assets/original-27.webp",
+    "review/v121/side-walk-study/nicolai-walk.webp"
+  ],
+  "nativeDimensions": [
+    1448,
+    1086
+  ],
+  "grid": {
+    "columns": 4,
+    "rows": 3,
+    "cell": [
+      362,
+      362
+    ]
+  },
+  "frames": [
+    "side-facing final step",
+    "quarter turn",
+    "three-quarter rear turn",
+    "rear-facing plant",
+    "left contact",
+    "left loading",
+    "right passing",
+    "right reach",
+    "right contact",
+    "right loading",
+    "left passing",
+    "left reach"
+  ],
+  "registration": {
+    "sourceFoot": [
+      356,
+      356,
+      356,
+      356,
+      349,
+      347,
+      345,
+      347,
+      345,
+      344,
+      343,
+      334
+    ],
+    "sourceTop": [
+      47,
+      48,
+      48,
+      48,
+      44,
+      44,
+      44,
+      44,
+      45,
+      45,
+      45,
+      45
+    ],
+    "standardHeight": 308,
+    "relativeScale": 0.84,
+    "doorwayBrakeSeconds": 0.22,
+    "turnSeconds": 0.36,
+    "rearWalkSeconds": 2.2,
+    "perspectiveScaleEnd": 0.86,
+    "depthRiseNative": 58,
+    "entranceLaneNative": [
+      1240,
+      1250
+    ]
+  },
+  "direction": "Normal gameplay run to the sill. Four turn keyframes, then eight rear-view walking poses into the carriage, with feet-anchored perspective and the native central handrail in front. No character fade or sideways crossing of the doorway. The original playable atlas remains unchanged. Native transparent PNG plus pixel-identical lossless WebP.",
+  "files": [
+    {
+      "path": "assets/boarding-v121/nicolai-board-native.png",
+      "bytes": 727194,
+      "sha256": "ee3f4a802be3092dbb3ee030d9aea5bba3ba53c2bb9c652fc83e71f67f7f4215"
+    },
+    {
+      "path": "assets/boarding-v121/nicolai-board.webp",
+      "bytes": 512348,
+      "sha256": "962b8042df96b7fa9be71157acd43a5bb65794de968b059b91cdc07995dfb8ac"
+    }
+  ],
+  "hairCorrection": {
+    "parent": "exec-50721bc9-3ba0-4794-81a1-7304608c2650.png",
+    "instruction": "Keep the approved poses, outfit and proportions; short close-cropped grey hair covers the crown. Nicolai must not appear bald.",
+    "tool": "image_gen"
+  }
+}

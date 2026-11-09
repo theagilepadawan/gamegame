@@ -51,8 +51,13 @@ try {
     assert.equal(sequence.gate.active,true);
     const [start,inside,near,hidden]=sequence.frames;
     assert.ok(start.x<inside.x && inside.x<near.x && near.x<hidden.x,'Run-in advances monotonically');
-    assert.ok(hidden.x>sequence.gate.pier+55,'Runner reaches behind the near pier');
-    assert.equal(hidden.y,sequence.gate.interiorFloor,'Runner finishes on the entrance interior floor plane');
+    if(sequence.gate.boarding) {
+      assert.ok(hidden.x>sequence.gate.threshold+20&&hidden.x<sequence.gate.pier-65,'Nicolai boards through the clear left half of the door');
+      assert.equal(hidden.y,sequence.gate.boardingFloor,'Rear-view feet finish on the receding carriage floor');
+    } else {
+      assert.ok(hidden.x>sequence.gate.pier+55,'Runner reaches behind the near pier');
+      assert.equal(hidden.y,sequence.gate.interiorFloor,'Runner finishes on the entrance interior floor plane');
+    }
     assert.equal(start.action,runner==='trond'?'jump':'run','An airborne finish continues its existing trajectory');
     for(const frame of sequence.frames) if(frame.action==='jump'||frame.action==='fall') {
       assert.ok(frame.x+25<=sequence.gate.threshold,'The runner lands outside the entrance, without jumping through its lintel');

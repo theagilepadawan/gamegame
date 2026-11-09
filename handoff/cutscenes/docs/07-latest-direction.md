@@ -1,6 +1,22 @@
 # Latest user direction
 
-## Current authority: version 1.20
+## Current authority: version 1.21
+
+The user explicitly wants Nicolai to turn his back toward the viewer and walk
+slowly INTO the subway, after his normal run to the door. The twelve-pose sheet
+uses four turning poses and eight rear-view walking poses. A small perspective
+change, grounded feet and the native brass pole establish depth. Keep this
+short and calm; do not revert to walking sideways across the doorway. The user
+approved the poses but specifically corrected the hair: retain very short grey
+hair across the crown, without a bald patch.
+
+Grete's first Central Park line triggers a gold vector exclamation above Nicolai
+and the user's `3.mp3` cue. The native upload is retained; only 0.400 seconds
+of initial silence was removed in the runtime copy. The effect honors mute,
+volume, hidden-tab pause and cancellation. No voice imitation was created.
+The new walk-in remains an experiment for user review.
+
+## Retained direction from version 1.20
 
 The opening Nicolai/Grete conversation gives the journey a purpose: a walking
 investment meeting in Central Park, via 505 to collect running shoes. It is a

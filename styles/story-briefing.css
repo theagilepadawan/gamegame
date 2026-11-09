@@ -34,3 +34,13 @@
 @media(max-height:360px){#story-briefing{padding:8px 18px}.briefing-heading{margin-bottom:8px;padding-bottom:6px}.briefing-heading h2{font-size:8px;letter-spacing:1.5px}.briefing-heading>span{font-size:9px}.briefing-connection{grid-template-columns:112px 60px 112px;gap:18px}.briefing-portrait figcaption{min-height:21px;padding-top:4px}.briefing-portrait strong{font-size:10px}.briefing-link svg{height:25px}.briefing-dialogue{margin-top:7px;min-height:68px;padding-top:8px}#briefing-text{font-size:13px;line-height:1.35}.briefing-footer{margin-top:4px}.briefing-count{font-size:9px}.briefing-footer button{min-height:32px}}
 @media(max-width:480px) and (min-height:441px){#story-briefing{padding:18px 14px}.briefing-shell{padding:0}.briefing-heading{margin-bottom:23px}.briefing-heading h2{font-size:9px;letter-spacing:1.6px}.briefing-heading>span{font-size:10px}.briefing-connection{grid-template-columns:minmax(0,1fr) 42px minmax(0,1fr);gap:12px}.briefing-link span{font-size:6px;letter-spacing:.3px}.briefing-portrait strong{font-size:11px}.briefing-dialogue{margin-top:24px;min-height:152px}#briefing-text{font-size:17px;line-height:1.5}.briefing-next{padding:9px 17px}}
 @media(prefers-reduced-motion:reduce){.briefing-portrait canvas{transition:none}}
+
+/* A single, clock-driven reaction above the portrait; reserved space keeps
+   the mark clear of the frame and header, even on compact landscape phones. */
+.briefing-connection{padding-top:40px}
+.briefing-alert{position:absolute;z-index:2;top:-47px;left:48%;width:30px;height:46px;pointer-events:none;transform-origin:50% 100%;opacity:0}
+.briefing-alert[hidden]{display:none}
+.briefing-alert svg{display:block;width:100%;height:100%;overflow:visible}
+#story-briefing[data-alert] [data-person="nicolai"] canvas{opacity:.94}
+@media(max-height:440px){.briefing-connection{padding-top:28px}.briefing-alert{top:-33px;width:22px;height:33px}}
+@media(max-height:360px){.briefing-connection{padding-top:22px;grid-template-columns:104px 60px 104px}.briefing-alert{top:-27px;width:18px;height:27px}}

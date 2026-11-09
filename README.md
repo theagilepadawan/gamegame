@@ -4,6 +4,16 @@
 
 This version starts exclusively from the supplied **The-Long-Run-New-York-NBIM-Arcade (1).html**. The source hash is recorded in `BASELINE.json`. All 40 original art, audio, font and identity source assets are preserved byte for byte; the runtime uses new scenery and venue art where described below.
 
+## Version 1.21 — Boarding and a change of plan
+
+Nicolai runs to the subway doorway, turns his back to the viewer and walks
+slowly into the carriage. Twelve dedicated poses, grounded foot registration,
+restrained perspective and the original handrail establish the depth.
+
+Grete's first Central Park line triggers a gold exclamation above Nicolai and
+the supplied reaction sound, through the existing effects mixer. Both pause
+with a hidden tab; Skip cancels the cue. [Verification](docs/verification-v121.md).
+
 ## Version 1.20.1 — Destination lettering
 
 Moved “Union Square” down five pixels in the train artwork's native coordinate

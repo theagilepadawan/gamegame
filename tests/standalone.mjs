@@ -65,6 +65,8 @@ try{
   }
   await page.locator('#start').click(); await skipOpeningCall(page);
   await page.waitForFunction(()=>longRun.state==='playing');
+  assert.equal(await page.evaluate(()=>LR_FINISH.inspect(q).walkReady),true,'Dedicated turn and rear walking atlas decodes offline');
+  assert.equal(await page.evaluate(()=>SA.clips['mission-alert'].src.startsWith('data:audio/mpeg;base64,')),true,'The uploaded reaction cue is embedded offline');
   await page.evaluate(()=>{q.invincible=1000;q.beginContrarian();});
   await page.waitForFunction(()=>longRun.snapshot.contrarian);
   await page.evaluate(()=>{q.endContrarian();});

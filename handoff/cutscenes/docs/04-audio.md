@@ -11,6 +11,7 @@ The audio sources are stored byte for byte in `game/assets/` and linked from `re
 | `05-contrarian-pixel-adventure.mp3` | `game/assets/original-39.mp3` | 64.848 s | Stereo / 48 kHz | Exclusive Contrarian event music |
 | `06-title-mellow-lounge.mp3` | `game/assets/audio/title-mellow-lounge.mp3` | 72.912 s | Stereo / 48 kHz | Title screen: Why talking to people is a superpower x Mellow Lounge |
 | `07-gift-piano.mp3` | `game/assets/cutscenes-v120/a-change-of-pace.mp3` | 4.128 s | Stereo / 48 kHz | Gift film: A change of pace |
+| `08-central-park-alert.mp3` | `game/assets/story-v121/central-park-alert.mp3` | 1.620 s | Stereo / 44.1 kHz | User-supplied opening-call reaction |
 
 The main soundtrack is displayed as **Downtown Good Company**, with the original composer credit **radicalTomography** retained (source recording: **Extended 16-Bit Bitcrushed**). The Contrarian display title is **Good ol’ Company** (source recording: **Pixel Adventure**). The user earlier supplied a legacy In Good Company tune, but the latest game uses the files above. A separate clean legacy recording is not included in this handoff; do not substitute an assumed version.
 
@@ -19,6 +20,12 @@ score and production details are in `game/assets/cutscenes-v120/` and
 `game/tools/render-gift-cue.py`. It plays only during the Midtown-results →
 Next: Central Park film, replacing the ordinary chapter track. It fades out
 before the film ends; Park music begins when gameplay starts.
+
+The reaction source `3.mp3` is preserved exactly as
+`game/assets/story-v121/central-park-alert-native.mp3` (2.011429 s). The runtime
+copy trims only the first 0.400 s of silence. It plays once alongside the
+exclamation, through effects gain/mute, and pauses with the call. This is not
+the still-pending voice clip for the separate title thumbs-up.
 
 ## Recommended treatment
 

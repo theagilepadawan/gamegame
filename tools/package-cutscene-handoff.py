@@ -206,7 +206,7 @@ for relative_folder in active_folders:
                     and item['path'].startswith('assets/') for item in rows
                 ):
                     data[field] = [item for item in rows if item['path'] in runtime_used
-                                   or item['path'].endswith(('-native.png', '-native.mp4'))]
+                                   or item['path'].endswith(('-native.png', '-native.mp4', '-native.mp3'))]
             if any(isinstance(data.get(field), list) and not data[field] for field in ['files', 'assets']):
                 continue
         target = game / relative_folder / p.name
@@ -214,7 +214,7 @@ for relative_folder in active_folders:
         target.write_text(json.dumps(data, indent=2) + '\n')
     # Native atlas accompanies extracted runtime cells for art production. It is
     # source material, not another runtime asset or a claim of higher resolution.
-    for native in [*folder_root.glob('*-native.png'), *folder_root.glob('*-native.mp4')]:
+    for native in [*folder_root.glob('*-native.png'), *folder_root.glob('*-native.mp4'), *folder_root.glob('*-native.mp3')]:
         copy(native, game / relative_folder / native.name)
     # The chapter-map strips have native crop/frame registration notes. Keep
     # the active asset's authoring notes with its bytes for the next agent.
@@ -340,12 +340,13 @@ captures = {
     'downtown-gameplay.png': 'release/Opening-v112-street.png',
     'central-park-gameplay.png': 'release/Park-v113-benchmark.png',
     'midtown-gameplay.png': 'release/Midtown-v113-street.png',
-    'opening-call.png': 'release/Opening-v120-briefing.png',
+    'opening-call.png': 'release/Opening-v121-alert.png',
     'opening-call-nicolai.png': 'release/Opening-v120-nicolai.png',
     'midtown-gift-film.png': 'release/Midtown-v120-gift.png',
     'finance-guidance-gameplay.png': 'release/Midtown-v113-guidance.png',
     'chapter-map-and-title-sendoff.png': 'release/Nicolai-v118-title-sendoff.png',
-    'opening-finish-entrance.png': 'release/Opening-v1201-subway.png',
+    'opening-finish-entrance.png': 'release/Opening-v121-boarding.png',
+    'nicolai-boarding-preview.mp4': 'release/Nicolai-v121-boarding.mp4',
     'midtown-finish-entrance.png': 'release/Midtown-v119-entrance.png',
     'park-finish-entrance.png': 'release/Park-v118-entrance.png',
     'midtown-finish-mobile.png': 'release/Midtown-v119-mobile-entrance.png',
@@ -359,6 +360,7 @@ audio = {
     '01-opening-theme.mp3': 'original-37.mp3',
     '06-title-mellow-lounge.mp3': 'audio/title-mellow-lounge.mp3',
     '07-gift-piano.mp3': 'cutscenes-v120/a-change-of-pace.mp3',
+    '08-central-park-alert.mp3': 'story-v121/central-park-alert.mp3',
     '02-midtown-theme.mp3': 'original-19.mp3',
     '03-central-park-theme.mp3': 'original-20.mp3',
     '04-nicolai-laugh.mp3': 'original-38.mp3',
@@ -389,9 +391,9 @@ metadata = {
     'included': ['Current editable game source', 'Self-contained playable HTML', 'Native production sprites, detailed city tiles and current prop atlas',
                  'Restored warm Midtown lossless paintings, native finance-obstacle atlas, stone material, chapter-map runner strips and authoring notes',
                  'Location index linking to exact native game assets without duplicate city-art copies',
-                 'Seven game audio sources, including the original gift piano cue, indexed without duplicate files',
+                 'Eight game audio sources, including the gift piano and supplied reaction cue, indexed without duplicate files',
                  'User-supplied cropped Midtown gift MP4 plus unmodified native source and provenance',
-                 'Grete/Nicolai opening communication, native portrait atlas and revised 6-train portal',
+                 'Grete/Nicolai opening call and reaction, native portrait and rear-view boarding atlases, and the 6-train portal',
                  'Cutscene production brief, shot slate, prompts and integration notes'],
     'notIncluded': ['No separate intro-reference video supplied yet', 'No Runway credentials or plugin installation',
                     'Original inline office/host reference photographs were not exposed as downloadable local files',
